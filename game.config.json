@@ -1,0 +1,8 @@
+{
+	"team": "Visualiseringscenter C",
+	"title": "DigitalTwinCity Interface",
+	"description": "Interface for DigitalTwinCity",
+	"neutralino": {
+		"allow": ["app.exit", "window.center"]
+	}
+}
