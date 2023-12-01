@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { PreloadScene } from "@/scenes/PreloadScene";
 import { GameScene } from "@/scenes/GameScene";
+import { UIScene } from "./scenes/UIScene";
 import OutlinePipelinePlugin from "phaser3-rex-plugins/plugins/outlinepipeline-plugin.js";
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -10,7 +11,7 @@ const config: Phaser.Types.Core.GameConfig = {
 	scale: {
 		mode: Phaser.Scale.FIT,
 	},
-	scene: [PreloadScene, GameScene],
+	scene: [PreloadScene, GameScene, UIScene],
 
 	plugins: {
 		global: [

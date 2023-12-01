@@ -1,31 +1,26 @@
-import { BaseScene } from "./../scenes/BaseScene";
+import { BaseScene } from "@/scenes/BaseScene";
 
 export class Button extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
+	// private hover: boolean;
 	private _hold: boolean;
-	private _hover: boolean;
 	protected blocked: boolean;
 	public liftSmooth: number;
-	public hoverSmooth: number;
 	public holdSmooth: number;
 	public category: number;
 	public aliveValue: number;
-	private hoverTween: Phaser.Tweens.Tween;
-	private holdTween: Phaser.Tweens.Tween;
-	public enabled: boolean;
+	private tween: Phaser.Tweens.Tween;
 
 	constructor(scene: BaseScene, x: number, y: number) {
 		super(scene, x, y);
 		this.scene = scene;
 		scene.add.existing(this);
 
-		this._hover = false;
+		// this.hover = false;
 		this._hold = false;
 		this.blocked = false;
-		this.enabled = true;
 
 		this.liftSmooth = 0;
-		this.hoverSmooth = 0;
 		this.holdSmooth = 0;
 		this.aliveValue = 0;
 	}
@@ -47,55 +42,24 @@ export class Button extends Phaser.GameObjects.Container {
 		return gameObject;
 	}
 
-	get hover(): boolean {
-		return this._hover;
-	}
-
-	set hover(value: boolean) {
-		if (value != this._hover) {
-			if (this.hoverTween) {
-				this.hoverTween.stop();
-			}
-			if (value) {
-				this.hoverTween = this.scene.tweens.add({
-					targets: this,
-					hoverSmooth: { from: 0.0, to: 1.0 },
-					ease: "Cubic.Out",
-					duration: 100,
-				});
-			} else {
-				this.hoverTween = this.scene.tweens.add({
-					targets: this,
-					hoverSmooth: { from: 1.0, to: 0.0 },
-					ease: (v: number) => {
-						return Phaser.Math.Easing.Elastic.Out(v, 1.5, 0.5);
-					},
-					duration: 500,
-				});
-			}
-		}
-
-		this._hover = value;
-	}
-
-	get hold(): boolean {
+	public get hold(): boolean {
 		return this._hold;
 	}
 
 	set hold(value: boolean) {
 		if (value != this._hold) {
-			if (this.holdTween) {
-				this.holdTween.stop();
+			if (this.tween) {
+				this.tween.stop();
 			}
 			if (value) {
-				this.holdTween = this.scene.tweens.add({
+				this.tween = this.scene.tweens.add({
 					targets: this,
 					holdSmooth: { from: 0.0, to: 1.0 },
 					ease: "Cubic.Out",
 					duration: 100,
 				});
 			} else {
-				this.holdTween = this.scene.tweens.add({
+				this.tween = this.scene.tweens.add({
 					targets: this,
 					holdSmooth: { from: 1.0, to: 0.0 },
 					ease: (v: number) => {
@@ -110,7 +74,7 @@ export class Button extends Phaser.GameObjects.Container {
 	}
 
 	onOut(pointer: Phaser.Input.Pointer, event: Phaser.Types.Input.EventData) {
-		this.hover = false;
+		// this.hover = false;
 		this.hold = false;
 	}
 
@@ -120,7 +84,7 @@ export class Button extends Phaser.GameObjects.Container {
 		localY: number,
 		event: Phaser.Types.Input.EventData
 	) {
-		this.hover = true;
+		// this.hover = true;
 	}
 
 	onDown(
@@ -131,7 +95,6 @@ export class Button extends Phaser.GameObjects.Container {
 	) {
 		this.hold = true;
 		this.blocked = false;
-		this.emit("down");
 	}
 
 	onUp(
@@ -146,16 +109,15 @@ export class Button extends Phaser.GameObjects.Container {
 		}
 	}
 
-	onDragStart(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {}
+	onDragStart() {}
 
-	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {}
+	onDrag() {}
 
-	onDragEnd(
-		pointer: Phaser.Input.Pointer,
-		dragX: number,
-		dragY: number,
-		dropped: boolean
-	) {}
+	onDragEnd() {}
+
+	isInsidePlayingField(): boolean {
+		return false;
+	}
 
 	block() {
 		this.blocked = true;

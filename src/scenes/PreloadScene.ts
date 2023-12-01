@@ -69,6 +69,7 @@ export class PreloadScene extends BaseScene {
 		this.fade(true, 200, 0x000000);
 		this.addEvent(200, () => {
 			this.scene.start("GameScene");
+			this.scene.launch("UIScene");
 		});
 	}
 }
