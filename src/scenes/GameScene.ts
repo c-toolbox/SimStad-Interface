@@ -2,7 +2,7 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { languageManager } from "@/utils/LanguageManager";
 
-// import { Thing } from "@/components/Thing";
+import { TestButton } from "@/components/TestButton";
 
 export enum State {
 	First = "First",
@@ -17,9 +17,10 @@ export class GameScene extends BaseScene {
 	private infoWindowOpen: boolean;
 	private blurTween: Phaser.Tweens.Tween;
 
-	// private background: Phaser.GameObjects.Image;
-	// private turtle: Turtle;
-	// private ui: UI;
+	private socket: WebSocket;
+
+	private debugTexts: Phaser.GameObjects.Text[];
+	private testButtons: TestButton[];
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -68,10 +69,76 @@ export class GameScene extends BaseScene {
 		});
 		languageManager.bind(bread, "bread_text");
 		bread.setWordWrapWidth(layout.width - map.displayHeight - 100);
+
+		// Test buttons
+
+		const buttonConfigs: any = [
+			{
+				text: "Knapp 1",
+				color: 0xb91c1c,
+				callback: () => {
+					this.sendSocketData({
+						message: "Hello world!",
+					});
+				},
+			},
+			{
+				text: "Knapp 2",
+				color: 0xb45309,
+				callback: () => {
+					this.sendSocketData({
+						type: "thing_1",
+					});
+					this.sendSocketData({
+						type: "thing_2",
+					});
+				},
+			},
+			{
+				text: "Knapp 3",
+				color: 0x4d7c0f,
+				callback: () => {
+					this.sendSocketData({
+						type: "lots_of_data",
+						name: "Name",
+						size: 12345,
+						location: "Norrköping",
+					});
+				},
+			},
+			{
+				text: "Knapp 4",
+				color: 0x1d4ed8,
+				callback: () => {
+					this.sendSocketData({
+						type: "lists_and_stuff",
+						numbers: [1, 2, 3, 4, 5],
+						things: [{ name: "foo" }, { name: "bar" }],
+						object: {
+							message: "Hello",
+						},
+					});
+				},
+			},
+		];
+
+		this.testButtons = [];
+		buttonConfigs.forEach((config: any, index: number) => {
+			let x = layout.left;
+			let y = layout.bottom;
+			let button = new TestButton(this, x, y, config.text, config.color);
+			button.x += button.width / 2 + index * (button.width + 25);
+			button.on("click", config.callback);
+			this.testButtons.push(button);
+		});
+
+		this.debugTexts = [];
 	}
 
 	update(time: number, delta: number) {
-		// this.turtle.update(time, delta);
+		this.testButtons.forEach((testButton) => {
+			testButton.update(time, delta);
+		});
 	}
 
 	/* Logic */
@@ -89,51 +156,67 @@ export class GameScene extends BaseScene {
 	initWebSocket(): void {
 		// const url = `wss://omni.itn.liu.se/ws/`;
 		const url = `ws://localhost:8000/ws/`;
-		const chatSocket = new WebSocket(url);
+		this.socket = new WebSocket(url);
 
-		chatSocket.onopen = () => {
+		this.socket.onopen = () => {
 			const data = JSON.stringify({
 				token: "CLIENT-TOKEN-HERE",
 			});
-			chatSocket.send(data);
-			this.addMessage(data);
+			this.socket.send(data);
+			this.addDebugMessage(data);
 		};
 
-		chatSocket.onclose = () => {
-			this.addMessage("Connection closed");
+		this.socket.onclose = () => {
+			this.addDebugMessage("Connection closed");
 		};
 
-		chatSocket.onmessage = (event: MessageEvent) => {
+		this.socket.onmessage = (event: MessageEvent) => {
 			const data = JSON.parse(event.data);
-			this.addMessage(JSON.stringify(data));
+			this.addDebugMessage(JSON.stringify(data));
 
 			// Bounce message
-			chatSocket.send(event.data);
+			this.socket.send(event.data);
+
+			// Insert logic here
+			// if (event.data.type == "something_cool") {
+			// Use event.data.param123
+			// }
 		};
 	}
 
-	addMessage(text: string) {
+	sendSocketData(data: any) {
+		this.addDebugMessage(JSON.stringify(data), true);
+		this.socket.send(JSON.stringify(data));
+	}
+
+	addDebugMessage(text: string, dim = false) {
 		let temp = this.addText({
 			size: 32,
-			color: "white",
+			color: dim ? "#3b82f6" : "white",
 			text,
 		});
 		temp.setOrigin(1);
 		temp.setStroke("black", 8);
+		temp.x = this.W - 50;
+		temp.y = this.H - 50;
+
+		this.debugTexts.forEach((text) => {
+			text.y -= 32 * 1.5;
+		});
+		this.debugTexts.push(temp);
 
 		var tween = this.tweens.addCounter({
 			from: 0,
 			to: 1,
 			ease: "Linear",
-			duration: 4000,
+			duration: 10000,
 			onUpdate: (tween, targets, key, current, previous, param) => {
 				var value = current;
-				temp.x = this.W - 50;
-				temp.y = this.H - 50 - 200 * value;
-				temp.setAlpha(2 - 2 * current);
+				temp.setAlpha(8 - 8 * current);
 			},
 			onComplete: () => {
 				temp.destroy();
+				this.debugTexts.splice(this.debugTexts.indexOf(temp), 1);
 			},
 		});
 	}

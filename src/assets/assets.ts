@@ -19,6 +19,15 @@ const spritesheets: SpriteSheet[] = [
 const audios: Audio[] = [];
 
 /* Fonts */
-await loadFont("Lato-Regular", "Game Font");
+await loadFont("Lato-Black", "Lato-Black");
+await loadFont("Lato-BlackItalic", "Lato-BlackItalic");
+await loadFont("Lato-Bold", "Lato-Bold");
+await loadFont("Lato-BoldItalic", "Lato-BoldItalic");
+await loadFont("Lato-Italic", "Lato-Italic");
+await loadFont("Lato-Light", "Lato-Light");
+await loadFont("Lato-LightItalic", "Lato-LightItalic");
+await loadFont("Lato-Regular", "Lato-Regular");
+await loadFont("Lato-Thin", "Lato-Thin");
+await loadFont("Lato-ThinItalic", "Lato-ThinItalic");
 
 export { images, spritesheets, audios };

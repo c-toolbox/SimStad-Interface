@@ -65,7 +65,7 @@ export class Button extends Phaser.GameObjects.Container {
 					ease: (v: number) => {
 						return Phaser.Math.Easing.Elastic.Out(v, 1.5, 0.5);
 					},
-					duration: 500,
+					duration: 400,
 				});
 			}
 		}
