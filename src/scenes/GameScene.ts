@@ -72,10 +72,6 @@ export class GameScene extends BaseScene {
 
 	update(time: number, delta: number) {
 		// this.turtle.update(time, delta);
-
-		if (Math.random() < 0.002) {
-			this.addMessage("{what look its a reall ylong message or something}");
-		}
 	}
 
 	/* Logic */
@@ -133,7 +129,7 @@ export class GameScene extends BaseScene {
 			onUpdate: (tween, targets, key, current, previous, param) => {
 				var value = current;
 				temp.x = this.W - 50;
-				temp.y = this.H - 50 - 100 * value;
+				temp.y = this.H - 50 - 200 * value;
 				temp.setAlpha(2 - 2 * current);
 			},
 			onComplete: () => {
