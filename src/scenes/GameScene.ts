@@ -78,7 +78,7 @@ export class GameScene extends BaseScene {
 				color: 0xb91c1c,
 				callback: () => {
 					this.sendSocketData({
-						message: "Hello world!",
+						message: "PingRequest",
 					});
 				},
 			},
@@ -87,10 +87,7 @@ export class GameScene extends BaseScene {
 				color: 0xb45309,
 				callback: () => {
 					this.sendSocketData({
-						type: "thing_1",
-					});
-					this.sendSocketData({
-						type: "thing_2",
+						type: "ScenariosRequest",
 					});
 				},
 			},
