@@ -155,13 +155,13 @@ export class GameScene extends BaseScene {
 	/* WebSocket */
 
 	initWebSocket(): void {
-		// const url = `wss://omni.itn.liu.se/ws/`;
-		const url = `ws://localhost:8000/ws/`;
+		const url = `wss://omni.itn.liu.se/ws/`;
+		//const url = `ws://localhost:8000/ws/`;
 		this.socket = new WebSocket(url);
 
 		this.socket.onopen = () => {
 			const data = JSON.stringify({
-				token: "f56c2f4c-a29a-457d-be9a-e36d4aaeb858",
+				token: "29cde70e-155a-4f82-ba0d-d43d69365ee5",
 			});
 			this.socket.send(data);
 			this.addDebugMessage(data);
