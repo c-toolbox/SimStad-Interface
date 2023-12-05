@@ -78,7 +78,7 @@ export class GameScene extends BaseScene {
 				color: 0xb91c1c,
 				callback: () => {
 					this.sendSocketData({
-						message: "PingRequest",
+						type: "PingRequest",
 					});
 				},
 			},
@@ -96,10 +96,14 @@ export class GameScene extends BaseScene {
 				color: 0x4d7c0f,
 				callback: () => {
 					this.sendSocketData({
-						type: "lots_of_data",
-						name: "Name",
-						size: 12345,
-						location: "Norrköping",
+						type : "MapLightRequest",
+						Name : "#sdlfkjsdlkf",
+						Northing : 12231112.24464522 , 
+						Easting  : 60434345.00022222 ,
+						Height : 50.0,
+						Color : "#sdlfkjsdlkf",
+						Typeofmessage : "add",
+						Enable : true
 					});
 				},
 			},
@@ -157,7 +161,7 @@ export class GameScene extends BaseScene {
 
 		this.socket.onopen = () => {
 			const data = JSON.stringify({
-				token: "CLIENT-TOKEN-HERE",
+				token: "f56c2f4c-a29a-457d-be9a-e36d4aaeb858",
 			});
 			this.socket.send(data);
 			this.addDebugMessage(data);
@@ -169,15 +173,18 @@ export class GameScene extends BaseScene {
 
 		this.socket.onmessage = (event: MessageEvent) => {
 			const data = JSON.parse(event.data);
-			this.addDebugMessage(JSON.stringify(data));
-
-			// Bounce message
-			this.socket.send(event.data);
-
+			console.log(data)
 			// Insert logic here
-			// if (event.data.type == "something_cool") {
-			// Use event.data.param123
-			// }
+			if (event.data.type == "ScenarioResponse") {
+				// Use event.data.param123
+				this.addDebugMessage(JSON.stringify(data));
+				console.log(JSON.stringify(data));
+			}
+
+			if (data.type == "PingResponse") {
+				// Use event.data.param123
+				this.addDebugMessage(JSON.stringify(data));
+			}
 		};
 	}
 
