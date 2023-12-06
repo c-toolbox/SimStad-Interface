@@ -3,6 +3,9 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { languageManager } from "@/utils/LanguageManager";
 
 import { TestButton } from "@/components/TestButton";
+import { TestSlider } from "@/components/TestSlider";
+
+const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
 
 export enum State {
 	First = "First",
@@ -21,6 +24,7 @@ export class GameScene extends BaseScene {
 
 	private debugTexts: Phaser.GameObjects.Text[];
 	private testButtons: TestButton[];
+	private testSliders: TestSlider[];
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -96,14 +100,14 @@ export class GameScene extends BaseScene {
 				color: 0x4d7c0f,
 				callback: () => {
 					this.sendSocketData({
-						type : "MapLightRequest",
-						Name : "#sdlfkjsdlkf",
-						Northing : 12231112.24464522 , 
-						Easting  : 60434345.00022222 ,
-						Height : 50.0,
-						Color : "#sdlfkjsdlkf",
-						Typeofmessage : "add",
-						Enable : true
+						type: "MapLightRequest",
+						Name: "#sdlfkjsdlkf",
+						Northing: 12231112.24464522,
+						Easting: 60434345.00022222,
+						Height: 50.0,
+						Color: "#ff0000",
+						Typeofmessage: "add",
+						Enable: true,
 					});
 				},
 			},
@@ -145,8 +149,49 @@ export class GameScene extends BaseScene {
 			this.testButtons.push(button);
 		});
 
-		
-		
+		const sliderConfigs: any = [
+			{
+				text: "Slider 1",
+				steps: 0,
+				callback: (value: number) => {
+					this.sendSocketData({
+						type: "SliderRequest",
+						value: value,
+					});
+				},
+			},
+			{
+				text: "Slider 2",
+				steps: 0,
+				callback: (value: number) => {
+					this.sendSocketData({
+						type: "SliderRequest",
+						value: Math.floor(100 * value),
+					});
+				},
+			},
+			{
+				text: "Slider 3",
+				steps: 11,
+				callback: (value: number) => {
+					this.sendSocketData({
+						type: "SliderRequest",
+						value: Math.floor(100 * value),
+					});
+				},
+			},
+		];
+
+		this.testSliders = [];
+		sliderConfigs.forEach((config: any, index: number) => {
+			let x = layout.left;
+			let y = layout.bottom;
+			let slider = new TestSlider(this, x, y, config.text, config.steps);
+			slider.x += slider.width / 2 + index * (slider.width + 75);
+			slider.y -= 100;
+			slider.on("onChange", config.callback);
+			this.testSliders.push(slider);
+		});
 
 		this.debugTexts = [];
 	}
@@ -154,6 +199,10 @@ export class GameScene extends BaseScene {
 	update(time: number, delta: number) {
 		this.testButtons.forEach((testButton) => {
 			testButton.update(time, delta);
+		});
+
+		this.testSliders.forEach((testSlider) => {
+			testSlider.update(time, delta);
 		});
 	}
 
@@ -171,7 +220,7 @@ export class GameScene extends BaseScene {
 
 	initWebSocket(): void {
 		const url = `wss://omni.itn.liu.se/ws/`;
-		//const url = `ws://localhost:8000/ws/`;
+		// const url = `ws://localhost:8000/ws/`;
 		this.socket = new WebSocket(url);
 
 		this.socket.onopen = () => {
@@ -188,7 +237,7 @@ export class GameScene extends BaseScene {
 
 		this.socket.onmessage = (event: MessageEvent) => {
 			const data = JSON.parse(event.data);
-			console.log(data)
+			console.log(data);
 			// Insert logic here
 			if (event.data.type == "ScenarioResponse") {
 				// Use event.data.param123
