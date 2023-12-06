@@ -108,19 +108,31 @@ export class GameScene extends BaseScene {
 				},
 			},
 			{
-				text: "Knapp 4",
+				text: "Dusk",
 				color: 0x1d4ed8,
 				callback: () => {
 					this.sendSocketData({
-						type: "lists_and_stuff",
-						numbers: [1, 2, 3, 4, 5],
-						things: [{ name: "foo" }, { name: "bar" }],
-						object: {
-							message: "Hello",
-						},
+						type: "LightRequest",
+						day:1,
+						month:2,
+						year:0,
+						minute:17.0
 					});
 				},
 			},
+			{
+				text: "Day ",
+				color: 0x1d4ed8,
+				callback: () => {
+					this.sendSocketData({
+						type: "LightRequest",
+						day:1,
+						month:5,
+						year:0,
+						Solar_Time:12.0
+					});
+				},
+			}
 		];
 
 		this.testButtons = [];
@@ -132,6 +144,9 @@ export class GameScene extends BaseScene {
 			button.on("click", config.callback);
 			this.testButtons.push(button);
 		});
+
+		
+		
 
 		this.debugTexts = [];
 	}
