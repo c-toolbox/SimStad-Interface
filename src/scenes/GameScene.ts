@@ -151,32 +151,41 @@ export class GameScene extends BaseScene {
 
 		const sliderConfigs: any = [
 			{
-				text: "Slider 1",
+				text: "Month ",
 				steps: 0,
 				callback: (value: number) => {
 					this.sendSocketData({
-						type: "SliderRequest",
-						value: value,
+						type: "LightRequest",
+						day:1,
+						month: Math.floor(12 * value),
+						year:0,
+						Solar_Time:12.0
 					});
 				},
 			},
 			{
-				text: "Slider 2",
+				text: "Day",
 				steps: 0,
 				callback: (value: number) => {
 					this.sendSocketData({
-						type: "SliderRequest",
-						value: Math.floor(100 * value),
+						type: "LightRequest",
+						day: Math.floor(30 * value),
+						month:1,
+						year:0,
+						Solar_Time:12.0
 					});
 				},
 			},
 			{
-				text: "Slider 3",
-				steps: 11,
+				text: "Solar Time",
+				steps: 0,
 				callback: (value: number) => {
 					this.sendSocketData({
 						type: "SliderRequest",
-						value: Math.floor(100 * value),
+						Solar_Time: Math.floor(24 * value),
+						day: 0,
+						month:1,
+						year:0,
 					});
 				},
 			},
