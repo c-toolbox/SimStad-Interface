@@ -1,6 +1,7 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import _suntimes from "@/data/norrköping_suntimes.json";
 import { interpolateColor } from "@/utils/functions";
+import { Color } from "@/utils/colors";
 const suntimes = _suntimes as { [date: string]: number[] };
 
 export class SunDial extends Phaser.GameObjects.Container {
@@ -14,8 +15,8 @@ export class SunDial extends Phaser.GameObjects.Container {
 		super(scene, x, y);
 		this.scene = scene;
 
-		this.innerRadius = 150;
-		this.outerRadius = 250;
+		this.innerRadius = 10;
+		this.outerRadius = 30;
 
 		this.graphics = scene.add.graphics();
 		this.add(this.graphics);
@@ -30,51 +31,25 @@ export class SunDial extends Phaser.GameObjects.Container {
 	initLabels() {
 		this.labels = [];
 		// const texts = ["18:00", "00:00", "06:00", "12:00"];
-		const texts = [
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-			".",
-		];
 
-		for (let i = 0; i < texts.length; i++) {
-			let a = (i / texts.length) * 2 * Math.PI;
-			let r = (this.outerRadius + this.innerRadius) / 2;
-			let x = r * Math.cos(a);
-			let y = r * Math.sin(a);
+		// for (let i = 0; i < texts.length; i++) {
+		// 	let a = (i / texts.length) * 2 * Math.PI;
+		// 	let r = (this.outerRadius + this.innerRadius) / 2;
+		// 	let x = r * Math.cos(a);
+		// 	let y = r * Math.sin(a);
 
-			let label = this.scene.addText({
-				x,
-				y,
-				size: 24,
-				fontFamily: "Lato-Bold",
-				color: "white",
-				text: texts[i],
-			});
-			label.setOrigin(0.5);
-			this.add(label);
-			this.labels.push(label);
-		}
+		// 	let label = this.scene.addText({
+		// 		x,
+		// 		y,
+		// 		size: 24,
+		// 		fontFamily: "Lato-Bold",
+		// 		color: "white",
+		// 		text: texts[i],
+		// 	});
+		// 	label.setOrigin(0.5);
+		// 	this.add(label);
+		// 	this.labels.push(label);
+		// }
 	}
 
 	setDate(month: number, day: number, hour: number) {
@@ -187,15 +162,23 @@ export class SunDial extends Phaser.GameObjects.Container {
 			this.graphics.fillPath();
 		}
 
-		for (let i = 0; i < stops.length; i++) {
-			let [time, color] = stops[i];
-			let r = this.outerRadius + (this.outerRadius - this.innerRadius) / 4;
-			let a = time * 2 * Math.PI + Math.PI / 2;
-			if (summertime) a -= (1 / 24) * 2 * Math.PI;
-			let x = r * Math.cos(a);
-			let y = r * Math.sin(a);
-			this.graphics.fillStyle(color);
-			this.graphics.fillCircle(x, y, 15);
-		}
+		let r = this.outerRadius - (this.outerRadius - this.innerRadius) / 2;
+		let a = (hour / 24) * 2 * Math.PI + Math.PI / 2;
+		if (summertime) a -= (1 / 24) * 2 * Math.PI;
+		let x = r * Math.cos(a);
+		let y = r * Math.sin(a);
+		this.graphics.fillStyle(Color.White);
+		this.graphics.fillCircle(x, y, 5);
+
+		// for (let i = 0; i < stops.length; i++) {
+		// 	let [time, color] = stops[i];
+		// 	let r = this.outerRadius + (this.outerRadius - this.innerRadius) / 4;
+		// 	let a = time * 2 * Math.PI + Math.PI / 2;
+		// 	if (summertime) a -= (1 / 24) * 2 * Math.PI;
+		// 	let x = r * Math.cos(a);
+		// 	let y = r * Math.sin(a);
+		// 	this.graphics.fillStyle(color);
+		// 	this.graphics.fillCircle(x, y, 15);
+		// }
 	}
 }

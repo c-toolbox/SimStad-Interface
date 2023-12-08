@@ -34,11 +34,11 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	send(data: object) {
 		this.emit("debug", JSON.stringify(data));
 
-		if (!this.socket || this.socket.readyState != WebSocket.OPEN) {
+		if (this.socket && this.socket.readyState == WebSocket.OPEN) {
+			this.socket.send(JSON.stringify(data));
+		} else {
 			console.warn("Socket is closed");
 		}
-
-		this.socket.send(JSON.stringify(data));
 	}
 
 	/* Methods */

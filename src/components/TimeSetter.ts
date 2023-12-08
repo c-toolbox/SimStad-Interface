@@ -44,8 +44,7 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 		});
 		this.add(this.background);
 
-		this.sunDial = new SunDial(scene, 0, 0);
-		this.sunDial.setVisible(false);
+		this.sunDial = new SunDial(scene, 0, 10);
 		this.add(this.sunDial);
 
 		this.dateSlider = new TestSlider(scene, 0, -50, "Date");
@@ -78,6 +77,7 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 
 		this.dateSlider.setLabel(languageManager.getDate(date));
 		this.emit("setTime", this.year, this.month, this.day, this.hour);
+		this.updateSunDial();
 	}
 
 	setHour(value: number) {
@@ -89,6 +89,7 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 		this.hourSlider.setLabel(languageManager.getHour(date));
 
 		this.emit("setTime", this.year, this.month, this.day, this.hour);
+		this.updateSunDial();
 	}
 
 	numberToDate(value: number) {

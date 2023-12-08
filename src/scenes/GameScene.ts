@@ -18,6 +18,9 @@ export class GameScene extends BaseScene {
 
 	private state: PageState;
 	private pages: Page[];
+	private homePage: HomePage;
+	private scenariosPage: ScenariosPage;
+	private debugPage: DebugPage;
 
 	private socket: SocketManager;
 
@@ -45,7 +48,7 @@ export class GameScene extends BaseScene {
 		let margin = 100;
 		let padding = 40;
 
-		let layout = new Phaser.Geom.Rectangle(
+		let box = new Phaser.Geom.Rectangle(
 			margin,
 			margin,
 			this.W - 2 * margin,
@@ -54,29 +57,32 @@ export class GameScene extends BaseScene {
 
 		let map = this.add.image(0, 0, "karta");
 		map.angle = -90;
-		map.setScale(layout.height / map.width);
-		map.setPosition(layout.right - map.displayHeight / 2, layout.centerY);
+		map.setScale(box.height / map.width);
+		map.setPosition(box.right - map.displayHeight / 2, box.centerY);
 
-		let leftLayout = new Phaser.Geom.Rectangle(
-			layout.left + padding,
-			layout.top + padding,
-			layout.width - map.displayHeight - margin - 2 * padding,
-			layout.height - 2 * padding
+		let panel = new Phaser.Geom.Rectangle(
+			box.left + padding,
+			box.top + padding,
+			box.width - map.displayHeight - margin - 2 * padding,
+			box.height - 2 * padding
 		);
 
 		let leftBackground = new RoundRectangle(this, {
-			x: leftLayout.centerX,
-			y: leftLayout.centerY,
-			width: leftLayout.width + 2 * padding,
-			height: leftLayout.height + 2 * padding,
+			x: panel.centerX,
+			y: panel.centerY,
+			width: panel.width + 2 * padding,
+			height: panel.height + 2 * padding,
 			radius: 16,
 			color: Color.Slate800,
 		});
 
 		this.pages = [];
-		this.pages.push(new HomePage(this, PageState.Home, leftLayout));
-		this.pages.push(new ScenariosPage(this, PageState.Scenarios, leftLayout));
-		this.pages.push(new DebugPage(this, PageState.Debug, leftLayout));
+		this.homePage = new HomePage(this, PageState.Home, panel);
+		this.scenariosPage = new ScenariosPage(this, PageState.Scenarios, panel);
+		this.debugPage = new DebugPage(this, PageState.Debug, panel);
+		this.pages.push(this.homePage);
+		this.pages.push(this.scenariosPage);
+		this.pages.push(this.debugPage);
 
 		this.pages.forEach((page) => {
 			page.on("state", (state: PageState) => {
@@ -88,7 +94,7 @@ export class GameScene extends BaseScene {
 			});
 		});
 
-		this.timeSetter = new TimeSetter(this, map.x, layout.bottom - 150);
+		this.timeSetter = new TimeSetter(this, map.x, box.bottom - 150);
 		this.timeSetter.on(
 			"setTime",
 			(year: number, month: number, day: number, hour: number) => {
@@ -124,12 +130,12 @@ export class GameScene extends BaseScene {
 	}
 
 	onSocketMessage(data: any) {
-		console.log(data);
-		// Insert logic here
 		if (data.type == "ScenarioResponse") {
+			this.scenariosPage.loadScenarios(data);
 		}
 
 		if (data.type == "PingResponse") {
+			console.log("Ping!");
 		}
 	}
 

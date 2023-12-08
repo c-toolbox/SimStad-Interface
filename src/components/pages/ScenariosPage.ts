@@ -3,12 +3,14 @@ import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { Color } from "@/utils/colors";
 
-import scenarioData from "@/data/scenarios.json";
+// import scenarioData from "@/data/scenarios.json";
 import { ScrollArea } from "../elements/ScrollArea";
+import { ScrollBar } from "@/components/elements/ScrollBar";
 import { RoundRectangle } from "../elements/RoundRectangle";
 
 export class ScenariosPage extends Page {
 	private scrollArea: ScrollArea;
+	private scrollBar: ScrollBar;
 
 	constructor(
 		scene: BaseScene,
@@ -34,9 +36,23 @@ export class ScenariosPage extends Page {
 		this.addButton(x, y, w, h, "Back", Color.Slate600, () => {
 			this.emit("state", PageState.Home);
 		});
-		this.addButton(layout.right - w / 2, y, w, h, "Reset", Color.Rose800, () => {
+		this.addButton(
+			layout.right - w / 2,
+			y,
+			w,
+			h,
+			"Reset",
+			Color.Rose800,
+			() => {
+				this.emit("send", {
+					type: "Reset",
+					misc: "123",
+				});
+			}
+		);
+		this.addButton(layout.centerX, y, w, h, "Load", Color.Green800, () => {
 			this.emit("send", {
-				type: "ResetDatasets",
+				type: "ScenariosRequest",
 			});
 		});
 
@@ -50,6 +66,15 @@ export class ScenariosPage extends Page {
 		);
 		this.add(this.scrollArea);
 
+		this.scrollBar = new ScrollBar(
+			this.scene,
+			-this.scrollArea.width / 2,
+			0,
+			6,
+			this.scrollArea.height
+		);
+		this.add(this.scrollBar);
+
 		let areaBackground = new RoundRectangle(scene, {
 			x: this.scrollArea.centerX,
 			y: this.scrollArea.centerY,
@@ -60,14 +85,25 @@ export class ScenariosPage extends Page {
 		});
 		this.add(areaBackground);
 		this.sendToBack(areaBackground);
+	}
 
+	update(time: number, delta: number) {
+		super.update(time, delta);
+
+		this.scrollArea.update(time, delta);
+		this.scrollBar.set(this.scrollArea.getScroll());
+	}
+
+	loadScenarios(scenarioData: any) {
 		let i = 0;
 
-		x = s;
-		y = 1.5 * s;
-		w = (this.scrollArea.width - 4 * s) / 3;
+		let s = 20;
+		let x = s;
+		let y = 1.5 * s;
+		let h = 64;
+		let w = (this.scrollArea.width - 4 * s) / 3;
 
-		scenarioData.scenarios.forEach((scenario) => {
+		scenarioData.scenarios.forEach((scenario: any) => {
 			let label = this.scene.addText({
 				x: this.scrollArea.width / 2,
 				y: y,
@@ -94,8 +130,8 @@ export class ScenariosPage extends Page {
 
 			let bx = w / 2 + s;
 
-			scenario.sections.forEach((section) => {
-				section.sectionObject.forEach((object) => {
+			scenario.sections.forEach((section: any) => {
+				section.sectionObject.forEach((object: any) => {
 					let button = this.addButton(
 						bx,
 						y,
@@ -105,7 +141,7 @@ export class ScenariosPage extends Page {
 						Color.Green700,
 						() => {
 							this.emit("send", {
-								type: "ActivateDatasets",
+								type: "ActiveDatasetRequest",
 								datasets: object.filenames,
 							});
 						}
@@ -122,11 +158,5 @@ export class ScenariosPage extends Page {
 
 			y += 110;
 		});
-	}
-
-	update(time: number, delta: number) {
-		super.update(time, delta);
-
-		this.scrollArea.update(time, delta);
 	}
 }
