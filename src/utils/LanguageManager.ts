@@ -2,8 +2,8 @@ import swedishLocales from "@/assets/locales/sv-SE.json";
 import englishLocales from "@/assets/locales/en-US.json";
 
 export enum LanguageKey {
-	English = "english",
-	Swedish = "swedish",
+	English = "en-US",
+	Swedish = "sv-SE",
 }
 
 interface BoundObject {
@@ -149,6 +149,20 @@ class LanguageManager {
 				blob.callback();
 			}
 		}
+	}
+
+	getDate(date: Date) {
+		return date.toLocaleString(this.currentLanguage, {
+			month: "long",
+			day: "numeric",
+		});
+	}
+
+	getHour(date: Date) {
+		return date.toLocaleString(this.currentLanguage, {
+			hour: "numeric",
+			minute: "numeric",
+		});
 	}
 }
 

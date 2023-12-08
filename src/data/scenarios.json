@@ -1,0 +1,1610 @@
+{
+	"scenarios": [
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Gatusimulering",
+							"comment": "",
+							"text1": "Bullersimulering i gaturummet.\n\nEn nattbuss kör ensam på Gibraltargatan. Ljudnivån ökar vid fasaderna längs gatan där fordonet färdas och ljudet breder ut sig bland husen.",
+							"text2": "Ljudutbredningen sker via reflektion i husens fasader och genom diffraktion som sprider ljudet runt hörnen på husen. Beräkningarna baseras på en förenklad fysikalisk modellering av ljudutbredning i stadsmiljö.                                                                                                                                                                  Visualisering DTCC, Chalmers",
+							"legend1": "Simulerad_ljudnivå_HR",
+							"legend2": "",
+							"filenames": "NoiseMedia/Noise-Media",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["NoiseMedia/Noise-Media"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Bullerkarta",
+							"comment": "",
+							"text1": "Bullerkarta för Göteborg.\n\nVisar årsmedelvärde av trafikbuller. Inom EU görs bullerkartläggning för alla städer med fler än 100 000 invånare och för områden längs större vägar, järnvägar och vid flygplatser.",
+							"text2": "",
+							"legend1": "ljudnivå_HR_stor_text",
+							"legend2": "",
+							"filenames": "Noise/Noise",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": ["Noise/Noise"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Buller"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Typ av lokal",
+							"comment": "",
+							"text1": "Detta datalager visar vad byggnaderna i huvudsak används till.",
+							"text2": "Visualisering DTCC, Chalmers",
+							"legend1": "byggnadsfunktion_HR_stor",
+							"legend2": "",
+							"filenames": "Building/Building Types",
+							"default": true,
+							"isIdle": false,
+							"filenameArray": ["Building/Building Types"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Byggår",
+							"comment": "",
+							"text1": "Detta datalager visar vilken tidsperiod byggnaderna är uppförda.",
+							"text2": "Visualisering DTCC, Chalmers",
+							"legend1": "byggnadsår_HR_stor",
+							"legend2": "",
+							"filenames": "Building/Building Years",
+							"default": false,
+							"isIdle": true,
+							"filenameArray": ["Building/Building Years"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Byggnadsdata"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Energiklasser för byggnader",
+							"comment": "",
+							"text1": "Detta datalager visar energiklasser per byggnad. Indelningen i de olika klasserna A-G är gjorda utifrån hur energianvändningen för en byggnad förhåller sig procenturellt till dagens byggnormer.",
+							"text2": "Visualisering DTCC, Chalmers",
+							"legend1": "energiklasser_HR_stor_text",
+							"legend2": "",
+							"filenames": "Building/Building Energy",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": ["Building/Building Energy"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Energibehov per areaenhet",
+							"comment": "",
+							"text1": "Detta datalager visar hotspots för det årliga (primära) energibehovet i byggnader för uppvärmning och elektricitet. Baserad på en energiberäkningsmodell för år 2020.",
+							"text2": "Visualisering DTCC, Chalmers",
+							"legend1": "Arligt_energibehov_HR_dec1",
+							"legend2": "",
+							"filenames": "Building/Building Energy Heatmap",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Building/Building Energy Heatmap"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Soltimmar Sommar",
+							"comment": "",
+							"text1": "Detta datalager visar antal soltimmar för årets längsta (sommarsolståndet 21/6). Visualiseringen börjar strax innan soluppgång och slutar strax efter.",
+							"text2": "Visualisering DTCC, Chalmers",
+							"legend1": "Dagsljusnivå_HR_dec1",
+							"legend2": "",
+							"filenames": "SunlightMedia/SunlightWinter",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["SunlightMedia/SunlightWinter"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Soltimmar Vinter",
+							"comment": "",
+							"text1": "Detta datalager visar antal soltimmar för årets  kortaste dag (vintersolståndet 21/12). Visualiseringen börjar strax innan soluppgång och slutar strax efter.",
+							"text2": "Visualisering DTCC, Chalmers",
+							"legend1": "Dagsljusnivå_HR_dec1",
+							"legend2": "",
+							"filenames": "SunlightMedia/SunlightSummer",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["SunlightMedia/SunlightSummer"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Energianvändning"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Byggplaner/hav 1",
+							"comment": "",
+							"text1": "Framtida byggnationer visas tillsammans med havsnivåhöjning 2070.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "SeaLevelRise/Year 2070,FutureCity/newInfrastructure,FutureCity/newPark,FutureCity/2011_buildings,FutureCity/2025_buildings,FutureCity/2035_buildings,FutureCity/2050_buildings",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"SeaLevelRise/Year 2070",
+								"FutureCity/newInfrastructure",
+								"FutureCity/newPark",
+								"FutureCity/2011_buildings",
+								"FutureCity/2025_buildings",
+								"FutureCity/2035_buildings",
+								"FutureCity/2050_buildings"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Byggplan/skyfall 1",
+							"comment": "",
+							"text1": "Framtida byggnationer och maximalt vattendjup vid ett 100-årsregn utan åtgärder gjorda.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "FutureCity/newInfrastructure,FutureCity/newPark,FutureCity/2011_buildings,FutureCity/2025_buildings,FutureCity/2035_buildings,FutureCity/2050_buildings",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"FutureCity/newInfrastructure",
+								"FutureCity/newPark",
+								"FutureCity/2011_buildings",
+								"FutureCity/2025_buildings",
+								"FutureCity/2035_buildings",
+								"FutureCity/2050_buildings"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Byggplan/skyfall 2",
+							"comment": "",
+							"text1": "Framtida byggnationer och maximalt vattendjup vid ett 100-årsregn med åtgärder gjorda.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "FutureCity/newInfrastructure,FutureCity/newPark,FutureCity/2011_buildings,FutureCity/2025_buildings,FutureCity/2035_buildings,FutureCity/2050_buildings",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"FutureCity/newInfrastructure",
+								"FutureCity/newPark",
+								"FutureCity/2011_buildings",
+								"FutureCity/2025_buildings",
+								"FutureCity/2035_buildings",
+								"FutureCity/2050_buildings"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Byggplaner/buller",
+							"comment": "",
+							"text1": "Framtida byggnationer och bullersimulering längs med Gibraltargatan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "NoiseMedia/Noise-Media,FutureCity/newInfrastructure,FutureCity/newPark,FutureCity/2011_buildings,FutureCity/2025_buildings,FutureCity/2035_buildings,FutureCity/2050_buildings",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"NoiseMedia/Noise-Media",
+								"FutureCity/newInfrastructure",
+								"FutureCity/newPark",
+								"FutureCity/2011_buildings",
+								"FutureCity/2025_buildings",
+								"FutureCity/2035_buildings",
+								"FutureCity/2050_buildings"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Många lager...",
+							"comment": "",
+							"text1": "Här har vi samlat en blandning av en massa lager samtidigt. Mycket information blir lätt för mycket information...",
+							"text2": "Kartor, ortofoto, havsnivåhöjning, energianvändning, byggnadsdata, buller, stadsutveckling, Västtrafik, skyfall, mobilitet och sevärdheter.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1998,FutureCity/newInfrastructure,FutureCity/newPark,FutureCity/2011_buildings,FutureCity/2025_buildings,FutureCity/2035_buildings,FutureCity/2050_buildings,vasttrafik_livemap/bus,vasttrafik_livemap/tram,vasttrafik_livemap/train,vasttrafik_livemap/boat",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"Orthos/Ortofoto 1998",
+								"FutureCity/newInfrastructure",
+								"FutureCity/newPark",
+								"FutureCity/2011_buildings",
+								"FutureCity/2025_buildings",
+								"FutureCity/2035_buildings",
+								"FutureCity/2050_buildings",
+								"vasttrafik_livemap/bus",
+								"vasttrafik_livemap/tram",
+								"vasttrafik_livemap/train",
+								"vasttrafik_livemap/boat"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Datavisualisering",
+							"comment": "",
+							"text1": "Visualisering handlar bland annat om att göra en stor och komplex datamängd begriplig.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": true,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Globala målen",
+							"comment": "",
+							"text1": "En digital tvillingstad kan hjälpa oss i arbetet med De globala målen och en hållbar utveckling.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/Goals_sv",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/Goals_sv"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Vit",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Orange",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/orange",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/orange"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Gul",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/Yellow",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/Yellow"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Grön",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/Green",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/Green"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Blå",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/Blue",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/Blue"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Lime Grön",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/lime_green",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/lime_green"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Magenta",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/magenta",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/magenta"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Ljus Blå",
+							"comment": "",
+							"text1": "",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "CleanColor/brightblue",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/brightblue"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Favoriter"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "År 1809",
+							"comment": "",
+							"text1": "Historiska kartor\n\nGöteborg är byggt på vatten – Göta älvs utbredning år 1809",
+							"text2": "No-Data",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": true,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1910",
+							"comment": "",
+							"text1": "Historiska kartor\n\nGöteborg är byggt på vatten – Göta älvs utbredning år 1910",
+							"text2": "No-Data",
+							"legend1": "No-Data",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1921",
+							"comment": "",
+							"text1": "Historiska kartor\n\nGöteborg är byggt på vatten – Göta älvs utbredning år 1921",
+							"text2": "No-Data",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2011",
+							"comment": "",
+							"text1": "Historiska kartor\n\nGöteborg är byggt på vatten – Göta älvs utbredning år 2011",
+							"text2": "No-Data",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Historiska kartor"
+				},
+				{
+					"sectionObject": [
+						{
+							"title": "År 2014",
+							"comment": "",
+							"text1": "Havsnivå – dagens situation",
+							"text2": "",
+							"legend1": "havshöjning_2014_HR",
+							"legend2": "",
+							"filenames": "SeaLevelRise/Year 2014",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["SeaLevelRise/Year 2014"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2070",
+							"comment": "",
+							"text1": "Havsnivå – framtidsscenario",
+							"text2": "Havsnivån förväntas stiga och Göta älv breder ut sig - förväntat läge år 2070",
+							"legend1": "havsnivåhöjning_2070_HR",
+							"legend2": "",
+							"filenames": "SeaLevelRise/Year 2070",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["SeaLevelRise/Year 2070"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2100",
+							"comment": "",
+							"text1": "Havsnivå – framtidsscenario",
+							"text2": "Simulerat för den högsta havsnivån under ett dygn år 2100. Beräkningen gjord för uppehållsväder. Flödet i tillrinnande vattendrag till Göta Älv är satt till dess högflöde (HQ). ",
+							"legend1": "havsnivåhöjning_2100_HR",
+							"legend2": "",
+							"filenames": "SeaLevelRise/Year 2100",
+							"default": false,
+							"isIdle": true,
+							"filenameArray": ["SeaLevelRise/Year 2100"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Scenario högflöde"
+				}
+			],
+			"title": "Havsnivåhöjning"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Stadskarta",
+							"comment": "",
+							"text1": "Stadskarta över Göteborg",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "BaseMaps/CityMap",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": ["BaseMaps/CityMap"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Stadsdelar",
+							"comment": "",
+							"text1": "Stadskarta över Göteborg med stadsdelar markerade",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Gatunamn",
+							"comment": "",
+							"text1": "Stadskarta över Göteborg med vissa gatunamn markerade",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Kartor"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Mobilitet",
+							"comment": "",
+							"text1": "Denna visualisering visar boendes förflyttningar under ett dygn innanför vallgraven i Göteborgs centrum. Simuleringen använder en syntetisk befolkning baserad på demografisk data (SCB). Data från en trafikanalys (Travel Survey – RVU Trafikanalys 2017) har använts för att tilldela den syntetiska befolkningen aktiviteter under en dag.",
+							"text2": " Varje färgad linje representerar en individ som ger sig av hemifrån för att utföra sina aktivtiteter. Linjernas färger representerar hur de boende valt att transportera sig. Visualisering DTCC, Chalmers",
+							"legend1": "mobilitet_HR_stor",
+							"legend2": "",
+							"filenames": "CleanColor/Black,MobilityMedia/MobilityMap",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": [
+								"CleanColor/Black",
+								"MobilityMedia/MobilityMap"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "No-Data",
+							"comment": "",
+							"text1": "No-Data",
+							"text2": "No-Data",
+							"legend1": "Location – Inom Vallgraven, Göteborg, Sweden Street Network – Trafikverket Building Data – Lantmateriet Point of Interests - OpenStreetMaps Population and Demographics – SCB (2021) Travel Survey – RVU Trafikanalys (2017)",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Mobilitet"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "År 2020",
+							"comment": "",
+							"text1": "Ortofoto\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "No-Data",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2020",
+							"default": false,
+							"isIdle": true,
+							"filenameArray": ["Orthos/Ortofoto 2020"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Nutid"
+				},
+				{
+					"sectionObject": [
+						{
+							"title": "År 1931",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoton tagna vinkelrätt mot markytan. Beroende på teknik och tidens gång är passningen mot kartan inte perfekt då bland annat markförhållanden kan ha ändrat sig.",
+							"text2": "Det kan vara svårt att uppfatta äldre bilder då de skiljer sig mycket från modellen. Titta lite extra kring hamnområdet. Där finns stora förändringar genom åren.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1931",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 1931"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1942",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoton tagna vinkelrätt mot markytan. Beroende på teknik och tidens gång är passningen mot kartan inte perfekt då bland annat markförhållanden kan ha ändrat sig.",
+							"text2": "Det kan vara svårt att uppfatta äldre bilder då de skiljer sig mycket från modellen. Titta lite extra kring hamnområdet. Där finns stora förändringar genom åren.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1942",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 1942"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1956-1963",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoton tagna vinkelrätt mot markytan. Beroende på teknik och tidens gång är passningen mot kartan inte perfekt då bland annat markförhållanden kan ha ändrat sig.",
+							"text2": "Det kan vara svårt att uppfatta äldre bilder då de skiljer sig mycket från modellen. Titta lite extra kring hamnområdet. Där finns stora förändringar genom åren.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1956-1963",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 1956-1963"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1970",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoton tagna vinkelrätt mot markytan. Beroende på teknik och tidens gång är passningen mot kartan inte perfekt då bland annat markförhållanden kan ha ändrat sig.",
+							"text2": "Det kan vara svårt att uppfatta äldre bilder då de skiljer sig mycket från modellen. Titta lite extra kring hamnområdet. Där finns stora förändringar genom åren.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1970",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 1970"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1995",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoton tagna vinkelrätt mot markytan. Beroende på teknik och tidens gång är passningen mot kartan inte perfekt då bland annat markförhållanden kan ha ändrat sig.",
+							"text2": "Det kan vara svårt att uppfatta äldre bilder då de skiljer sig mycket från modellen. Titta lite extra kring hamnområdet. Där finns stora förändringar genom åren.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1995",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 1995"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 1998",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "No-Data",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 1998",
+							"default": true,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 1998"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2001",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2001",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2001"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2003",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2003",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2003"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2006",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2006",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2006"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2008",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2008",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2008"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2010-2011",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2010-2011",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2010-2011"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2015",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2015",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2015"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "År 2017",
+							"comment": "",
+							"text1": "Historiska ortofoton\n\nFoto taget vinkelrätt mot markytan.",
+							"text2": "",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "Orthos/Ortofoto 2017",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Orthos/Ortofoto 2017"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Historiska bilder"
+				}
+			],
+			"title": "Ortofoto"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Universeum",
+							"comment": "",
+							"text1": "Universeum\n\nHär är du! Sveriges nationella vetenskapscenter placerat vid Korsvägen i Göteborg längs med evenemangsstråket.",
+							"text2": "No-Data",
+							"legend1": "Universeum1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.695533752441406,
+								"y": 11.989508628845215
+							}
+						},
+						{
+							"title": "Feskekörka",
+							"comment": "",
+							"text1": "Feskekörka\n\nUrsprungligen kallad Fiskhallen, invigd 1874. En ikonisk fisk- och skaldjursmarknad som fått sitt namn för att den liknar en kyrka.",
+							"text2": "No-Data",
+							"legend1": "feskekörka",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.7010383605957,
+								"y": 11.957812309265137
+							}
+						},
+						{
+							"title": "Lilla bommen",
+							"comment": "",
+							"text1": "Lilla bommen – Läppstiftet\n\nNamnet Lilla Bommen syftar både på skyskrapan, ett torg samt området kring gästhamnen.",
+							"text2": "I folkmun är denna 86 meters röd- och vitrandiga byggnad nog mest känd som Läppstiftet. Några andra namn som förekommer är Skanskaskrapan och Vattenståndet.",
+							"legend1": "lillabommen",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.71339416503906,
+								"y": 11.967538833618164
+							}
+						},
+						{
+							"title": "Liseberg",
+							"comment": "",
+							"text1": "Liseberg\n\nNordens största nöjespark. Invigd under Jubileumsutställningen i Göteborg 1923.",
+							"text2": "Är sedan många år Sveriges populäraste besöksmål.",
+							"legend1": "Liseberg",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.694923400878906,
+								"y": 11.992133140563965
+							}
+						},
+						{
+							"title": "Kopparmärra",
+							"comment": "",
+							"text1": "Kopparmärra\n\nKarl IX:s ryttarstaty. Har stått på sin nuvarande plats vid Kungsportsplatsen sedan 1936. Som Hertig Karl grundade han föregångaren till det nuvarande Göteborg, kallat Karl IX:s Göteborg.",
+							"text2": "Namnet Kopparmärra är ett tydligt exempel på göteborgshumorn då kungen sitter på en hingst gjord av brons (88 procent koppar och 12 procent tenn). Bildkälla: Wikimedia, Mattias Blomgren",
+							"legend1": "Kopparmärra1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.704586029052734,
+								"y": 11.969740867614746
+							}
+						},
+						{
+							"title": "Poseidon",
+							"comment": "",
+							"text1": "Poseidon\n\nPlacerad på Götaplatsen, vänd ner mot Kungsportsavenyn, är Poseidon ett av Göteborgs mest kända landmärken.",
+							"text2": "Bronsstatyn skapades av Carl Milles och invigdes 1931.",
+							"legend1": "poseidon",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.69718933105469,
+								"y": 11.979598999023438
+							}
+						},
+						{
+							"title": "Göteborgsoperan",
+							"comment": "",
+							"text1": "Göteborgsoperan\n\nGöteborgsoperan ligger vid Lilla Bommen och invigdes 1994 under tre kvällar i rad. Den tredje kvällen hälsades huset välkommet till kajen av sin gudmor, hovsångerskan Birgit Nilsson.",
+							"text2": "No-Data",
+							"legend1": "goteborgsoperan",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.710655212402344,
+								"y": 11.963217735290527
+							}
+						},
+						{
+							"title": "Slottsskogen",
+							"comment": "",
+							"text1": "Slottsskogen\n\nOfficiellt namn är Slottsskogsparken. Parken ligger i en skog som har sina rötter i Älvsborgs kungsladugårds marker sedan 600 år tillbaka. Den har varit öppen för allmänheten sedan 1876.",
+							"text2": "No-Data",
+							"legend1": "slottsskogen",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.68653869628906,
+								"y": 11.942198753356934
+							}
+						},
+						{
+							"title": "Botaniska",
+							"comment": "",
+							"text1": "Botaniska\n\nGöteborgs botaniska trädgård invigdes i samband med Jubileumsutställningen 1923. Den omfattar idag 175 hektar (40 hektar odlad) där delar av Änggårdsbergens naturreservat ingår.",
+							"text2": "Här odlas cirka 16 000 olika arter varav 4 000 i växthus.",
+							"legend1": "botaniskaträdgården",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.682289123535156,
+								"y": 11.950013160705566
+							}
+						},
+						{
+							"title": "Skansen Lejonet",
+							"comment": "",
+							"text1": "Skansen Lejonet\n\nSkansen Lejonet är en 1600-talsbefästning som ligger på Gullberget. Används idag som bland annat festlokal. Byggnadsminne sedan 1935.",
+							"text2": "No-Data",
+							"legend1": "skansenlejonet",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.7143440246582,
+								"y": 11.989441871643066
+							}
+						},
+						{
+							"title": "Skansen Kronan",
+							"comment": "",
+							"text1": "Skansen Kronan\n\nSkansen Kronan är en 1600-talsbefästning som ligger på Risåsberget (även kallat Skansberget). Används idag som bland annat festlokal och café. Byggnadsminne sedan 1935.",
+							"text2": "No-Data",
+							"legend1": "skansenkronan",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.696048736572266,
+								"y": 11.955352783203125
+							}
+						},
+						{
+							"title": "Kronhuset",
+							"comment": "",
+							"text1": "Kronhuset\n\nKronhuset är en av Göteborgs älsta byggnader. Det uppfördes 1643-1654 och användes då som tyghus, det vill säga lager för kanoner och andra vapen, men även som matförråd. Bildkälla: Wikimedia, Andrzej Otrębski",
+							"text2": "No-Data",
+							"legend1": "Kronhuset1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.707881927490234,
+								"y": 11.9636812210083
+							}
+						},
+						{
+							"title": "Gustaf Adolfs Torg",
+							"comment": "",
+							"text1": "Gustaf Adolfs Torg\n\nEfter uppförandet av Gustav II Adolfsstatyn (1854) kom Stora torget att istället kallas för Gustaf Adolfs torg. Statyn föreställer Gustav II Adolf pekandes med höger hand ned mot torget samtidigt som han tittar i fjärran.",
+							"text2": "Detta avbildar det tänkta tillfället när kungen ska ha uttalat \"Här ska staden ligga!\". Symboliskt representerar statyn därmed tillblivelsen av staden Göteborg.",
+							"legend1": "gustavadolfstorg",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.707130432128906,
+								"y": 11.966821670532227
+							}
+						},
+						{
+							"title": "Trädgårdsföreningen",
+							"comment": "",
+							"text1": "Trädgårdsföreningen\n\nStadspark i centrala Göteborg som rymmer rosarium, växthus, palmhus, caféer, restaurang och en utomhusscen. Byggnadsminne sedan 1992.",
+							"text2": "No-Data",
+							"legend1": "trädgårdsföreningen",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.70526123046875,
+								"y": 11.975520133972168
+							}
+						},
+						{
+							"title": "Scandinavium",
+							"comment": "",
+							"text1": "Scandinavium\n\nGöteborgs största inomhusarena för både sportarrangemang och konserter. Hemmaarena för Frölunda HC. Bildkälla: Wikimedia, Mattias Blomgren",
+							"text2": "No-Data",
+							"legend1": "Scandinavium1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.69923400878906,
+								"y": 11.987653732299805
+							}
+						},
+						{
+							"title": "Gamla Ullevi",
+							"comment": "",
+							"text1": "Gamla Ullevi\n\nFotbollsarena med publikkapacitet på drygt 18 000 åskådare. Ligger på samma plats som den tidigare arenan Gamla Ullevi. Hemmaarena för IFK Göteborg, Gais och Örgryte IS.",
+							"text2": "Nationalarena för Sveriges damlandslag i fotboll. Bildkälla: Wikimedia, Averater",
+							"legend1": "GamlaUllevi1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.70627212524414,
+								"y": 11.980154991149902
+							}
+						},
+						{
+							"title": "Ullevi",
+							"comment": "",
+							"text1": "Ullevi\n\nUllevi Stadion, av många kallat Nya Ullevi, är Nordens största evenemangsarena. Invigd 1958 då Sverige arrangerade Världsmästerskapet i fotboll.",
+							"text2": "Publikrekordet, 70 144 personer, är från Håkan Hellströms andra konsert 2016. Bildkälla: Wikimedia, Andreas Palmnäs",
+							"legend1": "NyaUllevi1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.70588684082031,
+								"y": 11.987333297729492
+							}
+						},
+						{
+							"title": "Karlatornet",
+							"comment": "",
+							"text1": "Karlatornet\n\nKarlatornet är under uppbyggnad och beräknas bli färdigt 2023. Den planerade höjden är 245 meter vilket då gör det till Nordens högsta byggnad. Bildkälla: Wikimedia, Vogler",
+							"text2": "No-Data",
+							"legend1": "Karlatornet1024x1024",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.70982360839844,
+								"y": 11.93936824798584
+							}
+						},
+						{
+							"title": "Hisingsbron",
+							"comment": "",
+							"text1": "Hisingsbron\n\nInvigd under sommaren 2021 är den en av Göteborgs nyare landmärken där den enar stadens två halvor över Göta älv. Bron är en lyftbro i stål och betong.",
+							"text2": "När den är stängd har den en seglingsfri höjd på 12 meter och i öppet läge 28 meter. De fyra pylonerna har en höjd på cirka 35 meter. Bildkälla: Alexander Ljungqvist/Fastighetskontoret Göteborgs stad, 2021.",
+							"legend1": "1024x1024hisingsbron_alexander-ljungqvi",
+							"legend2": "",
+							"filenames": "CleanColor/White",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["CleanColor/White"],
+							"sectionType": "PointLayer",
+							"lat_Lon": {
+								"x": 57.71489334106445,
+								"y": 11.967906951904297
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Sevärdheter"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Maxdjup 100-årsregn, nuläge",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar beräknade maximala vattendjup för dagens situation.",
+							"legend1": "maxdjup_nuläge_HR_stor",
+							"legend2": "",
+							"filenames": "Skyfall/Vattendjup nuläge",
+							"default": true,
+							"isIdle": false,
+							"filenameArray": ["Skyfall/Vattendjup nuläge"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Maxflöde 100-årsregn, nuläge",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar beräknade maximala ytvattenflöden för dagens situation.",
+							"legend1": "maxflöde_nuläge_HR_stor_text",
+							"legend2": "",
+							"filenames": "Skyfall/Ytvattenflöden nuläge",
+							"default": false,
+							"isIdle": true,
+							"filenameArray": ["Skyfall/Ytvattenflöden nuläge"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Beräknad varaktighet (>0,2 m), nuläge",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar hur länge vatten djupare än 0,2 m beräknas ligga kvar på marken utifrån dagens situation.",
+							"legend1": "varaktighet_nuläge_HR",
+							"legend2": "",
+							"filenames": "Skyfall/Varaktighet nuläge",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Skyfall/Varaktighet nuläge"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Strukturplan",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar på områdets strukturplan. Här kan man se de olika åtgärder som planeras för att minska de extrema skyfallens påverkan på staden.",
+							"legend1": "strukturplan_HR_stor_text",
+							"legend2": "",
+							"filenames": "Skyfall/Strukturplansområden,Skyfall/Styrning,Skyfall/Skyfallsyta,Skyfall/Skyfallsled,Skyfall/Högvattenskydd,Skyfall/Högvattenskydd öppningar",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"Skyfall/Strukturplansområden",
+								"Skyfall/Styrning",
+								"Skyfall/Skyfallsyta",
+								"Skyfall/Skyfallsled",
+								"Skyfall/Högvattenskydd",
+								"Skyfall/Högvattenskydd öppningar"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Scenarios utan åtgärder"
+				},
+				{
+					"sectionObject": [
+						{
+							"title": "Maxdjup 100-årsregn, åtgärd",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar beräknade maximala vattendjup med åtgärder gjorda.",
+							"legend1": "maxdjup_åtgärd_HR_stor",
+							"legend2": "",
+							"filenames": "Skyfall/Vattendjup åtgärd",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Skyfall/Vattendjup åtgärd"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Maxflöde 100-årsregn, åtgärd",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar beräknade maximala ytvattenflöden med åtgärder gjorda.",
+							"legend1": "maxflöde_åtgärd_HR_stor_text",
+							"legend2": "",
+							"filenames": "Skyfall/Ytvattenflöden åtgärd,Skyfall/Högvattenskydd,Skyfall/Högvattenskydd öppningar",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": [
+								"Skyfall/Ytvattenflöden åtgärd",
+								"Skyfall/Högvattenskydd",
+								"Skyfall/Högvattenskydd öppningar"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Beräknad varaktighet (>0,2 m), nuläge",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar hur länge vatten djupare än 0,2 m beräknas ligga kvar på marken med åtgärder gjorda.",
+							"legend1": "varaktighet_efter_åtgärd_HR",
+							"legend2": "",
+							"filenames": "Skyfall/Varaktighet åtgärd",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["Skyfall/Varaktighet åtgärd"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						},
+						{
+							"title": "Förändrat maximalt vattendjup",
+							"comment": "",
+							"text1": "Ett 100-årsregn är ett extremt skyfall som statistiskt sett inträffar en gång på 100 år.Man vet dock inte när det inträffar.",
+							"text2": "Detta datalager visar strukturplanens effekt på maximala vattendjup med åtgärder gjorda. Ett negativt djup (blå färg) innebär att vattendjupet minskat till följd av åtgärderna  medan ett positivt djup (röd färg) innebär att vattendjupet ökat.",
+							"legend1": "",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Scenarios med åtgärd"
+				}
+			],
+			"title": "Skyfall"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "Stadsutveckling, framtida byggnationer\n-2011\n-2025\n-2035\n-2050",
+							"comment": "",
+							"text1": "Stadsutveckling, framtida byggnationer. Färgerna visar ungefär när i tiden som bebyggelsen är planerad att vara klar.",
+							"text2": "",
+							"legend1": "stadsutveckling_HR_stor",
+							"legend2": "",
+							"filenames": "FutureCity/newInfrastructure,FutureCity/newPark,FutureCity/2011_buildings,FutureCity/2025_buildings,FutureCity/2035_buildings,FutureCity/2050_buildings",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": [
+								"FutureCity/newInfrastructure",
+								"FutureCity/newPark",
+								"FutureCity/2011_buildings",
+								"FutureCity/2025_buildings",
+								"FutureCity/2035_buildings",
+								"FutureCity/2050_buildings"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": ""
+				}
+			],
+			"title": "Stadsutveckling"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "- Spårvagn\n- Stadsbuss\n- Regionsbuss\n- Tåg",
+							"comment": "",
+							"text1": "Detta informationslager visar Västtrafiks olika trafikslag i realtid.",
+							"text2": "",
+							"legend1": "Västrafik_HR_stort_typsnitt",
+							"legend2": "",
+							"filenames": "vasttrafik_livemap/bus,vasttrafik_livemap/tram,vasttrafik_livemap/train,vasttrafik_livemap/boat",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": [
+								"vasttrafik_livemap/bus",
+								"vasttrafik_livemap/tram",
+								"vasttrafik_livemap/train",
+								"vasttrafik_livemap/boat"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Trafikslag"
+				},
+				{
+					"sectionObject": [
+						{
+							"title": "Linjesystem",
+							"comment": "",
+							"text1": "No-Data",
+							"text2": "No-Data",
+							"legend1": "No-Data",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "No-Data"
+				}
+			],
+			"title": "Test"
+		},
+		{
+			"sections": [
+				{
+					"sectionObject": [
+						{
+							"title": "- Spårvagn\n- Stadsbuss\n- Regionsbuss\n- Tåg",
+							"comment": "",
+							"text1": "Detta informationslager visar Västtrafiks olika trafikslag i realtid.",
+							"text2": "",
+							"legend1": "Västrafik_HR_stort_typsnitt",
+							"legend2": "",
+							"filenames": "vasttrafik_livemap/bus,vasttrafik_livemap/tram,vasttrafik_livemap/train,vasttrafik_livemap/boat",
+							"default": true,
+							"isIdle": true,
+							"filenameArray": [
+								"vasttrafik_livemap/bus",
+								"vasttrafik_livemap/tram",
+								"vasttrafik_livemap/train",
+								"vasttrafik_livemap/boat"
+							],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "Trafikslag"
+				},
+				{
+					"sectionObject": [
+						{
+							"title": "Linjesystem",
+							"comment": "",
+							"text1": "No-Data",
+							"text2": "No-Data",
+							"legend1": "No-Data",
+							"legend2": "",
+							"filenames": "No-Data",
+							"default": false,
+							"isIdle": false,
+							"filenameArray": ["No-Data"],
+							"sectionType": "Layer",
+							"lat_Lon": {
+								"x": -2.548986412567733e-15,
+								"y": -2.548986412567733e-15
+							}
+						}
+					],
+					"label1": "No-Data"
+				}
+			],
+			"title": "Västtrafik"
+		}
+	],
+	"type": "ScenarioResponse"
+}

@@ -10,12 +10,14 @@ export class TestButton extends Button {
 		scene: BaseScene,
 		x: number,
 		y: number,
+		width: number,
+		height: number,
 		text: string,
 		color: number
 	) {
 		super(scene, x, y);
-		this.width = 220;
-		this.height = 64;
+		this.width = width;
+		this.height = height;
 
 		this.background = new RoundRectangle(scene, {
 			width: this.width,

@@ -1,46 +1,50 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
-import { languageManager } from "@/utils/LanguageManager";
+import { Color } from "@/utils/colors";
 
-import { TestButton } from "@/components/TestButton";
-import { TestSlider } from "@/components/TestSlider";
+import { TimeSetter } from "@/components/TimeSetter";
+import { SocketManager } from "@/utils/SocketManager";
+import { Page, PageState } from "@/components/pages/Page";
+import { HomePage } from "@/components/pages/HomePage";
+import { ScenariosPage } from "@/components/pages/ScenariosPage";
 
-const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
-
-export enum State {
-	First = "First",
-	Second = "Second",
-	Third = "Third",
-	Fourth = "Fourth",
-}
+import { RoundRectangle } from "@/components/elements/RoundRectangle";
+import { DebugPage } from "@/components/pages/DebugPage";
 
 export class GameScene extends BaseScene {
-	private state: State;
 	private attractionOpen: boolean;
 	private infoWindowOpen: boolean;
 	private blurTween: Phaser.Tweens.Tween;
 
-	private socket: WebSocket;
+	private state: PageState;
+	private pages: Page[];
+
+	private socket: SocketManager;
 
 	private debugTexts: Phaser.GameObjects.Text[];
-	private testButtons: TestButton[];
-	private testSliders: TestSlider[];
+	private timeSetter: TimeSetter;
 
 	constructor() {
 		super({ key: "GameScene" });
 	}
 
 	create(): void {
-		this.fade(false, 200, 0x000000);
-		this.cameras.main.setBackgroundColor(0x0f172a);
+		this.fade(false, 200, Color.Black);
+		this.cameras.main.setBackgroundColor(Color.Slate900);
 		this.initBlur();
-		this.initWebSocket();
+
+		this.socket = new SocketManager(this);
+		this.socket.connect();
+		this.socket.on("message", this.onSocketMessage, this);
+		this.socket.on("debug", this.addDebugMessage, this);
 
 		// this.background = this.add.image(0, 0, "background");
 		// this.background.setOrigin(0);
 		// this.fitToScreen(this.background);
 
 		let margin = 100;
+		let padding = 40;
+
 		let layout = new Phaser.Geom.Rectangle(
 			margin,
 			margin,
@@ -53,232 +57,99 @@ export class GameScene extends BaseScene {
 		map.setScale(layout.height / map.width);
 		map.setPosition(layout.right - map.displayHeight / 2, layout.centerY);
 
-		// this.turtle = new Turtle(this, this.CX, this.CY);
+		let leftLayout = new Phaser.Geom.Rectangle(
+			layout.left + padding,
+			layout.top + padding,
+			layout.width - map.displayHeight - margin - 2 * padding,
+			layout.height - 2 * padding
+		);
 
-		// this.ui = new UI(this);
-
-		let title = this.addText({
-			x: layout.left,
-			y: layout.top,
-			size: 100,
-			color: "white",
+		let leftBackground = new RoundRectangle(this, {
+			x: leftLayout.centerX,
+			y: leftLayout.centerY,
+			width: leftLayout.width + 2 * padding,
+			height: leftLayout.height + 2 * padding,
+			radius: 16,
+			color: Color.Slate800,
 		});
-		languageManager.bind(title, "bread_title");
 
-		let bread = this.addText({
-			x: layout.left,
-			y: layout.top + 1.25 * title.displayHeight,
-			size: 32,
-			color: "white",
+		this.pages = [];
+		this.pages.push(new HomePage(this, PageState.Home, leftLayout));
+		this.pages.push(new ScenariosPage(this, PageState.Scenarios, leftLayout));
+		this.pages.push(new DebugPage(this, PageState.Debug, leftLayout));
+
+		this.pages.forEach((page) => {
+			page.on("state", (state: PageState) => {
+				this.setState(state);
+			});
+
+			page.on("send", (data: object) => {
+				this.socket.send(data);
+			});
 		});
-		languageManager.bind(bread, "bread_text");
-		bread.setWordWrapWidth(layout.width - map.displayHeight - 100);
 
-		// Test buttons
-
-		const buttonConfigs: any = [
-			{
-				text: "Knapp 1",
-				color: 0xb91c1c,
-				callback: () => {
-					this.sendSocketData({
-						type: "PingRequest",
-					});
-				},
-			},
-			{
-				text: "Knapp 2",
-				color: 0xb45309,
-				callback: () => {
-					this.sendSocketData({
-						type: "ScenariosRequest",
-					});
-				},
-			},
-			{
-				text: "Knapp 3",
-				color: 0x4d7c0f,
-				callback: () => {
-					this.sendSocketData({
-						type: "MapLightRequest",
-						Name: "#sdlfkjsdlkf",
-						Northing: 12231112.24464522,
-						Easting: 60434345.00022222,
-						Height: 50.0,
-						Color: "#ff0000",
-						Typeofmessage: "add",
-						Enable: true,
-					});
-				},
-			},
-			{
-				text: "Dusk",
-				color: 0x1d4ed8,
-				callback: () => {
-					this.sendSocketData({
-						type: "LightRequest",
-						day:1,
-						month:2,
-						year:0,
-						minute:17.0
-					});
-				},
-			},
-			{
-				text: "Day ",
-				color: 0x1d4ed8,
-				callback: () => {
-					this.sendSocketData({
-						type: "LightRequest",
-						day:1,
-						month:5,
-						year:0,
-						Solar_Time:12.0
-					});
-				},
+		this.timeSetter = new TimeSetter(this, map.x, layout.bottom - 150);
+		this.timeSetter.on(
+			"setTime",
+			(year: number, month: number, day: number, hour: number) => {
+				this.socket.sendLightRequest(year, month, day, hour);
 			}
-		];
-
-		this.testButtons = [];
-		buttonConfigs.forEach((config: any, index: number) => {
-			let x = layout.left;
-			let y = layout.bottom;
-			let button = new TestButton(this, x, y, config.text, config.color);
-			button.x += button.width / 2 + index * (button.width + 25);
-			button.on("click", config.callback);
-			this.testButtons.push(button);
-		});
-
-		const sliderConfigs: any = [
-			{
-				text: "Month ",
-				steps: 0,
-				callback: (value: number) => {
-					this.sendSocketData({
-						type: "LightRequest",
-						day:1,
-						month: Math.floor(12 * value),
-						year:0,
-						Solar_Time:12.0
-					});
-				},
-			},
-			{
-				text: "Day",
-				steps: 0,
-				callback: (value: number) => {
-					this.sendSocketData({
-						type: "LightRequest",
-						day: Math.floor(30 * value),
-						month:1,
-						year:0,
-						Solar_Time:12.0
-					});
-				},
-			},
-			{
-				text: "Solar Time",
-				steps: 0,
-				callback: (value: number) => {
-					this.sendSocketData({
-						type: "SliderRequest",
-						Solar_Time: Math.floor(24 * value),
-						day: 0,
-						month:1,
-						year:0,
-					});
-				},
-			},
-		];
-
-		this.testSliders = [];
-		sliderConfigs.forEach((config: any, index: number) => {
-			let x = layout.left;
-			let y = layout.bottom;
-			let slider = new TestSlider(this, x, y, config.text, config.steps);
-			slider.x += slider.width / 2 + index * (slider.width + 75);
-			slider.y -= 100;
-			slider.on("onChange", config.callback);
-			this.testSliders.push(slider);
-		});
+		);
 
 		this.debugTexts = [];
+
+		this.restart();
 	}
 
 	update(time: number, delta: number) {
-		this.testButtons.forEach((testButton) => {
-			testButton.update(time, delta);
+		this.pages.forEach((page) => {
+			page.update(time, delta);
 		});
 
-		this.testSliders.forEach((testSlider) => {
-			testSlider.update(time, delta);
-		});
+		this.timeSetter.update(time, delta);
 	}
 
 	/* Logic */
 
 	restart() {
-		this.setState(State.First);
+		this.setState(PageState.Home);
 	}
 
-	setState(state: State) {
+	setState(state: PageState) {
 		this.state = state;
+
+		this.pages.forEach((page) => {
+			page.setVisible(page.state == state);
+		});
 	}
 
-	/* WebSocket */
+	onSocketMessage(data: any) {
+		console.log(data);
+		// Insert logic here
+		if (data.type == "ScenarioResponse") {
+		}
 
-	initWebSocket(): void {
-		const url = `wss://omni.itn.liu.se/ws/`;
-		// const url = `ws://localhost:8000/ws/`;
-		this.socket = new WebSocket(url);
-
-		this.socket.onopen = () => {
-			const data = JSON.stringify({
-				token: CLIENT_TOKEN,
-			});
-			this.socket.send(data);
-			this.addDebugMessage(data);
-		};
-
-		this.socket.onclose = () => {
-			this.addDebugMessage("Connection closed");
-		};
-
-		this.socket.onmessage = (event: MessageEvent) => {
-			const data = JSON.parse(event.data);
-			console.log(data);
-			// Insert logic here
-			if (event.data.type == "ScenarioResponse") {
-				// Use event.data.param123
-				this.addDebugMessage(JSON.stringify(data));
-				console.log(JSON.stringify(data));
-			}
-
-			if (data.type == "PingResponse") {
-				// Use event.data.param123
-				this.addDebugMessage(JSON.stringify(data));
-			}
-		};
-	}
-
-	sendSocketData(data: any) {
-		this.addDebugMessage(JSON.stringify(data), true);
-		this.socket.send(JSON.stringify(data));
+		if (data.type == "PingResponse") {
+		}
 	}
 
 	addDebugMessage(text: string, dim = false) {
+		if (text.length > 1000) {
+			text = "<data>";
+		}
+
 		let temp = this.addText({
-			size: 32,
+			size: 30,
 			color: dim ? "#3b82f6" : "white",
 			text,
 		});
 		temp.setOrigin(1);
-		temp.setStroke("black", 8);
+		temp.setStroke("black", 4);
 		temp.x = this.W - 50;
 		temp.y = this.H - 50;
 
 		this.debugTexts.forEach((text) => {
-			text.y -= 32 * 1.5;
+			text.y -= 30 * 1.5;
 		});
 		this.debugTexts.push(temp);
 
@@ -286,10 +157,10 @@ export class GameScene extends BaseScene {
 			from: 0,
 			to: 1,
 			ease: "Linear",
-			duration: 10000,
+			duration: 5000,
 			onUpdate: (tween, targets, key, current, previous, param) => {
 				var value = current;
-				temp.setAlpha(8 - 8 * current);
+				temp.setAlpha(2 - 2 * current);
 			},
 			onComplete: () => {
 				temp.destroy();

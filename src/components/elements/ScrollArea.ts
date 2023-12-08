@@ -65,6 +65,12 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 				this.hold = false;
 			}
 		);
+		this.area.on(
+			"wheel",
+			(pointer: Phaser.Input.Pointer, deltaX: number, deltaY: number) => {
+				this.speedY -= deltaY / 8;
+			}
+		);
 
 		/* Content container */
 
@@ -163,5 +169,13 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 			y: this.content.y / (this.height - this.contentHeight),
 			ratio: this.height / this.contentHeight,
 		};
+	}
+
+	get centerX(): number {
+		return this.x + this.width / 2;
+	}
+
+	get centerY(): number {
+		return this.y + this.height / 2;
 	}
 }
