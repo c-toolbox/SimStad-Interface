@@ -8,6 +8,24 @@ const images: Image[] = [
 	image("map/streets.png", "streets"),
 
 	image("vis_c_logo.png", "vis_c_logo"),
+
+	image("icons/arrow-left.png", "arrow-left"),
+	image("icons/arrows-rotate.png", "arrows-rotate"),
+	image("icons/arrows-swap.png", "arrows-swap"),
+	image("icons/gear-code.png", "gear-code"),
+	image("icons/gears.png", "gears"),
+	image("icons/globe.png", "globe"),
+	image("icons/layers.png", "layers"),
+	image("icons/lightbulb.png", "lightbulb"),
+	image("icons/list.png", "list"),
+	image("icons/map.png", "map"),
+	image("icons/projector.png", "projector"),
+	image("icons/server.png", "server"),
+	image("icons/sun.png", "sun"),
+	image("icons/sunrise.png", "sunrise"),
+	image("icons/unreal.png", "unreal"),
+	image("icons/wifi.png", "wifi"),
+	image("icons/wifi-slash.png", "wifi-slash"),
 ];
 
 /* Spritesheets */
