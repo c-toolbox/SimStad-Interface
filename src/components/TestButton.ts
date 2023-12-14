@@ -41,9 +41,21 @@ export class TestButton extends Button {
 		}
 
 		this.bindInteractive(this.background);
+		this.background.on("wheel", (...args: any) => this.emit("wheel", ...args));
+		this.background.on("dragstart", (...args: any) =>
+			this.emit("dragstart", ...args)
+		);
+		this.background.on("drag", (...args: any) => this.emit("drag", ...args));
+		this.background.on("dragend", (...args: any) =>
+			this.emit("dragend", ...args)
+		);
 	}
 
 	update(time: number, delta: number) {
 		this.setScale(1 - 0.05 * this.holdSmooth);
+	}
+
+	setDraggable() {
+		this.bindInteractive(this.background, true);
 	}
 }

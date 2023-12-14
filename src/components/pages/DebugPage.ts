@@ -1,4 +1,5 @@
 import { BaseScene } from "@/scenes/BaseScene";
+import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { Color } from "@/utils/colors";
@@ -7,9 +8,10 @@ export class DebugPage extends Page {
 	constructor(
 		scene: BaseScene,
 		state: PageState,
+		socket: SocketManager,
 		layout: Phaser.Geom.Rectangle
 	) {
-		super(scene, state, layout);
+		super(scene, state, socket, layout);
 
 		let title = scene.addText({
 			x: layout.left,
@@ -36,14 +38,14 @@ export class DebugPage extends Page {
 		x = layout.left + w / 2;
 		y = layout.top + 1.3 * title.displayHeight + h / 2;
 		this.addButton(x, y, w, h, "Ping Request", Color.Red700, () => {
-			this.emit("send", {
+			this.socket.send({
 				type: "PingRequest",
 			});
 		});
 
 		x += w + s;
 		this.addButton(x, y, w, h, "Scenarios Request", Color.Amber700, () => {
-			this.emit("send", {
+			this.socket.send({
 				type: "ScenariosRequest",
 			});
 		});
@@ -51,9 +53,9 @@ export class DebugPage extends Page {
 		x -= w + s;
 		y += h + s;
 		this.addButton(x, y, w, h, "MapLightRequest", Color.Lime700, () => {
-			this.emit("send", {
+			this.socket.send({
 				type: "MapLightRequest",
-				Name: "#sdlfkjsdlkf",
+				Name: "something",
 				Northing: 12231112.24464522,
 				Easting: 60434345.00022222,
 				Height: 50.0,
@@ -65,11 +67,38 @@ export class DebugPage extends Page {
 
 		x += w + s;
 		this.addButton(x, y, w, h, "Activate Dataset", Color.Blue700, () => {
-			this.emit("send", {
+			this.socket.send({
 				type: "ActiveDatasetRequest",
 				datasets: "Nkpg/Cali_1,Nkpg/Cali_2",
 			});
 		});
+
+		// let icons = [
+		// 	"map",
+		// 	"layers",
+		// 	"sunrise",
+		// 	"gears",
+		// 	"sun",
+		// 	"list",
+		// 	"gear-code",
+		// 	"arrow-left",
+		// 	"arrows-rotate",
+		// 	"projector",
+		// 	"wifi",
+		// 	"wifi-slash",
+		// 	"server",
+		// 	"lightbulb",
+		// 	"globe",
+		// 	"arrows-swap",
+		// ];
+		// icons.map((key, index) => {
+		// 	let s = 100;
+		// 	let x = layout.left + s / 2 + s * (index % 4);
+		// 	let y = layout.centerY + s * Math.floor(index / 4);
+		// 	let icon = scene.add.image(x, y, key);
+		// 	icon.setScale(s / icon.width);
+		// 	this.add(icon);
+		// });
 	}
 
 	update(time: number, delta: number) {

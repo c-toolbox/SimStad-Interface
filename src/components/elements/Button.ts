@@ -109,7 +109,9 @@ export class Button extends Phaser.GameObjects.Container {
 		}
 	}
 
-	onDragStart() {}
+	onDragStart() {
+		this.hold = false;
+	}
 
 	onDrag() {}
 

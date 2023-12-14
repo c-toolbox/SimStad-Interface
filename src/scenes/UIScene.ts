@@ -38,7 +38,7 @@ export class UIScene extends BaseScene {
 		const showAttraction = false;
 		this.idleTimer = -2;
 		// this.add.rectangle(this.CX, this.CY, this.W, this.H, 0xFFFFFF, 0.3);
-		this.attractionView = new AttractionView(this, "#FFF", "streets", 0xFFFFFF);
+		this.attractionView = new AttractionView(this, "#FFF", "streets", 0xffffff);
 		this.attractionView.on("click", this.wakeUp, this);
 		this.events.emit("attraction", showAttraction);
 
@@ -60,11 +60,6 @@ export class UIScene extends BaseScene {
 		);
 
 		/* Toolbar */
-
-		let ctW = 0.04 * this.W;
-		let sbH = 0.22 * this.H;
-		let tbX = this.W - ctW / 2;
-		let tbY = this.H - sbH / 2;
 
 		const toolButtons = [
 			{
@@ -89,10 +84,9 @@ export class UIScene extends BaseScene {
 		this.toolButtons = [];
 		for (let i = 0; i < toolButtons.length; i++) {
 			let button = toolButtons[i];
-			// let size = 0.024 * this.H;
-			let size = 0.03 * this.H;
-			let x = tbX;
-			let y = tbY + (i - (toolButtons.length - 1) / 2) * 1.75 * size;
+			let size = 40;
+			let x = this.W - size;
+			let y = this.H - (toolButtons.length - 1 - i) * 1.75 * size - 2.5 * size;
 
 			let obj = new ToolboxButton(this, x, y, size, button.image);
 			this.add.existing(obj);

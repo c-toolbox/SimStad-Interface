@@ -136,6 +136,35 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 	apply(gameObject: any) {
 		this.content.add(gameObject);
 
+		let grabY = 0;
+		gameObject.on(
+			"dragstart",
+			(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+				this.hold = true;
+				grabY = -this.area.y + this.content.y;
+			}
+		);
+		gameObject.on(
+			"drag",
+			(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+				let newTargetY = dragY + grabY;
+				this.speedY = newTargetY - this.targetY;
+				this.targetY = newTargetY;
+			}
+		);
+		gameObject.on(
+			"dragend",
+			(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+				this.hold = false;
+			}
+		);
+		gameObject.on(
+			"wheel",
+			(pointer: Phaser.Input.Pointer, deltaX: number, deltaY: number) => {
+				this.speedY -= deltaY / 8;
+			}
+		);
+
 		// Set mask
 		// gameObject.setMask(this.maskArea);
 
@@ -143,6 +172,14 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 			this.contentHeight,
 			gameObject.y + gameObject.height
 		);
+	}
+
+	clear() {
+		for (let i = this.content.list.length; i > 0; i--) {
+			let obj = this.content.list[i - 1];
+			obj.destroy();
+		}
+		this.updateSize();
 	}
 
 	updateSize() {

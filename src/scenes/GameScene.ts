@@ -1,31 +1,29 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
+import { RoundRectangle } from "@/components/elements/RoundRectangle";
+import { Map } from "@/components/Map";
 
-import { TimeSetter } from "@/components/TimeSetter";
 import { SocketManager } from "@/utils/SocketManager";
+
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
 import { ScenariosPage } from "@/components/pages/ScenariosPage";
-
-import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { DebugPage } from "@/components/pages/DebugPage";
+import { Response, ScenariosResponse } from "@/utils/protocol";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
 	private infoWindowOpen: boolean;
 	private blurTween: Phaser.Tweens.Tween;
+	private socket: SocketManager;
 
 	private state: PageState;
 	private pages: Page[];
 	private homePage: HomePage;
 	private scenariosPage: ScenariosPage;
 	private debugPage: DebugPage;
-
-	private socket: SocketManager;
-
-	private debugTexts: Phaser.GameObjects.Text[];
-	private timeSetter: TimeSetter;
+	private map: Map;
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -36,16 +34,20 @@ export class GameScene extends BaseScene {
 		this.cameras.main.setBackgroundColor(Color.Slate900);
 		this.initBlur();
 
+		this.input.addPointer(10);
+		this.input.dragDistanceThreshold = 8;
+
 		this.socket = new SocketManager(this);
+		this.socket.setDepth(1000);
 		this.socket.connect();
-		this.socket.on("message", this.onSocketMessage, this);
-		this.socket.on("debug", this.addDebugMessage, this);
 
-		// this.background = this.add.image(0, 0, "background");
-		// this.background.setOrigin(0);
-		// this.fitToScreen(this.background);
+		this.socket.on(Response.Scenarios, (data: ScenariosResponse) => {
+			this.scenariosPage.loadScenarios(data);
+		});
 
-		let margin = 100;
+		/* Layout */
+
+		let margin = 80;
 		let padding = 40;
 
 		let box = new Phaser.Geom.Rectangle(
@@ -55,15 +57,21 @@ export class GameScene extends BaseScene {
 			this.H - 2 * margin
 		);
 
-		let map = this.add.image(0, 0, "karta");
-		map.angle = -90;
-		map.setScale(box.height / map.width);
-		map.setPosition(box.right - map.displayHeight / 2, box.centerY);
+		this.map = new Map(this, 0, 0, box);
+		this.map.on(
+			"setTime",
+			(year: number, month: number, day: number, hour: number) => {
+				this.socket.sendLight(year, month, day, hour);
+			}
+		);
+		this.map.on("send", (data: object) => {
+			this.socket.send(data);
+		});
 
 		let panel = new Phaser.Geom.Rectangle(
 			box.left + padding,
 			box.top + padding,
-			box.width - map.displayHeight - margin - 2 * padding,
+			box.width - this.map.width - margin - 2 * padding,
 			box.height - 2 * padding
 		);
 
@@ -77,9 +85,14 @@ export class GameScene extends BaseScene {
 		});
 
 		this.pages = [];
-		this.homePage = new HomePage(this, PageState.Home, panel);
-		this.scenariosPage = new ScenariosPage(this, PageState.Scenarios, panel);
-		this.debugPage = new DebugPage(this, PageState.Debug, panel);
+		this.homePage = new HomePage(this, PageState.Home, this.socket, panel);
+		this.scenariosPage = new ScenariosPage(
+			this,
+			PageState.Scenarios,
+			this.socket,
+			panel
+		);
+		this.debugPage = new DebugPage(this, PageState.Debug, this.socket, panel);
 		this.pages.push(this.homePage);
 		this.pages.push(this.scenariosPage);
 		this.pages.push(this.debugPage);
@@ -94,25 +107,17 @@ export class GameScene extends BaseScene {
 			});
 		});
 
-		this.timeSetter = new TimeSetter(this, map.x, box.bottom - 150);
-		this.timeSetter.on(
-			"setTime",
-			(year: number, month: number, day: number, hour: number) => {
-				this.socket.sendLightRequest(year, month, day, hour);
-			}
-		);
-
-		this.debugTexts = [];
-
 		this.restart();
 	}
 
 	update(time: number, delta: number) {
 		this.pages.forEach((page) => {
-			page.update(time, delta);
+			if (this.state == page.state) {
+				page.update(time, delta);
+			}
 		});
 
-		this.timeSetter.update(time, delta);
+		this.map.update(time, delta);
 	}
 
 	/* Logic */
@@ -126,52 +131,6 @@ export class GameScene extends BaseScene {
 
 		this.pages.forEach((page) => {
 			page.setVisible(page.state == state);
-		});
-	}
-
-	onSocketMessage(data: any) {
-		if (data.type == "ScenarioResponse") {
-			this.scenariosPage.loadScenarios(data);
-		}
-
-		if (data.type == "PingResponse") {
-			console.log("Ping!");
-		}
-	}
-
-	addDebugMessage(text: string, dim = false) {
-		if (text.length > 1000) {
-			text = "<data>";
-		}
-
-		let temp = this.addText({
-			size: 30,
-			color: dim ? "#3b82f6" : "white",
-			text,
-		});
-		temp.setOrigin(1);
-		temp.setStroke("black", 4);
-		temp.x = this.W - 50;
-		temp.y = this.H - 50;
-
-		this.debugTexts.forEach((text) => {
-			text.y -= 30 * 1.5;
-		});
-		this.debugTexts.push(temp);
-
-		var tween = this.tweens.addCounter({
-			from: 0,
-			to: 1,
-			ease: "Linear",
-			duration: 5000,
-			onUpdate: (tween, targets, key, current, previous, param) => {
-				var value = current;
-				temp.setAlpha(2 - 2 * current);
-			},
-			onComplete: () => {
-				temp.destroy();
-				this.debugTexts.splice(this.debugTexts.indexOf(temp), 1);
-			},
 		});
 	}
 

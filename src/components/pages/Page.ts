@@ -1,4 +1,5 @@
 import { BaseScene } from "@/scenes/BaseScene";
+import { SocketManager } from "@/utils/SocketManager";
 import { TestButton } from "../TestButton";
 
 export enum PageState {
@@ -10,6 +11,7 @@ export enum PageState {
 export class Page extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 	public state: PageState;
+	public socket: SocketManager;
 	public layout: Phaser.Geom.Rectangle;
 
 	protected buttons: TestButton[];
@@ -17,11 +19,13 @@ export class Page extends Phaser.GameObjects.Container {
 	constructor(
 		scene: BaseScene,
 		state: PageState,
+		socket: SocketManager,
 		layout: Phaser.Geom.Rectangle
 	) {
 		super(scene, 0, 0);
 		this.scene = scene;
 		this.state = state;
+		this.socket = socket;
 		this.layout = layout;
 		this.width = layout.width;
 		this.height = layout.height;

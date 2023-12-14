@@ -1,4 +1,5 @@
 import { BaseScene } from "@/scenes/BaseScene";
+import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { TestButton } from "../TestButton";
@@ -8,9 +9,10 @@ export class HomePage extends Page {
 	constructor(
 		scene: BaseScene,
 		state: PageState,
+		socket: SocketManager,
 		layout: Phaser.Geom.Rectangle
 	) {
-		super(scene, state, layout);
+		super(scene, state, socket, layout);
 
 		let title = scene.addText({
 			x: layout.left,
