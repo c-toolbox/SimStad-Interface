@@ -37,14 +37,14 @@ export class DebugPage extends Page {
 		h = 64;
 		x = layout.left + w / 2;
 		y = layout.top + 1.3 * title.displayHeight + h / 2;
-		this.addButton(x, y, w, h, "Ping Request", Color.Red700, () => {
+		this.addButton(x, y, w, h, "Ping", Color.Red700, () => {
 			this.socket.send({
 				type: "PingRequest",
 			});
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "Scenarios Request", Color.Amber700, () => {
+		this.addButton(x, y, w, h, "Fetch scenarios", Color.Amber700, () => {
 			this.socket.send({
 				type: "ScenariosRequest",
 			});
@@ -52,7 +52,7 @@ export class DebugPage extends Page {
 
 		x -= w + s;
 		y += h + s;
-		this.addButton(x, y, w, h, "MapLightRequest", Color.Lime700, () => {
+		this.addButton(x, y, w, h, "Add light", Color.Lime700, () => {
 			this.socket.send({
 				type: "MapLightRequest",
 				Name: "something",
@@ -66,10 +66,27 @@ export class DebugPage extends Page {
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "Activate Dataset", Color.Blue700, () => {
+		this.addButton(x, y, w, h, "KOllektivTrafik", Color.Blue700, () => {
 			this.socket.send({
-				type: "ActiveDatasetRequest",
-				datasets: "Nkpg/Cali_1,Nkpg/Cali_2",
+				type: "ActivateDatasetRequest",
+				datasets: "Nkpg/KOllektivTraffik",
+			});
+		});
+
+		x -= w + s;
+		y += h + s;
+		this.addButton(x, y, w, h, "Traffic on", Color.Rose700, () => {
+			this.socket.send({
+				type: "ActivateDatasetRequest",
+				datasets: "ActivateTraffic",
+			});
+		});
+		
+		x += w + s;
+		this.addButton(x, y, w, h, "Traffic off", Color.Rose900, () => {
+			this.socket.send({
+				type: "ActivateDatasetRequest",
+				datasets: "DeactivateTraffic",
 			});
 		});
 

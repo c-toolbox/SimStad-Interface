@@ -49,7 +49,8 @@ export class AttractionView extends Phaser.GameObjects.Container {
 		this.container = this.scene.add.container(0, 0); // Y set in update
 		this.add(this.container);
 
-		const titleY = -0.31 * scene.H;
+		// const titleY = -0.31 * scene.H;
+		const titleY = -100;
 
 		let mapImage = this.scene.add.image(0, titleY + 100, mapImageKey);
 		mapImage.setOrigin(0.5, 0.5);
@@ -183,6 +184,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 	}
 
 	newQuestion() {
+		return;
 		this.questionIndex = (this.questionIndex + 1) % this.questionKeys.length;
 
 		let target = this.questionTexts[this.questionIndex];

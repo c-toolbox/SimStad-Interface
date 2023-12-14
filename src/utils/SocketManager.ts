@@ -6,7 +6,7 @@ import * as scenariosData from "@/data/scenarios.json";
 const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
-const PING_TIMEOUT = 5000;
+const PING_TIMEOUT = 3000;
 
 export enum ConnectionStatus {
 	Disconnected = "Disconnected",
@@ -237,7 +237,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	checkUnrealConnection() {
-		if (this.pingAttempts < 2) {
+		if (this.pingAttempts < 3) {
 			this.setUnrealConnectionStatus(ConnectionStatus.Connecting);
 
 			this.sendPing();

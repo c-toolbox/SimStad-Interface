@@ -95,7 +95,7 @@ export class ScenariosPage extends Page {
 
 		this.errorIcon = scene.add.image(cx, cy, "wifi-slash");
 		this.errorIcon.setScale(((256 / 201) * 120) / this.errorIcon.width);
-		this.errorIcon.setTint(Color.Rose700);
+		this.errorIcon.setTint(Color.Slate800);
 		this.add(this.errorIcon);
 	}
 
