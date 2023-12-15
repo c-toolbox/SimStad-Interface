@@ -35,12 +35,12 @@ export class ScenariosPage extends Page {
 		this.add(title);
 
 		let s = 20;
-		let w = 220;
+		let w = 150;
 		let h = 64;
-		let x = layout.panelInner.left + w / 2;
+		let x = layout.panelInner.right - w / 2;
 		let y = layout.panelInner.bottom - h / 2;
 		this.addButton(
-			layout.panelInner.right - w / 2,
+			x,
 			y,
 			w,
 			h,
@@ -49,7 +49,7 @@ export class ScenariosPage extends Page {
 			() => this.socket.sendReset()
 		);
 		this.addButton(
-			layout.panelInner.centerX,
+			x - w - s,
 			y,
 			w,
 			h,

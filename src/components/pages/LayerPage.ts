@@ -7,6 +7,7 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
 import { TextButton } from "@/components/TextButton";
+import { LayerButton } from "@/components/LayerButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
 
@@ -17,7 +18,7 @@ export class LayerPage extends Page {
 	private scrollBar: ScrollBar;
 	private loadingIcon: LoadingIcon;
 	private errorIcon: Phaser.GameObjects.Image;
-	private layerButtons: TextButton[];
+	private layerButtons: LayerButton[];
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -112,22 +113,22 @@ export class LayerPage extends Page {
 
 	loadLayers(layerData: { layers: string[] }) {
 		let i = 0;
+		let m = 5;
 
 		let s = 20;
-		let h = 64;
-		let w = (this.scrollArea.width - 4 * s) / 3;
+		let w = (this.scrollArea.width - (m+1) * s) / m;
+		let h = w;
 		let x = w / 2 + s;
 		let y = s + h / 2;
 
 		layerData.layers.forEach((layer: string) => {
-			let button = new TextButton(
+			let button = new LayerButton(
 				this.scene,
 				x,
 				y,
 				w,
 				h,
-				layer,
-				Color.Yellow700
+				layer
 			);
 			button.setDraggable();
 			this.add(button);

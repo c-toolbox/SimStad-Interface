@@ -109,11 +109,13 @@ export class Button extends Phaser.GameObjects.Container {
 		}
 	}
 
-	onDragStart() {
-		this.hold = false;
-	}
+	onDragStart() {}
 
-	onDrag() {}
+	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
+		if (Math.abs(dragY) > 8) {
+			this.hold = false;
+		}
+	}
 
 	onDragEnd() {}
 

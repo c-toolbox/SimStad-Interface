@@ -102,7 +102,8 @@ class LayoutManager {
 		const x = this.panel.left + this.padding;
 		const y = this.panel.top + this.padding;
 		const w = this.panel.width - 2 * this.padding;
-		const h = this.nav.top - y - this.padding / 2;
+		// const h = this.nav.top - y - this.padding / 2;
+		const h = this.panel.height - 2 * this.padding;
 
 		this._panelInner = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._panelInner;
