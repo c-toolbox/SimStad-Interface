@@ -50,7 +50,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 		this.add(this.container);
 
 		// const titleY = -0.31 * scene.H;
-		const titleY = -100;
+		const titleY = -120;
 
 		let mapImage = this.scene.add.image(0, titleY + 100, mapImageKey);
 		mapImage.setOrigin(0.5, 0.5);

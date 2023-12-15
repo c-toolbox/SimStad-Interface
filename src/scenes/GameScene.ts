@@ -3,12 +3,16 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Map } from "@/components/Map";
+import { Navigation } from "@/components/Navigation";
 
 import { SocketManager } from "@/utils/SocketManager";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
 import { ScenariosPage } from "@/components/pages/ScenariosPage";
+import { LayerPage } from "@/components/pages/LayerPage";
+import { LightPage } from "@/components/pages/LightPage";
 import { DebugPage } from "@/components/pages/DebugPage";
 import { Response, ScenariosResponse } from "@/utils/protocol";
 
@@ -22,8 +26,11 @@ export class GameScene extends BaseScene {
 	private pages: Page[];
 	private homePage: HomePage;
 	private scenariosPage: ScenariosPage;
+	private layerPage: LayerPage;
+	private lightPage: LightPage;
 	private debugPage: DebugPage;
 	private map: Map;
+	private navigation: Navigation;
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -46,17 +53,7 @@ export class GameScene extends BaseScene {
 
 		/* Layout */
 
-		let margin = 80;
-		let padding = 40;
-
-		let box = new Phaser.Geom.Rectangle(
-			margin,
-			margin,
-			this.W - 2 * margin,
-			this.H - 2 * margin
-		);
-
-		this.map = new Map(this, 0, 0, box);
+		this.map = new Map(this, 0, 0, layout.body);
 		this.map.on(
 			"setTime",
 			(year: number, month: number, day: number, hour: number) => {
@@ -67,33 +64,22 @@ export class GameScene extends BaseScene {
 			this.socket.send(data);
 		});
 
-		let panel = new Phaser.Geom.Rectangle(
-			box.left + padding,
-			box.top + padding,
-			box.width - this.map.width - margin - 2 * padding,
-			box.height - 2 * padding
-		);
-
-		let leftBackground = new RoundRectangle(this, {
-			x: panel.centerX,
-			y: panel.centerY,
-			width: panel.width + 2 * padding,
-			height: panel.height + 2 * padding,
-			radius: 16,
-			color: Color.Slate800,
-		});
+		let panelBackground = layout.addRect(this, layout.panel, Color.Slate800);
 
 		this.pages = [];
-		this.homePage = new HomePage(this, PageState.Home, this.socket, panel);
+		this.homePage = new HomePage(this, PageState.Home, this.socket);
 		this.scenariosPage = new ScenariosPage(
 			this,
 			PageState.Scenarios,
-			this.socket,
-			panel
+			this.socket
 		);
-		this.debugPage = new DebugPage(this, PageState.Debug, this.socket, panel);
+		this.layerPage = new LayerPage(this, PageState.Layer, this.socket);
+		this.lightPage = new LightPage(this, PageState.Light, this.socket);
+		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
 		this.pages.push(this.homePage);
 		this.pages.push(this.scenariosPage);
+		this.pages.push(this.layerPage);
+		this.pages.push(this.lightPage);
 		this.pages.push(this.debugPage);
 
 		this.pages.forEach((page) => {
@@ -106,7 +92,13 @@ export class GameScene extends BaseScene {
 			});
 		});
 
+		this.navigation = new Navigation(this);
+		this.navigation.on("state", (state: PageState) => {
+			this.setState(state);
+		});
+
 		this.restart();
+		// layout.drawLayout(this);
 	}
 
 	update(time: number, delta: number) {
@@ -117,16 +109,19 @@ export class GameScene extends BaseScene {
 		});
 
 		this.map.update(time, delta);
+		this.navigation.update(time, delta);
 	}
 
 	/* Logic */
 
 	restart() {
-		this.setState(PageState.Home);
+		this.setState(PageState.Scenarios);
 	}
 
 	setState(state: PageState) {
 		this.state = state;
+
+		this.navigation.setState(state);
 
 		this.pages.forEach((page) => {
 			page.setVisible(page.state == state);

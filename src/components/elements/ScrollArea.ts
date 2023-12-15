@@ -113,7 +113,7 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		// Apply speed
 		if (!this.hold) {
 			this.targetY += this.speedY;
-			this.speedY *= 0.9;
+			this.speedY *= 0.8;
 		}
 
 		// Clamp at edges

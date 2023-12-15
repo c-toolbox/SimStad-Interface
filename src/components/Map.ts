@@ -1,6 +1,4 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { Color } from "@/utils/colors";
-import { TimeSetter } from "@/components/TimeSetter";
 
 // Bottom right
 const MIN_X = 129411.4;
@@ -14,7 +12,6 @@ export class Map extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
 	private map: Phaser.GameObjects.Image;
-	private timeSetter: TimeSetter;
 	private layout: Phaser.Geom.Rectangle;
 
 	private lamps: Phaser.GameObjects.Image[];
@@ -39,15 +36,6 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.width = this.map.displayHeight;
 
-		this.timeSetter = new TimeSetter(scene, this.map.x, layout.bottom - 150);
-		// this.timeSetter.setVisible(false);
-		this.timeSetter.on(
-			"setTime",
-			(year: number, month: number, day: number, hour: number) => {
-				this.emit("setTime", year, month, day, hour);
-			}
-		);
-
 		this.map
 			.setInteractive({ useHandCursor: true, draggable: true })
 			.on("pointerdown", this.onClick, this)
@@ -56,9 +44,7 @@ export class Map extends Phaser.GameObjects.Container {
 		this.lamps = [];
 	}
 
-	update(time: number, delta: number) {
-		this.timeSetter.update(time, delta);
-	}
+	update(time: number, delta: number) {}
 
 	onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
 		const py = 1 - localY / this.map.height;
@@ -74,8 +60,8 @@ export class Map extends Phaser.GameObjects.Container {
 			name: "name",
 			northing: x,
 			easting: y,
-			height: 60,
-			color: "#0000FF",
+			height: 400,
+			color: "#777777",
 			typeofmessage: this.lamps.length > 0 ? "update" : "add",
 			enable: true,
 		});

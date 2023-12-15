@@ -1,10 +1,16 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
+import { Color } from "@/utils/colors";
+import { layoutManager as layout } from "@/utils/LayoutManager";
+import { interpolateColor } from "@/utils/functions";
 
-export class TestButton extends Button {
+export class TextButton extends Button {
+	private border: RoundRectangle;
 	private background: RoundRectangle;
 	private title: Phaser.GameObjects.Text;
+
+	private color: number;
 
 	constructor(
 		scene: BaseScene,
@@ -18,11 +24,21 @@ export class TestButton extends Button {
 		super(scene, x, y);
 		this.width = width;
 		this.height = height;
+		this.color = color;
+
+		this.border = new RoundRectangle(scene, {
+			width: this.width + 8,
+			height: this.height + 8,
+			radius: layout.radius + 4,
+			color: Color.White,
+		});
+		this.border.setVisible(false);
+		this.add(this.border);
 
 		this.background = new RoundRectangle(scene, {
 			width: this.width,
 			height: this.height,
-			radius: this.height / 4,
+			radius: layout.radius,
 			color: color,
 		});
 		this.add(this.background);
@@ -52,10 +68,18 @@ export class TestButton extends Button {
 	}
 
 	update(time: number, delta: number) {
-		this.setScale(1 - 0.05 * this.holdSmooth);
+		this.setScale(1 - 0.1 * this.holdSmooth);
 	}
 
 	setDraggable() {
 		this.bindInteractive(this.background, true);
+	}
+
+	setHighlight(value: boolean) {
+		this.border.setVisible(value);
+
+		let t = value ? 0.2 : 0.0;
+		let color = interpolateColor(this.color, Color.White, t);
+		this.background.setColor(color);
 	}
 }

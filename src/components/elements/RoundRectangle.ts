@@ -1,6 +1,7 @@
 import { BaseScene } from "@/scenes/BaseScene";
 
 export interface RoundRectangleProps {
+	rect?: Phaser.Geom.Rectangle;
 	x?: number;
 	y?: number;
 	width?: number;
@@ -27,6 +28,7 @@ export class RoundRectangle extends Phaser.GameObjects.Container {
 	constructor(
 		scene: BaseScene,
 		{
+			rect,
 			x = 0,
 			y = 0,
 			width = 100,
@@ -40,6 +42,13 @@ export class RoundRectangle extends Phaser.GameObjects.Container {
 			topRight = true,
 		}: RoundRectangleProps
 	) {
+		if (rect) {
+			x = rect.centerX;
+			y = rect.centerY;
+			width = rect.width;
+			height = rect.height;
+		}
+
 		super(scene, x, y);
 		scene.add.existing(this);
 

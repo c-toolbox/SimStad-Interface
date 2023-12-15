@@ -45,6 +45,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 			[P.Response.Ping]: this.onPing,
 			[P.Response.Scenarios]: this.onScenarios,
+			[P.Response.ActivateTraffic]: this.onActivateTraffic,
+			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
@@ -150,6 +152,14 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
+	onActivateTraffic(data: P.ActivateTrafficResponse) {
+		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+	}
+
+	onDeactivateTraffic(data: P.DeactivateTrafficResponse) {
+		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+	}
+
 	/* Requests */
 
 	sendRequest(data: P.ValidRequests) {
@@ -170,6 +180,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			type: P.Request.Scenarios,
 		};
 		this.sendRequest(data);
+
+		// this.receive(scenariosData);
 	}
 
 	sendActivateDataset(datasets: string) {
@@ -184,6 +196,20 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		let data: P.DeactivateDatasetRequest = {
 			type: P.Request.DeactivateDataset,
 			datasets,
+		};
+		this.sendRequest(data);
+	}
+
+	sendActivateTraffic() {
+		let data: P.ActivateTrafficRequest = {
+			type: P.Request.ActivateTraffic,
+		};
+		this.sendRequest(data);
+	}
+
+	sendDeactivateTraffic() {
+		let data: P.DeactivateTrafficRequest = {
+			type: P.Request.DeactivateTraffic,
 		};
 		this.sendRequest(data);
 	}

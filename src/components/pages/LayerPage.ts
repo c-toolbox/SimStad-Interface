@@ -9,59 +9,37 @@ import { ScrollBar } from "@/components/elements/ScrollBar";
 import { TextButton } from "@/components/TextButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
-import { ScenariosResponse } from "@/utils/protocol";
 
-export class ScenariosPage extends Page {
+import * as layerData from "@/data/layers.json";
+
+export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
 	private loadingIcon: LoadingIcon;
 	private errorIcon: Phaser.GameObjects.Image;
-	private scenariosButtons: TextButton[];
+	private layerButtons: TextButton[];
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
-		socket.on("connectionStatus", this.updateConnection, this);
-
-		this.scenariosButtons = [];
+		this.layerButtons = [];
 
 		let title = scene.addText({
 			x: layout.panelInner.left,
 			y: layout.panelInner.top,
 			size: 100,
 			color: "white",
-			text: "Scenarios",
+			text: "Layers",
 		});
 		this.add(title);
 
 		let s = 20;
 		let w = 220;
 		let h = 64;
-		let x = layout.panelInner.left + w / 2;
+		let x = layout.panelInner.right - w / 2;
 		let y = layout.panelInner.bottom - h / 2;
-		this.addButton(
-			layout.panelInner.right - w / 2,
-			y,
-			w,
-			h,
-			"Reset",
-			Color.Rose800,
-			() => this.socket.sendReset()
-		);
-		this.addButton(
-			layout.panelInner.centerX,
-			y,
-			w,
-			h,
-			"Refresh",
-			Color.Green800,
-			() => {
-				this.clearScenarios();
-				if (this.errorIcon.visible) {
-					this.socket.reconnectToUnreal();
-				}
-				this.socket.sendScenariosRequest();
-			}
+		this.addButton(x, y, w, h, "Reset", Color.Rose800, () =>
+			this.socket.sendReset()
 		);
 
 		this.scrollArea = new ScrollArea(
@@ -98,12 +76,16 @@ export class ScenariosPage extends Page {
 		this.sendToBack(areaBackground);
 
 		this.loadingIcon = new LoadingIcon(scene, cx, cy, Color.Slate500, 60);
+		this.loadingIcon.setVisible(false);
 		this.add(this.loadingIcon);
 
 		this.errorIcon = scene.add.image(cx, cy, "wifi-slash");
 		this.errorIcon.setScale(((256 / 201) * 120) / this.errorIcon.width);
 		this.errorIcon.setTint(Color.Slate800);
+		this.errorIcon.setVisible(false);
 		this.add(this.errorIcon);
+
+		this.loadLayers(layerData);
 	}
 
 	update(time: number, delta: number) {
@@ -113,7 +95,7 @@ export class ScenariosPage extends Page {
 		this.scrollBar.set(this.scrollArea.getScroll());
 		this.loadingIcon.update(time, delta);
 
-		this.scenariosButtons.forEach((button) => {
+		this.layerButtons.forEach((button) => {
 			button.update(time, delta);
 		});
 	}
@@ -122,89 +104,52 @@ export class ScenariosPage extends Page {
 		return super.setVisible(value);
 	}
 
-	clearScenarios() {
+	clearLayer() {
 		this.scrollArea.clear();
-		this.scenariosButtons = [];
+		this.layerButtons = [];
 		this.loadingIcon.setVisible(true);
-		this.errorIcon.setVisible(false);
 	}
 
-	loadScenarios(scenarioData: ScenariosResponse) {
+	loadLayers(layerData: { layers: string[] }) {
 		let i = 0;
 
 		let s = 20;
-		let x = s;
-		let y = 1.5 * s;
 		let h = 64;
 		let w = (this.scrollArea.width - 4 * s) / 3;
+		let x = w / 2 + s;
+		let y = s + h / 2;
 
-		scenarioData.scenarios.forEach((scenario: any) => {
-			let label = this.scene.addText({
-				x: this.scrollArea.width / 2,
-				y: y,
-				size: 30,
-				text: scenario.title,
-			});
-			label.setOrigin(0.5);
-			this.scrollArea.apply(label);
+		layerData.layers.forEach((layer: string) => {
+			let button = new TextButton(
+				this.scene,
+				x,
+				y,
+				w,
+				h,
+				layer,
+				Color.Yellow700
+			);
+			button.setDraggable();
+			this.add(button);
+			this.layerButtons.push(button);
+			this.scrollArea.apply(button);
 
-			let sx = s;
-			let sy = y;
-			let sw = this.scrollArea.width / 2 - 2 * s - label.displayWidth / 2;
-			let sh = 1;
-			let hrLeft = this.scene.add.rectangle(sx, sy, sw, sh, Color.White);
-			hrLeft.setOrigin(0, 0.5);
-			this.scrollArea.apply(hrLeft);
-
-			sx = this.scrollArea.width - s;
-			let hrRight = this.scene.add.rectangle(sx, sy, sw, sh, Color.White);
-			hrRight.setOrigin(1.0, 0.5);
-			this.scrollArea.apply(hrRight);
-
-			y += 70;
-
-			let bx = w / 2 + s;
-
-			scenario.sections.forEach((section: any) => {
-				section.sectionObject.forEach((object: any) => {
-					let noData = object.filenames == "No-Data";
-					let text = object.title.replace(/\n+/g, "");
-					let color = noData ? Color.Slate800 : Color.Green700;
-					let button = new TextButton(this.scene, bx, y, w, h, text, color);
-					button.setDraggable();
-					this.add(button);
-					this.scenariosButtons.push(button);
-					this.scrollArea.apply(button);
-
-					button.on(
-						"click",
-						() => this.socket.sendActivateDataset(object.filenames),
-						this
-					);
-
-					bx += w + s;
-					if (bx + w / 2 > this.scrollArea.width) {
-						bx = w / 2 + s;
-						y += h + s;
-					}
-				});
+			let active = false;
+			button.on("click", () => {
+				active = !active;
+				button.setHighlight(active);
+				if (active) this.socket.sendActivateDataset("Nkpg/" + layer);
+				else this.socket.sendDeactivateDataset("Nkpg/" + layer);
 			});
 
-			y += 110;
+			x += w + s;
+			if (x + w / 2 > this.scrollArea.width) {
+				x = w / 2 + s;
+				y += h + s;
+			}
 		});
 
 		this.loadingIcon.setVisible(false);
 		this.buttons.forEach((button) => this.bringToTop(button));
-	}
-
-	updateConnection(omniStatus: CS, unrealStatus: CS) {
-		if (omniStatus == CS.Disconnected || unrealStatus == CS.Disconnected) {
-			this.clearScenarios();
-			this.loadingIcon.setVisible(false);
-			this.errorIcon.setVisible(true);
-		} else {
-			this.loadingIcon.setVisible(this.scenariosButtons.length == 0);
-			this.errorIcon.setVisible(false);
-		}
 	}
 }

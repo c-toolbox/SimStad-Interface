@@ -3,19 +3,15 @@ import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { Color } from "@/utils/colors";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 
 export class DebugPage extends Page {
-	constructor(
-		scene: BaseScene,
-		state: PageState,
-		socket: SocketManager,
-		layout: Phaser.Geom.Rectangle
-	) {
-		super(scene, state, socket, layout);
+	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
+		super(scene, state, socket);
 
 		let title = scene.addText({
-			x: layout.left,
-			y: layout.top,
+			x: layout.panelInner.left,
+			y: layout.panelInner.top,
 			size: 100,
 			color: "white",
 			text: "Debug",
@@ -25,18 +21,15 @@ export class DebugPage extends Page {
 		let s = 30;
 		let w = 220;
 		let h = 64;
-		let x = layout.left + w / 2;
-		let y = layout.bottom - h / 2;
-		this.addButton(x, y, w, h, "Back", Color.Slate600, () => {
-			this.emit("state", PageState.Home);
-		});
+		let x = layout.panelInner.left + w / 2;
+		let y = layout.panelInner.bottom - h / 2;
 
 		/* Debug buttons */
 
-		w = layout.width / 2 - s;
+		w = layout.panelInner.width / 2 - s;
 		h = 64;
-		x = layout.left + w / 2;
-		y = layout.top + 1.3 * title.displayHeight + h / 2;
+		x = layout.panelInner.left + w / 2;
+		y = layout.panelInner.top + 1.3 * title.displayHeight + h / 2;
 		this.addButton(x, y, w, h, "Ping", Color.Red700, () => {
 			this.socket.send({
 				type: "PingRequest",
@@ -76,46 +69,19 @@ export class DebugPage extends Page {
 		x -= w + s;
 		y += h + s;
 		this.addButton(x, y, w, h, "Traffic on", Color.Rose700, () => {
-			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "ActivateTraffic",
-			});
-		});
-		
-		x += w + s;
-		this.addButton(x, y, w, h, "Traffic off", Color.Rose900, () => {
-			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "DeactivateTraffic",
-			});
+			this.socket.sendActivateTraffic();
 		});
 
-		// let icons = [
-		// 	"map",
-		// 	"layers",
-		// 	"sunrise",
-		// 	"gears",
-		// 	"sun",
-		// 	"list",
-		// 	"gear-code",
-		// 	"arrow-left",
-		// 	"arrows-rotate",
-		// 	"projector",
-		// 	"wifi",
-		// 	"wifi-slash",
-		// 	"server",
-		// 	"lightbulb",
-		// 	"globe",
-		// 	"arrows-swap",
-		// ];
-		// icons.map((key, index) => {
-		// 	let s = 100;
-		// 	let x = layout.left + s / 2 + s * (index % 4);
-		// 	let y = layout.centerY + s * Math.floor(index / 4);
-		// 	let icon = scene.add.image(x, y, key);
-		// 	icon.setScale(s / icon.width);
-		// 	this.add(icon);
-		// });
+		x += w + s;
+		this.addButton(x, y, w, h, "Traffic off", Color.Rose900, () => {
+			this.socket.sendDeactivateTraffic();
+		});
+
+		x -= w + s;
+		y += h + s;
+		this.addButton(x, y, w, h, "Render layout", Color.Indigo700, () => {
+			layout.drawLayout(this.scene);
+		});
 	}
 
 	update(time: number, delta: number) {

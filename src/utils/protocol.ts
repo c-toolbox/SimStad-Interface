@@ -7,9 +7,11 @@ export enum Request {
 	Scenarios = "ScenariosRequest",
 	ActivateDataset = "ActivateDatasetRequest",
 	DeactivateDataset = "DeactivateDatasetRequest",
+	ActivateTraffic = "ActivateTrafficRequest",
+	DeactivateTraffic = "DeactivateTrafficRequest",
 	Light = "LightRequest",
 	MapLight = "MapLightRequest",
-	Reset = "Reset",
+	Reset = "ResetRequest",
 }
 
 export enum Response {
@@ -21,7 +23,9 @@ export enum Response {
 	OmniError = "server_error",
 
 	Ping = "PingResponse",
-	Scenarios = "ScenarioResponse",
+	Scenarios = "ScenariosResponse",
+	ActivateTraffic = "ActivateTrafficResponse",
+	DeactivateTraffic = "DeactivateTrafficResponse",
 }
 
 /* Omni*/
@@ -126,6 +130,24 @@ export interface DeactivateDatasetRequest {
 	datasets: string;
 }
 
+/* Traffic activation */
+
+export interface ActivateTrafficRequest {
+	type: Request.ActivateTraffic;
+}
+
+export interface ActivateTrafficResponse {
+	type: Response.ActivateTraffic;
+}
+
+export interface DeactivateTrafficRequest {
+	type: Request.DeactivateTraffic;
+}
+
+export interface DeactivateTrafficResponse {
+	type: Response.DeactivateTraffic;
+}
+
 /* Time of day */
 
 export interface LightRequest {
@@ -164,6 +186,8 @@ export type ValidRequests =
 	| ScenariosRequest
 	| ActivateDatasetRequest
 	| DeactivateDatasetRequest
+	| ActivateTrafficRequest
+	| DeactivateTrafficRequest
 	| LightRequest
 	| MapLightRequest
 	| ResetRequest;

@@ -1,10 +1,12 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { SocketManager } from "@/utils/SocketManager";
-import { TestButton } from "../TestButton";
+import { TextButton } from "../TextButton";
 
 export enum PageState {
 	Home = "Home",
 	Scenarios = "Scenarios",
+	Layer = "Layer",
+	Light = "Light",
 	Debug = "Debug",
 }
 
@@ -12,23 +14,14 @@ export class Page extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 	public state: PageState;
 	public socket: SocketManager;
-	public layout: Phaser.Geom.Rectangle;
 
-	protected buttons: TestButton[];
+	protected buttons: TextButton[];
 
-	constructor(
-		scene: BaseScene,
-		state: PageState,
-		socket: SocketManager,
-		layout: Phaser.Geom.Rectangle
-	) {
+	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, 0, 0);
 		this.scene = scene;
 		this.state = state;
 		this.socket = socket;
-		this.layout = layout;
-		this.width = layout.width;
-		this.height = layout.height;
 		scene.add.existing(this);
 
 		this.buttons = [];
@@ -48,8 +41,8 @@ export class Page extends Phaser.GameObjects.Container {
 		text: string,
 		color: number,
 		callback: () => void
-	): TestButton {
-		let button = new TestButton(this.scene, x, y, w, h, text, color);
+	): TextButton {
+		let button = new TextButton(this.scene, x, y, w, h, text, color);
 		button.on("click", callback, this);
 		this.add(button);
 		this.buttons.push(button);

@@ -1606,5 +1606,5 @@
 			"title": "Västtrafik"
 		}
 	],
-	"type": "ScenarioResponse"
+	"type": "ScenariosResponse"
 }

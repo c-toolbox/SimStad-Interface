@@ -4,6 +4,7 @@ import { TestSlider } from "./TestSlider";
 import { SunDial } from "@/components/SunDial";
 import { Color } from "@/utils/colors";
 import { languageManager } from "@/utils/LanguageManager";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 
 const START_DATE = new Date("2023-01-01 00:00:00").getTime();
 const END_DATE = new Date("2023-12-31 23:59:59").getTime();
@@ -39,8 +40,8 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 			y: 0,
 			width: this.width,
 			height: this.height,
-			radius: 16,
-			color: Color.Slate800,
+			radius: layout.radius,
+			color: Color.Slate700,
 		});
 		this.add(this.background);
 

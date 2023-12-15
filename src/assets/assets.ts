@@ -49,3 +49,23 @@ await loadFont("Lato-Thin", "Lato-Thin");
 await loadFont("Lato-ThinItalic", "Lato-ThinItalic");
 
 export { images, spritesheets, audios };
+
+export const iconSizes: { [key: string]: { width: number; height: number } } = {
+	"arrow-left": { width: 141, height: 120 },
+	"arrows-rotate": { width: 151, height: 140 },
+	"arrows-swap": { width: 141, height: 160 },
+	"gear-code": { width: 155, height: 160 },
+	gears: { width: 198, height: 157 },
+	globe: { width: 161, height: 160 },
+	layers: { width: 161, height: 160 },
+	lightbulb: { width: 111, height: 161 },
+	list: { width: 156, height: 130 },
+	map: { width: 181, height: 158 },
+	projector: { width: 201, height: 160 },
+	server: { width: 161, height: 140 },
+	sun: { width: 161, height: 160 },
+	sunrise: { width: 181, height: 160 },
+	unreal: { width: 256, height: 256 },
+	wifi: { width: 201, height: 140 },
+	"wifi-slash": { width: 201, height: 162 },
+};
