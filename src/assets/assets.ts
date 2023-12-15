@@ -2,7 +2,7 @@ import { Image, SpriteSheet, Audio } from "./util";
 import { image, sound, music, loadFont, spritesheet } from "./util";
 
 /* Images */
-const images: Image[] = [
+let images: Image[] = [
 	image("map/norrköping.jpg", "norrköping"),
 	image("map/karta.jpg", "karta"),
 	image("map/streets.png", "streets"),
@@ -12,6 +12,7 @@ const images: Image[] = [
 	image("icons/arrow-left.png", "arrow-left"),
 	image("icons/arrows-rotate.png", "arrows-rotate"),
 	image("icons/arrows-swap.png", "arrows-swap"),
+	image("icons/city.png", "city"),
 	image("icons/gear-code.png", "gear-code"),
 	image("icons/gears.png", "gears"),
 	image("icons/globe.png", "globe"),
@@ -27,6 +28,16 @@ const images: Image[] = [
 	image("icons/wifi.png", "wifi"),
 	image("icons/wifi-slash.png", "wifi-slash"),
 ];
+
+/* Load all thumbnails */
+const imageGlob = import.meta.glob("./images/thumbnails/*.png", {
+	as: "url",
+	eager: true,
+});
+for (let path in imageGlob) {
+	let file = path.replace("./images/thumbnails/", "").replace(".png", "");
+	images.push(image(`thumbnails/${file}.png`, file));
+}
 
 /* Spritesheets */
 const spritesheets: SpriteSheet[] = [
