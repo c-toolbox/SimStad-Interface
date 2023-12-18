@@ -44,6 +44,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.OmniError]: this.onOmniError,
 
 			[P.Response.Ping]: this.onPing,
+			[P.Response.ErrorRespone]: this.onErrorRepsonse,
 			[P.Response.Scenarios]: this.onScenarios,
 			[P.Response.ActivateTraffic]: this.onActivateTraffic,
 			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
@@ -147,6 +148,14 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		}
 	}
 
+	onErrorRepsonse(data: P.ErrorRespone){
+
+		if(data.error_type == "ScenarioErrorRepsonse") {
+			console.log(data);
+
+		}
+	}
+
 	onScenarios(data: P.ScenariosResponse) {
 		this.scenariosLoaded = true;
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
@@ -176,8 +185,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	sendScenariosRequest() {
 		this.scenariosLoaded = false;
 
+		// Need to acces current language 
 		let data: P.ScenariosRequest = {
 			type: P.Request.Scenarios,
+			language: "Swedish",
 		};
 		this.sendRequest(data);
 

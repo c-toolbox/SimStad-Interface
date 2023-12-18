@@ -24,6 +24,7 @@ export enum Response {
 
 	Ping = "PingResponse",
 	Scenarios = "ScenariosResponse",
+	ErrorRespone = "ErrorRespone",
 	ActivateTraffic = "ActivateTrafficResponse",
 	DeactivateTraffic = "DeactivateTrafficResponse",
 }
@@ -83,10 +84,19 @@ export interface PingResponse {
 	type: Response.Ping;
 }
 
+/* Error Repsonse */
+
+export interface ErrorRespone {
+	type: Response.ErrorRespone;
+	error_type: String;
+	message: String;
+}
+
 /* All scenarios */
 
 export interface ScenariosRequest {
 	type: Request.Scenarios;
+	language: String;
 }
 
 export interface ScenariosResponse {
