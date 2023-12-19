@@ -17,13 +17,18 @@ export class CircleButton extends Button {
 	) {
 		super(scene, x, y);
 
-		this.border = scene.add.ellipse(0, 0, size + 8, size + 8, Color.White);
-		this.border.setVisible(false);
+		this.border = scene.add.ellipse(0, 0, size + 8, size + 8, Color.Slate800);
 		this.add(this.border);
 
 		this.background = scene.add.ellipse(0, 0, size, size, color);
 		this.add(this.background);
 		this.bindInteractive(this.background);
+		this.background.input!.hitArea.setTo(
+			-30,
+			-30,
+			this.background.width + 2 * 30,
+			this.background.height + 2 * 30
+		);
 
 		this.image = scene.add.image(0, 0, texture);
 		this.image.setScale(size / this.image.width);
@@ -35,6 +40,8 @@ export class CircleButton extends Button {
 	}
 
 	setHighlight(value: boolean) {
-		this.border.setVisible(value);
+		this.background.setAlpha(value ? 1.0 : 0.6);
+		this.image.setAlpha(value ? 1.0 : 0.6);
+		this.border.fillColor = value ? Color.White : Color.Slate800;
 	}
 }

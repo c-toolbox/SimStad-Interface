@@ -1,7 +1,8 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "./colors";
 import * as P from "./protocol";
-import * as scenariosData from "@/data/scenarios.json";
+import { languageManager } from "./LanguageManager";
+import { layoutManager as layout } from "./LayoutManager";
 
 const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
@@ -44,7 +45,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.OmniError]: this.onOmniError,
 
 			[P.Response.Ping]: this.onPing,
-			[P.Response.ErrorRespone]: this.onErrorRepsonse,
+			[P.Response.ErrorResponse]: this.onErrorRepsonse,
+			[P.Response.ResetResponse]: this.onResetRepsonse,
 			[P.Response.Scenarios]: this.onScenarios,
 			[P.Response.ActivateTraffic]: this.onActivateTraffic,
 			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
@@ -148,12 +150,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		}
 	}
 
-	onErrorRepsonse(data: P.ErrorRespone){
+	onResetRepsonse(data: P.ResetResponse) {
+		console.log("Reset!");
+	}
 
-		if(data.error_type == "ScenarioErrorRepsonse") {
-			console.log(data);
-
-		}
+	onErrorRepsonse(data: P.ErrorResponse) {
+		console.error(data);
+		// if (data.error_type == "ScenarioRequestError") {}
 	}
 
 	onScenarios(data: P.ScenariosResponse) {
@@ -185,14 +188,11 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	sendScenariosRequest() {
 		this.scenariosLoaded = false;
 
-		// Need to acces current language 
 		let data: P.ScenariosRequest = {
 			type: P.Request.Scenarios,
-			language: "Swedish",
+			language: languageManager.getCurrentLanguage(),
 		};
 		this.sendRequest(data);
-
-		// this.receive(scenariosData);
 	}
 
 	sendActivateDataset(datasets: string) {
@@ -305,22 +305,22 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	setupStatusIcons() {
-		let size = 40;
-		let x = size / 2 + 5;
-		let y = size / 2;
+		let size = layout.status.height / 2;
+		let x = layout.status.left + size / 2 + 5;
+		let y = layout.status.centerY;
 		let k = 0.75;
 
-		this.omniIcon = this.scene.add.image(x, y, "wifi");
+		this.omniIcon = this.scene.add.image(x, y - size / 2, "wifi");
 		this.omniIcon.setScale(((256 / 201) * k * size) / this.omniIcon.width);
 		this.add(this.omniIcon);
 
-		this.unrealIcon = this.scene.add.image(x, y + size, "unreal");
+		this.unrealIcon = this.scene.add.image(x, y + size / 2, "unreal");
 		this.unrealIcon.setScale(((256 / 256) * k * size) / this.unrealIcon.width);
 		this.add(this.unrealIcon);
 
 		this.omniLabel = this.scene.addText({
 			x: x + 0.75 * size,
-			y,
+			y: y - size / 2,
 			size: 20,
 			weight: 600,
 		});
@@ -328,7 +328,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 		this.unrealLabel = this.scene.addText({
 			x: x + 0.75 * size,
-			y: y + size,
+			y: y + size / 2,
 			size: 20,
 			weight: 600,
 		});

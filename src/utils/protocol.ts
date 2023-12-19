@@ -24,7 +24,8 @@ export enum Response {
 
 	Ping = "PingResponse",
 	Scenarios = "ScenariosResponse",
-	ErrorRespone = "ErrorRespone",
+	ResetResponse = "ResetResponse",
+	ErrorResponse = "ErrorResponse",
 	ActivateTraffic = "ActivateTrafficResponse",
 	DeactivateTraffic = "DeactivateTrafficResponse",
 }
@@ -86,14 +87,13 @@ export interface PingResponse {
 
 /* Error Repsonse */
 
-export interface ErrorRespone {
-	type: Response.ErrorRespone;
+export interface ErrorResponse {
+	type: Response.ErrorResponse;
 	error_type: String;
 	message: String;
 }
 
 /* All scenarios */
-
 export interface ScenariosRequest {
 	type: Request.Scenarios;
 	language: String;
@@ -186,6 +186,11 @@ export interface MapLightRequest {
 export interface ResetRequest {
 	type: Request.Reset;
 	misc: string;
+}
+
+
+export interface ResetResponse {
+	type: Response.ResetResponse;
 }
 
 /* All requests*/

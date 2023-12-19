@@ -8,6 +8,7 @@ let images: Image[] = [
 	image("map/streets.png", "streets"),
 
 	image("vis_c_logo.png", "vis_c_logo"),
+	image("light.png", "light"),
 
 	image("icons/arrow-left.png", "arrow-left"),
 	image("icons/arrows-rotate.png", "arrows-rotate"),

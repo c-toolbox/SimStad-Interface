@@ -1,7 +1,7 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import _suntimes from "@/data/norrköping_suntimes.json";
 import { interpolateColor } from "@/utils/functions";
-import { Color } from "@/utils/colors";
+import { Color, ColorStr } from "@/utils/colors";
 const suntimes = _suntimes as { [date: string]: number[] };
 
 export class SunDial extends Phaser.GameObjects.Container {
@@ -11,45 +11,52 @@ export class SunDial extends Phaser.GameObjects.Container {
 	private innerRadius: number;
 	private outerRadius: number;
 
-	constructor(scene: BaseScene, x: number, y: number) {
+	constructor(
+		scene: BaseScene,
+		x: number,
+		y: number,
+		innerWidth: number,
+		outerWidth: number
+	) {
 		super(scene, x, y);
 		this.scene = scene;
 
-		this.innerRadius = 10;
-		this.outerRadius = 30;
+		this.innerRadius = innerWidth / 2;
+		this.outerRadius = outerWidth / 2;
 
 		this.graphics = scene.add.graphics();
 		this.add(this.graphics);
 
 		this.initLabels();
 
-		this.setDate(1, 1, 12);
+		this.setDate(7, 1, 12);
 	}
 
 	update(time: number, delta: number) {}
 
 	initLabels() {
 		this.labels = [];
-		// const texts = ["18:00", "00:00", "06:00", "12:00"];
+		const texts = ["18:00", "00:00", "06:00", "12:00"];
 
-		// for (let i = 0; i < texts.length; i++) {
-		// 	let a = (i / texts.length) * 2 * Math.PI;
-		// 	let r = (this.outerRadius + this.innerRadius) / 2;
-		// 	let x = r * Math.cos(a);
-		// 	let y = r * Math.sin(a);
+		for (let i = 0; i < texts.length; i++) {
+			let a = (i / texts.length) * 2 * Math.PI;
+			let r = this.innerRadius - (this.outerRadius - this.innerRadius) / 4;
+			let x = r * Math.cos(a);
+			let y = r * Math.sin(a);
 
-		// 	let label = this.scene.addText({
-		// 		x,
-		// 		y,
-		// 		size: 24,
-		// 		fontFamily: "Lato-Bold",
-		// 		color: "white",
-		// 		text: texts[i],
-		// 	});
-		// 	label.setOrigin(0.5);
-		// 	this.add(label);
-		// 	this.labels.push(label);
-		// }
+			let label = this.scene.addText({
+				x,
+				y,
+				size: 18,
+				fontFamily: "Lato-Bold",
+				color: ColorStr.White,
+				text: texts[i],
+				alpha: 0.5
+			});
+			label.setOrigin(0.5 + 0.5 * Math.cos(a), 0.5 + 0.5 * Math.sin(a));
+			this.add(label);
+			this.labels.push(label);
+		}
 	}
 
 	setDate(month: number, day: number, hour: number) {

@@ -64,7 +64,7 @@ const fontGlob = import.meta.glob("./fonts/**/*.ttf", {
 export const loadFont = async (path: string, name: string) => {
 	const face = new FontFace(name, `url(${fontGlob[`./fonts/${path}.ttf`]})`, {
 		style: "normal",
-		weight: "400",
+		weight: "500",
 	});
 	await face.load();
 	document.fonts.add(face);

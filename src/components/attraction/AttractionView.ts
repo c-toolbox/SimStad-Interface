@@ -34,7 +34,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 		this.setVisible(true);
 
 		// Dismiss on any clicks
-		this.outside = scene.add.rectangle(0, 0, scene.W, scene.H, 0, 0.001);
+		this.outside = scene.add.rectangle(0, 0, scene.W, scene.H, 0, 0.4);
 		this.add(this.outside);
 		this.outside.setInteractive({ useHandCursor: true }).on(
 			"pointerdown",
@@ -64,7 +64,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 			x: 0,
 			y: titleY + 0.02 * scene.H,
 			size: 54 * SCALE,
-			weight: 700,
+			fontFamily: "Lato-Bold",
 			color: textColor,
 			text: "Title",
 		});
@@ -74,7 +74,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 			x: 0,
 			y: titleY + 0.13 * scene.H,
 			size: 80 * SCALE,
-			weight: 700,
+			fontFamily: "Lato-Bold",
 			color: textColor,
 			text: "Heading",
 		});

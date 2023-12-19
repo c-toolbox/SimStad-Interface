@@ -10,13 +10,15 @@ export class TestSlider extends Phaser.GameObjects.Container {
 		scene: BaseScene,
 		x: number,
 		y: number,
+		width: number,
+		height: number,
 		text: string,
 		steps: number = 0
 	) {
 		super(scene, x, y);
 		scene.add.existing(this);
-		this.width = 460;
-		this.height = 40;
+		this.width = width;
+		this.height = height;
 
 		this.title = scene.addText({
 			x: -this.width / 2,

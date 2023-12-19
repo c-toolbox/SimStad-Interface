@@ -1,11 +1,11 @@
 import { BaseScene } from "./BaseScene";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 import { VERSION, IDLE_TIME, IDLE_FADE, SCALE } from "@/utils/constants";
 
 import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
 import { AttractionView } from "@/components/attraction/AttractionView";
-import { RoundRectangle } from "@/components/elements/RoundRectangle";
 
 export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
@@ -84,9 +84,9 @@ export class UIScene extends BaseScene {
 		this.toolButtons = [];
 		for (let i = 0; i < toolButtons.length; i++) {
 			let button = toolButtons[i];
-			let size = 40;
-			let x = this.W - size;
-			let y = this.H - (toolButtons.length - 1 - i) * 1.75 * size - 2.5 * size;
+			let size = layout.margin / 2;
+			let x = layout.toolbar.centerX;
+			let y = layout.toolbar.bottom - (toolButtons.length - 1 - i) * 1.75 * size - 0.5 * size;
 
 			let obj = new ToolboxButton(this, x, y, size, button.image);
 			this.add.existing(obj);
@@ -94,9 +94,6 @@ export class UIScene extends BaseScene {
 
 			obj.on("click", button.function, this);
 		}
-
-		// let land = this.add.image(this.CX, this.H - sbH - NODE_SIZE/2, "bg_land");
-		// this.containToScreen(land);
 
 		/* Fader */
 
@@ -176,9 +173,6 @@ export class UIScene extends BaseScene {
 			}
 		}
 	}
-
-	// bookmarkButton() {
-	// }
 
 	onInfoButton() {
 		if (!this.allowInput) return;

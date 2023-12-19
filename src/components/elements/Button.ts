@@ -104,20 +104,21 @@ export class Button extends Phaser.GameObjects.Container {
 		event: Phaser.Types.Input.EventData
 	) {
 		if (this.hold && !this.blocked) {
-			this.hold = false;
 			this.emit("click");
 		}
+		this.hold = false;
 	}
 
-	onDragStart() {}
+	onDragStart(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {}
 
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
-		if (Math.abs(dragY) > 8) {
-			this.hold = false;
-		}
+		// this.hold = false;
+		// if (Math.abs(dragY) > 8) {
+		// 	this.hold = false;
+		// }
 	}
 
-	onDragEnd() {}
+	onDragEnd(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {}
 
 	isInsidePlayingField(): boolean {
 		return false;

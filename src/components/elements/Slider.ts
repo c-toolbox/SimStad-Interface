@@ -17,6 +17,9 @@ export class Slider extends Phaser.GameObjects.Container {
 	private steps: number;
 	private thinHeight: number;
 
+	private dragging: boolean;
+	private offsetX: number;
+
 	private _hold: boolean;
 	public holdSmooth: number;
 	private tween: Phaser.Tweens.Tween;
@@ -59,6 +62,8 @@ export class Slider extends Phaser.GameObjects.Container {
 			.on("pointerdown", this.onDown, this)
 			.on("pointerup", this.onUp, this)
 			.on("pointerout", this.onUp, this)
+			.on("dragstart", this.onDragStart, this)
+			.on("dragend", this.onDragEnd, this)
 			.on("drag", this.onDrag, this);
 		this.background.input!.hitArea.setTo(
 			-padding,
@@ -92,6 +97,9 @@ export class Slider extends Phaser.GameObjects.Container {
 		this.maxV = 1;
 		this._value = 0.5;
 		this._prevValue = 0.5;
+
+		this.dragging = false;
+		this.offsetX = 0;
 
 		this._hold = false;
 		this.holdSmooth = 0;
@@ -130,15 +138,29 @@ export class Slider extends Phaser.GameObjects.Container {
 	) {
 		let x = localX - this.background.width / 2;
 		this.background.input!.dragStartX = x;
+		console.log("down", this.dragging);
 		this.onDrag(pointer, x, 0);
 		this.hold = true;
+		this.offsetX = x;
 	}
 
 	onUp() {
 		this.hold = false;
 	}
 
+	onDragStart() {
+		this.dragging = true;
+	}
+
+	onDragEnd() {
+		this.dragging = false;
+	}
+
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
+		// if (this.dragging) {
+		// 	dragX += this.offsetX;
+		// }
+
 		// Clamp x-coord
 		dragX = Phaser.Math.Clamp(dragX, this.minX, this.maxX);
 

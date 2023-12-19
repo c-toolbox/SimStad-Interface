@@ -2,7 +2,6 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
-import { Map } from "@/components/Map";
 import { Navigation } from "@/components/Navigation";
 
 import { SocketManager } from "@/utils/SocketManager";
@@ -29,7 +28,6 @@ export class GameScene extends BaseScene {
 	private layerPage: LayerPage;
 	private lightPage: LightPage;
 	private debugPage: DebugPage;
-	private map: Map;
 	private navigation: Navigation;
 
 	constructor() {
@@ -41,6 +39,7 @@ export class GameScene extends BaseScene {
 		this.cameras.main.setBackgroundColor(Color.Slate900);
 		this.initBlur();
 
+		// this.input.dragDistanceThreshold = 16;
 		this.input.addPointer(10);
 
 		this.socket = new SocketManager(this);
@@ -52,19 +51,6 @@ export class GameScene extends BaseScene {
 		});
 
 		/* Layout */
-
-		this.map = new Map(this, 0, 0, layout.body);
-		this.map.on(
-			"setTime",
-			(year: number, month: number, day: number, hour: number) => {
-				this.socket.sendLight(year, month, day, hour);
-			}
-		);
-		this.map.on("send", (data: object) => {
-			this.socket.send(data);
-		});
-
-		let panelBackground = layout.addRect(this, layout.panel, Color.Slate800);
 
 		this.pages = [];
 		this.homePage = new HomePage(this, PageState.Home, this.socket);
@@ -108,7 +94,6 @@ export class GameScene extends BaseScene {
 			}
 		});
 
-		this.map.update(time, delta);
 		this.navigation.update(time, delta);
 	}
 

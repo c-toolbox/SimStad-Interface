@@ -29,26 +29,80 @@ export class Navigation extends Phaser.GameObjects.Container {
 		// });
 		// this.add(this.background);
 
-		let s = layout.nav.height;
-		let x = layout.nav.left + s / 2;
-		let y = layout.navInner.centerY;
+		let fs = 32; // Font size
+		let s = layout.nav.width; // Button size
+		let x = layout.nav.centerX;
+		let y = layout.nav.bottom;
 		let g = 32;
-		let c = Color.Green800;
 
+		y -= fs / 2;
+		let scenarioLabel = scene.addText({
+			x,
+			y,
+			size: fs,
+			fontFamily: "Lato-Bold",
+			color: "white",
+			text: "Scenarios",
+		});
+		scenarioLabel.setOrigin(0.5, 0.5);
+		this.add(scenarioLabel);
+
+		y -= s / 2 + 0.75 * fs;
+		let c = Color.Green800;
 		this.scenarioButton = new CircleButton(scene, x, y, s, "map", c);
 		this.add(this.scenarioButton);
 
-		x += layout.nav.height / 2 + layout.navInner.height / 2 + g;
-		s = layout.navInner.height;
+		fs = 28;
+		y -= s / 2 + g + fs / 2;
+		let lightLabel = scene.addText({
+			x,
+			y,
+			size: fs,
+			fontFamily: "Lato-Bold",
+			color: "white",
+			text: "Light",
+		});
+		lightLabel.setOrigin(0.5, 0.5);
+		this.add(lightLabel);
+
+		s = layout.navInner.width;
+		y -= s / 2 + g;
+		c = Color.Yellow700;
+		this.lightButton = new CircleButton(scene, x, y, s, "sun", c);
+		this.add(this.lightButton);
+
+		y -= s / 2 + g + fs / 2;
+		let layerLabel = scene.addText({
+			x,
+			y,
+			size: fs,
+			fontFamily: "Lato-Bold",
+			color: "white",
+			text: "Layers",
+		});
+		layerLabel.setOrigin(0.5, 0.5);
+		this.add(layerLabel);
+
+		y -= s / 2 + 0.75 * fs;
+		c = Color.Blue800;
 		this.layerButton = new CircleButton(scene, x, y, s, "layers", c);
 		this.add(this.layerButton);
 
-		x += s + g;
-		this.lightButton = new CircleButton(scene, x, y, s, "sunrise", c);
-		this.add(this.lightButton);
+		y -= s / 2 + g + fs / 2;
+		let debugLabel = scene.addText({
+			x,
+			y,
+			size: fs,
+			fontFamily: "Lato-Bold",
+			color: "white",
+			text: "Debug",
+		});
+		debugLabel.setOrigin(0.5, 0.5);
+		this.add(debugLabel);
 
-		x += s + g;
-		this.debugButton = new CircleButton(scene, x, y, s, "gears", c);
+		y -= s / 2 + g;
+		c = Color.Slate700;
+		this.debugButton = new CircleButton(scene, x, y, s, "gear-code", c);
 		this.add(this.debugButton);
 
 		this.scenarioButton.on("click", () =>

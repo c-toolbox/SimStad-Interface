@@ -137,6 +137,7 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		this.content.add(gameObject);
 
 		let grabY = 0;
+		let dragging = false;
 		gameObject.on(
 			"dragstart",
 			(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
@@ -147,15 +148,22 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		gameObject.on(
 			"drag",
 			(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-				let newTargetY = dragY + grabY;
-				this.speedY = newTargetY - this.targetY;
-				this.targetY = newTargetY;
+				if (!dragging && Math.abs(dragY) > 16) {
+					gameObject.block();
+					dragging = true;
+				}
+				if (dragging) {
+					let newTargetY = dragY + grabY;
+					this.speedY = newTargetY - this.targetY;
+					this.targetY = newTargetY;
+				}
 			}
 		);
 		gameObject.on(
 			"dragend",
 			(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
 				this.hold = false;
+				dragging = false;
 			}
 		);
 		gameObject.on(

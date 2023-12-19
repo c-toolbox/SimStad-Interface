@@ -9,39 +9,43 @@ export class DebugPage extends Page {
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
+		let background = layout.addRect(scene, layout.panel, Color.Slate800);
+		this.add(background);
+
 		let title = scene.addText({
 			x: layout.panelInner.left,
 			y: layout.panelInner.top,
-			size: 100,
+			size: 64,
 			color: "white",
 			text: "Debug",
 		});
 		this.add(title);
 
+		let subtitle = scene.addText({
+			x: title.x,
+			y: title.y + 1.5 * 64,
+			size: 28,
+			color: "white",
+			text: "Debug page with direct access to certain behind the scenes calls. Intended for advanced mode.",
+		});
+		this.add(subtitle);
+
 		let s = 30;
-		let w = 220;
+		let w = layout.panelInner.width / 2 - s / 2;
 		let h = 64;
 		let x = layout.panelInner.left + w / 2;
-		let y = layout.panelInner.bottom - h / 2;
+		let y = subtitle.y + 1.5 * subtitle.displayHeight + h;
 
 		/* Debug buttons */
 
-		w = layout.panelInner.width / 2 - s;
-		h = 64;
-		x = layout.panelInner.left + w / 2;
-		y = layout.panelInner.top + 1.3 * title.displayHeight + h / 2;
 		this.addButton(x, y, w, h, "Ping", Color.Red700, () => {
-			this.socket.send({
-				type: "PingRequest",
-			});
+			this.socket.sendPing();
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "Fetch scenarios", Color.Amber700, () => {
-			this.socket.send({
-				type: "ScenariosRequest",
-			});
-		});
+		this.addButton(x, y, w, h, "Reload scenarios", Color.Amber700, () =>
+			this.socket.sendScenariosRequest()
+		);
 
 		x -= w + s;
 		y += h + s;
@@ -59,28 +63,19 @@ export class DebugPage extends Page {
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "KOllektivTrafik", Color.Blue700, () => {
-			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "Nkpg/KOllektivTraffik",
-			});
+		this.addButton(x, y, w, h, "Render layout", Color.Pink800, () => {
+			layout.drawLayout(this.scene);
 		});
 
 		x -= w + s;
 		y += h + s;
-		this.addButton(x, y, w, h, "Traffic on", Color.Rose700, () => {
+		this.addButton(x, y, w, h, "Traffic on", Color.Indigo600, () => {
 			this.socket.sendActivateTraffic();
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "Traffic off", Color.Rose900, () => {
+		this.addButton(x, y, w, h, "Traffic off", Color.Indigo800, () => {
 			this.socket.sendDeactivateTraffic();
-		});
-
-		x -= w + s;
-		y += h + s;
-		this.addButton(x, y, w, h, "Render layout", Color.Indigo700, () => {
-			layout.drawLayout(this.scene);
 		});
 	}
 

@@ -20,35 +20,55 @@ export class LayerPage extends Page {
 	private errorIcon: Phaser.GameObjects.Image;
 	private layerButtons: LayerButton[];
 
+	private activeLayers: string[];
+
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
 		this.layerButtons = [];
+		this.activeLayers = [];
+
+		let background = layout.addRect(scene, layout.panel, Color.Slate800);
+		this.add(background);
 
 		let title = scene.addText({
 			x: layout.panelInner.left,
 			y: layout.panelInner.top,
-			size: 100,
+			size: 64,
 			color: "white",
 			text: "Layers",
 		});
 		this.add(title);
+
+		let subtitle = scene.addText({
+			x: title.x,
+			y: title.y + 1.5 * 64,
+			size: 28,
+			color: "white",
+			text: "All available data layers. Intended for advanced mode.",
+		});
+		this.add(subtitle);
 
 		let s = 20;
 		let w = 220;
 		let h = 64;
 		let x = layout.panelInner.right - w / 2;
 		let y = layout.panelInner.bottom - h / 2;
-		this.addButton(x, y, w, h, "Reset", Color.Rose800, () =>
-			this.socket.sendReset()
-		);
+		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
+			this.socket.sendReset();
+			this.resetLayers();
+		});
+
+		let scrollTop = subtitle.y + subtitle.displayHeight + s;
+		let scrollBottom = layout.panelInner.bottom - h - s;
+		let scrollHeight = scrollBottom - scrollTop;
 
 		this.scrollArea = new ScrollArea(
 			scene,
 			layout.panelInner.left,
-			layout.panelInner.top + 1.25 * title.displayHeight,
+			scrollTop,
 			layout.panelInner.width,
-			layout.panelInner.height - 1.25 * title.displayHeight - h - s,
+			scrollHeight,
 			0
 		);
 		this.add(this.scrollArea);
@@ -75,6 +95,7 @@ export class LayerPage extends Page {
 		});
 		this.add(areaBackground);
 		this.sendToBack(areaBackground);
+		this.sendToBack(background);
 
 		this.loadingIcon = new LoadingIcon(scene, cx, cy, Color.Slate500, 60);
 		this.loadingIcon.setVisible(false);
@@ -113,34 +134,35 @@ export class LayerPage extends Page {
 
 	loadLayers(layerData: { layers: string[] }) {
 		let i = 0;
-		let m = 5;
+		let m = 7;
 
 		let s = 20;
-		let w = (this.scrollArea.width - (m+1) * s) / m;
+		let w = (this.scrollArea.width - (m + 1) * s) / m;
 		let h = w;
 		let x = w / 2 + s;
 		let y = s + h / 2;
 
+		layerData.layers.sort();
+
 		layerData.layers.forEach((layer: string) => {
-			let button = new LayerButton(
-				this.scene,
-				x,
-				y,
-				w,
-				h,
-				layer
-			);
+			let button = new LayerButton(this.scene, x, y, w, h, layer);
 			button.setDraggable();
 			this.add(button);
 			this.layerButtons.push(button);
 			this.scrollArea.apply(button);
 
-			let active = false;
 			button.on("click", () => {
-				active = !active;
-				button.setHighlight(active);
-				if (active) this.socket.sendActivateDataset("Nkpg/" + layer);
-				else this.socket.sendDeactivateDataset("Nkpg/" + layer);
+				button.setSelected(!button.selected);
+
+				if (button.selected) {
+					this.activeLayers.push(button.layer);
+				} else {
+					const index = this.activeLayers.indexOf(button.layer);
+					this.activeLayers.splice(index, 1);
+				}
+				// if (button.selected) this.socket.sendActivateDataset("Nkpg/" + layer);
+				// else this.socket.sendDeactivateDataset("Nkpg/" + layer);
+				this.sendActiveDataset();
 			});
 
 			x += w + s;
@@ -152,5 +174,29 @@ export class LayerPage extends Page {
 
 		this.loadingIcon.setVisible(false);
 		this.buttons.forEach((button) => this.bringToTop(button));
+	}
+
+	sendActiveDataset() {
+		this.activeLayers.forEach((layer, index) => {
+			let button = this.layerButtons.find((button) => button.layer == layer);
+			if (button) {
+				button.setOrder(index + 1);
+			}
+		});
+
+		// let active = this.layerButtons.filter((button) => button.selected);
+		// let layers = active.map((button) => `Nkpg/${button.layer}`);
+		let layers = this.activeLayers.map((layer) => `Nkpg/${layer}`);
+		let layerString = layers.join(",");
+
+		this.socket.sendReset();
+		// setTimeout(() => {
+		this.socket.sendActivateDataset(layerString);
+		// }, 500);
+	}
+
+	resetLayers() {
+		this.activeLayers = [];
+		this.layerButtons.forEach((buttons) => buttons.setSelected(false));
 	}
 }

@@ -10,6 +10,7 @@ import { TextButton } from "@/components/TextButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
 import { ScenariosResponse } from "@/utils/protocol";
+import * as scenariosData from "@/data/scenarios.json";
 
 export class ScenariosPage extends Page {
 	private scrollArea: ScrollArea;
@@ -25,51 +26,58 @@ export class ScenariosPage extends Page {
 
 		this.scenariosButtons = [];
 
+		let background = layout.addRect(scene, layout.panel, Color.Slate800);
+		this.add(background);
+
 		let title = scene.addText({
 			x: layout.panelInner.left,
 			y: layout.panelInner.top,
-			size: 100,
+			size: 64,
 			color: "white",
 			text: "Scenarios",
 		});
 		this.add(title);
 
+		let subtitle = scene.addText({
+			x: title.x,
+			y: title.y + 1.5 * 64,
+			size: 28,
+			color: "white",
+			text: "List of handpicked scenarios, stories and combination of layers.",
+		});
+		this.add(subtitle);
+
 		let s = 20;
-		let w = 150;
+		let w = 220;
 		let h = 64;
 		let x = layout.panelInner.right - w / 2;
 		let y = layout.panelInner.bottom - h / 2;
-		this.addButton(
-			x,
-			y,
-			w,
-			h,
-			"Reset",
-			Color.Rose800,
-			() => this.socket.sendReset()
-		);
-		this.addButton(
-			x - w - s,
-			y,
-			w,
-			h,
-			"Refresh",
-			Color.Green800,
-			() => {
-				this.clearScenarios();
-				if (this.errorIcon.visible) {
-					this.socket.reconnectToUnreal();
-				}
-				this.socket.sendScenariosRequest();
+		this.addButton(x, y, w, h, "Reset", Color.Rose800, () => {
+			this.socket.sendReset();
+			this.scenariosButtons.forEach((button) => button.setHighlight(false));
+		});
+		this.addButton(x - w - s, y, w, h, "Refresh", Color.Green800, () => {
+			this.clearScenarios();
+			if (this.errorIcon.visible) {
+				this.socket.reconnectToUnreal();
 			}
-		);
+			this.socket.sendScenariosRequest();
+		});
+		this.addButton(x - 2 * w - 2 * s, y, w, h, "Fake", Color.Yellow800, () => {
+			this.clearScenarios();
+			this.loadScenarios(scenariosData as any);
+		});
+
+		let scrollTop = subtitle.y + subtitle.displayHeight + s;
+		let scrollBottom = layout.panelInner.bottom - h - s;
+		let scrollHeight = scrollBottom - scrollTop;
 
 		this.scrollArea = new ScrollArea(
 			scene,
 			layout.panelInner.left,
-			layout.panelInner.top + 1.25 * title.displayHeight,
+			scrollTop,
 			layout.panelInner.width,
-			layout.panelInner.height - 1.25 * title.displayHeight - h - s,
+			scrollHeight,
 			0
 		);
 		this.add(this.scrollArea);
@@ -96,6 +104,7 @@ export class ScenariosPage extends Page {
 		});
 		this.add(areaBackground);
 		this.sendToBack(areaBackground);
+		this.sendToBack(background);
 
 		this.loadingIcon = new LoadingIcon(scene, cx, cy, Color.Slate500, 60);
 		this.add(this.loadingIcon);
@@ -178,7 +187,14 @@ export class ScenariosPage extends Page {
 
 					button.on(
 						"click",
-						() => this.socket.sendActivateDataset(object.filenames),
+						() => {
+							this.socket.sendActivateDataset(object.filenames);
+
+							this.scenariosButtons.forEach((button) =>
+								button.setHighlight(false)
+							);
+							button.setHighlight(true);
+						},
 						this
 					);
 
