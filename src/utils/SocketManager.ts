@@ -371,17 +371,17 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		}
 
 		let temp = this.scene.addText({
-			size: 28,
+			size: 28 / 2,
 			color,
 			text,
 		});
 		temp.setOrigin(1);
-		temp.setStroke("black", 8);
+		temp.setStroke("black", 4);
 		temp.x = this.scene.W - 10;
-		temp.y = 50;
+		temp.y = 50 / 2;
 
 		this.debugTexts.forEach((text) => {
-			text.y += 30 * 1.4;
+			text.y += (30 * 1.4) / 2;
 		});
 		this.debugTexts.push(temp);
 
@@ -391,7 +391,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			ease: "Linear",
 			duration: 10000,
 			onUpdate: (tween, targets, key, current, previous, param) => {
-				let alpha = Math.min(8 - 8 * current, 2 - temp.y / 200);
+				let alpha = Math.min(8 - 8 * current, 2 - temp.y / 100);
 				temp.setAlpha(alpha);
 			},
 			onComplete: () => {

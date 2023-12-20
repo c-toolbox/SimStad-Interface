@@ -4,6 +4,7 @@ import { Color } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { MapLight } from "./MapLight";
 import { SocketManager } from "@/utils/SocketManager";
+import { Response } from "@/utils/protocol";
 
 // Bottom right
 const MIN_X = 129411.4;
@@ -45,6 +46,11 @@ export class Map extends Phaser.GameObjects.Container {
 		this.map
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", this.onClick, this);
+
+		this.socket.on(Response.ResetResponse, () => {
+			this.lamps.forEach((lamp) => lamp.destroy());
+			this.lamps = [];
+		});
 
 		this.lamps = [];
 	}

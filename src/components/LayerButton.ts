@@ -43,7 +43,7 @@ export class LayerButton extends Button {
 			width: this.width,
 			height: this.height,
 			radius: 0,
-			color: Color.Black,
+			color: Color.Gray900,
 		});
 		this.add(this.background);
 
