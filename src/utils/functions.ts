@@ -45,6 +45,26 @@ export function HSVToRGB(h: number, s: number, v: number): number {
 	return (<Phaser.Display.Color>union).color;
 }
 
+// Convert hsv values to color (hex)
+export function colorToGrayscale(color: number): number {
+	return (
+		(((((color >> 16) & 0xff) * 76 +
+			((color >> 8) & 0xff) * 150 +
+			(color & 0xff) * 29) >>
+			8) <<
+			16) |
+		(((((color >> 16) & 0xff) * 76 +
+			((color >> 8) & 0xff) * 150 +
+			(color & 0xff) * 29) >>
+			8) <<
+			8) |
+		((((color >> 16) & 0xff) * 76 +
+			((color >> 8) & 0xff) * 150 +
+			(color & 0xff) * 29) >>
+			8)
+	);
+}
+
 // Convert hex number color to hex string color
 export function colorToString(color: number): string {
 	let c = Phaser.Display.Color.ValueToColor(color);

@@ -30,7 +30,7 @@ export class Legend extends Phaser.GameObjects.Container {
 			width,
 			height,
 			radius: layout.radius,
-			color: Color.Slate700,
+			color: Color.Slate900,
 		});
 		this.add(this.background);
 
@@ -42,6 +42,7 @@ export class Legend extends Phaser.GameObjects.Container {
 			y: -height / 2 + layout.padding / 2,
 			size: 28,
 			fontFamily: "Lato-Bold",
+			color: "white",
 		});
 		this.add(this.title);
 
@@ -75,7 +76,7 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		const ty = this.title.y + this.title.displayHeight + 20;
 		const th = this.height / 2 - ty - layout.padding / 2;
-		const gap = 6;
+		const gap = 2;
 		const size = (th - gap * (stops.length - 1)) / stops.length;
 
 		stops.forEach(({ color, text }, index) => {
@@ -83,10 +84,17 @@ export class Legend extends Phaser.GameObjects.Container {
 			let y = ty + (size + gap) * index + size / 2;
 			let radius = Math.min(size / 2, 24);
 
-			this.graphics.fillStyle(Color.Slate200);
-			this.graphics.fillCircle(x, y, radius);
+			this.graphics.fillStyle(Color.Slate300);
+			// this.graphics.fillCircle(x, y, radius);
+			this.graphics.fillRect(x - size / 2, y - size *2/3/2, size, size *2/3);
 			this.graphics.fillStyle(colorToNumber(color));
-			this.graphics.fillCircle(x, y, radius - 2);
+			// this.graphics.fillCircle(x, y, radius - 2);
+			this.graphics.fillRect(
+				x - size / 2 + 2,
+				y - size *2/3/2 + 2,
+				size - 4,
+				size *2/3 -4
+			);
 
 			let label = this.scene.addText({
 				x: x + 2 * radius,
@@ -94,6 +102,7 @@ export class Legend extends Phaser.GameObjects.Container {
 				size: Math.min(size, 24),
 				fontFamily: "Lato-Bold",
 				text,
+				color: "white",
 			});
 			label.setOrigin(0, 0.5);
 			this.add(label);

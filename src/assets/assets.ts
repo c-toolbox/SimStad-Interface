@@ -28,6 +28,14 @@ let images: Image[] = [
 	image("icons/unreal.png", "unreal"),
 	image("icons/wifi.png", "wifi"),
 	image("icons/wifi-slash.png", "wifi-slash"),
+
+	image("chapters/crowd.png", "crowd"),
+	image("chapters/sunlight.png", "sunlight"),
+	image("chapters/umbrella.png", "umbrella"),
+	image("chapters/tram.png", "tram"),
+	image("chapters/cranes.png", "cranes"),
+
+	image("legends/vislab-stadstvilling.jpg", "legend_default"),
 ];
 
 /* Load all thumbnails */

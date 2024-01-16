@@ -148,21 +148,21 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		// let qrBg = new RoundRectangle(scene, qx-qw/2, qy+qw/2, qw, qw, 4, 0xFFFFFF);
 		// this.box.add(qrBg);
 
-		let lutraImage = scene.add.image(0, 0, "vis_c_logo");
-		lutraImage.setScale(qw / lutraImage.width);
-		// lutraImage.setOrigin(1, 0);
-		lutraImage.setAlpha(0.75);
-		lutraImage.setTint(highlightColor);
-		lutraImage.setBlendMode(Phaser.BlendModes.ADD);
+		let visLogo = scene.add.image(0, 0, "vis_c_logo");
+		visLogo.setScale(qw / visLogo.width);
+		// visLogo.setOrigin(1, 0);
+		visLogo.setAlpha(1.0);
+		visLogo.setTint(highlightColor);
+		visLogo.setBlendMode(Phaser.BlendModes.ADD);
 
 		this.lutraButton = new Button(
 			this.scene,
-			qx - lutraImage.displayWidth / 2,
-			qy + lutraImage.displayHeight / 2
+			qx - visLogo.displayWidth / 2,
+			qy + visLogo.displayHeight / 2
 		);
 		this.box.add(this.lutraButton);
-		this.lutraButton.bindInteractive(lutraImage);
-		this.lutraButton.add(lutraImage);
+		this.lutraButton.bindInteractive(visLogo);
+		this.lutraButton.add(visLogo);
 
 		// Easter egg
 		this.lutraClicks = 0;

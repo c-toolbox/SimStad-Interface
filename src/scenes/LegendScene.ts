@@ -1,0 +1,357 @@
+import { BaseScene } from "@/scenes/BaseScene";
+import { Color, ColorStr } from "@/utils/colors";
+import { RoundRectangle } from "@/components/elements/RoundRectangle";
+import * as scenarioData from "@/data/scenarios.json";
+import * as scenarioDataEn from "@/data/scenarios-en.json";
+import {
+	colorToGrayscale,
+	colorToNumber,
+	interpolateColor,
+} from "@/utils/functions";
+
+const screenWidth = 1920;
+const screenHeight = 1080;
+const margin = 40;
+const padding = 80;
+const separation = 40;
+const radius = 40;
+const titleSize = 90;
+const breadSize = 40;
+const legendTitleSize = 48;
+const legendLabelSize = 40;
+const grid = 4;
+
+const bx = margin;
+const by = margin;
+const bw = screenWidth - 2 * margin;
+const bh = screenHeight - 2 * margin;
+const body = new Phaser.Geom.Rectangle(bx, by, bw, bh);
+
+const lw = (body.width - 2 * padding - separation) / 1.6;
+const lh = body.height - 2 * padding;
+const lx = body.left + padding;
+const ly = body.top + padding;
+const left = new Phaser.Geom.Rectangle(lx, ly, lw, lh);
+
+const rw = body.width - 2 * padding - separation - left.width;
+const rh = body.height - 2 * padding;
+const rx = body.right - padding - rw;
+const ry = body.top + padding;
+const right = new Phaser.Geom.Rectangle(rx, ry, rw, rh);
+
+export class LargeLegend extends Phaser.GameObjects.Container {
+	public scene: BaseScene;
+
+	private background: RoundRectangle;
+	private graphics: Phaser.GameObjects.Graphics;
+	private title: Phaser.GameObjects.Text;
+	private labels: Phaser.GameObjects.Text[];
+
+	constructor(
+		scene: BaseScene,
+		x: number,
+		y: number,
+		width: number,
+		height: number
+	) {
+		super(scene, x, y);
+		this.scene = scene;
+		this.width = width;
+		this.height = height;
+
+		this.background = new RoundRectangle(scene, {
+			width,
+			height,
+			radius,
+			color: Color.Slate900,
+		});
+		this.add(this.background);
+
+		this.graphics = scene.add.graphics();
+		this.add(this.graphics);
+
+		this.title = this.scene.addText({
+			x: -width / 2 + padding / 2,
+			y: -height / 2 + padding / 2,
+			size: legendTitleSize,
+			fontFamily: "Lato-Bold",
+			color: ColorStr.White,
+		});
+		this.add(this.title);
+
+		let hr = this.scene.add.rectangle(
+			0,
+			this.title.y + this.title.displayHeight * 1.25,
+			width - padding,
+			2,
+			Color.White
+		);
+		this.add(hr);
+
+		this.labels = [];
+
+		const stops: { color: string; text: string }[] = [
+			{ color: ColorStr.Red500, text: "1" },
+			{ color: ColorStr.Orange500, text: "2" },
+			{ color: ColorStr.Yellow500, text: "3" },
+		];
+		this.loadLegend("Title", stops);
+	}
+
+	update(time: number, delta: number) {}
+
+	loadLegend(title: string, stops: { color: string; text: string }[]) {
+		this.graphics.clear();
+		this.title.setText(title);
+
+		if (this.title.displayWidth >= this.width - 2 * padding) {
+			this.title.setColor(ColorStr.Red700);
+		}
+
+		this.labels.forEach((text) => text.destroy());
+		this.labels = [];
+
+		const ty = this.title.y + this.title.displayHeight * 2.0;
+		const th = this.height / 2 - ty - padding / 2;
+		const gap = 16;
+		const border = 4;
+		const count = Math.max(stops.length, 12);
+		const height = (th - gap * (count - 1)) / count;
+		const width = 2 * height;
+		// const dotRadius = size / 2;
+
+		stops.forEach(({ color, text }, index) => {
+			let x = this.title.x;
+			let y = ty + (height + gap) * index + height / 2;
+			let c = colorToNumber(color);
+			let gc = 0xffffff - colorToGrayscale(c);
+			let bc = interpolateColor(c, gc, 0.5);
+
+			this.graphics.fillStyle(bc);
+			// this.graphics.fillCircle(x, y, dotRadius);
+			this.graphics.fillRect(x, y - height / 2, width, height);
+
+			this.graphics.fillStyle(colorToNumber(color));
+			// this.graphics.fillCircle(x, y, dotRadius - border);
+			this.graphics.fillRect(
+				x + border,
+				y - height / 2 + border,
+				width - 2 * border,
+				height - 2 * border
+			);
+
+			let label = this.scene.addText({
+				// x: x + dotRadius + separation,
+				x: x + width + gap,
+				y,
+				size: Math.min(height, legendLabelSize),
+				fontFamily: "Lato-Bold",
+				text,
+				color: "white",
+			});
+			label.setOrigin(0, 0.5);
+			this.add(label);
+			this.labels.push(label);
+		});
+	}
+}
+
+export class LegendScreen extends Phaser.GameObjects.Container {
+	public id: string;
+
+	constructor(
+		scene: BaseScene,
+		titleText: string,
+		breadText: string,
+		legendColors?: { color: string; text: string }[]
+	) {
+		super(scene, 0, 0);
+		this.scene = scene;
+
+		this.id = titleText.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+
+		let background = scene.add.rectangle(
+			screenWidth / 2,
+			screenHeight / 2,
+			screenWidth,
+			screenHeight,
+			Color.Slate900
+		);
+		this.add(background);
+		background.setInteractive({ useHandCursor: true }).on("pointerdown", () => {
+			this.emit("click");
+		});
+
+		let panel = new RoundRectangle(scene, {
+			rect: body,
+			radius,
+			color: Color.Slate800,
+		});
+		this.add(panel);
+
+		let title = scene.addText({
+			x: left.left,
+			y: left.top,
+			size: titleSize,
+			color: "white",
+			text: titleText,
+		});
+		this.add(title);
+
+		if (title.displayWidth > left.width) {
+			title.setColor(ColorStr.Red700);
+		}
+
+		let ty = left.top + 1.0 * titleSize + 1.0 * breadSize;
+
+		breadText.split("\n").forEach((paragraph) => {
+			let subtitle = scene.addText({
+				x: left.left,
+				y: ty,
+				size: breadSize,
+				color: "white",
+				text: paragraph,
+			});
+			subtitle.setWordWrapWidth(left.width);
+			this.add(subtitle);
+
+			ty += subtitle.displayHeight + 0.75 * breadSize;
+			if (ty > screenHeight) {
+				subtitle.setColor(ColorStr.Red700);
+			}
+		});
+
+		/* Legends */
+
+		let lw = right.width;
+		let lh = right.height;
+		let lx = right.centerX;
+		let ly = right.centerY;
+
+		if (legendColors) {
+			let legend = new LargeLegend(scene, lx, ly, lw, lh);
+			legend.loadLegend(titleText, legendColors);
+			this.add(legend);
+		}
+	}
+
+	addImage(key: string) {
+		let image = this.scene.add.image(right.centerX, right.centerY, key);
+		image.setScale(
+			Math.min(right.width / image.width, right.height / image.height)
+		);
+		this.add(image);
+	}
+}
+
+export class LegendScene extends BaseScene {
+	private legendScreens: LegendScreen[];
+	private currentScreen?: LegendScreen;
+
+	constructor() {
+		super({ key: "LegendScene" });
+	}
+
+	create(): void {
+		this.fade(false, 200, Color.Black);
+		this.cameras.main.setBackgroundColor(Color.Slate900);
+
+		this.legendScreens = [];
+
+		let legend = new LegendScreen(
+			this,
+			"Rubrik",
+			"Excepteur dolor minim est adipisicing consequat do excepteur. Irure labore incididunt esse aliquip nisi laboris ea labore dolor nostrud consequat. Exercitation esse ut exercitation amet fugiat labore ea anim anim. Fugiat ea eu id ad sunt duis ad exercitation. Veniam amet reprehenderit ut non id labore Lorem deserunt exercitation et.\nLaborum quis ex magna incididunt est minim mollit incididunt mollit sunt non dolore sint nostrud. Nostrud ad reprehenderit cupidatat officia laboris eu non labore proident. Mollit ipsum eu adipisicing exercitation sit labore fugiat do adipisicing incididunt ea consectetur commodo dolor. Et aliquip consequat nisi laborum reprehenderit."
+		);
+		legend.on("click", () => this.select(legend));
+		this.legendScreens.push(legend);
+		this.add.existing(legend);
+		legend.addImage("legend_default");
+
+		scenarioData.scenarios.forEach((scenario) => {
+			scenario.Sections.forEach((section) => {
+				section.SectionObject.forEach((object) => {
+					let legend = new LegendScreen(
+						this,
+						object.Title,
+						object.Text1,
+						object.LegendColors
+					);
+					legend.on("click", () => this.select(legend));
+					this.legendScreens.push(legend);
+					this.add.existing(legend);
+				});
+			});
+		});
+
+		// scenarioDataEn.scenarios.forEach((scenario) => {
+		// 	console.log(scenario.Title);
+		// 	scenario.Sections.forEach((section) => {
+		// 		console.log(section.Label1);
+		// 		section.SectionObject.forEach((object) => {
+		// 			let legend = new LegendScreen(
+		// 				this,
+		// 				object.Title,
+		// 				object.Text1,
+		// 				object.LegendColors
+		// 			);
+		// 			legend.on("click", () => this.select(legend));
+		// 			this.legendScreens.push(legend);
+		// 			this.add.existing(legend);
+		// 		});
+		// 	});
+		// });
+
+		this.input.keyboard?.on("keydown-L", this.drawLayout, this);
+
+		this.input.keyboard?.on("keydown-ESC", this.reset, this);
+		this.reset();
+
+		// this.input.keyboard?.on("keydown-SPACE", () => {
+		// 	if (this.currentScreen) {
+		// 		let link = document.createElement("a");
+		// 		link.download = this.currentScreen.id + ".png";
+		// 		link.href = this.game.canvas.toDataURL("image/png");
+		// 		link.click();
+		// 		console.log("Download!");
+		// 	}
+		// });
+	}
+
+	update(time: number, delta: number) {}
+
+	reset() {
+		this.currentScreen = undefined;
+		this.legendScreens.forEach((screen, index) => {
+			const x = (index % grid) * (screenWidth / grid);
+			const y = Math.floor(index / grid) * (screenHeight / grid);
+			screen.setVisible(true);
+			screen.setPosition(x, y);
+			screen.setScale(1 / grid);
+		});
+	}
+
+	select(screen: LegendScreen) {
+		this.currentScreen = screen;
+		this.legendScreens.forEach((screen) => screen.setVisible(false));
+		screen.setVisible(true);
+		screen.setScale(1);
+		screen.setPosition(0, 0);
+	}
+
+	drawLayout() {
+		const graphics = this.add.graphics();
+		graphics.clear();
+
+		const rects = [
+			[body, Color.Gray600],
+			[left, Color.Purple600],
+			[right, Color.Fuchsia600],
+		];
+
+		rects.forEach(([rect, color]) => {
+			graphics.lineStyle(2, color as number);
+			graphics.strokeRectShape(rect as Phaser.Geom.Rectangle);
+		});
+	}
+}
