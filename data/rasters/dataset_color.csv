@@ -1,0 +1,13 @@
+---,Extent,Name,RasterTexture
+White,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","White","Texture2D'/Game/Datasets/CleanColor/white.white'"
+Green,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Green","Texture2D'/Game/Datasets/CleanColor/green.green'"
+Blue,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Blue","Texture2D'/Game/Datasets/CleanColor/blue.blue'"
+Orange,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Orange","Texture2D'/Game/Datasets/CleanColor/orange.orange'"
+Yellow,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Yellow","Texture2D'/Game/Datasets/CleanColor/yellow.yellow'"
+Purple,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Purple","Texture2D'/Game/Datasets/CleanColor/Purple.Purple'"
+Black,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Black","Texture2D'/Game/Datasets/CleanColor/black.black'"
+Goals_en,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Goals_en","Texture2D'/Game/Datasets/CleanColor/global_goals.global_goals'"
+Goals_sv,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Goals_sv","Texture2D'/Game/Datasets/CleanColor/global_goals_sv.global_goals_sv'"
+LimeGreen,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","LimeGreen","Texture2D'/Game/Datasets/CleanColor/limegreen.limegreen'"
+Magenta,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Magenta","Texture2D'/Game/Datasets/CleanColor/magenta.magenta'"
+BrightBlue,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","BrightBlue","Texture2D'/Game/Datasets/CleanColor/brightblue.brightblue'"
