@@ -1,0 +1,83 @@
+{
+    "Title": "Stadens sammansättning",
+    "Sections": [
+        {
+            "Label1": "",
+            "SectionObject": [
+                {
+                    "Title": "Arbetsplatstäthet",
+                    "Text1": "Här kan du se var det finns mest arbetsplatser i Norrköping idag. Som ni ser är det i centrala Norrköping och på Vrinnevisjukhuset är det är tätast med arbetsplatser. Men blickar vi framåt 2050 kan vi se att det fest arbetsplatser återfinns i Butängen, på Sylten och i Norra Himmelstalund.",
+                    "Text2": "",
+                    "Datasource": "",
+                    "Legend1": "arbetsplatstathet",
+                    "Legend2": "",
+                    "Default": true,
+                    "Idle": false,
+                    "Filenames": "Nkpg/Arbetsplatstathet_nulage",
+					"Buttons": ["Nkpg/Arbetsplatstathet_nulage", "Nkpg/Arbetsplatstathet_2050"],
+                    "LegendTitle": "Antal personer inom 250m",
+                    "LegendColors": [
+                        { "color": "#F8FD35", "text": "1 – 232" },
+                        { "color": "#FBD708", "text": "232 – 630" },
+                        { "color": "#FC9F01", "text": "630 – 1189" },
+                        { "color": "#F94804", "text": "1189 – 1775" },
+                        { "color": "#D51B1C", "text": "1775 – 2438" },
+                        { "color": "#8F110E", "text": "2438 – 5739" }
+                    ]
+                },
+                {
+                    "Title": "Boendetäthet",
+                    "Text1": "Var bor det flest människor i Norrköping? I modellen har man tagit hänsyn till stadens barriärer och räknat med hur många boende du når inom 250 meter från varje punkt. Analysen kan användas för att mer noggrant beräkna underlag vid till exempel planering av kollektivtrafik och skolplatser.",
+                    "Text2": "",
+                    "Datasource": "",
+                    "Legend1": "boendetathet",
+                    "Legend2": "",
+                    "Default": false,
+                    "Idle": true,
+                    "Filenames": "Nkpg/Boendetathet_nulage",
+                    "Buttons": ["Nkpg/Boendetathet_nulage", "Nkpg/Boendetathet_2050"],
+                    "LegendTitle": "Antal personer inom 250m",
+                    "LegendColors": [
+                        { "color": "#F8FD35", "text": "1 – 333" },
+                        { "color": "#FBD708", "text": "333 – 689" },
+                        { "color": "#FC9F01", "text": "689 – 1210" },
+                        { "color": "#F94804", "text": "1210 – 1901" },
+                        { "color": "#D51B1C", "text": "1901 – 2970" },
+                        { "color": "#8F110E", "text": "2970 – 4494" }
+                    ]
+                },
+                {
+                    "Title": "Byggnadstyper",
+                    "Text1": "Här kan du se hur fördelningen ser ut mellan bostäder och verksamheter.\nGenom åren har det funnit olika ideal för hur en stad ska byggas. 1945–1965 vara Norrköping i hög utsträckning en blandstad där bostäder, arbetsplatser och handel fanns relativt nära. De flesta tog sig till arbetet till fots eller på cykel och handlade sina varor i sitt kvarter. Från mitten av 60-talet slog bilen igen i stor skala och staden planerades utifrån ett helt nytt perspektiv. Centrumgalleriorna växte fram, bostadsområden bygges utanför stadskärnan och gator breddades för att göra plats för bilens framfart. På senare år har strävan efter en blandstad slagit igenom igen och begreppet 15-minutersstaden, det vill säga möjligheten att nå det du behöver inom 15 minuter från din bostad, har blivit allt mer populärt.\nUtifrån fördelningen av bostäder och verksamheter idag – tycker du att Norrköping är en blandstad?",
+                    "Text2": "",
+                    "Datasource": "",
+                    "Legend1": "byggnadstyper",
+                    "Legend2": "",
+                    "Default": false,
+                    "Idle": true,
+                    "Filenames": "Nkpg/Byggnadstyper",
+                    "LegendTitle": "Byggnader",
+                    "LegendColors": [
+                        { "color": "#FF0000", "text": "Bostad" },
+                        { "color": "#00FF00", "text": "Lägg till mer" }
+                    ]
+                },
+                {
+                    "Title": "Belysning",
+                    "Text1": "Visste du att det finns omkring 28 000 belysningsstolpar i Norrköpings kommun?\nPå kommunen finns alla belysningsstolpar dokumenterade i en karta. För att uppdatera kartan behöver ibland kommunen åka ut för att mäta in var stolpar står eller ta hjälp av ritningar vid nybyggnation. Med hjälp av den nya AI-tekniken som utvecklats inom projektet SimStad kan en AI (artificiell intelligens) själv scanna av ett område och klassificera olika typer av objekt vilket både gör informationen mer detaljerad och betydligt enklare att hålla uppdaterad.\nPå modellen ser du var det finns belysningsstolpar och hur stor yta som ljuset täcker in. För kommunen är detta viktigt för att i planeringen framåt kunna analysera var ny belysning behövs och kunna sköta om den befintliga belysningen.",
+                    "Text2": "",
+                    "Datasource": "",
+                    "Legend1": "belysning",
+                    "Legend2": "",
+                    "Default": false,
+                    "Idle": true,
+                    "Filenames": "Nkpg/Belysning",
+                    "LegendTitle": "Lampor",
+                    "LegendColors": [
+                        { "color": "#FFFF00", "text": "Hitta på något" }
+                    ]
+                }
+            ]
+        }
+    ]
+}
