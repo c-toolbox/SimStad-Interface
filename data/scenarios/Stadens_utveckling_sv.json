@@ -13,11 +13,13 @@
                     "Legend2": "",
                     "Default": true,
                     "Idle": false,
-                    "Filenames": "Nkpg/Framtidens_norrkoping",
+                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Framtidens_norrkoping",
                     "LegendTitle": "Typ av område",
                     "LegendColors": [
-                        { "color": "#ffff00", "text": "Nybygge" },
-                        { "color": "#ffff00", "text": "Fixa till detta" }
+                        { "color": "#927f61", "text": "Nyområde" },
+                        { "color": "#e5b636", "text": "Nybygge" },
+                        { "color": "#af7166", "text": "Spår" },
+                        { "color": "#947791", "text": "Östlänken" }
                     ]
                 },
                 {
@@ -29,7 +31,7 @@
                     "Legend2": "",
                     "Default": false,
                     "Idle": true,
-                    "Filenames": "Nkpg/Byggnadsar",
+                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Byggnads_ar",
                     "LegendTitle": "Tidsperiod",
                     "LegendColors": [
                         { "color": "#440154", "text": "<1800" },

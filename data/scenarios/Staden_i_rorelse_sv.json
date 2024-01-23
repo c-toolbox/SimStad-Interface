@@ -13,7 +13,7 @@
                     "Legend2": "",
                     "Default": true,
                     "Idle": true,
-                    "Filenames": "Nkpg/KOllektivTraffik2",
+                    "Filenames": "Nkpg/KOllektivTraffik,Nkpg/vattenytor",
                     "LegendTitle": "Typ av trafik",
                     "LegendColors": [
                         { "color": "#ff0000", "text": "tåg" },

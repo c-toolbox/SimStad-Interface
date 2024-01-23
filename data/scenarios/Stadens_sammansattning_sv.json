@@ -13,8 +13,8 @@
                     "Legend2": "",
                     "Default": true,
                     "Idle": false,
-                    "Filenames": "Nkpg/Arbetsplatstathet_nulage",
-					"Buttons": ["Nkpg/Arbetsplatstathet_nulage", "Nkpg/Arbetsplatstathet_2050"],
+                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_nulage",
+					"Buttons": ["Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_nulage", "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_2050"],
                     "LegendTitle": "Antal personer inom 250m",
                     "LegendColors": [
                         { "color": "#F8FD35", "text": "1 – 232" },
@@ -34,8 +34,8 @@
                     "Legend2": "",
                     "Default": false,
                     "Idle": true,
-                    "Filenames": "Nkpg/Boendetathet_nulage",
-                    "Buttons": ["Nkpg/Boendetathet_nulage", "Nkpg/Boendetathet_2050"],
+                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Boendetathet_nulage",
+                    "Buttons": ["Nkpg/Backgrund_kommun_karta_dark,Nkpg/Boendetathet_nulage", "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Boendetathet_2050"],
                     "LegendTitle": "Antal personer inom 250m",
                     "LegendColors": [
                         { "color": "#F8FD35", "text": "1 – 333" },
@@ -55,7 +55,7 @@
                     "Legend2": "",
                     "Default": false,
                     "Idle": true,
-                    "Filenames": "Nkpg/Byggnadstyper",
+                    "Filenames": "CleanColor/White,Nkpg/Byggnadstyper",
                     "LegendTitle": "Byggnader",
                     "LegendColors": [
                         { "color": "#FF0000", "text": "Bostad" },
