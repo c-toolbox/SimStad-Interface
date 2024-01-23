@@ -3,9 +3,10 @@ import { image, sound, music, loadFont, spritesheet } from "./util";
 
 /* Images */
 let images: Image[] = [
-	image("map/norrköping.jpg", "norrköping"),
-	image("map/karta.jpg", "karta"),
-	image("map/streets.png", "streets"),
+	image("norrköping.jpg", "norrköping"),
+	image("karta.jpg", "karta"),
+	image("streets.png", "streets"),
+	image("blank.png", "blank"),
 
 	image("vis_c_logo.png", "vis_c_logo"),
 	image("light.png", "light"),
@@ -39,13 +40,23 @@ let images: Image[] = [
 ];
 
 /* Load all thumbnails */
-const imageGlob = import.meta.glob("./images/thumbnails/*.png", {
+const thumbnailImageGlob = import.meta.glob("./images/thumbnails/*/*.png", {
 	as: "url",
 	eager: true,
 });
-for (let path in imageGlob) {
+for (let path in thumbnailImageGlob) {
 	let file = path.replace("./images/thumbnails/", "").replace(".png", "");
 	images.push(image(`thumbnails/${file}.png`, file));
+}
+
+/* Load all map images */
+const mapImageGlob = import.meta.glob("./images/map/*/*.png", {
+	as: "url",
+	eager: true,
+});
+for (let path in mapImageGlob) {
+	let file = path.replace("./images/", "").replace(".png", "");
+	images.push(image(`${file}.png`, file));
 }
 
 /* Spritesheets */

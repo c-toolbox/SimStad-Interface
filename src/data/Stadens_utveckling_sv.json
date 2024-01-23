@@ -9,14 +9,17 @@
                     "Text1": "Här markeras områden där det planeras eller genomförs mer omfattande stadsutveckling i Norrköping just nu. Visste du om att det ska bli omkring 3000 nya bostäder i Inre hamnen? Eller att hela Butängen ska omvandlas till en del av innerstaden i samband med att höghastighetsjärnvägen Ostlänken byggs?\nPå modellen kan du även se att Syltenområdet ska få ett ansiktslyft framöver och att Norrköpings västra stadsdelar växer.",
                     "Text2": "",
                     "Datasource": "",
-                    "Legend1": "",
+                    "Legend1": "stadsutvecklingsomraden",
                     "Legend2": "",
                     "Default": true,
                     "Idle": false,
-                    "Filenames": "Nkpg/Framtidens_norrkoping",
+                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Framtidens_norrkoping",
+                    "LegendTitle": "Typ av område",
                     "LegendColors": [
-                        { "color": "#ffff00", "text": "Nybygge" },
-                        { "color": "#ffff00", "text": "Fixa till detta" }
+                        { "color": "#927f61", "text": "Nyområde" },
+                        { "color": "#e5b636", "text": "Nybygge" },
+                        { "color": "#af7166", "text": "Spår" },
+                        { "color": "#947791", "text": "Östlänken" }
                     ]
                 },
                 {
@@ -24,11 +27,12 @@
                     "Text1": "Genom att titta på byggnadsår kan vi se hur staden har växt fram över tid och var ny byggnation har tillkommit på senare år.\nRunt förra sekelskiftet befann Norrköping sig i en högkonjunktur. Textilindustrin växte och så även staden. I mitten av 1900-talet slog textilkrisen till och produktionen i det centrala industriområdet minskade successivt.\nTrots industriernas nedgång satsades det på nya bostäder under 60- och 70-talen. Äldre bostäder revs för att ge plats åt nya modernare. Men medan rivningarna fortsatte så stagnerade staden och behovet av nya bostäder avtog snabbt. Detta ledde till många avrivna tomter och kvarter som inte kom att bebyggdas. Först runt det senaste millennieskiftet började dessa luckor successivt att fyllas med nya bostäder, arbetsplatser, restauranger, handel, mm.",
                     "Text2": "",
                     "Datasource": "",
-                    "Legend1": "",
+                    "Legend1": "byggnadsar",
                     "Legend2": "",
                     "Default": false,
                     "Idle": true,
-                    "Filenames": "Nkpg/Byggnadsar",
+                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Byggnads_ar",
+                    "LegendTitle": "Tidsperiod",
                     "LegendColors": [
                         { "color": "#440154", "text": "<1800" },
                         { "color": "#482576", "text": "1800 – 1850" },

@@ -36,18 +36,18 @@ export class LayerPage extends Page {
 			y: layout.panelInner.top,
 			size: 64,
 			color: "white",
-			text: "Layers",
+			text: "Datalayers",
 		});
 		this.add(title);
 
-		let subtitle = scene.addText({
-			x: title.x,
-			y: title.y + 1.5 * 64,
-			size: 28,
-			color: "white",
-			text: "All available data layers. Intended for advanced mode.",
-		});
-		this.add(subtitle);
+		// let subtitle = scene.addText({
+		// 	x: title.x,
+		// 	y: title.y + 1.5 * 64,
+		// 	size: 28,
+		// 	color: "white",
+		// 	text: "All available data layers. Intended for advanced mode.",
+		// });
+		// this.add(subtitle);
 
 		let s = 20;
 		let w = 220;
@@ -57,9 +57,10 @@ export class LayerPage extends Page {
 		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
 			this.socket.sendReset();
 			this.resetLayers();
+			this.emit("map", "");
 		});
 
-		let scrollTop = subtitle.y + subtitle.displayHeight + s;
+		let scrollTop = title.y + title.displayHeight + s;
 		let scrollBottom = layout.panelInner.bottom - h - s;
 		let scrollHeight = scrollBottom - scrollTop;
 
@@ -134,7 +135,7 @@ export class LayerPage extends Page {
 
 	loadLayers(layerData: { layers: string[] }) {
 		let i = 0;
-		let m = 7;
+		let m = 6;
 
 		let s = 20;
 		let w = (this.scrollArea.width - (m + 1) * s) / m;
@@ -142,7 +143,7 @@ export class LayerPage extends Page {
 		let x = w / 2 + s;
 		let y = s + h / 2;
 
-		layerData.layers.sort();
+		// layerData.layers.sort();
 
 		layerData.layers.forEach((layer: string) => {
 			let button = new LayerButton(this.scene, x, y, w, h, layer);
@@ -184,10 +185,8 @@ export class LayerPage extends Page {
 			}
 		});
 
-		// let active = this.layerButtons.filter((button) => button.selected);
-		// let layers = active.map((button) => `Nkpg/${button.layer}`);
-		let layers = this.activeLayers.map((layer) => `Nkpg/${layer}`);
-		let layerString = layers.join(",");
+		let layerString = this.activeLayers.join(",");
+		this.emit("map", layerString);
 
 		this.socket.sendReset();
 		// setTimeout(() => {

@@ -19,6 +19,7 @@ export class Map extends Phaser.GameObjects.Container {
 	public socket: SocketManager;
 
 	private map: Phaser.GameObjects.Image;
+	private layers: Phaser.GameObjects.Image[];
 	private lamps: MapLight[];
 
 	constructor(scene: BaseScene, socket: SocketManager) {
@@ -32,20 +33,48 @@ export class Map extends Phaser.GameObjects.Container {
 			width: layout.map.width + 8,
 			height: layout.map.height + 8,
 			radius: 4,
-			color: Color.Slate700,
+			color: Color.Slate800,
 		});
 		this.add(background);
 
-		this.map = scene.add.image(layout.map.centerX, layout.map.centerY, "karta");
-		this.map.angle = -90;
-		this.map.setScale(layout.panelInner.height / this.map.width);
+		this.map = scene.add.image(
+			layout.map.centerX,
+			layout.map.centerY,
+			"map/Nkpg/Backgrund_kommun_karta_dark"
+		);
+		// this.map.angle = -90;
+		// this.map.setScale(layout.map.height / this.map.width);
 		this.add(this.map);
+
+		this.layers = [];
+		for (let i = 0; i < 10; i++) {
+			let layer = scene.add.image(
+				layout.map.centerX,
+				layout.map.centerY,
+				"map/CleanColor/White"
+			);
+			this.add(layer);
+			layer.setVisible(false);
+			this.layers.push(layer);
+		}
 
 		this.width = this.map.displayHeight;
 
 		this.map
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", this.onClick, this);
+
+		/* Controls */
+
+		let controlsBg = new RoundRectangle(scene, {
+			x: layout.mapControls.centerX,
+			y: layout.mapControls.centerY,
+			width: layout.mapControls.width + 8,
+			height: layout.mapControls.height + 8,
+			radius: 4,
+			color: Color.Slate800,
+		});
+		this.add(background);
 
 		this.socket.on(Response.ResetResponse, () => {
 			this.lamps.forEach((lamp) => lamp.destroy());
@@ -57,6 +86,18 @@ export class Map extends Phaser.GameObjects.Container {
 
 	update(time: number, delta: number) {
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
+	}
+
+	setLayers(layerString: string) {
+		let layerImages = layerString.split(",");
+		layerImages = layerImages.filter((layer) => !!layer);
+		layerImages = layerImages.map((layer) => "map/" + layer);
+
+		this.layers.forEach((layer) => layer.setVisible(false));
+		for (let i = 0; i < layerImages.length; i++) {
+			this.layers[i].setVisible(true);
+			this.layers[i].setTexture(layerImages[i]);
+		}
 	}
 
 	onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {

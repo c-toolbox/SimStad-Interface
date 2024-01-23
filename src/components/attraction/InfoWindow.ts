@@ -18,8 +18,9 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 	private lines: (Phaser.GameObjects.Text | null)[];
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
-	private lutraButton: Button;
-	private lutraClicks: number;
+	private visButton: Button;
+	private visClicks: number;
+	private guideModeEnabled: boolean;
 
 	private fontSize: number;
 	private sep: number;
@@ -122,7 +123,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 					size: this.fontSize * (1 + (line.size || 0) / 6),
 					color: line.color || "#FFF",
 					text: "Text",
-					weight: line.weight
+					weight: line.weight,
 				});
 				// text.setLineSpacing(10);
 				// text.setBlendMode(Phaser.BlendModes.SCREEN);
@@ -155,29 +156,47 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		visLogo.setTint(highlightColor);
 		visLogo.setBlendMode(Phaser.BlendModes.ADD);
 
-		this.lutraButton = new Button(
+		this.visButton = new Button(
 			this.scene,
 			qx - visLogo.displayWidth / 2,
 			qy + visLogo.displayHeight / 2
 		);
-		this.box.add(this.lutraButton);
-		this.lutraButton.bindInteractive(visLogo);
-		this.lutraButton.add(visLogo);
+		this.box.add(this.visButton);
+		this.visButton.bindInteractive(visLogo);
+		this.visButton.add(visLogo);
+
+		let visText = scene.addText({
+			x: this.visButton.x,
+			y: this.visButton.y + qw / 2 + this.fontSize,
+			size: this.fontSize,
+			fontFamily: "Lato-Bold",
+			color: "white",
+		});
+		visText.setOrigin(0.5, 0.0);
+		visText.setVisible(false);
+		languageManager.bind(visText, "guide_mode");
+		this.box.add(visText);
 
 		// Easter egg
-		this.lutraClicks = 0;
-		this.lutraButton.on("click", () => {
-			this.lutraClicks += 1;
-			if (this.lutraClicks % 3 == 0) {
+		this.guideModeEnabled = false;
+		this.visClicks = 0;
+		this.visButton.on("click", () => {
+			this.visClicks += 1;
+			if (this.visClicks % 3 == 0) {
 				this.scene.tweens.addCounter({
 					from: 0,
 					to: 360,
 					duration: 1000,
 					ease: "Back.InOut",
 					onUpdate: (tween) => {
-						this.lutraButton.setAngle(tween.getValue());
-						this.lutraClicks = 0;
+						this.visButton.setAngle(tween.getValue());
+						this.visClicks = 0;
 					},
+				});
+				this.scene.addEvent(500, () => {
+					this.guideModeEnabled = !this.guideModeEnabled;
+					visLogo.setTint(this.guideModeEnabled ? 0xffffff : highlightColor);
+					visText.setVisible(this.guideModeEnabled);
 				});
 			}
 		});
@@ -267,7 +286,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.alphaGoal = 0;
 		this.emit("close");
 
-		this.lutraClicks = 0;
+		this.visClicks = 0;
 	}
 
 	public get isOpen(): boolean {
@@ -290,6 +309,6 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.scrollArea.update(time, delta);
 		this.scrollBar.set(this.scrollArea.getScroll());
 
-		this.lutraButton.setScale(1.0 - 0.05 * this.lutraButton.holdSmooth);
+		this.visButton.setScale(1.0 - 0.05 * this.visButton.holdSmooth);
 	}
 }

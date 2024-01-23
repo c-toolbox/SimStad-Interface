@@ -1,4 +1,4 @@
-import os, csv, re
+import os, csv, re, json
 from PIL import Image
 
 
@@ -24,28 +24,39 @@ def read_csv(file):
     return lines
 
 
-new_images = fetch_images(["rasters/new"])
-old_images = fetch_images(["rasters/old"])
-lines = read_csv("dataset.csv")
+folders = {
+    "color": "CleanColor",
+    "old": "Nkpg",
+    "new": "Nkpg",
+    "flood": "Flood",
+}
+image_groups = [
+    fetch_images(["rasters/color"]),
+    fetch_images(["rasters/old"]),
+    fetch_images(["rasters/new"]),
+    fetch_images(["rasters/flood"]),
+]
+datasets = [
+    read_csv("rasters/dataset_color.csv"),
+    read_csv("rasters/dataset_layers.csv"),
+    read_csv("rasters/dataset_flood.csv"),
+]
+datasets = sum(datasets, [])
 
 # Map "texture" -> "path". New images are prioritized.
 image_map = {}
-for path in old_images:
-    texture = path.split("/")[-1]
-    texture = texture.split(".png")[0]
-    texture = re.sub("[^a-zA-Z0-9]", "_", texture)
-    image_map[texture] = path
-for path in new_images:
-    texture = path.split("/")[-1]
-    texture = texture.split(".png")[0]
-    texture = re.sub("[^a-zA-Z0-9]", "_", texture)
-    image_map[texture] = path
+for image_group in image_groups:
+    for path in image_group:
+        texture = path.split("/")[-1]
+        texture = texture.split(".png")[0]
+        texture = re.sub("[^a-zA-Z0-9]", "_", texture)
+        image_map[texture] = path
 
 found_textures = {}
 missing_textures = []
 
 # Pair up textures with image paths
-for args in lines:
+for args in datasets:
     _, extent, name, texture = args
 
     texture = texture.split("'")[1]
@@ -60,13 +71,24 @@ for args in lines:
         print(f"Cannot find texture: '{texture}'")
 print()
 
-# Create output folder
-if not os.path.exists("thumbnails"):
-    os.makedirs("thumbnails")
 
-# Image magic
+# Create output folder
+if not os.path.exists("output"):
+    os.makedirs("output")
+if not os.path.exists("output/thumbnails"):
+    os.makedirs("output/thumbnails")
+for key in folders:
+    if not os.path.exists("output/thumbnails/" + folders[key]):
+        os.makedirs("output/thumbnails/" + folders[key])
+if not os.path.exists("output/map"):
+    os.makedirs("output/map")
+for key in folders:
+    if not os.path.exists("output/map/" + folders[key]):
+        os.makedirs("output/map/" + folders[key])
+
+# Thumbnail image magic
 for name, path in found_textures.items():
-    print(f"Converting {name}...")
+    print(f"Converting thumbnail for {name}...")
     image = Image.open(path)
 
     # Setting the points for cropped image
@@ -83,11 +105,43 @@ for name, path in found_textures.items():
     # Cropped image of above dimension
     cropped_image = image.crop((left, top, right, bottom))
     scaled_image = cropped_image.resize((256, 256), Image.ANTIALIAS)
+    if width > height:
+        scaled_image = scaled_image.transpose(Image.ROTATE_90)
 
-    # Preview image
-    # image.show()
-    # cropped.show()
-    # scaled_image.show()
-    # break
+    folder = folders[path.split("/")[1]]
+    scaled_image.save(f"output/thumbnails/{folder}/{name}.png")
 
-    scaled_image.save(f"thumbnails/{name}.png")
+"""
+# Map image magic
+for name, path in found_textures.items():
+    print(f"Converting map image for {name}...")
+    image = Image.open(path)
+
+    # Setting the points for cropped image
+    width, height = image.size
+
+    # Cropped image of above dimension
+    new_width = 730
+    new_height = int(730 * (3849 / 5120))
+    if width > height:
+        scaled_image = image.resize((new_width, new_height), Image.ANTIALIAS)
+        rotated_image = scaled_image.transpose(Image.ROTATE_90)
+    else:
+        rotated_image = image.resize((new_height, new_width), Image.ANTIALIAS)
+
+    folder = folders[path.split("/")[1]]
+    rotated_image.save(f"output/map/{folder}/{name}.png")
+
+
+# Write layers.json
+
+layers = []
+for name, path in found_textures.items():
+    folder = folders[path.split("/")[1]]
+    layers.append(f"{folder}/{name}")
+
+with open("output/layers.json", "w") as f:
+    json.dump({"layers": layers}, f, indent="\t")
+
+print(f"Wrote {len(layers)} layers to output/layers.json")
+"""

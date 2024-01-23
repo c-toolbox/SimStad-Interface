@@ -4,6 +4,7 @@ import { TextButton } from "../TextButton";
 
 export enum PageState {
 	Home = "Home",
+	Scenario = "Scenario",
 	Scenarios = "Scenarios",
 	Layer = "Layer",
 	Light = "Light",

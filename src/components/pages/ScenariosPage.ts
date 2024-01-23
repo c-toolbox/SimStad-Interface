@@ -113,6 +113,24 @@ export class ScenariosPage extends Page {
 		this.errorIcon.setScale(((256 / 201) * 120) / this.errorIcon.width);
 		this.errorIcon.setTint(Color.Slate800);
 		this.add(this.errorIcon);
+
+		w = 512;
+		h = 160;
+		let c1 = scene.add.image(cx-w, cy-h, "crowd");
+		c1.setScale(400 / 512);
+		this.add(c1);
+		let c2 = scene.add.image(cx, cy-h, "sunlight");
+		c2.setScale(400 / 512);
+		this.add(c2);
+		let c3 = scene.add.image(cx-w, cy, "umbrella");
+		c3.setScale(400 / 512);
+		this.add(c3);
+		let c4 = scene.add.image(cx, cy, "tram");
+		c4.setScale(400 / 512);
+		this.add(c4);
+		let c5 = scene.add.image(cx-w, cy+h, "cranes");
+		c5.setScale(400 / 512);
+		this.add(c5);
 	}
 
 	update(time: number, delta: number) {

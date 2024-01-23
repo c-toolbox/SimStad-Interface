@@ -1,23 +1,28 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
-import * as scenarioData from "@/data/scenarios.json";
-import * as scenarioDataEn from "@/data/scenarios-en.json";
+// import * as scenarioData from "@/data/scenarios.json";
+// import * as scenarioDataEn from "@/data/scenarios-en.json";
+import * as dataStadenIRorelse from "@/data/Staden_i_rorelse_sv.json";
+import * as dataStadenOchKlimatet from "@/data/Staden_och_klimatet_sv.json";
+import * as dataStadensSammansattning from "@/data/Stadens_sammansattning_sv.json";
+import * as dataStadensUtveckling from "@/data/Stadens_utveckling_sv.json";
 import {
 	colorToGrayscale,
 	colorToNumber,
 	interpolateColor,
 } from "@/utils/functions";
+// import { layoutManager } from "@/utils/LayoutManager";
 
 const screenWidth = 1920;
 const screenHeight = 1080;
 const margin = 40;
 const padding = 80;
 const separation = 40;
-const radius = 40;
+const radius = 16;
 const titleSize = 90;
 const breadSize = 40;
-const legendTitleSize = 48;
+const legendTitleSize = 40;
 const legendLabelSize = 40;
 const grid = 4;
 
@@ -104,18 +109,18 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 		this.graphics.clear();
 		this.title.setText(title);
 
-		if (this.title.displayWidth >= this.width - 2 * padding) {
-			this.title.setColor(ColorStr.Red700);
-		}
+		// if (this.title.displayWidth >= this.width - 2 * padding) {
+		// 	this.title.setColor(ColorStr.Red700);
+		// }
 
 		this.labels.forEach((text) => text.destroy());
 		this.labels = [];
 
 		const ty = this.title.y + this.title.displayHeight * 2.0;
 		const th = this.height / 2 - ty - padding / 2;
-		const gap = 16;
-		const border = 4;
-		const count = Math.max(stops.length, 12);
+		const gap = 24;
+		const border = 2;
+		const count = Math.max(stops.length, 10);
 		const height = (th - gap * (count - 1)) / count;
 		const width = 2 * height;
 		// const dotRadius = size / 2;
@@ -125,7 +130,7 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 			let y = ty + (height + gap) * index + height / 2;
 			let c = colorToNumber(color);
 			let gc = 0xffffff - colorToGrayscale(c);
-			let bc = interpolateColor(c, gc, 0.5);
+			let bc = interpolateColor(c, gc, 0.3);
 
 			this.graphics.fillStyle(bc);
 			// this.graphics.fillCircle(x, y, dotRadius);
@@ -144,10 +149,9 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 				// x: x + dotRadius + separation,
 				x: x + width + gap,
 				y,
-				size: Math.min(height, legendLabelSize),
-				fontFamily: "Lato-Bold",
+				size: Math.min(1000 * height, legendLabelSize),
+				// fontFamily: "Lato-Regular",
 				text,
-				color: "white",
 			});
 			label.setOrigin(0, 0.5);
 			this.add(label);
@@ -163,6 +167,7 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 		scene: BaseScene,
 		titleText: string,
 		breadText: string,
+		legendTitle: string,
 		legendColors?: { color: string; text: string }[]
 	) {
 		super(scene, 0, 0);
@@ -213,6 +218,7 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 				text: paragraph,
 			});
 			subtitle.setWordWrapWidth(left.width);
+			subtitle.setLineSpacing(0.2 * breadSize);
 			this.add(subtitle);
 
 			ty += subtitle.displayHeight + 0.75 * breadSize;
@@ -228,9 +234,9 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 		let lx = right.centerX;
 		let ly = right.centerY;
 
-		if (legendColors) {
+		if (legendColors && legendColors.length > 0) {
 			let legend = new LargeLegend(scene, lx, ly, lw, lh);
-			legend.loadLegend(titleText, legendColors);
+			legend.loadLegend(legendTitle, legendColors);
 			this.add(legend);
 		}
 	}
@@ -261,20 +267,30 @@ export class LegendScene extends BaseScene {
 		let legend = new LegendScreen(
 			this,
 			"Rubrik",
-			"Excepteur dolor minim est adipisicing consequat do excepteur. Irure labore incididunt esse aliquip nisi laboris ea labore dolor nostrud consequat. Exercitation esse ut exercitation amet fugiat labore ea anim anim. Fugiat ea eu id ad sunt duis ad exercitation. Veniam amet reprehenderit ut non id labore Lorem deserunt exercitation et.\nLaborum quis ex magna incididunt est minim mollit incididunt mollit sunt non dolore sint nostrud. Nostrud ad reprehenderit cupidatat officia laboris eu non labore proident. Mollit ipsum eu adipisicing exercitation sit labore fugiat do adipisicing incididunt ea consectetur commodo dolor. Et aliquip consequat nisi laborum reprehenderit."
+			"Excepteur dolor minim est adipisicing consequat do excepteur. Irure labore incididunt esse aliquip nisi laboris ea labore dolor nostrud consequat. Exercitation esse ut exercitation amet fugiat labore ea anim anim. Fugiat ea eu id ad sunt duis ad exercitation. Veniam amet reprehenderit ut non id labore Lorem deserunt exercitation et.\nLaborum quis ex magna incididunt est minim mollit incididunt mollit sunt non dolore sint nostrud. Nostrud ad reprehenderit cupidatat officia laboris eu non labore proident. Mollit ipsum eu adipisicing exercitation sit labore fugiat do adipisicing incididunt ea consectetur commodo dolor. Et aliquip consequat nisi laborum reprehenderit.",
+			"Legendtitel"
 		);
 		legend.on("click", () => this.select(legend));
 		this.legendScreens.push(legend);
 		this.add.existing(legend);
 		legend.addImage("legend_default");
 
-		scenarioData.scenarios.forEach((scenario) => {
-			scenario.Sections.forEach((section) => {
+		let datasets = [
+			dataStadenIRorelse,
+			dataStadenOchKlimatet,
+			dataStadensSammansattning,
+			dataStadensUtveckling,
+		];
+
+		datasets.forEach((dataset) => {
+			// scenarioData.scenarios.forEach((scenario) => {
+			dataset.Sections.forEach((section) => {
 				section.SectionObject.forEach((object) => {
 					let legend = new LegendScreen(
 						this,
 						object.Title,
 						object.Text1,
+						object.LegendTitle,
 						object.LegendColors
 					);
 					legend.on("click", () => this.select(legend));
@@ -282,6 +298,7 @@ export class LegendScene extends BaseScene {
 					this.add.existing(legend);
 				});
 			});
+			// });
 		});
 
 		// scenarioDataEn.scenarios.forEach((scenario) => {
