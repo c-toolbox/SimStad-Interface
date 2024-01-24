@@ -7,7 +7,7 @@ import { layoutManager as layout } from "./LayoutManager";
 const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
-const PING_TIMEOUT = 3000;
+const PING_TIMEOUT = 2000;
 
 export enum ConnectionStatus {
 	Disconnected = "Disconnected",
@@ -274,11 +274,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	checkUnrealConnection() {
-		if (this.pingAttempts < 3) {
+		if (this.pingAttempts < 10) {
 			this.setUnrealConnectionStatus(ConnectionStatus.Connecting);
 
 			this.sendPing();
 			this.pingAttempts += 1;
+
+			clearTimeout(this.pingTimeout);
 			this.pingTimeout = setTimeout(() => {
 				this.checkUnrealConnection();
 			}, PING_TIMEOUT);
