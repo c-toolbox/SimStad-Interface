@@ -12,6 +12,7 @@ import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
 
 import * as layerData from "@/data/layers.json";
+import { languageManager } from "@/utils/LanguageManager";
 
 export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
@@ -39,6 +40,7 @@ export class LayerPage extends Page {
 			text: "Datalayers",
 		});
 		this.add(title);
+		languageManager.bind(title, "page_layer");
 
 		// let subtitle = scene.addText({
 		// 	x: title.x,
@@ -153,6 +155,10 @@ export class LayerPage extends Page {
 			this.scrollArea.apply(button);
 
 			button.on("click", () => {
+				if (!button.selected && this.activeLayers.length >= 10) {
+					return;
+				}
+
 				button.setSelected(!button.selected);
 
 				if (button.selected) {

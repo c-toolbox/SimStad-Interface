@@ -29,8 +29,9 @@ export class Navigation extends Phaser.GameObjects.Container {
 		// });
 		// this.add(this.background);
 
-		let fs = 32; // Font size
-		let s = layout.nav.width; // Button size
+		let fs = 16; // Font size
+		// let s = layout.nav.width; // Button size
+		let s = layout.navInner.width; // Button size
 		let x = layout.nav.centerX;
 		let y = layout.nav.bottom;
 		let g = 32;
@@ -40,7 +41,7 @@ export class Navigation extends Phaser.GameObjects.Container {
 			x,
 			y,
 			size: fs,
-			fontFamily: "Lato-Bold",
+			// fontFamily: "Lato-Bold",
 			color: "white",
 			text: "Scenarios",
 		});
@@ -52,20 +53,20 @@ export class Navigation extends Phaser.GameObjects.Container {
 		this.scenarioButton = new CircleButton(scene, x, y, s, "map", c);
 		this.add(this.scenarioButton);
 
-		fs = 28;
+		// fs = 28;
 		y -= s / 2 + g + fs / 2;
 		let lightLabel = scene.addText({
 			x,
 			y,
 			size: fs,
-			fontFamily: "Lato-Bold",
+			// fontFamily: "Lato-Bold",
 			color: "white",
 			text: "Light",
 		});
 		lightLabel.setOrigin(0.5, 0.5);
 		this.add(lightLabel);
 
-		s = layout.navInner.width;
+		// s = layout.navInner.width;
 		y -= s / 2 + g;
 		c = Color.Yellow700;
 		this.lightButton = new CircleButton(scene, x, y, s, "sun", c);
@@ -76,7 +77,7 @@ export class Navigation extends Phaser.GameObjects.Container {
 			x,
 			y,
 			size: fs,
-			fontFamily: "Lato-Bold",
+			// fontFamily: "Lato-Bold",
 			color: "white",
 			text: "Layers",
 		});
@@ -93,7 +94,7 @@ export class Navigation extends Phaser.GameObjects.Container {
 			x,
 			y,
 			size: fs,
-			fontFamily: "Lato-Bold",
+			// fontFamily: "Lato-Bold",
 			color: "white",
 			text: "Debug",
 		});
@@ -105,9 +106,7 @@ export class Navigation extends Phaser.GameObjects.Container {
 		this.debugButton = new CircleButton(scene, x, y, s, "gear-code", c);
 		this.add(this.debugButton);
 
-		this.scenarioButton.on("click", () =>
-			this.emit("state", PageState.Scenarios)
-		);
+		this.scenarioButton.on("click", () => this.emit("state", PageState.Home));
 		this.layerButton.on("click", () => this.emit("state", PageState.Layer));
 		this.lightButton.on("click", () => this.emit("state", PageState.Light));
 		this.debugButton.on("click", () => this.emit("state", PageState.Debug));

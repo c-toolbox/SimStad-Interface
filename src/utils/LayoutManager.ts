@@ -121,16 +121,11 @@ class LayoutManager {
 	get nav(): Phaser.Geom.Rectangle {
 		if (this._nav) return this._nav;
 
-		// const w =
-		// 	this.body.width - this.map.width - this.separation + this.margin / 2;
-		// const h = 200;
-		// const x = this.body.left - this.margin / 2;
-		// const y = this.body.bottom - h + this.margin / 2;
-		const w = 200;
-		const h = this.body.height + this.margin;
-		const x = this.body.left - this.margin / 2;
-		const y = this.body.top - this.margin / 2;
-
+		const x = 0;
+		const y = this.margin;
+		const w = this.margin;
+		const h = this.body.height;
+		
 		this._nav = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._nav;
 	}
@@ -138,7 +133,7 @@ class LayoutManager {
 	get navInner(): Phaser.Geom.Rectangle {
 		if (this._navInner) return this._navInner;
 
-		const p = this.padding;
+		const p = this.padding / 2;
 		const x = this.nav.left + p;
 		const y = this.nav.top + p;
 		const w = this.nav.width - 2 * p;
@@ -271,8 +266,8 @@ class LayoutManager {
 
 		const rects = [
 			[this.body, Color.Red900, 0],
-			// [this.nav, Color.Green600, 0],
-			// [this.navInner, Color.Lime600, 0],
+			[this.nav, Color.Pink600, 4],
+			[this.navInner, Color.Pink400, 0],
 			// [this.panel, Color.Orange700, 0],
 			// [this.panelInner, Color.Yellow500, 4],
 			// [this.panelLeft, Color.Pink600, 0],

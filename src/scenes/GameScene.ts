@@ -88,10 +88,10 @@ export class GameScene extends BaseScene {
 			});
 		});
 
-		// this.navigation = new Navigation(this);
-		// this.navigation.on("state", (state: PageState) => {
-		// 	this.setState(state);
-		// });
+		this.navigation = new Navigation(this);
+		this.navigation.on("state", (state: PageState) => {
+			this.setState(state);
+		});
 
 		this.map = new Map(this, this.socket);
 		this.add.existing(this.map);
@@ -109,7 +109,7 @@ export class GameScene extends BaseScene {
 
 		this.map.update(time, delta);
 
-		// this.navigation.update(time, delta);
+		this.navigation.update(time, delta);
 	}
 
 	/* Logic */

@@ -14,12 +14,19 @@ const MIN_Y = 6495015.262;
 const MAX_X = 134211.4;
 const MAX_Y = 6498915.262;
 
+interface MapLayer {
+	active: boolean;
+	fade: number;
+	texture: string;
+	image: Phaser.GameObjects.Image;
+}
+
 export class Map extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 	public socket: SocketManager;
 
 	private map: Phaser.GameObjects.Image;
-	private layers: Phaser.GameObjects.Image[];
+	private layers: MapLayer[];
 	private lamps: MapLight[];
 
 	constructor(scene: BaseScene, socket: SocketManager) {
@@ -55,7 +62,12 @@ export class Map extends Phaser.GameObjects.Container {
 			);
 			this.add(layer);
 			layer.setVisible(false);
-			this.layers.push(layer);
+			this.layers.push({
+				active: false,
+				fade: 0.0,
+				texture: "",
+				image: layer,
+			});
 		}
 
 		this.width = this.map.displayHeight;
@@ -86,17 +98,54 @@ export class Map extends Phaser.GameObjects.Container {
 
 	update(time: number, delta: number) {
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
+
+		this.layers.forEach((layer) => {
+			let dx = (layer.active ? delta : -delta) / 1000 * 4;
+			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
+			layer.image.setVisible(layer.fade > 0);
+			let ease = layer.active ? Phaser.Math.Easing.Cubic.Out : Phaser.Math.Easing.Cubic.In;
+			layer.image.setAlpha(ease(layer.fade));
+		});
 	}
 
 	setLayers(layerString: string) {
-		let layerImages = layerString.split(",");
-		layerImages = layerImages.filter((layer) => !!layer);
-		layerImages = layerImages.map((layer) => "map/" + layer);
+		let textures = layerString.split(",");
+		textures = textures.filter((layer) => !!layer);
+		textures = textures.map((layer) => "map/" + layer);
 
-		this.layers.forEach((layer) => layer.setVisible(false));
-		for (let i = 0; i < layerImages.length; i++) {
-			this.layers[i].setVisible(true);
-			this.layers[i].setTexture(layerImages[i]);
+		let removedTextures = this.layers
+			.filter((layer) => layer.active && !textures.includes(layer.texture))
+			.map((layer) => layer.texture);
+		let addedTextures = textures.filter(
+			(texture) => !this.layers.find((layer) => layer.texture == texture)
+		);
+
+		addedTextures.forEach((texture) => {
+			this.addLayer(texture);
+		});
+		removedTextures.forEach((texture) => {
+			this.removeLayer(texture);
+		});
+	}
+
+	addLayer(texture: string) {
+		let layer = this.layers.find((layer) => !layer.active && layer.fade == 0);
+		if (!layer) {
+			layer = this.layers.find((layer) => !layer.active);
+		}
+		if (layer) {
+			layer.active = true;
+			layer.texture = texture;
+			layer.image.setTexture(texture);
+			this.bringToTop(layer.image);
+		}
+	}
+
+	removeLayer(texture: string) {
+		let layer = this.layers.find((layer) => layer.texture == texture);
+		if (layer) {
+			layer.active = false;
+			layer.texture = "";
 		}
 	}
 
