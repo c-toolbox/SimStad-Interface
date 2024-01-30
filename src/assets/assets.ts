@@ -14,6 +14,7 @@ let images: Image[] = [
 	image("icons/arrow-left.png", "arrow-left"),
 	image("icons/arrows-rotate.png", "arrows-rotate"),
 	image("icons/arrows-swap.png", "arrows-swap"),
+	image("icons/book.png", "book"),
 	image("icons/city.png", "city"),
 	image("icons/gear-code.png", "gear-code"),
 	image("icons/gears.png", "gears"),

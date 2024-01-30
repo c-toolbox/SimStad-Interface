@@ -1,12 +1,12 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
-// import * as scenarioData from "@/data/scenarios.json";
-// import * as scenarioDataEn from "@/data/scenarios-en.json";
-import * as dataStadenIRorelse from "@/data/Staden_i_rorelse_sv.json";
-import * as dataStadenOchKlimatet from "@/data/Staden_och_klimatet_sv.json";
-import * as dataStadensSammansattning from "@/data/Stadens_sammansattning_sv.json";
-import * as dataStadensUtveckling from "@/data/Stadens_utveckling_sv.json";
+// import * as scenarioData from "@/assets/data/scenarios.json";
+// import * as scenarioDataEn from "@/assets/data/scenarios-en.json";
+import * as dataStadenIRorelse from "@/assets/data/Staden_i_rorelse_sv.json";
+import * as dataStadenOchKlimatet from "@/assets/data/Staden_och_klimatet_sv.json";
+import * as dataStadensSammansattning from "@/assets/data/Stadens_sammansattning_sv.json";
+import * as dataStadensUtveckling from "@/assets/data/Stadens_utveckling_sv.json";
 import {
 	colorToGrayscale,
 	colorToNumber,
@@ -100,12 +100,12 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 			{ color: ColorStr.Orange500, text: "2" },
 			{ color: ColorStr.Yellow500, text: "3" },
 		];
-		this.loadLegend("Title", stops);
+		this.setLegend("Title", stops);
 	}
 
 	update(time: number, delta: number) {}
 
-	loadLegend(title: string, stops: { color: string; text: string }[]) {
+	setLegend(title: string, stops: { color: string; text: string }[]) {
 		this.graphics.clear();
 		this.title.setText(title);
 
@@ -236,7 +236,7 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 
 		if (legendColors && legendColors.length > 0) {
 			let legend = new LargeLegend(scene, lx, ly, lw, lh);
-			legend.loadLegend(legendTitle, legendColors);
+			legend.setLegend(legendTitle, legendColors);
 			this.add(legend);
 		}
 	}

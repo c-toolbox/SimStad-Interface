@@ -1,0 +1,131 @@
+{
+	"Title": "Staden och klimatet",
+	"Sections": [
+		{
+			"Label1": "",
+			"SectionObject": [
+				{
+					"Title": "Extrema regn 100-årsflöde",
+					"Text1": "Ett 100-års regn inträffar statistiskt en gång per hundra år. De belysta områdena på modellen är de områden som drabbas värst vid extremregn.\nNär kommunen planerar för ny bebyggelse tar man hänsyn till översvämningsrisker och ställer krav på olika åtgärder. Det kan till exempel handla om att höja marknivån och grundläggningsnivån vid byggnation av nya hus. Men minst lika viktigt är att se till så att stora vattenmängder har någonstans att ta vägen.\nEn av åtgärderna kommunen arbetar med är att skapa nedsänkta ytor i parker och naturområden. Genom att göra nedsänkta ytor på lämpliga platser och skapa dem lägre än omgivande bebyggelse eller vägar kan vattnet samlas där istället för att orsaka översvämningar på ställen där de ställer till skada.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "extremaregn",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "CleanColor/White,Nkpg/Extrem100",
+					"Buttons": [
+						{ "Title": "100 år", "Layers": "CleanColor/White,Nkpg/Extrem100" },
+						{ "Title": "200 år", "Layers": "CleanColor/White,Nkpg/Extrem200" },
+						{ "Title": "500 år", "Layers": "CleanColor/White,Nkpg/Extrem500" }
+					],
+					"LegendTitle": "Vattenhöjning",
+					"LegendColors": [
+						{ "color": "#00AAFF", "text": "0,1 – 0,2 meter" },
+						{ "color": "#0000FF", "text": "0,2 – 0,3 meter" },
+						{ "color": "#000078", "text": "0,3 – 0,5 meter" },
+						{ "color": "#FFFF00", "text": "0,5 – 1 meter" },
+						{ "color": "#FF0000", "text": "mer än 1 meter" }
+					]
+				},
+				{
+					"Title": "Havsnivåhöjning",
+					"Text1": "Havet stiger och kommer göra så länge till på grund av den globala uppvärmningen. Om uppvärmningen begränsas blir även havsnivåhöjningen mindre.  Det finns planer på vallkonstruktioner och en sluss i Kvarsebo för att möta en högre havsnivå.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "havsnivahojning",
+					"Legend2": "",
+					"Default": true,
+					"Idle": true,
+					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_00",
+					"Slider": {
+						"Title": "Vattennivå i meter",
+						"Labels": ["0", "5", "10", "15", "20", "25"],
+						"Layers": [
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_00",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_01",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_02",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_03",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_04",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_05",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_06",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_07",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_08",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_09",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_10",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_11",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_12",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_13",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_14",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_15",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_16",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_17",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_18",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_19",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_20",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_21",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_22",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_23",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_24",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_25",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_26",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_27",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_28",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_29",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_30",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_31",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_32",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_33",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_34",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_35",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_36",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_37",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_38",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_39",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_40",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_41",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_42",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_43",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_44",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_45",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_46",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_47",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_48",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_49",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_50",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_51",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_52",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_53",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_54",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_55",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_56",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_57",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_58",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_59",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_60"
+						]
+					},
+					"LegendTitle": "",
+					"LegendColors": []
+				},
+				{
+					"Title": "Träd",
+					"Text1": "Här kan du se var det finns träd i staden. Träd i stadsmiljö är viktiga för vårt välmående. De bidrar till grönska och förbättrar den förorenade luften som kommer från bilar och fabriker. Träden i staden har dessutom en temperaturutjämnande effekt genom att använda solenergi för sin tillväxt. Samtidigt ger lövverket skugga och svalka i städer under varma sommardagar. När det gäller nederbörd kan de minska belastningen på stadens avloppssystem genom att ta upp stora mängder vatten. Träd fungerar också som en nod i ett grönt nätverk i staden. De gynnar biologisk mångfald och erbjuder boplats för fåglar och livsmiljö för ett antal växter, mossor, insekter och lavar.\nTycker du att Norrköping är en grön stad? ",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "trad",
+					"Legend2": "",
+					"Default": true,
+					"Idle": true,
+					"Filenames": "Nkpg/trad_vatten_stad_2",
+					"LegendTitle": "Tjolahopp",
+					"LegendColors": [
+						{ "color": "#90cf80", "text": "Träd" },
+						{ "color": "#daebd2", "text": "Gräsytor" },
+						{ "color": "#8bbdff", "text": "Vatten" }
+					]
+				}
+			]
+		}
+	]
+}

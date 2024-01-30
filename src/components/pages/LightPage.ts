@@ -19,8 +19,8 @@ export class LightPage extends Page {
 		this.add(background);
 
 		let title = scene.addText({
-			x: layout.panelLeft.left,
-			y: layout.panelLeft.top,
+			x: layout.panelInner.left,
+			y: layout.panelInner.top,
 			size: 64,
 			color: "white",
 			text: "Light",
@@ -34,15 +34,15 @@ export class LightPage extends Page {
 			color: "white",
 			text: "Settings for time of year and time of day.",
 		});
-		subtitle.setWordWrapWidth(layout.panelLeft.width);
+		subtitle.setWordWrapWidth(layout.panelInner.width);
 		this.add(subtitle);
 
 		let th = 250;
-		let tw = layout.panelLeft.width - th - layout.separation;
+		let tw = layout.panelInner.width - th - layout.separation;
 		this.timeSetter = new TimeSetter(
 			scene,
-			layout.panelLeft.left + tw / 2,
-			layout.panelLeft.centerY,
+			layout.panelInner.left + tw / 2,
+			layout.panelInner.centerY,
 			tw,
 			th
 		);
@@ -57,7 +57,7 @@ export class LightPage extends Page {
 
 		this.sunDial = new SunDial(
 			scene,
-			layout.panelLeft.right - th / 2,
+			layout.panelInner.right - th / 2,
 			this.timeSetter.y,
 			0.75 * th,
 			th

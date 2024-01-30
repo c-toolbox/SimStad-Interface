@@ -16,6 +16,7 @@ import { LightPage } from "@/components/pages/LightPage";
 import { DebugPage } from "@/components/pages/DebugPage";
 import { Response, ScenariosResponse } from "@/utils/protocol";
 import { Map } from "@/components/Map";
+import { ScenarioKey } from "@/utils/ScenarioManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -53,6 +54,9 @@ export class GameScene extends BaseScene {
 		this.socket.on(Response.Scenarios, (data: ScenariosResponse) => {
 			this.scenariosPage.loadScenarios(data);
 		});
+		this.socket.on("reconnect", () => {
+			this.restart();
+		});
 
 		/* Layout */
 
@@ -86,6 +90,11 @@ export class GameScene extends BaseScene {
 			page.on("map", (layers: string) => {
 				this.map.setLayers(layers);
 			});
+
+			page.on("scenario", (scenario: ScenarioKey) => {
+				this.setState(PageState.Scenario);
+				this.scenarioPage.setScenario(scenario);
+			});
 		});
 
 		this.navigation = new Navigation(this);
@@ -115,13 +124,15 @@ export class GameScene extends BaseScene {
 	/* Logic */
 
 	restart() {
-		this.setState(PageState.Layer);
+		this.setState(PageState.Home);
+		this.map.reset();
+		this.socket.sendReset();
 	}
 
 	setState(state: PageState) {
 		this.state = state;
 
-		// this.navigation.setState(state);
+		this.navigation.setState(state);
 
 		this.pages.forEach((page) => {
 			page.setVisible(page.state == state);
@@ -148,6 +159,17 @@ export class GameScene extends BaseScene {
 			(state: boolean) => {
 				this.infoWindowOpen = state;
 				this.updateBlur();
+			},
+			this
+		);
+
+		this.scene.get("UIScene").events.on(
+			"guide",
+			(value: boolean) => {
+				this.navigation.setGuideMode(value);
+				if (!value) {
+					this.restart();
+				}
 			},
 			this
 		);

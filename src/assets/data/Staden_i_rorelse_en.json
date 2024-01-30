@@ -1,0 +1,45 @@
+{
+    "Title": "Staden i rörelse",
+    "Sections": [
+        {
+            "Label1": "",
+            "SectionObject": [
+                {
+                    "Title": "Public transport",
+                    "Text1": "Here you can see where buses and trams in public transport are located in real time. The same data used in the model is used for traffic information at stops and in apps. Can you catch the next bus?",
+                    "Text2": "",
+                    "Datasource": "",
+                    "Legend1": "kollektivtrafik",
+                    "Legend2": "",
+                    "Default": true,
+                    "Idle": true,
+                    "Filenames": "Nkpg/KOllektivTraffik,Nkpg/vattenytor",
+                    "LegendTitle": "Type of traffic",
+                    "LegendColors": [
+                        { "color": "#ff0000", "text": "train" },
+                        { "color": "#00ff00", "text": "bus" },
+                        { "color": "#0000ff", "text": "add more" }
+                    ]
+                },
+                {
+                    "Title": "Traffic noise",
+                    "Text1": "Here you can see how central Norrköping is affected by traffic noise. The illustration shows how much surface area the noise spreads at the maximum level for each location. The railway emits the most noise.\nAll cities with more than 100,000 inhabitants have an obligation to make calculations for traffic noise at least every five years. The calculations are made on the basis of many different parameters such as traffic flows, the design of the road, adjacent buildings and speeds. The noise level is calculated at the facade, i.e. outside the house. How the noise level is perceived inside the house largely depends on how the house is built, how well insulated the house is and what windows there are.\nHow do you experience traffic noise where you live?",
+                    "Text2": "",
+                    "Datasource": "",
+                    "Legend1": "trafikbuller",
+                    "Legend2": "",
+                    "Default": false,
+                    "Idle": false,
+                    "Filenames": "Nkpg/Noise_train",
+                    "LegendTitle": "Maximum sound level",
+                    "LegendColors": [
+                        { "color": "#ffffb2", "text": "65–69 dBa" },
+                        { "color": "#feb751", "text": "70–74 dBa" },
+                        { "color": "#f45629", "text": "75–79 dBa" },
+                        { "color": "#bd0026", "text": "over 80 dBa" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

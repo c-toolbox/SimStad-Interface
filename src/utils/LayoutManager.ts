@@ -19,7 +19,6 @@ class LayoutManager {
 	private _navInner: Phaser.Geom.Rectangle;
 	private _panel: Phaser.Geom.Rectangle;
 	private _panelInner: Phaser.Geom.Rectangle;
-	private _panelLeft: Phaser.Geom.Rectangle;
 	private _scenarioTabs: Phaser.Geom.Rectangle;
 	private _scenario: Phaser.Geom.Rectangle;
 	private _scenarioInner: Phaser.Geom.Rectangle;
@@ -96,7 +95,7 @@ class LayoutManager {
 	get mapControlsInner(): Phaser.Geom.Rectangle {
 		if (this._mapControlsInner) return this._mapControlsInner;
 
-		const p = this.padding;
+		const p = this.padding / 2;
 		const x = this.mapControls.left + p;
 		const y = this.mapControls.top + p;
 		const w = this.mapControls.width - 2 * p;
@@ -133,7 +132,7 @@ class LayoutManager {
 	get navInner(): Phaser.Geom.Rectangle {
 		if (this._navInner) return this._navInner;
 
-		const p = this.padding / 2;
+		const p = this.padding / 4;
 		const x = this.nav.left + p;
 		const y = this.nav.top + p;
 		const w = this.nav.width - 2 * p;
@@ -167,18 +166,6 @@ class LayoutManager {
 
 		this._panelInner = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._panelInner;
-	}
-
-	get panelLeft(): Phaser.Geom.Rectangle {
-		if (this._panelLeft) return this._panelLeft;
-
-		const x = this.panelInner.left;
-		const y = this.panelInner.top;
-		const w = this.panelInner.width - this.map.width - this.separation;
-		const h = this.panelInner.height;
-
-		this._panelLeft = new Phaser.Geom.Rectangle(x, y, w, h);
-		return this._panelLeft;
 	}
 
 	get scenarioTabs(): Phaser.Geom.Rectangle {
@@ -270,12 +257,11 @@ class LayoutManager {
 			[this.navInner, Color.Pink400, 0],
 			// [this.panel, Color.Orange700, 0],
 			// [this.panelInner, Color.Yellow500, 4],
-			// [this.panelLeft, Color.Pink600, 0],
 			[this.mapControls, Color.Orange700, 4],
 			[this.mapControlsInner, Color.Yellow500, 0],
 			[this.map, Color.Orange700, 4],
-			// [this.status, Color.Purple600, 4],
-			// [this.toolbar, Color.Fuchsia600, 0],
+			[this.status, Color.Purple600, 4],
+			[this.toolbar, Color.Fuchsia600, 0],
 			[this.scenarioTabs, Color.Orange700, 4],
 			[this.scenario, Color.Orange700, 4],
 			[this.scenarioInner, Color.Yellow500, 0],

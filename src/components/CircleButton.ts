@@ -17,7 +17,7 @@ export class CircleButton extends Button {
 	) {
 		super(scene, x, y);
 
-		this.border = scene.add.ellipse(0, 0, size + 8, size + 8, Color.Slate800);
+		this.border = scene.add.ellipse(0, 0, size + 4, size + 4, Color.Slate800);
 		this.add(this.border);
 
 		this.background = scene.add.ellipse(0, 0, size, size, color);

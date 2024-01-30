@@ -58,6 +58,9 @@ export class UIScene extends BaseScene {
 			},
 			this
 		);
+		this.infoWindow.on("guide", (value: boolean) =>
+			this.events.emit("guide", value)
+		);
 
 		/* Toolbar */
 
@@ -86,7 +89,10 @@ export class UIScene extends BaseScene {
 			let button = toolButtons[i];
 			let size = layout.margin / 2;
 			let x = layout.toolbar.centerX;
-			let y = layout.toolbar.bottom - (toolButtons.length - 1 - i) * 1.75 * size - 0.5 * size;
+			let y =
+				layout.toolbar.bottom -
+				(toolButtons.length - 1 - i) * 1.75 * size -
+				0.5 * size;
 
 			let obj = new ToolboxButton(this, x, y, size, button.image);
 			this.add.existing(obj);
@@ -193,11 +199,11 @@ export class UIScene extends BaseScene {
 			this.infoWindow.hide();
 			// this.storyWindow.hide();
 			this.attractionView.show();
+			this.infoWindow.setGuideMode(false);
 
 			this.events.emit("restart");
 			this.events.emit("attraction", true);
 			this.events.emit("info", false);
-			// this.events.emit("story", false);
 		}
 
 		if (this.currentLanguage == LanguageKey.English) {

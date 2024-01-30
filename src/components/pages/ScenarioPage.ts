@@ -4,10 +4,23 @@ import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
-import { LargeLegend } from "@/scenes/LegendScene";
+import { Legend } from "@/components/Legend";
 import { HSVToRGB, colorToString, interpolateColor } from "@/utils/functions";
+import { ScenarioKey, Section, scenarioManager } from "@/utils/ScenarioManager";
+import { TextButton } from "../TextButton";
+import { TestSlider } from "../TestSlider";
+import { TabButton } from "../TabButton";
 
 export class ScenarioPage extends Page {
+	private subtitle: Phaser.GameObjects.Text;
+	private title: Phaser.GameObjects.Text;
+	private bread: Phaser.GameObjects.Text;
+	private legend: Legend;
+	private backButton: TextButton;
+	private tabButtons: TextButton[];
+	private layerButtons: TextButton[];
+	private layerSlider: TestSlider;
+
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
@@ -16,24 +29,31 @@ export class ScenarioPage extends Page {
 
 		/* Text */
 
-		let title = scene.addText({
+		this.subtitle = scene.addText({
 			x: layout.scenarioInfo.left,
 			y: layout.scenarioInfo.top,
-			size: 64,
+			size: 20,
 			color: "white",
 		});
-		this.add(title);
-		languageManager.bind(title, "bread_title");
+		this.add(this.subtitle);
 
-		let bread = scene.addText({
+		this.title = scene.addText({
 			x: layout.scenarioInfo.left,
-			y: layout.scenarioInfo.top + 1.5 * title.displayHeight,
+			y: this.subtitle.y + 1.25 * this.subtitle.displayHeight,
+			size: 58,
+			color: "white",
+		});
+		this.add(this.title);
+
+		this.bread = scene.addText({
+			x: layout.scenarioInfo.left,
+			y: this.title.y + 1.5 * this.title.displayHeight,
 			size: 28,
 			color: "white",
 		});
-		this.add(bread);
-		languageManager.bind(bread, "bread_text");
-		bread.setWordWrapWidth(layout.scenarioInfo.width);
+		this.add(this.bread);
+		this.bread.setLineSpacing(0.25 * 28);
+		this.bread.setWordWrapWidth(layout.scenarioInfo.width);
 
 		/* Legend */
 
@@ -41,8 +61,8 @@ export class ScenarioPage extends Page {
 		let lh = layout.scenarioLegend.height;
 		let lx = layout.scenarioLegend.centerX;
 		let ly = layout.scenarioLegend.centerY;
-		let legend = new LargeLegend(scene, lx, ly, lw, lh);
-		this.add(legend);
+		this.legend = new Legend(scene, lx, ly, lw, lh);
+		this.add(this.legend);
 		const stops: { color: string; text: string }[] = [];
 		for (let i = 0; i < 8; i++) {
 			stops.push({
@@ -50,35 +70,176 @@ export class ScenarioPage extends Page {
 				text: "Label " + (i + 1),
 			});
 		}
-		legend.loadLegend("Title", stops);
+		this.legend.setLegend("Title", stops);
 
-		/* Buttons */
+		/* Layer buttons */
 
 		const bl = layout.scenarioControls;
 		const bn = 3;
 		const bw = (bl.width - (bn - 1) * layout.separation) / bn;
 		const by = bl.centerY;
 		const bh = bl.height;
+		const bc = Color.Yellow600;
+
+		this.layerButtons = [];
 		for (let i = 0; i < 3; i++) {
-			let t = "Datalayer " + (i + 1);
+			let bt = "Layer " + (i + 1);
 			let bx = bl.left + (i + 0.5) * bw + i * layout.separation;
-			this.addButton(bx, by, bw, bh, t, Color.Red700, () => {});
+
+			let button = new TextButton(scene, bx, by, bw, bh, bt, bc);
+			this.add(button);
+			this.layerButtons.push(button);
 		}
 
 		/* Tabs */
-		const tn = 3;
+
+		const tn = 5;
 		const tl = layout.scenarioTabs;
 		const tw = (tl.width - (tn - 1) * layout.separation) / tn;
 		const ty = tl.centerY;
 		const th = tl.height;
-		for (let i = 0; i < 3; i++) {
-			let t = "Datalayer " + (i + 1);
-			let tx = tl.left + (i + 0.5) * tw + i * layout.separation;
-			this.addButton(tx, ty, tw, th, t, Color.Slate700, () => {});
+		const tc = Color.Slate700;
+
+		this.tabButtons = [];
+		for (let i = 0; i < tn; i++) {
+			let tt = "Tab " + (i + 1);
+			let tx = tl.right - (i + 0.5) * tw - i * layout.separation;
+
+			let button = new TextButton(scene, tx, ty, tw, th, tt, tc);
+			this.add(button);
+			this.tabButtons.push(button);
 		}
+
+		this.backButton = new TextButton(
+			scene,
+			tl.left + 0.5 * tw,
+			ty,
+			tw,
+			th,
+			"Back",
+			tc
+		);
+		this.add(this.backButton);
+		this.backButton.on("click", () => {
+			this.emit("state", PageState.Home);
+			this.activateDataset("");
+		});
+
+		/* Slider */
+
+		const sl = layout.scenarioControls;
+		const sx = sl.centerX;
+		const sy = sl.top;
+		const sw = sl.width;
+		const sh = sl.height / 2;
+
+		this.layerSlider = new TestSlider(scene, sx, sy, sw, sh, "Slider", 10);
+		this.layerSlider.setVisible(false);
+		this.add(this.layerSlider);
 	}
 
 	update(time: number, delta: number) {
 		super.update(time, delta);
+
+		this.backButton.update(time, delta);
+		this.tabButtons.forEach((button) => button.update(time, delta));
+		this.layerButtons.forEach((button) => button.update(time, delta));
+		this.layerSlider.update(time, delta);
+	}
+
+	setScenario(scenario: ScenarioKey) {
+		const sections = scenarioManager.getScenarioSections(scenario);
+
+		if (sections.length > this.tabButtons.length) {
+			throw "More sections than tabs";
+		}
+
+		this.tabButtons.forEach((tab) => tab.setVisible(false));
+		sections.forEach((section, index) => {
+			this.tabButtons[index].setVisible(true);
+			this.tabButtons[index].setText(section.key + "title");
+			this.tabButtons[index].on("click", () => {
+				this.setSection(section);
+			});
+			this.tabButtons[index].setData("section", section.key);
+		});
+
+		let activeSection = sections.find((section) => section.default);
+		if (activeSection) {
+			this.setSection(activeSection);
+		}
+	}
+
+	setSection(section: Section) {
+		languageManager.bind(this.subtitle, section.scenario + "title");
+		languageManager.bind(this.title, section.key + "title");
+		languageManager.bind(this.bread, section.key + "bread");
+
+		this.tabButtons.forEach((button) => {
+			button.setHighlight(button.getData("section") == section.key);
+		});
+
+		if (
+			section.layerButtons &&
+			section.layerButtons.length > this.layerButtons.length
+		) {
+			throw "More layers than buttons";
+		}
+
+		if (section.legendColors.length > 0) {
+			this.legend.setVisible(true);
+			this.legend.setLegend(section.key + "legend", section.legendColors);
+		} else {
+			this.legend.setVisible(false);
+		}
+
+		this.layerButtons.forEach((button) => button.setVisible(false));
+		if (section.layerButtons) {
+			section.layerButtons.forEach((layerString: string, index: number) => {
+				let button = this.layerButtons[index];
+				const layers = section.layerButtons![index];
+
+				button.setVisible(true);
+				button.setText(section.key + "button" + index);
+				button.setData("layers", layers);
+				button.on("click", () => {
+					this.activateDataset(layers);
+				});
+			});
+		}
+
+		this.layerSlider.setVisible(false);
+		if (section.layerSlider) {
+			this.layerSlider.setVisible(true);
+			this.layerSlider.value = 0;
+			this.layerSlider.setSteps(section.layerSlider.layers.length);
+			this.layerSlider.setTitle(section.key + "sliderTitle");
+			let labels = [];
+			for (let i = 0; i < section.layerSlider.labels; i++) {
+				labels.push(section.key + "sliderLabel" + i);
+			}
+			this.layerSlider.setLabels(labels);
+
+			this.layerSlider.on("onChange", (value: number) => {
+				let layers = section.layerSlider?.layers;
+				if (layers) {
+					let index = Math.round(value / (1 / (layers.length - 1)));
+					this.layerSlider.setLabel(index.toString());
+					this.activateDataset(layers[index]);
+				}
+			});
+		}
+
+		this.activateDataset(section.defaultLayer);
+	}
+
+	activateDataset(layers: string) {
+		this.emit("map", layers);
+		this.socket.sendReset();
+		this.socket.sendActivateDataset(layers);
+
+		this.layerButtons.forEach((button) => {
+			button.setHighlight(button.getData("layers") == layers);
+		});
 	}
 }

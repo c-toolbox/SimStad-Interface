@@ -16,10 +16,10 @@
                     "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Framtidens_norrkoping",
                     "LegendTitle": "Typ av område",
                     "LegendColors": [
-                        { "color": "#927f61", "text": "Nyområde" },
+                        { "color": "#e9cf87", "text": "Nyområde" },
                         { "color": "#e5b636", "text": "Nybygge" },
-                        { "color": "#af7166", "text": "Spår" },
-                        { "color": "#947791", "text": "Östlänken" }
+                        { "color": "#e75a23", "text": "Spår" },
+                        { "color": "#ad7aa9", "text": "Östlänken" }
                     ]
                 },
                 {

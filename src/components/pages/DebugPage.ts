@@ -104,7 +104,7 @@ export class DebugPage extends Page {
 			{ color: "#ffff00", text: "0,5 – 1 meter" },
 			{ color: "#ff0000", text: "mer än 1 meter" },
 		];
-		legend1.loadLegend("Extrema regn – 100 år", stops1);
+		legend1.setLegend("Extrema regn – 100 år", stops1);
 
 		const stops2: { color: string; text: string }[] = [
 			{ color: "#f8fd35", text: "1 – 232" },
@@ -114,7 +114,7 @@ export class DebugPage extends Page {
 			{ color: "#d51b1c", text: "1775 – 2438" },
 			{ color: "#8f110e", text: "2438 – 5739" },
 		];
-		legend2.loadLegend("Arbetsplatstäthet 2050", stops2);
+		legend2.setLegend("Arbetsplatstäthet 2050", stops2);
 
 		const stops3: { color: string; text: string }[] = [
 			{ color: "#440154", text: "<1800" },
@@ -129,7 +129,7 @@ export class DebugPage extends Page {
 			{ color: "#bcdf27", text: "2010 – 2020" },
 			{ color: "#fde725", text: "2020 – 2023" },
 		];
-		legend3.loadLegend("Byggnadsår", stops3);
+		legend3.setLegend("Byggnadsår", stops3);
 	}
 
 	update(time: number, delta: number) {

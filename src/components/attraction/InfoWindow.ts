@@ -19,6 +19,9 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
 	private visButton: Button;
+	private visLogo: Phaser.GameObjects.Image;
+	private visText: Phaser.GameObjects.Text;
+	private highlightColor: number;
 	private visClicks: number;
 	private guideModeEnabled: boolean;
 
@@ -35,6 +38,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 	) {
 		super(scene, scene.CX, scene.CY);
 		this.scene = scene;
+		this.highlightColor = highlightColor;
 		scene.add.existing(this);
 
 		this.alphaGoal = 0;
@@ -149,33 +153,33 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		// let qrBg = new RoundRectangle(scene, qx-qw/2, qy+qw/2, qw, qw, 4, 0xFFFFFF);
 		// this.box.add(qrBg);
 
-		let visLogo = scene.add.image(0, 0, "vis_c_logo");
-		visLogo.setScale(qw / visLogo.width);
-		// visLogo.setOrigin(1, 0);
-		visLogo.setAlpha(1.0);
-		visLogo.setTint(highlightColor);
-		visLogo.setBlendMode(Phaser.BlendModes.ADD);
+		this.visLogo = scene.add.image(0, 0, "vis_c_logo");
+		this.visLogo.setScale(qw / this.visLogo.width);
+		// this.visLogo.setOrigin(1, 0);
+		this.visLogo.setAlpha(1.0);
+		this.visLogo.setTint(highlightColor);
+		this.visLogo.setBlendMode(Phaser.BlendModes.ADD);
 
 		this.visButton = new Button(
 			this.scene,
-			qx - visLogo.displayWidth / 2,
-			qy + visLogo.displayHeight / 2
+			qx - this.visLogo.displayWidth / 2,
+			qy + this.visLogo.displayHeight / 2
 		);
 		this.box.add(this.visButton);
-		this.visButton.bindInteractive(visLogo);
-		this.visButton.add(visLogo);
+		this.visButton.bindInteractive(this.visLogo);
+		this.visButton.add(this.visLogo);
 
-		let visText = scene.addText({
+		this.visText = scene.addText({
 			x: this.visButton.x,
 			y: this.visButton.y + qw / 2 + this.fontSize,
 			size: this.fontSize,
 			fontFamily: "Lato-Bold",
 			color: "white",
 		});
-		visText.setOrigin(0.5, 0.0);
-		visText.setVisible(false);
-		languageManager.bind(visText, "guide_mode");
-		this.box.add(visText);
+		this.visText.setOrigin(0.5, 0.0);
+		this.visText.setVisible(false);
+		languageManager.bind(this.visText, "guide_mode");
+		this.box.add(this.visText);
 
 		// Easter egg
 		this.guideModeEnabled = false;
@@ -194,9 +198,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 					},
 				});
 				this.scene.addEvent(500, () => {
-					this.guideModeEnabled = !this.guideModeEnabled;
-					visLogo.setTint(this.guideModeEnabled ? 0xffffff : highlightColor);
-					visText.setVisible(this.guideModeEnabled);
+					this.setGuideMode(!this.guideModeEnabled);
 				});
 			}
 		});
@@ -261,6 +263,8 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			},
 			this
 		);
+
+		this.setGuideMode(false);
 	}
 
 	repositionText() {
@@ -287,6 +291,16 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.emit("close");
 
 		this.visClicks = 0;
+	}
+
+	setGuideMode(value: boolean) {
+		this.guideModeEnabled = value;
+		this.emit("guide", this.guideModeEnabled);
+
+		this.visLogo.setTint(
+			this.guideModeEnabled ? 0xffffff : this.highlightColor
+		);
+		this.visText.setVisible(this.guideModeEnabled);
 	}
 
 	public get isOpen(): boolean {

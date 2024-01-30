@@ -11,7 +11,7 @@ import { LayerButton } from "@/components/LayerButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
 
-import * as layerData from "@/data/layers.json";
+import * as layerData from "@/assets/data/layers.json";
 import { languageManager } from "@/utils/LanguageManager";
 
 export class LayerPage extends Page {
@@ -195,9 +195,7 @@ export class LayerPage extends Page {
 		this.emit("map", layerString);
 
 		this.socket.sendReset();
-		// setTimeout(() => {
 		this.socket.sendActivateDataset(layerString);
-		// }, 500);
 	}
 
 	resetLayers() {

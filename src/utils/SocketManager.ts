@@ -303,6 +303,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			this.unrealConnectionStatus = status;
 			this.addDebug(`Unreal: ${status}`, ColorStr.Gray500);
 			this.updateStatusIcons();
+
+			if (this.unrealConnectionStatus) {
+				this.emit("reconnect");
+			}
 		}
 	}
 

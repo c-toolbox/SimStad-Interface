@@ -5,6 +5,7 @@ import { RoundRectangle } from "./elements/RoundRectangle";
 import { MapLight } from "./MapLight";
 import { SocketManager } from "@/utils/SocketManager";
 import { Response } from "@/utils/protocol";
+import { CircleButton } from "./CircleButton";
 
 // Bottom right
 const MIN_X = 129411.4;
@@ -28,6 +29,7 @@ export class Map extends Phaser.GameObjects.Container {
 	private map: Phaser.GameObjects.Image;
 	private layers: MapLayer[];
 	private lamps: MapLight[];
+	private controlButtons: CircleButton[];
 
 	constructor(scene: BaseScene, socket: SocketManager) {
 		super(scene);
@@ -83,27 +85,56 @@ export class Map extends Phaser.GameObjects.Container {
 			y: layout.mapControls.centerY,
 			width: layout.mapControls.width + 8,
 			height: layout.mapControls.height + 8,
-			radius: 4,
+			radius: layout.radius,
 			color: Color.Slate800,
 		});
-		this.add(background);
+		this.add(controlsBg);
 
+		/* Control buttons */
+
+		this.controlButtons = [];
+
+		const cil = layout.mapControlsInner;
+		const size = cil.height;
+		const xCoords = [cil.left + size / 2, cil.centerX, cil.right - size / 2];
+
+		for (let i = 0; i < 3; i++) {
+			let x = xCoords[i];
+			let y = cil.centerY;
+
+			let button = new CircleButton(
+				this.scene,
+				x,
+				y,
+				size,
+				"lightbulb",
+				Color.Slate700
+			);
+			button.on("click", () => {});
+			this.add(button);
+			this.controlButtons.push(button);
+		}
+
+		/* Lamps */
+
+		this.lamps = [];
 		this.socket.on(Response.ResetResponse, () => {
 			this.lamps.forEach((lamp) => lamp.destroy());
 			this.lamps = [];
 		});
-
-		this.lamps = [];
 	}
 
 	update(time: number, delta: number) {
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
+		this.controlButtons.forEach((button) => button.update(time, delta));
 
 		this.layers.forEach((layer) => {
-			let dx = (layer.active ? delta : -delta) / 1000 * 4;
+			let dx = ((layer.active ? delta : -delta) / 1000) * 4;
 			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
 			layer.image.setVisible(layer.fade > 0);
-			let ease = layer.active ? Phaser.Math.Easing.Cubic.Out : Phaser.Math.Easing.Cubic.In;
+			let ease = layer.active
+				? Phaser.Math.Easing.Cubic.Out
+				: Phaser.Math.Easing.Cubic.In;
 			layer.image.setAlpha(ease(layer.fade));
 		});
 	}
@@ -171,5 +202,11 @@ export class Map extends Phaser.GameObjects.Container {
 		console.log("LAMP says", method);
 
 		this.socket.sendMapLight("name", x, y, 400, "#777777", method, true);
+	}
+
+	reset() {
+		this.setLayers("");
+		this.lamps.forEach((lamp) => lamp.destroy());
+		this.lamps = [];
 	}
 }

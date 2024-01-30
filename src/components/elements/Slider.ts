@@ -9,6 +9,7 @@ export class Slider extends Phaser.GameObjects.Container {
 	private _prevValue: number;
 	private background: RoundRectangle;
 	private button: Phaser.GameObjects.Ellipse;
+	private notches: Phaser.GameObjects.Ellipse[];
 	private maxV: number;
 	private maxX: number;
 	private minV: number;
@@ -74,17 +75,8 @@ export class Slider extends Phaser.GameObjects.Container {
 		// this.scene.input!.enableDebug(this.background);
 
 		// Step notches
-		if (steps > 1) {
-			for (let i = 0; i < steps; i++) {
-				let x = -width / 2 + (i / (steps - 1)) * width;
-				let y = 0;
-				let size = 0.75 * thinHeight;
-
-				let notch = scene.add.ellipse(x, y, 0.4 * size, 0.4 * size, 0x000000);
-				notch.setAlpha(0.6);
-				this.background.add(notch);
-			}
-		}
+		this.notches = [];
+		this.setSteps(steps);
 
 		// Slider button
 		this.button = scene.add.ellipse(0, 0, height, height, 0xffffff);
@@ -109,6 +101,32 @@ export class Slider extends Phaser.GameObjects.Container {
 		this.minV = min;
 		this.maxV = max;
 		this.value = this._value; // Will clamp
+	}
+
+	setSteps(steps: number) {
+		this.steps = steps;
+
+		this.notches.forEach((notch) => notch.destroy());
+		this.notches = [];
+
+		if (steps > 1) {
+			for (let i = 0; i < steps; i++) {
+				let x = -this.width / 2 + (i / (steps - 1)) * this.width;
+				let y = 0;
+				let size = 0.75 * this.thinHeight;
+
+				let notch = this.scene.add.ellipse(
+					x,
+					y,
+					0.4 * size,
+					0.4 * size,
+					0x000000
+				);
+				notch.setAlpha(0.6);
+				this.notches.push(notch);
+				this.background.add(notch);
+			}
+		}
 	}
 
 	set value(value: number) {

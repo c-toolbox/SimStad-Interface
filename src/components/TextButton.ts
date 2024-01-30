@@ -4,6 +4,7 @@ import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { interpolateColor } from "@/utils/functions";
+import { languageManager } from "@/utils/LanguageManager";
 
 export class TextButton extends Button {
 	private border: RoundRectangle;
@@ -50,11 +51,8 @@ export class TextButton extends Button {
 			text: text,
 		});
 		this.title.setOrigin(0.5);
+		this.setText(text);
 		this.add(this.title);
-
-		if (this.title.displayWidth > this.background.width - 40) {
-			this.title.displayWidth = this.background.width - 40;
-		}
 
 		this.bindInteractive(this.background);
 		this.background.on("wheel", (...args: any) => this.emit("wheel", ...args));
@@ -81,5 +79,18 @@ export class TextButton extends Button {
 		let t = value ? 0.2 : 0.0;
 		let color = interpolateColor(this.color, Color.White, t);
 		this.background.setColor(color);
+	}
+
+	setText(key: string) {
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.title, key, () => {
+				this.title.setScale(1);
+				if (this.title.displayWidth > this.background.width - 40) {
+					this.title.displayWidth = this.background.width - 40;
+				}
+			});
+		} else {
+			this.title.setText(key);
+		}
 	}
 }
