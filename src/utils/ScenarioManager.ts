@@ -110,7 +110,7 @@ export class ScenarioManager {
 
 			// Fetch section lists
 			const sectionsSv = scenariosSv[scenarioKey].Sections[0].SectionObject;
-			const sectionsEn = scenariosSv[scenarioKey].Sections[0].SectionObject;
+			const sectionsEn = scenariosEn[scenarioKey].Sections[0].SectionObject;
 			if (sectionsSv.length != sectionsEn.length) {
 				throw "Swedish and english scenario sections not matching";
 			}
@@ -167,6 +167,12 @@ export class ScenarioManager {
 				englishLocales[sectionKey + "bread"] = sectionEn.Text1;
 				swedishLocales[sectionKey + "legend"] = sectionSv.LegendTitle;
 				englishLocales[sectionKey + "legend"] = sectionEn.LegendTitle;
+				sectionSv.LegendColors?.forEach(({ text }, index) => {
+					swedishLocales[sectionKey + "legend" + index] = text;
+				});
+				sectionEn.LegendColors?.forEach(({ text }, index) => {
+					englishLocales[sectionKey + "legend" + index] = text;
+				});
 				sectionSv.Buttons?.forEach((button, index) => {
 					swedishLocales[sectionKey + "button" + index] = button.Title;
 				});

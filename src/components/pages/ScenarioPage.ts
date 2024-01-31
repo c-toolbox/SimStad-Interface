@@ -63,14 +63,6 @@ export class ScenarioPage extends Page {
 		let ly = layout.scenarioLegend.centerY;
 		this.legend = new Legend(scene, lx, ly, lw, lh);
 		this.add(this.legend);
-		const stops: { color: string; text: string }[] = [];
-		for (let i = 0; i < 8; i++) {
-			stops.push({
-				color: colorToString(HSVToRGB(i / 8, 1, 1)),
-				text: "Label " + (i + 1),
-			});
-		}
-		this.legend.setLegend("Title", stops);
 
 		/* Layer buttons */
 
@@ -124,6 +116,7 @@ export class ScenarioPage extends Page {
 			this.emit("state", PageState.Home);
 			this.activateDataset("");
 		});
+		this.backButton.setText("back");
 
 		/* Slider */
 

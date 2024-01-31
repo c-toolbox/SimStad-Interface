@@ -118,11 +118,14 @@ export class Legend extends Phaser.GameObjects.Container {
 				y,
 				size: Math.min(1000 * height, legendLabelSize),
 				// fontFamily: "Lato-Regular",
-				text,
 			});
 			label.setOrigin(0, 0.5);
 			this.add(label);
 			this.labels.push(label);
+
+			if (languageManager.get(title + index, false)) {
+				languageManager.bind(label, title + index);
+			}
 		});
 	}
 
