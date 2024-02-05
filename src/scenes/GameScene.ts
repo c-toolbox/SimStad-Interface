@@ -56,6 +56,7 @@ export class GameScene extends BaseScene {
 		});
 		this.socket.on("reconnect", () => {
 			this.restart();
+			this.socket.sendReset();
 		});
 
 		/* Layout */
@@ -126,7 +127,6 @@ export class GameScene extends BaseScene {
 	restart() {
 		this.setState(PageState.Home);
 		this.map.reset();
-		this.socket.sendReset();
 	}
 
 	setState(state: PageState) {
@@ -178,6 +178,7 @@ export class GameScene extends BaseScene {
 			"restart",
 			() => {
 				this.restart();
+				this.socket.sendReset();
 			},
 			this
 		);

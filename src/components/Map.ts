@@ -27,6 +27,7 @@ export class Map extends Phaser.GameObjects.Container {
 	public socket: SocketManager;
 
 	private map: Phaser.GameObjects.Image;
+	private layerContainer: Phaser.GameObjects.Container;
 	private layers: MapLayer[];
 	private lamps: MapLight[];
 	private controlButtons: CircleButton[];
@@ -49,11 +50,15 @@ export class Map extends Phaser.GameObjects.Container {
 		this.map = scene.add.image(
 			layout.map.centerX,
 			layout.map.centerY,
+			// "map/Nkpg/Backgrund_kommun_karta_dark"
 			"map/Nkpg/Backgrund_kommun_karta_dark"
 		);
 		// this.map.angle = -90;
 		// this.map.setScale(layout.map.height / this.map.width);
 		this.add(this.map);
+
+		this.layerContainer = scene.add.container();
+		this.add(this.layerContainer);
 
 		this.layers = [];
 		for (let i = 0; i < 10; i++) {
@@ -62,7 +67,7 @@ export class Map extends Phaser.GameObjects.Container {
 				layout.map.centerY,
 				"map/CleanColor/White"
 			);
-			this.add(layer);
+			this.layerContainer.add(layer);
 			layer.setVisible(false);
 			this.layers.push({
 				active: false,
@@ -157,6 +162,20 @@ export class Map extends Phaser.GameObjects.Container {
 		removedTextures.forEach((texture) => {
 			this.removeLayer(texture);
 		});
+
+		textures.forEach((texture) => {
+			let layer = this.layers.find((layer) => layer.texture == texture);
+			if (layer) {
+				this.bringToTop(layer.image);
+			}
+		});
+
+		removedTextures.forEach((texture) => {
+			let layer = this.layers.find((layer) => layer.texture == texture);
+			if (layer) {
+				this.bringToTop(layer.image);
+			}
+		});
 	}
 
 	addLayer(texture: string) {
@@ -168,7 +187,7 @@ export class Map extends Phaser.GameObjects.Container {
 			layer.active = true;
 			layer.texture = texture;
 			layer.image.setTexture(texture);
-			this.bringToTop(layer.image);
+			// this.bringToTop(layer.image);
 		}
 	}
 
@@ -181,7 +200,7 @@ export class Map extends Phaser.GameObjects.Container {
 	}
 
 	onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
-		if (this.lamps.length == 0) {
+		if (this.lamps.length < 3) {
 			let lamp = new MapLight(this.scene, pointer.x, pointer.y);
 			this.add(lamp);
 			this.lamps.push(lamp);
@@ -190,22 +209,28 @@ export class Map extends Phaser.GameObjects.Container {
 			lamp.on("update", () => {
 				this.updateLamp(lamp, "update");
 			});
+			lamp.on("delete", () => {
+				this.lamps.splice(this.lamps.indexOf(lamp), 1);
+				this.updateLamp(lamp, "delete");
+				lamp.destroy();
+			});
+			lamp.on("click", lamp.changeColor);
 		}
 	}
 
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
-		const py = 1 - (lamp.x - layout.map.left) / layout.map.width;
-		const px = 1 - (lamp.y - layout.map.top) / layout.map.height;
+		const py = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
+		const px = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
 		const x = MIN_X + (MAX_X - MIN_X) * px;
 		const y = MIN_Y + (MAX_Y - MIN_Y) * py;
+		const color = lamp.color;
 
-		console.log("LAMP says", method);
-
-		this.socket.sendMapLight("name", x, y, 400, "#777777", method, true);
+		this.socket.sendMapLight("name", x, y, 400, color, method, true);
 	}
 
 	reset() {
 		this.setLayers("");
+		this.lamps
 		this.lamps.forEach((lamp) => lamp.destroy());
 		this.lamps = [];
 	}

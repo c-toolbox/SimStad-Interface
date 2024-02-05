@@ -112,6 +112,7 @@ export class ScenarioPage extends Page {
 			tc
 		);
 		this.add(this.backButton);
+		this.backButton.removeListener("click");
 		this.backButton.on("click", () => {
 			this.emit("state", PageState.Home);
 			this.activateDataset("");
@@ -151,6 +152,7 @@ export class ScenarioPage extends Page {
 		sections.forEach((section, index) => {
 			this.tabButtons[index].setVisible(true);
 			this.tabButtons[index].setText(section.key + "title");
+			this.tabButtons[index].removeListener("click");
 			this.tabButtons[index].on("click", () => {
 				this.setSection(section);
 			});
@@ -195,6 +197,7 @@ export class ScenarioPage extends Page {
 				button.setVisible(true);
 				button.setText(section.key + "button" + index);
 				button.setData("layers", layers);
+				button.removeListener("click");
 				button.on("click", () => {
 					this.activateDataset(layers);
 				});
@@ -213,6 +216,7 @@ export class ScenarioPage extends Page {
 			}
 			this.layerSlider.setLabels(labels);
 
+			this.layerSlider.removeListener("onChange");
 			this.layerSlider.on("onChange", (value: number) => {
 				let layers = section.layerSlider?.layers;
 				if (layers) {
