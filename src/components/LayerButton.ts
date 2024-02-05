@@ -7,7 +7,8 @@ import { interpolateColor } from "@/utils/functions";
 
 export class LayerButton extends Button {
 	private border: RoundRectangle;
-	public background: RoundRectangle;
+	// private background: RoundRectangle;
+	private background: Phaser.GameObjects.Image;
 	private image: Phaser.GameObjects.Image;
 	private title: Phaser.GameObjects.Text;
 
@@ -39,12 +40,14 @@ export class LayerButton extends Button {
 		});
 		this.add(this.border);
 
-		this.background = new RoundRectangle(scene, {
-			width: this.width,
-			height: this.height,
-			radius: 0,
-			color: Color.Gray900,
-		});
+		// this.background = new RoundRectangle(scene, {
+		// 	width: this.width,
+		// 	height: this.height,
+		// 	radius: 0,
+		// 	color: Color.Gray900,
+		// });
+		this.background = scene.add.image(0, 0, "blank");
+		this.background.setScale(this.width / this.background.width);
 		this.add(this.background);
 
 		let texture = this.scene.textures.exists(layer) ? layer : "city";
@@ -70,7 +73,7 @@ export class LayerButton extends Button {
 			y: this.height / 2 - th / 2,
 			size: 0.6 * th,
 			fontFamily: "Lato-Bold",
-			text: layer,
+			text: layer.split("/").pop(),
 		});
 		this.title.setOrigin(0.5);
 		this.add(this.title);

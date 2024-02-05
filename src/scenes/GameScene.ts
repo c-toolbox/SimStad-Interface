@@ -9,11 +9,14 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
+import { ScenarioPage } from "@/components/pages/ScenarioPage";
 import { ScenariosPage } from "@/components/pages/ScenariosPage";
 import { LayerPage } from "@/components/pages/LayerPage";
 import { LightPage } from "@/components/pages/LightPage";
 import { DebugPage } from "@/components/pages/DebugPage";
 import { Response, ScenariosResponse } from "@/utils/protocol";
+import { Map } from "@/components/Map";
+import { ScenarioKey } from "@/utils/ScenarioManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -24,11 +27,13 @@ export class GameScene extends BaseScene {
 	private state: PageState;
 	private pages: Page[];
 	private homePage: HomePage;
+	private scenarioPage: ScenarioPage;
 	private scenariosPage: ScenariosPage;
 	private layerPage: LayerPage;
 	private lightPage: LightPage;
 	private debugPage: DebugPage;
 	private navigation: Navigation;
+	private map: Map;
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -49,11 +54,16 @@ export class GameScene extends BaseScene {
 		this.socket.on(Response.Scenarios, (data: ScenariosResponse) => {
 			this.scenariosPage.loadScenarios(data);
 		});
+		this.socket.on("reconnect", () => {
+			this.restart();
+			this.socket.sendReset();
+		});
 
 		/* Layout */
 
 		this.pages = [];
 		this.homePage = new HomePage(this, PageState.Home, this.socket);
+		this.scenarioPage = new ScenarioPage(this, PageState.Scenario, this.socket);
 		this.scenariosPage = new ScenariosPage(
 			this,
 			PageState.Scenarios,
@@ -63,6 +73,7 @@ export class GameScene extends BaseScene {
 		this.lightPage = new LightPage(this, PageState.Light, this.socket);
 		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
 		this.pages.push(this.homePage);
+		this.pages.push(this.scenarioPage);
 		this.pages.push(this.scenariosPage);
 		this.pages.push(this.layerPage);
 		this.pages.push(this.lightPage);
@@ -76,12 +87,24 @@ export class GameScene extends BaseScene {
 			page.on("send", (data: object) => {
 				this.socket.send(data);
 			});
+
+			page.on("map", (layers: string) => {
+				this.map.setLayers(layers);
+			});
+
+			page.on("scenario", (scenario: ScenarioKey) => {
+				this.setState(PageState.Scenario);
+				this.scenarioPage.setScenario(scenario);
+			});
 		});
 
 		this.navigation = new Navigation(this);
 		this.navigation.on("state", (state: PageState) => {
 			this.setState(state);
 		});
+
+		this.map = new Map(this, this.socket);
+		this.add.existing(this.map);
 
 		this.restart();
 		// layout.drawLayout(this);
@@ -94,13 +117,16 @@ export class GameScene extends BaseScene {
 			}
 		});
 
+		this.map.update(time, delta);
+
 		this.navigation.update(time, delta);
 	}
 
 	/* Logic */
 
 	restart() {
-		this.setState(PageState.Scenarios);
+		this.setState(PageState.Home);
+		this.map.reset();
 	}
 
 	setState(state: PageState) {
@@ -138,9 +164,21 @@ export class GameScene extends BaseScene {
 		);
 
 		this.scene.get("UIScene").events.on(
+			"guide",
+			(value: boolean) => {
+				this.navigation.setGuideMode(value);
+				if (!value) {
+					this.restart();
+				}
+			},
+			this
+		);
+
+		this.scene.get("UIScene").events.on(
 			"restart",
 			() => {
 				this.restart();
+				this.socket.sendReset();
 			},
 			this
 		);

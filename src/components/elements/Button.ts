@@ -8,7 +8,6 @@ export class Button extends Phaser.GameObjects.Container {
 	public liftSmooth: number;
 	public holdSmooth: number;
 	public category: number;
-	public aliveValue: number;
 	private tween: Phaser.Tweens.Tween;
 
 	constructor(scene: BaseScene, x: number, y: number) {
@@ -22,7 +21,6 @@ export class Button extends Phaser.GameObjects.Container {
 
 		this.liftSmooth = 0;
 		this.holdSmooth = 0;
-		this.aliveValue = 0;
 	}
 
 	bindInteractive(
@@ -103,6 +101,7 @@ export class Button extends Phaser.GameObjects.Container {
 		localY: number,
 		event: Phaser.Types.Input.EventData
 	) {
+		console.log("onUp", this.blocked);
 		if (this.hold && !this.blocked) {
 			this.emit("click");
 		}

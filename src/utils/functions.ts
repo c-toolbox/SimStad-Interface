@@ -75,3 +75,8 @@ export function colorToString(color: number): string {
 export function colorToNumber(color: string): number {
 	return Phaser.Display.Color.HexStringToColor(color).color;
 }
+
+// Returns a safe version of a string
+export function safeString(text: string): string {
+	return text.replace(/[^a-zA-Z0-9]/g, "");
+}

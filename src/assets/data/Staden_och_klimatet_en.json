@@ -1,0 +1,140 @@
+{
+	"Title": "The city and the climate",
+	"Sections": [
+		{
+			"Label1": "",
+			"SectionObject": [
+				{
+					"Title": "Extreme rainfall 100-year flow",
+					"Text1": "A 100-year rainfall occurs statistically once every hundred years. The highlighted areas on the models are the areas that are worst hit by extreme rain.\nWhen the municipality plans for new buildings, they take flood risks into account and set requirements for various measures. It could, for example, be about raising the ground level and foundation level when building new houses. But it is at least as important to ensure that large amounts of water have somewhere to go.\nOne of the measures in the municipality works to create submerged surfaces in parks and natural areas. By making submerged areas in suitable places and creating them lower than surrounding buildings or roads, the water can collect there instead of causing flooding in places where it causes damage.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "extremaregn",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "CleanColor/White,Nkpg/Extrem100",
+					"Buttons": [
+						{
+							"Title": "100 years",
+							"Layers": "CleanColor/White,Nkpg/Extrem100"
+						},
+						{
+							"Title": "200 years",
+							"Layers": "CleanColor/White,Nkpg/Extrem200"
+						},
+						{
+							"Title": "500 years",
+							"Layers": "CleanColor/White,Nkpg/Extrem500"
+						}
+					],
+					"LegendTitle": "Water rise",
+					"LegendColors": [
+						{ "color": "#00AAFF", "text": "0,1 – 0,2 meters" },
+						{ "color": "#0000FF", "text": "0,2 – 0,3 meters" },
+						{ "color": "#000078", "text": "0,3 – 0,5 meters" },
+						{ "color": "#FFFF00", "text": "0,5 – 1 meters" },
+						{ "color": "#FF0000", "text": "mer än 1 meters" }
+					]
+				},
+				{
+					"Title": "Sea level rise",
+					"Text1": "Seas are rising and will continue to do so for a long time due to global warming. If warming is limited, sea level rise will also be less. There are plans for dike constructions and a lock in Kvarsebo to meet a higher sea level.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "havsnivahojning",
+					"Legend2": "",
+					"Default": true,
+					"Idle": true,
+					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_00",
+					"Slider": {
+						"Title": "Water level in meters",
+						"Labels": ["0", "5", "10", "15"],
+						"Layers": [
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_00",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_01",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_02",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_03",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_04",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_05",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_06",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_07",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_08",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_09",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_10",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_11",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_12",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_13",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_14",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_15",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_16",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_17",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_18",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_19",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_20",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_21",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_22",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_23",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_24",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_25",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_26",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_27",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_28",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_29",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_30",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_31",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_32",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_33",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_34",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_35",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_36",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_37",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_38",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_39",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_40",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_41",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_42",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_43",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_44",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_45",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_46",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_47",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_48",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_49",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_50",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_51",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_52",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_53",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_54",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_55",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_56",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_57",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_58",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_59",
+							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_60"
+						]
+					},
+					"LegendTitle": "",
+					"LegendColors": []
+				},
+				{
+					"Title": "Trees",
+					"Text1": "Here you can see where there are trees in the city. Trees in urban environments are important for our well-being. They contribute to greenery and improve the polluted air coming from cars and factories. The trees in the city also have a temperature equalizing effect by using solar energy for their growth. At the same time, the foliage provides shade and coolness in cities during hot summer days. When it comes to rainfall, it can reduce the load on the city's sewage system by absorbing large amounts of water. Trees also act as a node in a green network in the city. They favor biological diversity and offer habitat for birds and habitat for a number of plants, mosses, insects and lichens.\nDo you think Norrköping is a green city?",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "trad",
+					"Legend2": "",
+					"Default": true,
+					"Idle": true,
+					"Filenames": "Nkpg/trad_vatten_stad_2",
+					"LegendTitle": "Tjolahopp",
+					"LegendColors": [
+						{ "color": "#90cf80", "text": "Trees" },
+						{ "color": "#daebd2", "text": "Grass areas" },
+						{ "color": "#8bbdff", "text": "Water" }
+					]
+				}
+			]
+		}
+	]
+}

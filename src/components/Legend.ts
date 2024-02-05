@@ -1,9 +1,14 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import _suntimes from "@/data/norrköping_suntimes.json";
-import { colorToNumber, interpolateColor } from "@/utils/functions";
+import _suntimes from "@/assets/data/norrköping_suntimes.json";
+import {
+	colorToGrayscale,
+	colorToNumber,
+	interpolateColor,
+} from "@/utils/functions";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
+import { languageManager } from "@/utils/LanguageManager";
 const suntimes = _suntimes as { [date: string]: number[] };
 
 export class Legend extends Phaser.GameObjects.Container {
@@ -62,51 +67,78 @@ export class Legend extends Phaser.GameObjects.Container {
 			{ color: ColorStr.Orange500, text: "2" },
 			{ color: ColorStr.Yellow500, text: "3" },
 		];
-		this.loadLegend("Title", stops);
+		this.setLegend("Title", stops);
 	}
 
 	update(time: number, delta: number) {}
 
-	loadLegend(title: string, stops: { color: string; text: string }[]) {
+	setLegend(title: string, stops: { color: string; text: string }[]) {
 		this.graphics.clear();
-		this.title.setText(title);
+		this.setTitle(title);
+
+		const legendTitleSize = 28;
+		const legendLabelSize = 28;
+		const padding = 80;
 
 		this.labels.forEach((text) => text.destroy());
 		this.labels = [];
 
-		const ty = this.title.y + this.title.displayHeight + 20;
-		const th = this.height / 2 - ty - layout.padding / 2;
-		const gap = 2;
-		const size = (th - gap * (stops.length - 1)) / stops.length;
+		const ty = this.title.y + this.title.displayHeight * 2.0;
+		const th = this.height / 2 - ty - padding / 2;
+		const gap = 24;
+		const border = 2;
+		const count = Math.max(stops.length, 10);
+		const height = (th - gap * (count - 1)) / count;
+		const width = 2 * height;
+		// const dotRadius = size / 2;
 
 		stops.forEach(({ color, text }, index) => {
-			let x = this.title.x + size / 2;
-			let y = ty + (size + gap) * index + size / 2;
-			let radius = Math.min(size / 2, 24);
+			let x = this.title.x;
+			let y = ty + (height + gap) * index + height / 2;
+			let c = colorToNumber(color);
+			let gc = 0xffffff - colorToGrayscale(c);
+			let bc = interpolateColor(c, gc, 0.3);
 
-			this.graphics.fillStyle(Color.Slate300);
-			// this.graphics.fillCircle(x, y, radius);
-			this.graphics.fillRect(x - size / 2, y - size *2/3/2, size, size *2/3);
+			this.graphics.fillStyle(bc);
+			// this.graphics.fillCircle(x, y, dotRadius);
+			this.graphics.fillRect(x, y - height / 2, width, height);
+
 			this.graphics.fillStyle(colorToNumber(color));
-			// this.graphics.fillCircle(x, y, radius - 2);
+			// this.graphics.fillCircle(x, y, dotRadius - border);
 			this.graphics.fillRect(
-				x - size / 2 + 2,
-				y - size *2/3/2 + 2,
-				size - 4,
-				size *2/3 -4
+				x + border,
+				y - height / 2 + border,
+				width - 2 * border,
+				height - 2 * border
 			);
 
 			let label = this.scene.addText({
-				x: x + 2 * radius,
+				// x: x + dotRadius + separation,
+				x: x + width + gap,
 				y,
-				size: Math.min(size, 24),
-				fontFamily: "Lato-Bold",
-				text,
-				color: "white",
+				size: Math.min(1000 * height, legendLabelSize),
+				// fontFamily: "Lato-Regular",
 			});
 			label.setOrigin(0, 0.5);
 			this.add(label);
 			this.labels.push(label);
+
+			if (languageManager.get(title + index, false)) {
+				languageManager.bind(label, title + index);
+			}
 		});
+	}
+
+	setTitle(key: string) {
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.title, key, () => {
+				this.title.setScale(1);
+				if (this.title.displayWidth > this.background.width - 40) {
+					this.title.displayWidth = this.background.width - 40;
+				}
+			});
+		} else {
+			this.title.setText(key);
+		}
 	}
 }

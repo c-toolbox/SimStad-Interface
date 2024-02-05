@@ -10,7 +10,7 @@ import { TextButton } from "@/components/TextButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
 import { ScenariosResponse } from "@/utils/protocol";
-import * as scenariosData from "@/data/scenarios.json";
+// import * as scenariosData from "@/assets/data/unused/scenarios.json";
 
 export class ScenariosPage extends Page {
 	private scrollArea: ScrollArea;
@@ -65,7 +65,7 @@ export class ScenariosPage extends Page {
 		});
 		this.addButton(x - 2 * w - 2 * s, y, w, h, "Fake", Color.Yellow800, () => {
 			this.clearScenarios();
-			this.loadScenarios(scenariosData as any);
+			// this.loadScenarios(scenariosData as any);
 		});
 
 		let scrollTop = subtitle.y + subtitle.displayHeight + s;

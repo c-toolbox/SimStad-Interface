@@ -7,7 +7,7 @@ import { layoutManager as layout } from "./LayoutManager";
 const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
-const PING_TIMEOUT = 3000;
+const PING_TIMEOUT = 2000;
 
 export enum ConnectionStatus {
 	Disconnected = "Disconnected",
@@ -274,11 +274,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	checkUnrealConnection() {
-		if (this.pingAttempts < 3) {
+		if (this.pingAttempts < 10) {
 			this.setUnrealConnectionStatus(ConnectionStatus.Connecting);
 
 			this.sendPing();
 			this.pingAttempts += 1;
+
+			clearTimeout(this.pingTimeout);
 			this.pingTimeout = setTimeout(() => {
 				this.checkUnrealConnection();
 			}, PING_TIMEOUT);
@@ -291,7 +293,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	setOmniConnectionStatus(status: ConnectionStatus) {
 		if (this.omniConnectionStatus != status) {
 			this.omniConnectionStatus = status;
-			this.addDebug(`Omni: ${status}`, ColorStr.Gray500);
+			// this.addDebug(`Omni: ${status}`, ColorStr.Gray500);
 			this.updateStatusIcons();
 		}
 	}
@@ -299,8 +301,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	setUnrealConnectionStatus(status: ConnectionStatus) {
 		if (this.unrealConnectionStatus != status) {
 			this.unrealConnectionStatus = status;
-			this.addDebug(`Unreal: ${status}`, ColorStr.Gray500);
+			// this.addDebug(`Unreal: ${status}`, ColorStr.Gray500);
 			this.updateStatusIcons();
+
+			if (this.unrealConnectionStatus == ConnectionStatus.Connected) {
+				this.emit("reconnect");
+			}
 		}
 	}
 
@@ -389,7 +395,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			from: 0,
 			to: 1,
 			ease: "Linear",
-			duration: 10000,
+			duration: 5000,
 			onUpdate: (tween, targets, key, current, previous, param) => {
 				let alpha = Math.min(8 - 8 * current, 2 - temp.y / 100);
 				temp.setAlpha(alpha);

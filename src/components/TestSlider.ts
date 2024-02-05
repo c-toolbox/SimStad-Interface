@@ -1,5 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Slider } from "@/components/elements/Slider";
+import { languageManager } from "@/utils/LanguageManager";
 
 export class TestSlider extends Phaser.GameObjects.Container {
 	private slider: Slider;
@@ -61,8 +62,32 @@ export class TestSlider extends Phaser.GameObjects.Container {
 		this.slider.update(time, delta);
 	}
 
-	setLabel(text: string) {
-		this.label.setText(text);
+	setTitle(key: string) {
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.title, key);
+		} else {
+			this.title.setText(key);
+		}
+	}
+
+	setLabel(key: string) {
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.title, key);
+		} else {
+			this.label.setText(key);
+		}
+	}
+
+	setLabels(labels: string[]) {
+		// if (languageManager.get(key, false)) {
+		// 	languageManager.bind(this.title, key);
+		// } else {
+		// 	this.title.setText(key);
+		// }
+	}
+
+	setSteps(steps: number) {
+		this.slider.setSteps(steps);
 	}
 
 	get value(): number {

@@ -1,5 +1,6 @@
 import swedishLocales from "@/assets/locales/sv-SE.json";
 import englishLocales from "@/assets/locales/en-US.json";
+import { scenarioManager } from "./ScenarioManager";
 
 export enum LanguageKey {
 	English = "en-US",
@@ -37,6 +38,8 @@ class LanguageManager {
 	): void {
 		swedishLocales = Object.assign({}, swedishLocales);
 		englishLocales = Object.assign({}, englishLocales);
+
+		scenarioManager.fetchLanguageData(swedishLocales, englishLocales);
 
 		this.languageData.clear();
 		this.languageData.set(LanguageKey.Swedish, swedishLocales);
