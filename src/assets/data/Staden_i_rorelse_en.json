@@ -16,9 +16,12 @@
                     "Filenames": "Nkpg/KOllektivTraffik,Nkpg/vattenytor",
                     "LegendTitle": "Type of traffic",
                     "LegendColors": [
-                        { "color": "#ff0000", "text": "train" },
-                        { "color": "#00ff00", "text": "bus" },
-                        { "color": "#0000ff", "text": "add more" }
+                        { "color": "#ebc34c", "text": "Express buses" },
+                        { "color": "#bbeb77", "text": "Rural traffic" },
+                        { "color": "#e39189", "text": "Tramway" },
+                        { "color": "#2f9fea", "text": "Train" },
+                        { "color": "#57e6c0", "text": "City traffic" },
+                        { "color": "#ffb800", "text": "Stops" }
                     ]
                 },
                 {
@@ -31,7 +34,7 @@
                     "Default": false,
                     "Idle": false,
                     "Filenames": "Nkpg/Noise_train",
-                    "LegendTitle": "Maximum sound level",
+                    "LegendTitle": "Sound level in decibels",
                     "LegendColors": [
                         { "color": "#ffffb2", "text": "65–69 dBa" },
                         { "color": "#feb751", "text": "70–74 dBa" },

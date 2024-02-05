@@ -49,7 +49,7 @@
 					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_00",
 					"Slider": {
 						"Title": "Water level in meters",
-						"Labels": ["0", "5", "10", "15", "20", "25"],
+						"Labels": ["0", "5", "10", "15"],
 						"Layers": [
 							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_00",
 							"Nkpg/Backgrund_kommun_karta_dark,Nkpg/Vag_vatten,Flood/Flood_01",

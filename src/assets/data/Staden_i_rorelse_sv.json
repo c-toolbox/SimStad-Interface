@@ -16,9 +16,12 @@
                     "Filenames": "Nkpg/KOllektivTraffik,Nkpg/vattenytor",
                     "LegendTitle": "Typ av trafik",
                     "LegendColors": [
-                        { "color": "#ff0000", "text": "tåg" },
-                        { "color": "#00ff00", "text": "buss" },
-                        { "color": "#0000ff", "text": "lägg till mer" }
+                        { "color": "#ebc34c", "text": "Expressbussar" },
+                        { "color": "#bbeb77", "text": "Landsbygdstrafik" },
+                        { "color": "#e39189", "text": "Spårväg" },
+                        { "color": "#2f9fea", "text": "Tåg" },
+                        { "color": "#57e6c0", "text": "Tätortstrafik" },
+                        { "color": "#ffb800", "text": "Hållplatser" }
                     ]
                 },
                 {
@@ -31,7 +34,7 @@
                     "Default": false,
                     "Idle": false,
                     "Filenames": "Nkpg/Noise_train",
-                    "LegendTitle": "Maximal ljudnivå",
+                    "LegendTitle": "Ljudnivå i decibel",
                     "LegendColors": [
                         { "color": "#ffffb2", "text": "65–69 dBa" },
                         { "color": "#feb751", "text": "70–74 dBa" },
