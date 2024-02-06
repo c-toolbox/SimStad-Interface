@@ -80,3 +80,29 @@ export function colorToNumber(color: string): number {
 export function safeString(text: string): string {
 	return text.replace(/[^a-zA-Z0-9]/g, "");
 }
+
+// Check availibility of localStorage
+export function isLocalStorageAvailable() {
+	var test = "test";
+	try {
+		localStorage.setItem(test, test);
+		localStorage.removeItem(test);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+// Get localStorage data
+export function getLocalStorage(key: string, defaultValue: any): any {
+	if (isLocalStorageAvailable()) {
+		return JSON.parse(localStorage.getItem(key) || defaultValue);
+	}
+	return defaultValue;
+}
+
+// Set localStorage data
+export function setLocalStorage(key: string, value: any): void {
+	if (isLocalStorageAvailable()) {
+		localStorage.setItem(key, JSON.stringify(value));
+	}
+}

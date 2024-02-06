@@ -39,6 +39,10 @@ export class CircleButton extends Button {
 		this.setScale(1 - 0.1 * this.holdSmooth);
 	}
 
+	setTexture(texture: string) {
+		this.image.setTexture(texture);
+	}
+
 	setHighlight(value: boolean) {
 		this.background.setAlpha(value ? 1.0 : 0.6);
 		this.image.setAlpha(value ? 1.0 : 0.6);
