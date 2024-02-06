@@ -11,7 +11,7 @@
 					"Datasource": "",
 					"Legend1": "boendetathet",
 					"Legend2": "",
-					"Default": false,
+					"Default": true,
 					"Idle": true,
 					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetathet_nulage",
 					"Buttons": [
