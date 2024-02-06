@@ -5,36 +5,6 @@
 			"Label1": "",
 			"SectionObject": [
 				{
-					"Title": "Workplace density",
-					"Text1": "Here you can see where there are most workplaces in Norrköping today. As you can see, it is in central Norrköping and at Vrinnevisjukhuset that there is the densest number of workplaces. But if we look ahead to 2050, we can see that the party workplaces can be found in Butängen, on Sylten and in Norra Himmelstalund.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "arbetsplatstathet",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_nulage",
-					"Buttons": [
-						{
-							"Title": "Today",
-							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_nulage"
-						},
-						{
-							"Title": "2050",
-							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_2050"
-						}
-					],
-					"LegendTitle": "Number of people within 250m",
-					"LegendColors": [
-						{ "color": "#F8FD35", "text": "1 – 232" },
-						{ "color": "#FBD708", "text": "232 – 630" },
-						{ "color": "#FC9F01", "text": "630 – 1189" },
-						{ "color": "#F94804", "text": "1189 – 1775" },
-						{ "color": "#D51B1C", "text": "1775 – 2438" },
-						{ "color": "#8F110E", "text": "2438 – 5739" }
-					]
-				},
-				{
 					"Title": "Housing density",
 					"Text1": "Where do most people live in Norrköping? The model has taken into account the city's barriers and calculated how many residents you reach within 250 meters of each point. The analysis can be used to more accurately calculate data when, for example, planning public transport and school places.",
 					"Text2": "",
@@ -56,28 +26,30 @@
 					],
 					"LegendTitle": "Number of people within 250m",
 					"LegendColors": [
-						{ "color": "#F8FD35", "text": "1 – 333" },
-						{ "color": "#FBD708", "text": "333 – 689" },
-						{ "color": "#FC9F01", "text": "689 – 1210" },
-						{ "color": "#F94804", "text": "1210 – 1901" },
-						{ "color": "#D51B1C", "text": "1901 – 2970" },
-						{ "color": "#8F110E", "text": "2970 – 4494" }
-					]
-				},
-				{
-					"Title": "Building types",
-					"Text1": "Here you can see how the distribution looks between housing and businesses.\nOver the years, there have been different ideals for how a city should be built. From 1945 to 1965, Norrköping was to a large extent a mixed city where housing, workplaces and trade were relatively close. Most people went to work on foot or by bicycle and did their shopping in their neighborhood. From the mid-60s, the car struck again on a large scale and the city was planned from a completely new perspective. Center malls grew, residential areas were built outside the city center and streets were widened to make room for the car's progress. In recent years, the pursuit of a mixed city has gained momentum again and the concept of the 15-minute city, i.e. the ability to reach what you need within 15 minutes from your home, has become increasingly popular.\nBased on the distribution of homes and businesses today - do you think that Norrköping is a mixed city?",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "byggnadstyper",
-					"Legend2": "",
-					"Default": false,
-					"Idle": true,
-					"Filenames": "CleanColor/White,Nkpg/ByggnadsTyper",
-					"LegendTitle": "Buildings",
-					"LegendColors": [
-						{ "color": "#FF0000", "text": "Bostad" },
-						{ "color": "#00FF00", "text": "Lägg till mer" }
+						{
+							"color": "#F8FD35",
+							"text": "1 – 333"
+						},
+						{
+							"color": "#FBD708",
+							"text": "333 – 689"
+						},
+						{
+							"color": "#FC9F01",
+							"text": "689 – 1210"
+						},
+						{
+							"color": "#F94804",
+							"text": "1210 – 1901"
+						},
+						{
+							"color": "#D51B1C",
+							"text": "1901 – 2970"
+						},
+						{
+							"color": "#8F110E",
+							"text": "2970 – 4494"
+						}
 					]
 				},
 				{

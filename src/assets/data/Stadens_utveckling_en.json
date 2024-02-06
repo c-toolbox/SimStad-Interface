@@ -4,49 +4,94 @@
         {
             "Label1": "",
             "SectionObject": [
-                {
-                    "Title": "Urban development areas",
-                    "Text1": "Areas where more extensive urban development is planned or implemented in Norrköping are marked here right now. Did you know that there will be around 3,000 new homes in the Inner Harbour? Or that the whole of Butängen should be converted into a part of the inner city in connection with the construction of the Ostlänken high-speed railway?\nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western neighborhoods will grow.",
-                    "Text2": "",
-                    "Datasource": "",
-                    "Legend1": "stadsutvecklingsomraden",
-                    "Legend2": "",
-                    "Default": true,
-                    "Idle": false,
-                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Framtidens_norrkoping",
-                    "LegendTitle": "Type of area",
-                    "LegendColors": [
-                        { "color": "#e9cf87", "text": "New area" },
-                        { "color": "#e5b636", "text": "Settlement" },
-                        { "color": "#e75a23", "text": "Track" },
-                        { "color": "#ad7aa9", "text": "The East Link" }
-                    ]
-                },
-                {
-                    "Title": "Year of construction",
-                    "Text1": "By looking at the year of construction, we can see how the city has developed over time and where new construction has been added in recent years.\nAround the turn of the last century, Norrköping was in a boom. The textile industry grew and so did the city. In the middle of the 20th century, the textile crisis hit and production in the central industrial area gradually decreased.\nDespite the decline of the industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make way for new, more modern ones. But while the demolitions continued, the city stagnated and the need for new housing quickly diminished. This led to many demolished plots and blocks that were not developed. Only around the turn of the last millennium did these gaps gradually begin to be filled with new housing, workplaces, restaurants, commerce, etc.",
-                    "Text2": "",
-                    "Datasource": "",
-                    "Legend1": "byggnadsar",
-                    "Legend2": "",
-                    "Default": false,
-                    "Idle": true,
-                    "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Byggnads_ar",
-                    "LegendTitle": "Period",
-                    "LegendColors": [
-                        { "color": "#440154", "text": "<1800" },
-                        { "color": "#482576", "text": "1800 – 1850" },
-                        { "color": "#414387", "text": "1850 – 1900" },
-                        { "color": "#345F8D", "text": "1900 – 1920" },
-                        { "color": "#2A788E", "text": "1920 – 1940" },
-                        { "color": "#21908D", "text": "1940 – 1960" },
-                        { "color": "#23A884", "text": "1960 – 1980" },
-                        { "color": "#43BF70", "text": "1980 – 2000" },
-                        { "color": "#7AD151", "text": "2000 – 2010" },
-                        { "color": "#BCDF27", "text": "2010 – 2020" },
-                        { "color": "#FDE725", "text": "2020 – 2023" }
-                    ]
-                }
+              {
+                "Title": "Urban development areas",
+                "Text1": "This area the areas where more extensive urban development is planned or implemented now in Norrköping. Did you know that there will be around 3,000 new homes in the Inner Harbour? Or that the whole of Butängen will be converted into a part of the inner city in connection with the construction of the Ostlänken high-speed railway?/nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western districts are growing.",
+                "Text2": "",
+                "Datasource": "",
+                "Legend1": "stadsutvecklingsomraden",
+                "Legend2": "",
+                "Default": true,
+                "Idle": false,
+                "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Framtidens_norrkoping",
+                "LegendTitle": "Type of area",
+                "LegendColors": [
+                  {
+                    "color": "#e9cf87",
+                    "text": "New area"
+                  },
+                  {
+                    "color": "#e5b636",
+                    "text": "Settlement"
+                  },
+                  {
+                    "color": "#e75a23",
+                    "text": "Track"
+                  },
+                  {
+                    "color": "#ad7aa9",
+                    "text": "The East Link"
+                  }
+                ]
+              },
+              {
+                "Title": "Year of construction",
+                "Text1": "By looking at the year of construction, we can see how the city has developed over time and where new construction has been added in recent years./nNorrköping was booming around the turn of the last century. The textile industry grew and so did the city. However, the textile crisis hit in the middle of the 20th century, and production in the central industrial area gradually declined./nDespite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make way for new, more modern ones. While the demolitions continued, the city stagnated and the need for new housing quickly diminished. This led to many demolished plots and blocks that were not developed. Only around the turn of the last millennium did these gaps gradually begin to be filled with new housing, workplaces, restaurants, commerce, etc.",
+                "Text2": "",
+                "Datasource": "",
+                "Legend1": "byggnadsar",
+                "Legend2": "",
+                "Default": false,
+                "Idle": true,
+                "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Byggnads_ar",
+                "LegendTitle": "Period",
+                "LegendColors": [
+                  {
+                    "color": "#440154",
+                    "text": "<1800"
+                  },
+                  {
+                    "color": "#482576",
+                    "text": "1800 – 1850"
+                  },
+                  {
+                    "color": "#414387",
+                    "text": "1850 – 1900"
+                  },
+                  {
+                    "color": "#345F8D",
+                    "text": "1900 – 1920"
+                  },
+                  {
+                    "color": "#2A788E",
+                    "text": "1920 – 1940"
+                  },
+                  {
+                    "color": "#21908D",
+                    "text": "1940 – 1960"
+                  },
+                  {
+                    "color": "#23A884",
+                    "text": "1960 – 1980"
+                  },
+                  {
+                    "color": "#43BF70",
+                    "text": "1980 – 2000"
+                  },
+                  {
+                    "color": "#7AD151",
+                    "text": "2000 – 2010"
+                  },
+                  {
+                    "color": "#BCDF27",
+                    "text": "2010 – 2020"
+                  },
+                  {
+                    "color": "#FDE725",
+                    "text": "2020 – 2023"
+                  }
+                ]
+              }
             ]
         }
     ]

@@ -24,24 +24,36 @@
                         { "color": "#ffb800", "text": "Hållplatser" }
                     ]
                 },
-                {
-                    "Title": "Trafikbuller",
-                    "Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig vid maxnivån för varje plats. Järnvägen sprider mest ljud.\nAlla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år. Beräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån räknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur väl isolerat huset är och vilka fönster som finns.\nHur upplevelser du trafikbuller där du bor?",
-                    "Text2": "",
-                    "Datasource": "",
-                    "Legend1": "trafikbuller",
-                    "Legend2": "",
-                    "Default": false,
-                    "Idle": false,
-                    "Filenames": "Nkpg/Noise_train",
-                    "LegendTitle": "Ljudnivå i decibel",
-                    "LegendColors": [
-                        { "color": "#ffffb2", "text": "65–69 dBa" },
-                        { "color": "#feb751", "text": "70–74 dBa" },
-                        { "color": "#f45629", "text": "75–79 dBa" },
-                        { "color": "#bd0026", "text": "över 80 dBa" }
-                    ]
-                }
+              {
+                "Title": "Trafikbuller",
+                "Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig vid maxnivån och som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar.\nAlla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år. Beräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur väl isolerat huset är och vilka fönster som finns.\nHur upplevelser du trafikbuller där du bor?",
+                "Text2": "",
+                "Datasource": "",
+                "Legend1": "trafikbuller",
+                "Legend2": "",
+                "Default": false,
+                "Idle": false,
+                "Filenames": "Nkpg/Noise_train",
+                "LegendTitle": "Ljudnivå i decibel",
+                "LegendColors": [
+                  {
+                    "color": "#ffffb2",
+                    "text": "65–69 dBa"
+                  },
+                  {
+                    "color": "#feb751",
+                    "text": "70–74 dBa"
+                  },
+                  {
+                    "color": "#f45629",
+                    "text": "75–79 dBa"
+                  },
+                  {
+                    "color": "#bd0026",
+                    "text": "över 80 dBa"
+                  }
+                ]
+              }
             ]
         }
     ]
