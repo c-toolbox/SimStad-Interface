@@ -111,7 +111,6 @@ for name, path in found_textures.items():
     folder = folders[path.split("/")[1]]
     scaled_image.save(f"output/thumbnails/{folder}/{name}.png")
 
-"""
 # Map image magic
 for name, path in found_textures.items():
     print(f"Converting map image for {name}...")
@@ -144,4 +143,3 @@ with open("output/layers.json", "w") as f:
     json.dump({"layers": layers}, f, indent="\t")
 
 print(f"Wrote {len(layers)} layers to output/layers.json")
-"""
