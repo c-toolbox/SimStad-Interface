@@ -4,9 +4,12 @@ import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
-import { scenarioManager } from "@/utils/ScenarioManager";
+import { ScenarioKey, scenarioManager } from "@/utils/ScenarioManager";
+import { ScenarioButton } from "../ScenarioButton";
 
 export class HomePage extends Page {
+	scenarioButtons: ScenarioButton[];
+
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
@@ -36,23 +39,46 @@ export class HomePage extends Page {
 
 		/* Scenario buttons */
 
-		let scenariosKeys = scenarioManager.getScenarioKeys();
+		const chapters: { [key in ScenarioKey]: string } = {
+			rorelse: "tram",
+			klimatet: "umbrella",
+			sammansattning: "crowd",
+			utveckling: "cranes",
+			// "sunlight"
+		};
+
 		let bg = 32;
 		let bw = (layout.panelInner.width - bg) / 2;
-		let bh = 64;
-		for (let i = 0; i < scenariosKeys.length; i++) {
-			let button = this.addButton(
-				layout.panelInner.left + bw / 2 + (i % 2) * (bw + bg),
-				layout.panelInner.bottom - bh / 2 - Math.floor(i / 2) * (bh + bg),
-				bw,
-				bh,
-				scenariosKeys[i] + "title",
-				Color.Yellow600,
-				() => {
-					this.emit("scenario", scenariosKeys[i]);
-				}
+		let bh = bw / 2;
+		this.scenarioButtons = [];
+		Object.values(ScenarioKey).forEach((key: ScenarioKey, i: number) => {
+			let x = layout.panelInner.left + bw / 2 + (i % 2) * (bw + bg);
+			let y = layout.panelInner.centerY + bh / 2 - Math.floor(i / 2) * (bh + bg);
+			let w = bw;
+			let h = bh;
+			let text = key + "title";
+			let color = Color.Yellow600;
+
+			let button = new ScenarioButton(
+				this.scene,
+				x,
+				y,
+				w,
+				h,
+				text,
+				color,
+				chapters[key]
 			);
-		}
+			button.on(
+				"click",
+				() => {
+					this.emit("scenario", key);
+				},
+				this
+			);
+			this.add(button);
+			this.scenarioButtons.push(button);
+		});
 
 		// let cx = layout.panelInner.centerX;
 		// let cy = layout.panelInner.centerY;
@@ -77,5 +103,7 @@ export class HomePage extends Page {
 
 	update(time: number, delta: number) {
 		super.update(time, delta);
+
+		this.scenarioButtons.forEach((button) => button.update(time, delta));
 	}
 }

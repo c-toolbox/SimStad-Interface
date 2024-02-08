@@ -6,6 +6,7 @@ import { VERSION, IDLE_TIME, IDLE_FADE, SCALE } from "@/utils/constants";
 import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
 import { AttractionView } from "@/components/attraction/AttractionView";
+import { getLocalStorage, setLocalStorage } from "@/utils/functions";
 
 export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
@@ -58,9 +59,12 @@ export class UIScene extends BaseScene {
 			},
 			this
 		);
-		this.infoWindow.on("guide", (value: boolean) =>
-			this.events.emit("guide", value)
-		);
+		this.infoWindow.on("guide", (value: boolean) => {
+			this.events.emit("guide", value);
+			setLocalStorage("guide", value);
+		});
+
+		this.infoWindow.setGuideMode(getLocalStorage("guide", false));
 
 		/* Toolbar */
 

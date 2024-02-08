@@ -124,7 +124,7 @@ export class ScenarioPage extends Page {
 		const sl = layout.scenarioControls;
 		const sx = sl.centerX;
 		const sy = sl.top;
-		const sw = sl.width;
+		const sw = 0.5 * sl.width;
 		const sh = sl.height / 2;
 
 		this.layerSlider = new TestSlider(scene, sx, sy, sw, sh, "Slider", 10);

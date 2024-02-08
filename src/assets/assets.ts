@@ -23,6 +23,7 @@ let images: Image[] = [
 	image("icons/lightbulb.png", "lightbulb"),
 	image("icons/list.png", "list"),
 	image("icons/map.png", "map"),
+	image("icons/marker.png", "marker"),
 	image("icons/projector.png", "projector"),
 	image("icons/server.png", "server"),
 	image("icons/sun.png", "sun"),

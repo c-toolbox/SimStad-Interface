@@ -33,7 +33,7 @@
                 "Legend2": "",
                 "Default": false,
                 "Idle": false,
-                "Filenames": "Nkpg/Noise_train",
+                "Filenames": "Nkpg/buller_eqvialent",
                 "LegendTitle": "Ljudnivå i decibel",
                 "LegendColors": [
                   {

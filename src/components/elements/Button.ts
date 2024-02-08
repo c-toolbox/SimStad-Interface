@@ -101,7 +101,6 @@ export class Button extends Phaser.GameObjects.Container {
 		localY: number,
 		event: Phaser.Types.Input.EventData
 	) {
-		console.log("onUp", this.blocked);
 		if (this.hold && !this.blocked) {
 			this.emit("click");
 		}

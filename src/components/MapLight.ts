@@ -6,11 +6,13 @@ import { colorToNumber } from "@/utils/functions";
 
 export class MapLight extends Button {
 	public scene: BaseScene;
+	public name: string;
 
 	private container: Phaser.GameObjects.Container;
 	private glow: Phaser.GameObjects.Image;
 	private background: Phaser.GameObjects.Ellipse;
 	private image: Phaser.GameObjects.Image;
+	private text: Phaser.GameObjects.Text;
 
 	public goalX: number;
 	public goalY: number;
@@ -18,9 +20,10 @@ export class MapLight extends Button {
 
 	private aliveValue: number;
 
-	constructor(scene: BaseScene, x: number, y: number) {
+	constructor(scene: BaseScene, x: number, y: number, name: string) {
 		super(scene, x, y);
 		this.scene = scene;
+		this.name = name;
 		this.goalX = x;
 		this.goalY = y;
 
@@ -52,6 +55,17 @@ export class MapLight extends Button {
 		this.image = this.scene.add.image(0, 0, "lightbulb");
 		this.image.setScale(size / this.image.width);
 		this.container.add(this.image);
+
+		this.text = this.scene.addText({
+			size: 16,
+			weight: 900,
+			color: "white",
+			text: name,
+		});
+		this.text.setOrigin(0.5, -0.5);
+		this.container.add(this.text);
+
+		/* Interactive */
 
 		this.background
 			.setInteractive({
