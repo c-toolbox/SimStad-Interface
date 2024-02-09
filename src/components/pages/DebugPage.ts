@@ -53,13 +53,13 @@ export class DebugPage extends Page {
 		this.addButton(x, y, w, h, "Add light", Color.Green700, () => {
 			this.socket.send({
 				type: "MapLightRequest",
-				Name: "something",
+				name: "something",
 				northing: (129411.4 + 134211.4) / 2,
 				easting: (6495015.262 + 6498915.262) / 2,
-				Height: 200.0,
-				Color: "#ffffff",
-				Typeofmessage: "add",
-				Enable: true,
+				height: 200.0,
+				color: "#ffffff",
+				typeofmessage: "add",
+				enable: true,
 			});
 		});
 
@@ -67,13 +67,13 @@ export class DebugPage extends Page {
 		this.addButton(x, y, w, h, "Remove light", Color.Red800, () => {
 			this.socket.send({
 				type: "MapLightRequest",
-				Name: "something",
+				name: "something",
 				northing: (129411.4 + 134211.4) / 2,
 				easting: (6495015.262 + 6498915.262) / 2,
-				Height: 200.0,
-				Color: "#ffffff",
-				Typeofmessage: "remove",
-				Enable: true,
+				height: 200.0,
+				color: "#ffffff",
+				typeofmessage: "delete",
+				enable: true,
 			});
 		});
 

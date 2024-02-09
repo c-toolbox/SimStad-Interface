@@ -38,9 +38,10 @@ image_groups = [
     fetch_images(["rasters/flood"]),
 ]
 datasets = [
-    read_csv("rasters/dataset_color.csv"),
-    read_csv("rasters/dataset_layers.csv"),
-    read_csv("rasters/dataset_flood.csv"),
+    # read_csv("rasters/dataset_color.csv"),
+    # read_csv("rasters/dataset_layers.csv"),
+    # read_csv("rasters/dataset_flood.csv"),
+    read_csv("rasters/dataset_temp.csv"),
 ]
 datasets = sum(datasets, [])
 
@@ -74,11 +75,10 @@ for args in datasets:
         print(f"Cannot find texture: '{texture}'")
 print()
 
-for name in image_map:
-    if name not in found_textures_names:
-        print(name)
-        found_textures[name] = image_map[name]
-        missing_textures.add(name)
+# for name in image_map:
+#     if name not in found_textures_names:
+#         found_textures[name] = image_map[name]
+#         missing_textures.add(name)
 
 # Create output folder
 if not os.path.exists("output"):
@@ -96,7 +96,7 @@ for key in folders:
 
 # Thumbnail image magic
 for name, path in found_textures.items():
-    print(f"Converting thumbnail for {name}...")
+    print(f"Generating thumbnail for {name}...")
     image = Image.open(path)
 
     # Setting the points for cropped image
@@ -123,7 +123,7 @@ for name, path in found_textures.items():
 
 # Map image magic
 for name, path in found_textures.items():
-    print(f"Converting map image for {name}...")
+    print(f"Generating map image for {name}...")
     image = Image.open(path)
 
     # Setting the points for cropped image

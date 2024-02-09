@@ -37,7 +37,7 @@ Orto_print_11,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=64
 Orto_print_12,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Starka_strak_nulage","Texture2D'/Game/Datasets/Nkpg/Starka_strak_nulage.Starka_strak_nulage'"
 Orto_print_13,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Starka_strak_2050","Texture2D'/Game/Datasets/Nkpg/Starka_strak_2050.Starka_strak_2050'"
 Orto_print_14,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Kommunkarta_dark","Texture2D'/Game/Datasets/Nkpg/Kommunkarta_dark.Kommunkarta_dark'"
-Orto_print_15,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Kollektiv_trafik","Texture2D'/Game/Datasets/Nkpg/Tillganglighet_kollektivtrafik.Tillganglighet_kollektivtrafik'"
+Orto_print_15,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Kollektiv_trafik","Texture2D'/Game/Datasets/Nkpg/Kollektivtrafik.Kollektivtrafik'"
 Orto_print_16,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Kommunkartan","Texture2D'/Game/Datasets/Nkpg/Kommunkartan.Kommunkartan'"
 Orto_print_17,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Solkartan","Texture2D'/Game/Datasets/Nkpg/Solkartan.Solkartan'"
 Orto_print_18,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Hillshade","Texture2D'/Game/Datasets/Nkpg/Hillshade.Hillshade'"
