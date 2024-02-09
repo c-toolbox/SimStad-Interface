@@ -53,6 +53,44 @@
 					]
 				},
 				{
+					"Title": "Workplace density",
+					"Text1": "Here you can see where there are most workplaces in Norrköping today. As you can see, it is in central Norrköping and at Vrinnevisjukhuset that there is the densest number of workplaces. But if we look ahead to 2050, we can see that the party workplaces can be found in Butängen, on Sylten and in Norra Himmelstalund.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "arbetsplatstathet",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_nulage",
+					"LegendTitle": "Number of people within 250m",
+					"LegendColors": [
+						{ "color": "#F8FD35", "text": "1 – 232" },
+						{ "color": "#FBD708", "text": "232 – 630" },
+						{ "color": "#FC9F01", "text": "630 – 1189" },
+						{ "color": "#F94804", "text": "1189 – 1775" },
+						{ "color": "#D51B1C", "text": "1775 – 2438" },
+						{ "color": "#8F110E", "text": "2438 – 5739" }
+					]
+				},
+				{
+					"Title": "Everyday life index",
+					"Text1": "Voluptate irure nulla excepteur labore non ullamco laborum incididunt commodo sint aliquip eu fugiat velit. Pariatur ad magna sint tempor et eu ex officia ex consequat consectetur consectetur. Officia dolor occaecat sit nisi deserunt. Consequat commodo laborum quis adipisicing est nostrud ut deserunt velit fugiat. Non veniam officia nisi id nulla qui in dolore anim do ut qui nisi. Sit tempor adipisicing adipisicing do fugiat quis amet est Lorem consectetur veniam commodo.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "vardagslivsindex",
+					"Legend2": "",
+					"Default": false,
+					"Idle": true,
+					"Filenames": "Nkpg/vattenytor,Nkpg/Vardagslivsindex_nulage",
+					"LegendTitle": "Lampor",
+					"LegendColors": [
+						{
+							"color": "#FFFF00",
+							"text": "Hitta på något"
+						}
+					]
+				},
+				{
 					"Title": "Lighting",
 					"Text1": "Did you know that there are around 28,000 lighting poles in the municipality of Norrköping?\nIn the municipality, all lighting poles are documented in a map. In order to update the map, the municipality sometimes needs to go out to measure where poles are or use drawings for new construction. With the help of the new AI technology developed within the SimStad project, an AI (artificial intelligence) can itself scan an area and classify different types of objects, which both makes the information more detailed and significantly easier to keep up to date.\nOn the model you can see where there are lighting poles and how large an area the light covers. For the municipality, this is important in order to be able to analyze where new lighting is needed in future planning and to be able to look after the existing lighting.",
 					"Text2": "",

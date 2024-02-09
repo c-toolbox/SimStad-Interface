@@ -228,6 +228,8 @@ export class ScenarioPage extends Page {
 		}
 
 		this.activateDataset(section.defaultLayer);
+
+		this.activateBlocks(section.legend);
 	}
 
 	activateDataset(layers: string) {
@@ -238,5 +240,19 @@ export class ScenarioPage extends Page {
 		this.layerButtons.forEach((button) => {
 			button.setHighlight(button.getData("layers") == layers);
 		});
+	}
+
+	activateBlocks(legend: string) {
+		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
+			method: "POST",
+			body: JSON.stringify({
+				task: "SimStad-" + legend,
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8",
+			},
+		})
+			.then((response) => response.json())
+			.then((json) => console.log(json));
 	}
 }

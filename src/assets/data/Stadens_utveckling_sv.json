@@ -18,19 +18,19 @@
                 "LegendColors": [
                   {
                     "color": "#e9cf87",
-                    "text": "Nyområde"
+                    "text": "Utvecklingsområde"
                   },
                   {
                     "color": "#e5b636",
-                    "text": "Nybygge"
+                    "text": "Nya kvarter"
                   },
                   {
                     "color": "#e75a23",
-                    "text": "Spår"
+                    "text": "Ostlänken"
                   },
                   {
                     "color": "#ad7aa9",
-                    "text": "Östlänken"
+                    "text": "Tunnel Ostlänken"
                   }
                 ]
               },

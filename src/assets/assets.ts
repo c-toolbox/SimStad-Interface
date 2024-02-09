@@ -31,6 +31,7 @@ let images: Image[] = [
 	image("icons/unreal.png", "unreal"),
 	image("icons/wifi.png", "wifi"),
 	image("icons/wifi-slash.png", "wifi-slash"),
+	image("icons/x.png", "x"),
 
 	image("chapters/crowd.png", "crowd"),
 	image("chapters/sunlight.png", "sunlight"),

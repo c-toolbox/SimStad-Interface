@@ -27,7 +27,7 @@ export class MapLight extends Button {
 		this.goalX = x;
 		this.goalY = y;
 
-		const size = 30;
+		const size = 60;
 
 		let maskGraphics = this.scene.make.graphics({}, false);
 		maskGraphics.fillStyle(Color.White);
@@ -49,7 +49,7 @@ export class MapLight extends Button {
 		this.glow.setScale((10 * size) / this.glow.width);
 		this.container.add(this.glow);
 
-		this.background = this.scene.add.ellipse(0, 0, size, size, Color.Black);
+		this.background = this.scene.add.ellipse(0, 0, size, size, Color.Stone100);
 		this.container.add(this.background);
 
 		this.image = this.scene.add.image(0, 0, "lightbulb");
@@ -63,6 +63,7 @@ export class MapLight extends Button {
 			text: name,
 		});
 		this.text.setOrigin(0.5, -0.5);
+		this.text.setVisible(false);
 		this.container.add(this.text);
 
 		/* Interactive */

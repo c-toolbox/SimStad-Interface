@@ -123,15 +123,15 @@ export class ScenarioManager {
 				const sectionEn = sectionsEn[i];
 
 				if (sectionSv.Buttons?.length != sectionEn.Buttons?.length) {
-					throw "Swedish and english buttons mismatch";
+					throw "Swedish and english buttons mismatch: " + scenarioKey;
 				}
 				if (
 					sectionSv.Slider?.Labels.length != sectionEn.Slider?.Labels.length
 				) {
-					throw "Swedish and english slider mismatch";
+					throw "Swedish and english slider mismatch: " + scenarioKey;
 				}
 				if (sectionSv.LegendColors.length != sectionEn.LegendColors.length) {
-					throw "Swedish and english legend mismatch";
+					throw "Swedish and english legend mismatch: " + scenarioKey;
 				}
 
 				// Make safe string

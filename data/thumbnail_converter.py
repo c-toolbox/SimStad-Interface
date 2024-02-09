@@ -29,6 +29,7 @@ folders = {
     "old": "Nkpg",
     "new": "Nkpg",
     "flood": "Flood",
+    "missing": "Missing",
 }
 image_groups = [
     fetch_images(["rasters/color"]),
@@ -49,11 +50,12 @@ for image_group in image_groups:
     for path in image_group:
         texture = path.split("/")[-1]
         texture = texture.split(".png")[0]
-        texture = re.sub("[^a-zA-Z0-9]", "_", texture)
+        texture = re.sub("[^a-zA-Z0-9-]", "_", texture)
         image_map[texture] = path
 
 found_textures = {}
-missing_textures = []
+found_textures_names = {}
+missing_textures = set()
 
 # Pair up textures with image paths
 for args in datasets:
@@ -67,10 +69,16 @@ for args in datasets:
         if name in found_textures:
             print(f"Duplicate name found: '{name}'")
         found_textures[name] = image_map[texture]
+        found_textures_names[texture] = name
     else:
         print(f"Cannot find texture: '{texture}'")
 print()
 
+for name in image_map:
+    if name not in found_textures_names:
+        print(name)
+        found_textures[name] = image_map[name]
+        missing_textures.add(name)
 
 # Create output folder
 if not os.path.exists("output"):
@@ -109,6 +117,8 @@ for name, path in found_textures.items():
         scaled_image = scaled_image.transpose(Image.ROTATE_90)
 
     folder = folders[path.split("/")[1]]
+    if name in missing_textures:
+        folder = "Missing"
     scaled_image.save(f"output/thumbnails/{folder}/{name}.png")
 
 # Map image magic
@@ -129,14 +139,17 @@ for name, path in found_textures.items():
         rotated_image = image.resize((new_height, new_width), Image.ANTIALIAS)
 
     folder = folders[path.split("/")[1]]
+    if name in missing_textures:
+        folder = "Missing"
     rotated_image.save(f"output/map/{folder}/{name}.png")
-
 
 # Write layers.json
 
 layers = []
 for name, path in found_textures.items():
     folder = folders[path.split("/")[1]]
+    if name in missing_textures:
+        folder = "Missing"
     layers.append(f"{folder}/{name}")
 
 with open("output/layers.json", "w") as f:

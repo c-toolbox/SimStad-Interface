@@ -13,19 +13,19 @@
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Nkpg/Hillshade,Nkpg/Extrem100",
+					"Filenames": "CleanColor/White,Nkpg/Extrem100",
 					"Buttons": [
 						{
 							"Title": "100-year flood",
-							"Layers": "Nkpg/Hillshade,Nkpg/Extrem100"
+							"Layers": "CleanColor/White,Nkpg/Extrem100"
 						},
 						{
 							"Title": "200-year flood",
-							"Layers": "Nkpg/Hillshade,Nkpg/Extrem200"
+							"Layers": "CleanColor/White,Nkpg/Extrem200"
 						},
 						{
 							"Title": "500-year flood",
-							"Layers": "Nkpg/Hillshade,Nkpg/Extrem500"
+							"Layers": "CleanColor/White,Nkpg/Extrem500"
 						}
 					],
 					"LegendTitle": "Water rise",

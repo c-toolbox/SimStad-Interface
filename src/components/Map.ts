@@ -151,6 +151,8 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.layers.forEach((layer) => {
 			let dx = ((layer.active ? delta : -delta) / 1000) * 5;
+			if (layer.texture.includes("Flood")) dx = 1;
+
 			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
 			layer.image.setVisible(layer.fade > 0);
 			let ease = Phaser.Math.Easing.Sine.Out;
@@ -177,15 +179,15 @@ export class Map extends Phaser.GameObjects.Container {
 			this.removeLayer(texture);
 		});
 
-		// if (addedTextures.length > 0) {
-		// 	textures.forEach((texture) => {
-		// 		let layer = this.layers.find((layer) => layer.texture == texture);
-		// 		if (layer) {
-		// 			this.layerContainer.bringToTop(layer.image);
-		// 			console.log("top", layer.image);
-		// 		}
-		// 	});
-		// }
+		if (addedTextures.length > 0) {
+			textures.forEach((texture) => {
+				let layer = this.layers.find((layer) => layer.texture == texture);
+				if (layer) {
+					this.layerContainer.bringToTop(layer.image);
+					console.log("top", layer.image);
+				}
+			});
+		}
 
 		// removedTextures.forEach((texture) => {
 		// 	let layer = this.layers.find((layer) => layer.texture == texture);
@@ -244,7 +246,7 @@ export class Map extends Phaser.GameObjects.Container {
 		const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 		const color = lamp.color;
 
-		this.socket.sendMapLight(lamp.name, x, y, 400, color, method, true);
+		this.socket.sendMapLight(lamp.name, x, y, 150, color, method, true);
 	}
 
 	reset() {

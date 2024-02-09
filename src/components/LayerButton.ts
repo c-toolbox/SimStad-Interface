@@ -102,6 +102,20 @@ export class LayerButton extends Button {
 		this.orderText.setOrigin(0.5);
 		this.add(this.orderText);
 
+		if (texture.includes("Missing")) {
+			let ms = 0.2 * this.width;
+			let mx = width / 2 - 0.6 * ms;
+			let my = -height / 2 + 0.6 * ms;
+			let circle = scene.add.ellipse(mx, my, ms, ms, 0, 0.75);
+			this.add(circle);
+			let missing = scene.add.image(mx, my, "x");
+			missing.setTint(Color.Red500);
+			missing.setScale(0.6 * ms / missing.width);
+			this.add(missing);
+		}
+
+		/* Interactions */
+
 		this.bindInteractive(this.background);
 		this.background.on("wheel", (...args: any) => this.emit("wheel", ...args));
 		this.background.on("dragstart", (...args: any) =>

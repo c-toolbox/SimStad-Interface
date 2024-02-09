@@ -53,7 +53,8 @@ export class HomePage extends Page {
 		this.scenarioButtons = [];
 		Object.values(ScenarioKey).forEach((key: ScenarioKey, i: number) => {
 			let x = layout.panelInner.left + bw / 2 + (i % 2) * (bw + bg);
-			let y = layout.panelInner.centerY + bh / 2 - Math.floor(i / 2) * (bh + bg);
+			let y =
+				layout.panelInner.centerY + bh / 2 - Math.floor(i / 2) * (bh + bg);
 			let w = bw;
 			let h = bh;
 			let text = key + "title";

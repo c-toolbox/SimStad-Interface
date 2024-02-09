@@ -53,6 +53,44 @@
 					]
 				},
 				{
+					"Title": "Arbetsplatstäthet",
+					"Text1": "Här kan du se var det finns mest arbetsplatser i Norrköping idag. Som ni ser är det i centrala Norrköping och på Vrinnevisjukhuset är det är tätast med arbetsplatser. Men blickar vi framåt 2050 kan vi se att det fest arbetsplatser återfinns i Butängen, på Sylten och i Norra Himmelstalund.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "arbetsplatstathet",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Arbetsplatstathet_nulage",
+					"LegendTitle": "Antal personer inom 250m",
+					"LegendColors": [
+						{ "color": "#F8FD35", "text": "1 – 232" },
+						{ "color": "#FBD708", "text": "232 – 630" },
+						{ "color": "#FC9F01", "text": "630 – 1189" },
+						{ "color": "#F94804", "text": "1189 – 1775" },
+						{ "color": "#D51B1C", "text": "1775 – 2438" },
+						{ "color": "#8F110E", "text": "2438 – 5739" }
+					]
+				},
+				{
+					"Title": "Vardagslivsindex",
+					"Text1": "Voluptate irure nulla excepteur labore non ullamco laborum incididunt commodo sint aliquip eu fugiat velit. Pariatur ad magna sint tempor et eu ex officia ex consequat consectetur consectetur. Officia dolor occaecat sit nisi deserunt. Consequat commodo laborum quis adipisicing est nostrud ut deserunt velit fugiat. Non veniam officia nisi id nulla qui in dolore anim do ut qui nisi. Sit tempor adipisicing adipisicing do fugiat quis amet est Lorem consectetur veniam commodo.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "vardagslivsindex",
+					"Legend2": "",
+					"Default": false,
+					"Idle": true,
+					"Filenames": "Nkpg/vattenytor,Nkpg/Vardagslivsindex_nulage",
+					"LegendTitle": "Lampor",
+					"LegendColors": [
+						{
+							"color": "#FFFF00",
+							"text": "Hitta på något"
+						}
+					]
+				},
+				{
 					"Title": "Belysning",
 					"Text1": "Visste du att det finns omkring 28 000 belysningsstolpar i Norrköpings kommun? På kommunen finns alla belysningsstolpar dokumenterade i en karta.\nPå modellen ser du var det finns belysningsstolpar och hur stor yta som ljuset täcker in. För kommunen är detta viktigt för att i planeringen framåt kunna analysera var ny belysning behövs och kunna sköta om den befintliga belysningen.",
 					"Text2": "",

@@ -18,19 +18,19 @@
                 "LegendColors": [
                   {
                     "color": "#e9cf87",
-                    "text": "New area"
+                    "text": "Development area"
                   },
                   {
                     "color": "#e5b636",
-                    "text": "Settlement"
+                    "text": "New quarters"
                   },
                   {
                     "color": "#e75a23",
-                    "text": "Track"
+                    "text": "The east link"
                   },
                   {
                     "color": "#ad7aa9",
-                    "text": "The East Link"
+                    "text": "The east link tunnel"
                   }
                 ]
               },

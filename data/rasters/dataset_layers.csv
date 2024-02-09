@@ -55,3 +55,8 @@ Orto_print_29,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=64
 Orto_print_30,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Belysning","Texture2D'/Game/Datasets/Nkpg/Belysning.Belysning'"
 Orto_print_31,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Arbetsplatstathet_nulage","Texture2D'/Game/Datasets/Nkpg/Arbetsplatstathet_nulage.Arbetsplatstathet_nulage'"
 Orto_print_32,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Arbetsplatstathet_2050","Texture2D'/Game/Datasets/Nkpg/Arbetsplatstathet_2050.Arbetsplatstathet_2050'"
+Orto_print_33,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Buller_V2","Texture2D'/Game/Datasets/Nkpg/Buller_V2.Buller_V2'"
+Orto_print_34,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Norrkoping_1959","Texture2D'/Game/Datasets/Nkpg/Norrkoping_1959-min.Norrkoping_1959-min'"
+Orto_print_35,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Norrkoping_1974","Texture2D'/Game/Datasets/Nkpg/Norrkoping_1974-min.Norrkoping_1974-min'"
+Orto_print_36,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","Ortho20230921","Texture2D'/Game/Datasets/Nkpg/Orto20230921-min.Orto20230921-min'"
+Orto_print_37,"(Max=(X=134436.815000,Y=6498924.439000),Min=(X=129316.815000,Y=6495084.439000))","ekonomiskakartan_1947","Texture2D'/Game/Datasets/Nkpg/ekonomiskakartan_1947-min.ekonomiskakartan_1947-min'"
