@@ -105,14 +105,14 @@ export class ScenarioManager {
 
 			// Not sure why it even is an array
 			if (scenariosSv[scenarioKey].Sections.length != 1) {
-				throw "Not supported";
+				console.error("Not supported");
 			}
 
 			// Fetch section lists
 			const sectionsSv = scenariosSv[scenarioKey].Sections[0].SectionObject;
 			const sectionsEn = scenariosEn[scenarioKey].Sections[0].SectionObject;
 			if (sectionsSv.length != sectionsEn.length) {
-				throw "Swedish and english scenario sections not matching";
+				console.error("Swedish and english scenario sections not matching");
 			}
 
 			this.sections[scenarioKey] = [];
@@ -123,15 +123,20 @@ export class ScenarioManager {
 				const sectionEn = sectionsEn[i];
 
 				if (sectionSv.Buttons?.length != sectionEn.Buttons?.length) {
-					throw "Swedish and english buttons mismatch: " + scenarioKey;
+					console.error("Swedish and english buttons mismatch: " + scenarioKey);
 				}
 				if (
 					sectionSv.Slider?.Labels.length != sectionEn.Slider?.Labels.length
 				) {
-					throw "Swedish and english slider mismatch: " + scenarioKey;
+					console.error("Swedish and english slider mismatch: " + scenarioKey);
 				}
 				if (sectionSv.LegendColors.length != sectionEn.LegendColors.length) {
-					throw "Swedish and english legend mismatch: " + scenarioKey;
+					console.error("Swedish and english legend mismatch: " + scenarioKey);
+				}
+				if (sectionSv.Filenames != sectionEn.Filenames) {
+					console.error(
+						`Swedish and english filenames mismatch in '${scenarioKey}'\n- ${sectionSv.Filenames}\n- ${sectionEn.Filenames}`
+					);
 				}
 
 				// Make safe string

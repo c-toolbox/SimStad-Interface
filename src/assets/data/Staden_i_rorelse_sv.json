@@ -13,7 +13,7 @@
                     "Legend2": "",
                     "Default": true,
                     "Idle": true,
-                    "Filenames": "Nkpg/KOllektivTraffik,Nkpg/vattenytor",
+                    "Filenames": "Nkpg/Kommunkarta_dark,Nkpg/vattenytor,Nkpg/Tillganglighet_kollektivtrafik,Nkpg/Kollektiv_trafik",
                     "LegendTitle": "Typ av trafik",
                     "LegendColors": [
                         { "color": "#ebc34c", "text": "Expressbussar" },
@@ -33,7 +33,7 @@
                 "Legend2": "",
                 "Default": false,
                 "Idle": false,
-                "Filenames": "Nkpg/buller_eqvialent",
+                "Filenames": "Nkpg/Buller_V2",
                 "LegendTitle": "Ljudnivå i decibel",
                 "LegendColors": [
                   {

@@ -13,15 +13,15 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": true,
-					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Boendetathet_nulage",
+					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetathet_nulage",
 					"Buttons": [
 						{
 							"Title": "Today",
-							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Boendetathet_nulage"
+							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetathet_nulage"
 						},
 						{
 							"Title": "2050",
-							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Boendetathet_2050"
+							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetatahet_2050"
 						}
 					],
 					"LegendTitle": "Number of people within 250m",
@@ -61,7 +61,7 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/Arbetsplatstathet_nulage",
+					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Arbetsplatstathet_nulage",
 					"LegendTitle": "Number of people within 250m",
 					"LegendColors": [
 						{ "color": "#F8FD35", "text": "1 – 232" },

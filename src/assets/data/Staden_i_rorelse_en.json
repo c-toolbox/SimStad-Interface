@@ -13,7 +13,7 @@
                 "Legend2": "",
                 "Default": true,
                 "Idle": true,
-                "Filenames": "Nkpg/KOllektivTraffik,Nkpg/vattenytor",
+                "Filenames": "Nkpg/Kommunkarta_dark,Nkpg/vattenytor,Nkpg/Tillganglighet_kollektivtrafik,Nkpg/Kollektiv_trafik",
                 "LegendTitle": "Type of traffic",
                 "LegendColors": [
                   {
@@ -51,7 +51,7 @@
                 "Legend2": "",
                 "Default": false,
                 "Idle": false,
-                "Filenames": "Nkpg/Noise_train",
+                "Filenames": "Nkpg/Buller_V2",
                 "LegendTitle": "Sound level in decibels",
                 "LegendColors": [
                   {
