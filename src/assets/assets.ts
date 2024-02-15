@@ -38,6 +38,8 @@ let images: Image[] = [
 	image("chapters/umbrella.png", "umbrella"),
 	image("chapters/tram.png", "tram"),
 	image("chapters/cranes.png", "cranes"),
+	image("chapters/history.png", "history"),
+	image("chapters/ai.png", "ai"),
 
 	image("legends/vislab-stadstvilling.jpg", "legend_default"),
 ];

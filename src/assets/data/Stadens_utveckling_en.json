@@ -1,102 +1,194 @@
 {
-    "Title": "The development of the city",
-    "Sections": [
-        {
-            "Label1": "",
-            "SectionObject": [
-              {
-                "Title": "Urban development areas",
-                "Text1": "This area the areas where more extensive urban development is planned or implemented now in Norrköping. Did you know that there will be around 3,000 new homes in the Inner Harbour? Or that the whole of Butängen will be converted into a part of the inner city in connection with the construction of the Ostlänken high-speed railway?/nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western districts are growing.",
-                "Text2": "",
-                "Datasource": "",
-                "Legend1": "stadsutvecklingsomraden",
-                "Legend2": "",
-                "Default": true,
-                "Idle": false,
-                "Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Framtidens_norrkoping",
-                "LegendTitle": "Type of area",
-                "LegendColors": [
-                  {
-                    "color": "#e9cf87",
-                    "text": "Development area"
-                  },
-                  {
-                    "color": "#e5b636",
-                    "text": "New quarters"
-                  },
-                  {
-                    "color": "#e75a23",
-                    "text": "The east link"
-                  },
-                  {
-                    "color": "#ad7aa9",
-                    "text": "The east link tunnel"
-                  },
-                  {
-                    "color": "#c0c0c0",
-                    "text": "Johannisborgsförbindelsen"
-                  }
-                ]
-              },
-              {
-                "Title": "Year of construction",
-                "Text1": "By looking at the year of construction, we can see how the city has developed over time and where new construction has been added in recent years./nNorrköping was booming around the turn of the last century. The textile industry grew and so did the city. However, the textile crisis hit in the middle of the 20th century, and production in the central industrial area gradually declined./nDespite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make way for new, more modern ones. While the demolitions continued, the city stagnated and the need for new housing quickly diminished. This led to many demolished plots and blocks that were not developed. Only around the turn of the last millennium did these gaps gradually begin to be filled with new housing, workplaces, restaurants, commerce, etc.",
-                "Text2": "",
-                "Datasource": "",
-                "Legend1": "byggnadsar",
-                "Legend2": "",
-                "Default": false,
-                "Idle": true,
-                "Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Byggnadsar",
-                "LegendTitle": "Period",
-                "LegendColors": [
-                  {
-                    "color": "#440154",
-                    "text": "<1800"
-                  },
-                  {
-                    "color": "#482576",
-                    "text": "1800 – 1850"
-                  },
-                  {
-                    "color": "#414387",
-                    "text": "1850 – 1900"
-                  },
-                  {
-                    "color": "#345F8D",
-                    "text": "1900 – 1920"
-                  },
-                  {
-                    "color": "#2A788E",
-                    "text": "1920 – 1940"
-                  },
-                  {
-                    "color": "#21908D",
-                    "text": "1940 – 1960"
-                  },
-                  {
-                    "color": "#23A884",
-                    "text": "1960 – 1980"
-                  },
-                  {
-                    "color": "#43BF70",
-                    "text": "1980 – 2000"
-                  },
-                  {
-                    "color": "#7AD151",
-                    "text": "2000 – 2010"
-                  },
-                  {
-                    "color": "#BCDF27",
-                    "text": "2010 – 2020"
-                  },
-                  {
-                    "color": "#FDE725",
-                    "text": "2020 – 2023"
-                  }
-                ]
-              }
-            ]
-        }
-    ]
+	"Title": "The development of the city",
+	"Sections": [
+		{
+			"Label1": "",
+			"SectionObject": [
+				{
+					"Title": "Urban development areas",
+					"Text1": "This area the areas where more extensive urban development is planned or implemented now in Norrköping. Did you know that there will be around 3,000 new homes in the Inner Harbour? Or that the whole of Butängen will be converted into a part of the inner city in connection with the construction of the Ostlänken high-speed railway?/nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western districts are growing.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "stadsutvecklingsomraden",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Framtidens_norrkoping",
+					"LegendTitle": "Type of area",
+					"LegendColors": [
+						{
+							"color": "#e9cf87",
+							"text": "Development area"
+						},
+						{
+							"color": "#e5b636",
+							"text": "New quarters"
+						},
+						{
+							"color": "#e75a23",
+							"text": "The east link"
+						},
+						{
+							"color": "#ad7aa9",
+							"text": "The east link tunnel"
+						},
+						{
+							"color": "#c0c0c0",
+							"text": "New road"
+						}
+					]
+				},
+				{
+					"Title": "Year of construction",
+					"Text1": "By looking at the year of construction, we can see how the city has developed over time and where new construction has been added in recent years./nNorrköping was booming around the turn of the last century. The textile industry grew and so did the city. However, the textile crisis hit in the middle of the 20th century, and production in the central industrial area gradually declined./nDespite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make way for new, more modern ones. While the demolitions continued, the city stagnated and the need for new housing quickly diminished. This led to many demolished plots and blocks that were not developed. Only around the turn of the last millennium did these gaps gradually begin to be filled with new housing, workplaces, restaurants, commerce, etc.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "byggnadsar",
+					"Legend2": "",
+					"Default": false,
+					"Idle": true,
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Byggnadsar",
+					"LegendTitle": "Period",
+					"LegendColors": [
+						{
+							"color": "#440154",
+							"text": "<1800"
+						},
+						{
+							"color": "#482576",
+							"text": "1800 – 1850"
+						},
+						{
+							"color": "#414387",
+							"text": "1850 – 1900"
+						},
+						{
+							"color": "#345F8D",
+							"text": "1900 – 1920"
+						},
+						{
+							"color": "#2A788E",
+							"text": "1920 – 1940"
+						},
+						{
+							"color": "#21908D",
+							"text": "1940 – 1960"
+						},
+						{
+							"color": "#23A884",
+							"text": "1960 – 1980"
+						},
+						{
+							"color": "#43BF70",
+							"text": "1980 – 2000"
+						},
+						{
+							"color": "#7AD151",
+							"text": "2000 – 2010"
+						},
+						{
+							"color": "#BCDF27",
+							"text": "2010 – 2020"
+						},
+						{
+							"color": "#FDE725",
+							"text": "2020 – 2023"
+						}
+					]
+				},
+				{
+					"Title": "Stadstyper",
+					"Text1": "Veniam adipisicing do in occaecat ad aliqua. Fugiat aliqua aliquip nisi est mollit. Ex nisi laboris minim irure qui irure occaecat magna consequat in ipsum id ut. Et veniam laboris mollit eu eu. Tempor veniam ut tempor deserunt ullamco.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "stadstyper",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Stadskaraktar_V2,Nkpg/Vattenytor,Nkpg/Vagnat",
+					"LegendTitle": "Stadstyper",
+					"LegendColors": [
+						{
+							"color": "#c90fc3",
+							"text": "Rutnätsstaden"
+						},
+						{
+							"color": "#d231a3",
+							"text": "Egnahem"
+						},
+						{
+							"color": "#db5482",
+							"text": "Trädgårdsstaden"
+						},
+						{
+							"color": "#e47662",
+							"text": "Funktionalism"
+						},
+						{
+							"color": "#ed9841",
+							"text": "Modernism"
+						},
+						{
+							"color": "#f6bb20",
+							"text": "Miljonprogram"
+						},
+						{
+							"color": "#ffdd00",
+							"text": "1970-tal"
+						},
+						{
+							"color": "#bdd605",
+							"text": "1980-tal"
+						},
+						{
+							"color": "#7cd009",
+							"text": "1990-tal"
+						},
+						{
+							"color": "#3ac90e",
+							"text": "2000-tal"
+						},
+						{
+							"color": "#2563eb",
+							"text": "Blandad bebyggelse"
+						},
+						{
+							"color": "#475569",
+							"text": "Verksamhet"
+						},
+						{
+							"color": "#0ea5e9",
+							"text": "Villastad"
+						}
+					]
+				},
+				{
+					"Title": "Kulturminnen",
+					"Text1": "Aliquip anim minim ad mollit in irure magna in. Occaecat aliqua nulla ea quis anim mollit consectetur ullamco amet aliquip id. Non non adipisicing veniam ea. Lorem consequat ut occaecat irure consectetur ea id proident in. Ea sit aliqua minim commodo laborum ea et labore commodo ut. Exercitation deserunt mollit Lorem cupidatat velit mollit aliquip dolore sunt.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "kulturminnen",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Kulturhistorisktvardefulla_byggnader,Nkpg/Vattenytor",
+					"LegendTitle": "Klasser",
+					"LegendColors": [
+						{
+							"color": "#d7191c",
+							"text": "Byggnadsminne"
+						},
+						{
+							"color": "#ff8000",
+							"text": "Klass 1"
+						},
+						{
+							"color": "#ffb800",
+							"text": "Klass 2"
+						}
+					]
+				}
+			]
+		}
+	]
 }

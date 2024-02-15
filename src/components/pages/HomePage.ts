@@ -40,21 +40,23 @@ export class HomePage extends Page {
 		/* Scenario buttons */
 
 		const chapters: { [key in ScenarioKey]: string } = {
-			rorelse: "tram",
-			klimatet: "umbrella",
 			sammansattning: "crowd",
 			utveckling: "cranes",
+			rorelse: "tram",
+			klimatet: "umbrella",
+			ovan: "history",
+			ai: "ai",
 			// "sunlight"
 		};
 
 		let bg = 32;
-		let bw = (layout.panelInner.width - bg) / 2;
+		let bw = (layout.panelInner.width - bg) / 2 - bg;
 		let bh = bw / 2;
 		this.scenarioButtons = [];
 		Object.values(ScenarioKey).forEach((key: ScenarioKey, i: number) => {
 			let x = layout.panelInner.left + bw / 2 + (i % 2) * (bw + bg);
 			let y =
-				layout.panelInner.centerY + bh / 2 - Math.floor(i / 2) * (bh + bg);
+				layout.panelInner.centerY - bh - bg + Math.floor(i / 2) * (bh + bg);
 			let w = bw;
 			let h = bh;
 			let text = key + "title";

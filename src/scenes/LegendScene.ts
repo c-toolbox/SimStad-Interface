@@ -1,8 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
-// import * as scenarioData from "@/assets/data/scenarios.json";
-// import * as scenarioDataEn from "@/assets/data/scenarios-en.json";
 import * as dataStadenIRorelse from "@/assets/data/Staden_i_rorelse_sv.json";
 import * as dataStadenOchKlimatet from "@/assets/data/Staden_och_klimatet_sv.json";
 import * as dataStadensSammansattning from "@/assets/data/Stadens_sammansattning_sv.json";
@@ -12,7 +10,6 @@ import {
 	colorToNumber,
 	interpolateColor,
 } from "@/utils/functions";
-// import { layoutManager } from "@/utils/LayoutManager";
 
 const screenWidth = 1920;
 const screenHeight = 1080;

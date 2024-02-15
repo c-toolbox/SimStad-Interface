@@ -14,41 +14,27 @@
 					"Default": true,
 					"Idle": true,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetathet_nulage",
-					"Buttons": [
-						{
-							"Title": "Today",
-							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetathet_nulage"
-						},
-						{
-							"Title": "2050",
-							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetatahet_2050"
-						}
-					],
 					"LegendTitle": "Number of people within 250m",
 					"LegendColors": [
 						{
 							"color": "#F8FD35",
-							"text": "1 – 333"
+							"text": "1 – 300"
 						},
 						{
 							"color": "#FBD708",
-							"text": "333 – 689"
+							"text": "300 – 700"
 						},
 						{
 							"color": "#FC9F01",
-							"text": "689 – 1210"
+							"text": "700 – 1200"
 						},
 						{
 							"color": "#F94804",
-							"text": "1210 – 1901"
+							"text": "1200 – 1900"
 						},
 						{
 							"color": "#D51B1C",
-							"text": "1901 – 2970"
-						},
-						{
-							"color": "#8F110E",
-							"text": "2970 – 4494"
+							"text": "1900 – 3000"
 						}
 					]
 				},
@@ -64,16 +50,30 @@
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
 					"LegendTitle": "Number of people within 250m",
 					"LegendColors": [
-						{ "color": "#F8FD35", "text": "1 – 232" },
-						{ "color": "#FBD708", "text": "232 – 630" },
-						{ "color": "#FC9F01", "text": "630 – 1189" },
-						{ "color": "#F94804", "text": "1189 – 1775" },
-						{ "color": "#D51B1C", "text": "1775 – 2438" },
-						{ "color": "#8F110E", "text": "2438 – 5739" }
+						{
+							"color": "#F8FD35",
+							"text": "1 – 230"
+						},
+						{
+							"color": "#FBD708",
+							"text": "230 – 630"
+						},
+						{
+							"color": "#FC9F01",
+							"text": "630 – 1200"
+						},
+						{
+							"color": "#F94804",
+							"text": "1200 – 1800"
+						},
+						{
+							"color": "#D51B1C",
+							"text": "1800 – 2400"
+						}
 					]
 				},
 				{
-					"Title": "Everyday life index",
+					"Title": "15-minute city",
 					"Text1": "Voluptate irure nulla excepteur labore non ullamco laborum incididunt commodo sint aliquip eu fugiat velit. Pariatur ad magna sint tempor et eu ex officia ex consequat consectetur consectetur. Officia dolor occaecat sit nisi deserunt. Consequat commodo laborum quis adipisicing est nostrud ut deserunt velit fugiat. Non veniam officia nisi id nulla qui in dolore anim do ut qui nisi. Sit tempor adipisicing adipisicing do fugiat quis amet est Lorem consectetur veniam commodo.",
 					"Text2": "",
 					"Datasource": "",
@@ -81,27 +81,38 @@
 					"Legend2": "",
 					"Default": false,
 					"Idle": true,
-					"Filenames": "Nkpg/Vattenytor,Nkpg/Vardagslivsindex_nulage",
-					"LegendTitle": "Lampor",
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vardagslivsindex_nulage",
+					"LegendTitle": "Everyday life index",
 					"LegendColors": [
 						{
-							"color": "#FFFF00",
-							"text": "Hitta på något"
+							"color": "#ea7879",
+							"text": "6,2 – 8,2"
+						},
+						{
+							"color": "#f8ac8d",
+							"text": "4,6 – 6,2"
+						},
+						{
+							"color": "#f4cda0",
+							"text": "3,5 – 4,6"
+						},
+						{
+							"color": "#dfd7ae",
+							"text": "2,7 – 3,5"
+						},
+						{
+							"color": "#cae4be",
+							"text": "1,9 – 2,7"
+						},
+						{
+							"color": "#a6d6c9",
+							"text": "0,9 – 1,9"
+						},
+						{
+							"color": "#73b1d1",
+							"text": "0,0 – 0,9"
 						}
 					]
-				},
-				{
-					"Title": "Lighting",
-					"Text1": "Did you know that there are around 28,000 lighting poles in the municipality of Norrköping?\nIn the municipality, all lighting poles are documented in a map. In order to update the map, the municipality sometimes needs to go out to measure where poles are or use drawings for new construction. With the help of the new AI technology developed within the SimStad project, an AI (artificial intelligence) can itself scan an area and classify different types of objects, which both makes the information more detailed and significantly easier to keep up to date.\nOn the model you can see where there are lighting poles and how large an area the light covers. For the municipality, this is important in order to be able to analyze where new lighting is needed in future planning and to be able to look after the existing lighting.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "belysning",
-					"Legend2": "",
-					"Default": false,
-					"Idle": true,
-					"Filenames": "Nkpg/Belysning",
-					"LegendTitle": "Lamps",
-					"LegendColors": [{ "color": "#FFFF00", "text": "Make something up" }]
 				}
 			]
 		}

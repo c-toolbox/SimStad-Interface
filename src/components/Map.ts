@@ -51,7 +51,7 @@ export class Map extends Phaser.GameObjects.Container {
 		this.map = scene.add.image(
 			layout.map.centerX,
 			layout.map.centerY,
-			"minimaps/Nkpg/Kommunkarta_dark"
+			"minimaps/Nkpg/Hillshade"
 		);
 		// this.map.angle = -90;
 		// this.map.setScale(layout.map.height / this.map.width);

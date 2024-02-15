@@ -1,0 +1,23 @@
+{
+	"Title": "Coming soon",
+	"Sections": [
+		{
+			"Label1": "",
+			"SectionObject": [
+				{
+					"Title": "AI",
+					"Text1": "Adipisicing ea incididunt duis aute in. Lorem culpa minim velit dolor sit qui est esse velit esse Lorem aliqua. Fugiat commodo velit occaecat quis do cillum esse eu esse ex nisi exercitation consectetur eu. Sint non nisi et ut sunt aliquip veniam adipisicing commodo cillum consectetur reprehenderit. Ipsum enim voluptate proident et id labore consectetur qui laborum anim eu nostrud ipsum. Sunt eiusmod enim irure est eiusmod nostrud velit cupidatat veniam quis.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "?????",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "Nkpg/Hillshade",
+					"LegendTitle": "",
+					"LegendColors": []
+				}
+			]
+		}
+	]
+}

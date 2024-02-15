@@ -370,6 +370,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	/* Debug messages */
 
 	addDebug(text: any, color: string) {
+		return;
 		console.warn(text);
 		if (typeof text !== "string") text = JSON.stringify(text);
 

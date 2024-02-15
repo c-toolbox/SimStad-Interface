@@ -85,7 +85,7 @@ export class ScenarioPage extends Page {
 
 		/* Tabs */
 
-		const tn = 5;
+		const tn = 6;
 		const tl = layout.scenarioTabs;
 		const tw = (tl.width - (tn - 1) * layout.separation) / tn;
 		const ty = tl.centerY;
@@ -243,7 +243,7 @@ export class ScenarioPage extends Page {
 	}
 
 	activateBlocks(legend: string) {
-		fetch("172.19.98.10:443/rest/script/invoke/WebTask/start", {
+		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
 			method: "POST",
 			body: JSON.stringify({
 				task: "SimStad-" + legend,
@@ -254,5 +254,12 @@ export class ScenarioPage extends Page {
 		})
 			.then((response) => response.json())
 			.then((json) => console.log("Blocks:", json));
+	}
+
+	setVisible(value: boolean): this {
+		if (!value) {
+			this.activateBlocks("default");
+		}
+		return super.setVisible(value);
 	}
 }

@@ -1,11 +1,15 @@
 import * as dataStadenIRorelseSv from "@/assets/data/Staden_i_rorelse_sv.json";
-import * as dataStadenOchKlimatetSv from "@/assets/data/Staden_och_klimatet_sv.json";
-import * as dataStadensSammansattningSv from "@/assets/data/Stadens_sammansattning_sv.json";
-import * as dataStadensUtvecklingSv from "@/assets/data/Stadens_utveckling_sv.json";
 import * as dataStadenIRorelseEn from "@/assets/data/Staden_i_rorelse_en.json";
+import * as dataStadenOchKlimatetSv from "@/assets/data/Staden_och_klimatet_sv.json";
 import * as dataStadenOchKlimatetEn from "@/assets/data/Staden_och_klimatet_en.json";
+import * as dataStadensSammansattningSv from "@/assets/data/Stadens_sammansattning_sv.json";
 import * as dataStadensSammansattningEn from "@/assets/data/Stadens_sammansattning_en.json";
+import * as dataStadensUtvecklingSv from "@/assets/data/Stadens_utveckling_sv.json";
 import * as dataStadensUtvecklingEn from "@/assets/data/Stadens_utveckling_en.json";
+import * as dataBilderFranOvanSv from "@/assets/data/Bilder_fran_ovan_sv.json";
+import * as dataBilderFranOvanEn from "@/assets/data/Bilder_fran_ovan_en.json";
+import * as dataAISv from "@/assets/data/AI_sv.json";
+import * as dataAIEn from "@/assets/data/AI_en.json";
 import { languageManager } from "./LanguageManager";
 import { safeString } from "./functions";
 
@@ -46,6 +50,8 @@ export enum ScenarioKey {
 	klimatet = "klimatet",
 	sammansattning = "sammansattning",
 	utveckling = "utveckling",
+	ovan = "ovan",
+	ai = "ai",
 }
 
 export interface Section {
@@ -75,6 +81,8 @@ export class ScenarioManager {
 			[ScenarioKey.klimatet]: [],
 			[ScenarioKey.sammansattning]: [],
 			[ScenarioKey.utveckling]: [],
+			[ScenarioKey.ovan]: [],
+			[ScenarioKey.ai]: [],
 		};
 	}
 
@@ -89,12 +97,16 @@ export class ScenarioManager {
 			[ScenarioKey.klimatet]: dataStadenOchKlimatetSv,
 			[ScenarioKey.sammansattning]: dataStadensSammansattningSv,
 			[ScenarioKey.utveckling]: dataStadensUtvecklingSv,
+			[ScenarioKey.ovan]: dataBilderFranOvanSv,
+			[ScenarioKey.ai]: dataAISv,
 		};
 		const scenariosEn: { [key in ScenarioKey]: ScenarioData } = {
 			[ScenarioKey.rorelse]: dataStadenIRorelseEn,
 			[ScenarioKey.klimatet]: dataStadenOchKlimatetEn,
 			[ScenarioKey.sammansattning]: dataStadensSammansattningEn,
 			[ScenarioKey.utveckling]: dataStadensUtvecklingEn,
+			[ScenarioKey.ovan]: dataBilderFranOvanEn,
+			[ScenarioKey.ai]: dataAIEn,
 		};
 
 		// Iterate over all scenarios

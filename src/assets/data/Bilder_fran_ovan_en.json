@@ -1,0 +1,75 @@
+{
+	"Title": "Bilder från ovan",
+	"Sections": [
+		{
+			"Label1": "",
+			"SectionObject": [
+				{
+					"Title": "1879",
+					"Text1": "Aliqua non non consequat in nulla id laboris ex. Velit nulla laborum amet sit velit sit. Magna in et consequat id voluptate nostrud labore est excepteur. Laboris amet Lorem sunt enim commodo aliquip occaecat non esse pariatur cillum eiusmod adipisicing mollit.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "?????",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "Nkpg/Lundgren1879",
+					"LegendTitle": "",
+					"LegendColors": []
+				},
+				{
+					"Title": "1930",
+					"Text1": "Qui consequat pariatur proident duis amet qui ullamco consequat amet consectetur veniam adipisicing. Ipsum do qui excepteur dolor sunt minim enim. Mollit fugiat do fugiat irure. Anim ipsum nulla dolore incididunt ad pariatur.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "?????",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "Nkpg/1930_centrala_norrkoping",
+					"LegendTitle": "",
+					"LegendColors": []
+				},
+				{
+					"Title": "1959",
+					"Text1": "Quis nostrud aute magna adipisicing ea duis laborum eiusmod ipsum elit incididunt nulla. Cupidatat excepteur id qui quis voluptate adipisicing occaecat. Eiusmod nulla ad occaecat ex proident ut eiusmod duis eiusmod aute officia dolore excepteur ad. Eu voluptate proident elit sunt irure nisi ex.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "?????",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "Nkpg/Norrkoping_1959",
+					"LegendTitle": "",
+					"LegendColors": []
+				},
+				{
+					"Title": "1974",
+					"Text1": "Pariatur aute esse eu pariatur ipsum aliquip cupidatat reprehenderit aliqua esse laborum. Eu cupidatat qui laborum adipisicing. Dolore commodo amet cupidatat laboris sunt ad veniam. Non aute enim sit culpa ea dolor sunt in deserunt incididunt. In est eiusmod ullamco et et incididunt fugiat excepteur anim eiusmod nisi voluptate dolore reprehenderit. Ea mollit aliquip anim labore fugiat deserunt reprehenderit enim. Minim ad ipsum nulla laboris excepteur ut est fugiat adipisicing.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "?????",
+					"Legend2": "",
+					"Default": false,
+					"Idle": false,
+					"Filenames": "Nkpg/Norrkoping_1974",
+					"LegendTitle": "",
+					"LegendColors": []
+				},
+				{
+					"Title": "20230",
+					"Text1": "Ipsum deserunt proident ex veniam dolor ut laborum enim veniam. Proident est reprehenderit ea excepteur culpa adipisicing adipisicing esse. Ut fugiat esse culpa non nostrud cillum. Irure qui anim officia proident quis dolor dolor incididunt irure aliquip deserunt.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "?????",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Nkpg/Orto20230921",
+					"LegendTitle": "",
+					"LegendColors": []
+				}
+			]
+		}
+	]
+}
