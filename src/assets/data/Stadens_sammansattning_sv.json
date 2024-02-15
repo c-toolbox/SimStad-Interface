@@ -13,15 +13,15 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": true,
-					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetathet_nulage",
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetathet_nulage",
 					"Buttons": [
 						{
 							"Title": "Nuläge",
-							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetathet_nulage"
+							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetathet_nulage"
 						},
 						{
 							"Title": "2050",
-							"Layers": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Boendetatahet_2050"
+							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetatahet_2050"
 						}
 					],
 					"LegendTitle": "Antal personer inom 250m",
@@ -61,7 +61,7 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Arbetsplatstathet_nulage",
+					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
 					"LegendTitle": "Antal personer inom 250m",
 					"LegendColors": [
 						{ "color": "#F8FD35", "text": "1 – 232" },
@@ -81,7 +81,7 @@
 					"Legend2": "",
 					"Default": false,
 					"Idle": true,
-					"Filenames": "Nkpg/vattenytor,Nkpg/Vardagslivsindex_nulage",
+					"Filenames": "Nkpg/Vattenytor,Nkpg/Vardagslivsindex_nulage",
 					"LegendTitle": "Lampor",
 					"LegendColors": [
 						{

@@ -13,7 +13,7 @@
                 "Legend2": "",
                 "Default": true,
                 "Idle": false,
-                "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Framtidens_norrkoping",
+                "Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Framtidens_norrkoping",
                 "LegendTitle": "Type of area",
                 "LegendColors": [
                   {
@@ -31,6 +31,10 @@
                   {
                     "color": "#ad7aa9",
                     "text": "The east link tunnel"
+                  },
+                  {
+                    "color": "#c0c0c0",
+                    "text": "Johannisborgsförbindelsen"
                   }
                 ]
               },
@@ -43,7 +47,7 @@
                 "Legend2": "",
                 "Default": false,
                 "Idle": true,
-                "Filenames": "Nkpg/Backgrund_kommun_karta_dark,Nkpg/vattenytor,Nkpg/Byggnads_ar",
+                "Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Byggnadsar",
                 "LegendTitle": "Period",
                 "LegendColors": [
                   {
