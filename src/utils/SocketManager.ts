@@ -5,6 +5,7 @@ import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
 
 const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
+// const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152";
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
 const PING_TIMEOUT = 2000;
@@ -369,7 +370,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	/* Debug messages */
 
 	addDebug(text: any, color: string) {
-		console.log(text);
+		console.warn(text);
 		if (typeof text !== "string") text = JSON.stringify(text);
 
 		if (text.length > 100) {

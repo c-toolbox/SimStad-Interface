@@ -70,6 +70,7 @@ export class PreloadScene extends BaseScene {
 		this.addEvent(200, () => {
 			this.scene.start("GameScene");
 			this.scene.launch("UIScene");
+			// this.scene.start("LegendScene");
 		});
 	}
 }
