@@ -93,4 +93,8 @@ export class TextButton extends Button {
 			this.title.setText(key);
 		}
 	}
+
+	getText() {
+		return this.title.text;
+	}
 }

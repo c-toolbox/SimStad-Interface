@@ -253,6 +253,6 @@ export class ScenarioPage extends Page {
 			},
 		})
 			.then((response) => response.json())
-			.then((json) => console.log(json));
+			.then((json) => console.log("Blocks:", json));
 	}
 }

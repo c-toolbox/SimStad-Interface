@@ -51,8 +51,7 @@ export class Map extends Phaser.GameObjects.Container {
 		this.map = scene.add.image(
 			layout.map.centerX,
 			layout.map.centerY,
-			// "map/Nkpg/Backgrund_kommun_karta_dark"
-			"map/Nkpg/Backgrund_kommun_karta_dark"
+			"minimaps/Nkpg/Kommunkarta_dark"
 		);
 		// this.map.angle = -90;
 		// this.map.setScale(layout.map.height / this.map.width);
@@ -66,7 +65,7 @@ export class Map extends Phaser.GameObjects.Container {
 			let layer = scene.add.image(
 				layout.map.centerX,
 				layout.map.centerY,
-				"map/CleanColor/White"
+				"minimaps/Color/white"
 			);
 			this.layerContainer.add(layer);
 			layer.setVisible(false);
@@ -163,7 +162,7 @@ export class Map extends Phaser.GameObjects.Container {
 	setLayers(layerString: string) {
 		let textures = layerString.split(",");
 		textures = textures.filter((layer) => !!layer);
-		textures = textures.map((layer) => "map/" + layer);
+		textures = textures.map((layer) => "minimaps/" + layer);
 
 		let removedTextures = this.layers
 			.filter((layer) => layer.active && !textures.includes(layer.texture))
@@ -184,7 +183,6 @@ export class Map extends Phaser.GameObjects.Container {
 				let layer = this.layers.find((layer) => layer.texture == texture);
 				if (layer) {
 					this.layerContainer.bringToTop(layer.image);
-					console.log("top", layer.image);
 				}
 			});
 		}
@@ -207,6 +205,10 @@ export class Map extends Phaser.GameObjects.Container {
 			layer.texture = texture;
 			layer.image.setTexture(texture);
 			this.layerContainer.bringToTop(layer.image);
+
+			if (!this.scene.textures.exists(texture)) {
+				console.error("Missing texture:", texture);
+			}
 		}
 	}
 

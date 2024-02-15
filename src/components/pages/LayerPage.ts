@@ -9,16 +9,13 @@ import { ScrollBar } from "@/components/elements/ScrollBar";
 import { TextButton } from "@/components/TextButton";
 import { LayerButton } from "@/components/LayerButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
-import { LoadingIcon } from "@/components/LoadingIcon";
 
-import * as layerData from "@/assets/data/layers.json";
 import { languageManager } from "@/utils/LanguageManager";
+import { layerNames } from "@/assets/assets";
 
 export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
-	private loadingIcon: LoadingIcon;
-	private errorIcon: Phaser.GameObjects.Image;
 	private layerButtons: LayerButton[];
 
 	private activeLayers: string[];
@@ -42,14 +39,7 @@ export class LayerPage extends Page {
 		this.add(title);
 		languageManager.bind(title, "page_layer");
 
-		// let subtitle = scene.addText({
-		// 	x: title.x,
-		// 	y: title.y + 1.5 * 64,
-		// 	size: 28,
-		// 	color: "white",
-		// 	text: "All available data layers. Intended for advanced mode.",
-		// });
-		// this.add(subtitle);
+		/* Button */
 
 		let s = 20;
 		let w = 220;
@@ -61,6 +51,16 @@ export class LayerPage extends Page {
 			this.resetLayers();
 			this.emit("map", "");
 		});
+
+		let folders = [...new Set(layerNames.map((layer) => layer.split("/")[0]))];
+		folders.forEach((folder, index) => {
+			let x = layout.panelInner.left + w / 2 + (w + s) * index;
+			this.addButton(x, y, w, h, folder, Color.Cyan800, () => {
+				this.loadLayers(folder);
+			});
+		});
+
+		/* Scroll area */
 
 		let scrollTop = title.y + title.displayHeight + s;
 		let scrollBottom = layout.panelInner.bottom - h - s;
@@ -100,17 +100,7 @@ export class LayerPage extends Page {
 		this.sendToBack(areaBackground);
 		this.sendToBack(background);
 
-		this.loadingIcon = new LoadingIcon(scene, cx, cy, Color.Slate500, 60);
-		this.loadingIcon.setVisible(false);
-		this.add(this.loadingIcon);
-
-		this.errorIcon = scene.add.image(cx, cy, "wifi-slash");
-		this.errorIcon.setScale(((256 / 201) * 120) / this.errorIcon.width);
-		this.errorIcon.setTint(Color.Slate800);
-		this.errorIcon.setVisible(false);
-		this.add(this.errorIcon);
-
-		this.loadLayers(layerData);
+		this.loadLayers("Nkpg");
 	}
 
 	update(time: number, delta: number) {
@@ -118,7 +108,6 @@ export class LayerPage extends Page {
 
 		this.scrollArea.update(time, delta);
 		this.scrollBar.set(this.scrollArea.getScroll());
-		this.loadingIcon.update(time, delta);
 
 		this.layerButtons.forEach((button) => {
 			button.update(time, delta);
@@ -129,30 +118,39 @@ export class LayerPage extends Page {
 		return super.setVisible(value);
 	}
 
-	clearLayer() {
+	clearLayers() {
 		this.scrollArea.clear();
 		this.layerButtons = [];
-		this.loadingIcon.setVisible(true);
 	}
 
-	loadLayers(layerData: { layers: string[] }) {
-		let i = 0;
-		let m = 6;
+	loadLayers(filter = "") {
+		this.clearLayers();
 
+		this.buttons.forEach((button) => {
+			button.setHighlight(button.getText() == filter);
+		});
+
+		let m = 6;
 		let s = 20;
 		let w = (this.scrollArea.width - (m + 1) * s) / m;
 		let h = w;
 		let x = w / 2 + s;
 		let y = s + h / 2;
 
-		// layerData.layers.sort();
+		let shownLayers = layerNames.filter((layer) => layer.includes(filter));
 
-		layerData.layers.forEach((layer: string) => {
+		shownLayers.forEach((layer: string) => {
 			let button = new LayerButton(this.scene, x, y, w, h, layer);
 			button.setDraggable();
 			this.add(button);
 			this.layerButtons.push(button);
 			this.scrollArea.apply(button);
+
+			let activeIndex = this.activeLayers.indexOf(layer);
+			if (activeIndex != -1) {
+				button.setSelected(true);
+				button.setOrder(activeIndex + 1);
+			}
 
 			button.on("click", () => {
 				if (!button.selected && this.activeLayers.length >= 10) {
@@ -179,7 +177,6 @@ export class LayerPage extends Page {
 			}
 		});
 
-		this.loadingIcon.setVisible(false);
 		this.buttons.forEach((button) => this.bringToTop(button));
 	}
 

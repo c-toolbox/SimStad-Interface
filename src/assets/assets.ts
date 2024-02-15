@@ -53,13 +53,16 @@ for (let path in thumbnailImageGlob) {
 }
 
 /* Load all map images */
-const mapImageGlob = import.meta.glob("./images/map/*/*.png", {
+const minimapImageGlob = import.meta.glob("./images/minimaps/*/*.png", {
 	as: "url",
 	eager: true,
 });
-for (let path in mapImageGlob) {
+const layerNames: string[] = [];
+for (let path in minimapImageGlob) {
 	let file = path.replace("./images/", "").replace(".png", "");
 	images.push(image(`${file}.png`, file));
+
+	layerNames.push(file.replace("minimaps/", ""));
 }
 
 /* Spritesheets */
@@ -82,7 +85,7 @@ await loadFont("Lato-Regular", "Lato-Regular");
 await loadFont("Lato-Thin", "Lato-Thin");
 await loadFont("Lato-ThinItalic", "Lato-ThinItalic");
 
-export { images, spritesheets, audios };
+export { images, spritesheets, audios, layerNames };
 
 export const iconSizes: { [key: string]: { width: number; height: number } } = {
 	"arrow-left": { width: 141, height: 120 },
