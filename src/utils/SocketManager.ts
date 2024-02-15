@@ -87,6 +87,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	send(data: object) {
+		return;
 		if (this.isConnectedToSocket) {
 			this.socket.send(JSON.stringify(data));
 			this.addDebug(data, ColorStr.Blue600);

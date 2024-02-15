@@ -1,5 +1,5 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import _suntimes from "@/assets/data/norrköping_suntimes.json";
+import _suntimes from "@/data/norrköping_suntimes.json";
 import { interpolateColor } from "@/utils/functions";
 import { Color, ColorStr } from "@/utils/colors";
 const suntimes = _suntimes as { [date: string]: number[] };

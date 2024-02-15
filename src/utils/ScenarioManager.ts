@@ -1,15 +1,15 @@
-import * as dataStadenIRorelseSv from "@/assets/data/Staden_i_rorelse_sv.json";
-import * as dataStadenIRorelseEn from "@/assets/data/Staden_i_rorelse_en.json";
-import * as dataStadenOchKlimatetSv from "@/assets/data/Staden_och_klimatet_sv.json";
-import * as dataStadenOchKlimatetEn from "@/assets/data/Staden_och_klimatet_en.json";
-import * as dataStadensSammansattningSv from "@/assets/data/Stadens_sammansattning_sv.json";
-import * as dataStadensSammansattningEn from "@/assets/data/Stadens_sammansattning_en.json";
-import * as dataStadensUtvecklingSv from "@/assets/data/Stadens_utveckling_sv.json";
-import * as dataStadensUtvecklingEn from "@/assets/data/Stadens_utveckling_en.json";
-import * as dataBilderFranOvanSv from "@/assets/data/Bilder_fran_ovan_sv.json";
-import * as dataBilderFranOvanEn from "@/assets/data/Bilder_fran_ovan_en.json";
-import * as dataAISv from "@/assets/data/AI_sv.json";
-import * as dataAIEn from "@/assets/data/AI_en.json";
+import * as dataStadenIRorelseSv from "@/data/scenarios/Staden_i_rorelse_sv.json";
+import * as dataStadenIRorelseEn from "@/data/scenarios/Staden_i_rorelse_en.json";
+import * as dataStadenOchKlimatetSv from "@/data/scenarios/Staden_och_klimatet_sv.json";
+import * as dataStadenOchKlimatetEn from "@/data/scenarios/Staden_och_klimatet_en.json";
+import * as dataStadensSammansattningSv from "@/data/scenarios/Stadens_sammansattning_sv.json";
+import * as dataStadensSammansattningEn from "@/data/scenarios/Stadens_sammansattning_en.json";
+import * as dataStadensUtvecklingSv from "@/data/scenarios/Stadens_utveckling_sv.json";
+import * as dataStadensUtvecklingEn from "@/data/scenarios/Stadens_utveckling_en.json";
+import * as dataBilderFranOvanSv from "@/data/scenarios/Bilder_fran_ovan_sv.json";
+import * as dataBilderFranOvanEn from "@/data/scenarios/Bilder_fran_ovan_en.json";
+import * as dataAISv from "@/data/scenarios/AI_sv.json";
+import * as dataAIEn from "@/data/scenarios/AI_en.json";
 import { languageManager } from "./LanguageManager";
 import { safeString } from "./functions";
 

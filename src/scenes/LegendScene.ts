@@ -1,10 +1,12 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
-import * as dataStadenIRorelse from "@/assets/data/Staden_i_rorelse_sv.json";
-import * as dataStadenOchKlimatet from "@/assets/data/Staden_och_klimatet_sv.json";
-import * as dataStadensSammansattning from "@/assets/data/Stadens_sammansattning_sv.json";
-import * as dataStadensUtveckling from "@/assets/data/Stadens_utveckling_sv.json";
+import * as dataStadenIRorelse from "@/data/scenarios/Staden_i_rorelse_sv.json";
+import * as dataStadenOchKlimatet from "@/data/scenarios/Staden_och_klimatet_sv.json";
+import * as dataStadensSammansattning from "@/data/scenarios/Stadens_sammansattning_sv.json";
+import * as dataStadensUtveckling from "@/data/scenarios/Stadens_utveckling_sv.json";
+import * as dataBilderFranOvan from "@/data/scenarios/Bilder_fran_ovan_sv.json";
+import * as dataAI from "@/data/scenarios/AI_sv.json";
 import {
 	colorToGrayscale,
 	colorToNumber,
@@ -277,6 +279,8 @@ export class LegendScene extends BaseScene {
 			dataStadenOchKlimatet,
 			dataStadensSammansattning,
 			dataStadensUtveckling,
+			dataBilderFranOvan,
+			dataAI
 		];
 
 		datasets.forEach((dataset) => {

@@ -1,5 +1,4 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import _suntimes from "@/assets/data/norrköping_suntimes.json";
 import {
 	colorToGrayscale,
 	colorToNumber,
@@ -9,7 +8,6 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { languageManager } from "@/utils/LanguageManager";
-const suntimes = _suntimes as { [date: string]: number[] };
 
 export class Legend extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
