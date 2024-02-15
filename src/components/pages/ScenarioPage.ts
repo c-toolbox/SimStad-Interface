@@ -243,7 +243,7 @@ export class ScenarioPage extends Page {
 	}
 
 	activateBlocks(legend: string) {
-		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
+		fetch("172.19.98.10:443/rest/script/invoke/WebTask/start", {
 			method: "POST",
 			body: JSON.stringify({
 				task: "SimStad-" + legend,
