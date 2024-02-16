@@ -12,7 +12,6 @@ export class MapLight extends Button {
 	private glow: Phaser.GameObjects.Image;
 	private background: Phaser.GameObjects.Ellipse;
 	private image: Phaser.GameObjects.Image;
-	private text: Phaser.GameObjects.Text;
 
 	public goalX: number;
 	public goalY: number;
@@ -27,7 +26,8 @@ export class MapLight extends Button {
 		this.goalX = x;
 		this.goalY = y;
 
-		const size = 60;
+		this.height = 100;
+		const size = 20;
 
 		let maskGraphics = this.scene.make.graphics({}, false);
 		maskGraphics.fillStyle(Color.White);
@@ -45,8 +45,8 @@ export class MapLight extends Button {
 
 		this.glow = this.scene.add.image(0, 0, "light");
 		this.glow.setBlendMode(Phaser.BlendModes.ADD);
-		this.glow.setAlpha(0.5);
-		this.glow.setScale((10 * size) / this.glow.width);
+		this.glow.setAlpha(0.75);
+		this.glow.setScale(400 / this.glow.width);
 		this.container.add(this.glow);
 
 		this.background = this.scene.add.ellipse(0, 0, size, size, Color.Stone100);
@@ -56,32 +56,22 @@ export class MapLight extends Button {
 		this.image.setScale(size / this.image.width);
 		this.container.add(this.image);
 
-		this.text = this.scene.addText({
-			size: 16,
-			weight: 900,
-			color: "white",
-			text: name,
-		});
-		this.text.setOrigin(0.5, -0.5);
-		this.text.setVisible(false);
-		this.container.add(this.text);
-
 		/* Interactive */
 
-		this.background
-			.setInteractive({
-				useHandCursor: true,
-				draggable: true,
-				hitArea: new Phaser.Geom.Circle(size / 2, size / 2, 2 * size),
-				hitAreaCallback: Phaser.Geom.Circle.Contains,
-			})
-			.on("pointerout", this.onOut, this)
-			.on("pointerover", this.onOver, this)
-			.on("pointerdown", this.onDown, this)
-			.on("pointerup", this.onUp, this)
-			.on("dragstart", this.onDragStart, this)
-			.on("drag", this.onDrag, this)
-			.on("dragend", this.onDragEnd, this);
+		// this.background
+		// 	.setInteractive({
+		// 		useHandCursor: true,
+		// 		draggable: true,
+		// 		hitArea: new Phaser.Geom.Circle(size / 2, size / 2, 2 * size),
+		// 		hitAreaCallback: Phaser.Geom.Circle.Contains,
+		// 	})
+		// 	.on("pointerout", this.onOut, this)
+		// 	.on("pointerover", this.onOver, this)
+		// 	.on("pointerdown", this.onDown, this)
+		// 	.on("pointerup", this.onUp, this)
+		// 	.on("dragstart", this.onDragStart, this)
+		// 	.on("drag", this.onDrag, this)
+		// 	.on("dragend", this.onDragEnd, this);
 		// this.scene.input.enableDebug(this.background, 0xff0000);
 
 		/* Animation */
@@ -142,13 +132,13 @@ export class MapLight extends Button {
 
 	get allColors(): string[] {
 		return [
-			ColorStr.Zinc500,
 			ColorStr.White,
-			ColorStr.Black,
-			ColorStr.Red500,
-			ColorStr.Yellow500,
-			ColorStr.Green500,
-			ColorStr.Blue500,
+			// ColorStr.Zinc500,
+			// ColorStr.Black,
+			// ColorStr.Red500,
+			// ColorStr.Yellow500,
+			// ColorStr.Green500,
+			// ColorStr.Blue500,
 		];
 	}
 
@@ -159,5 +149,18 @@ export class MapLight extends Button {
 		const colorInt = colorToNumber(this.color);
 		this.image.setTint(colorInt);
 		this.glow.setTint(colorInt);
+	}
+
+	setGoal(x: number, y: number) {
+		this.goalX = Phaser.Math.Clamp(
+			x,
+			layout.map.left,
+			layout.map.left + layout.map.width
+		);
+		this.goalY = Phaser.Math.Clamp(
+			y,
+			layout.map.top,
+			layout.map.top + layout.map.height
+		);
 	}
 }

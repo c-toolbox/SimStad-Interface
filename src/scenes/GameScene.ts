@@ -55,8 +55,12 @@ export class GameScene extends BaseScene {
 			this.scenariosPage.loadScenarios(data);
 		});
 		this.socket.on("reconnect", () => {
-			this.restart();
 			this.socket.sendReset();
+			this.restart();
+			this.socket.send({
+				type: "DeactivateDatasetRequest",
+				datasets: "RiverFlow",
+			});
 		});
 
 		/* Layout */
@@ -125,8 +129,8 @@ export class GameScene extends BaseScene {
 	/* Logic */
 
 	restart() {
-		this.setState(PageState.Home);
 		this.map.reset();
+		this.setState(PageState.Home);
 	}
 
 	setState(state: PageState) {
@@ -137,6 +141,14 @@ export class GameScene extends BaseScene {
 		this.pages.forEach((page) => {
 			page.setVisible(page.state == state);
 		});
+
+		if (state == PageState.Home) {
+			this.scenarioPage.activateBlocks("SimStad-default");
+			// this.scenarioPage.activateBlocks("VisualCity-Wall_360");
+			this.map.setLayers("Nkpg/Orto20230921");
+			this.socket.sendReset();
+			this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+		}
 	}
 
 	/* Blur */
@@ -177,8 +189,8 @@ export class GameScene extends BaseScene {
 		this.scene.get("UIScene").events.on(
 			"restart",
 			() => {
-				this.restart();
 				this.socket.sendReset();
+				this.restart();
 			},
 			this
 		);

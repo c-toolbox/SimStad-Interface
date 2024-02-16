@@ -21,8 +21,12 @@ export class ScenarioPage extends Page {
 	private layerButtons: TextButton[];
 	private layerSlider: TestSlider;
 
+	private currentLayerString: string;
+
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
+
+		this.currentLayerString = "";
 
 		let background = layout.addRect(scene, layout.scenario, Color.Slate800);
 		this.add(background);
@@ -115,7 +119,7 @@ export class ScenarioPage extends Page {
 		this.backButton.removeListener("click");
 		this.backButton.on("click", () => {
 			this.emit("state", PageState.Home);
-			this.activateDataset("");
+			// this.activateDataset("");
 		});
 		this.backButton.setText("back");
 
@@ -163,6 +167,16 @@ export class ScenarioPage extends Page {
 		if (activeSection) {
 			this.setSection(activeSection);
 		}
+
+		const blocks: { [key in ScenarioKey]: string } = {
+			[ScenarioKey.sammansattning]: "VisualCity-Wall_Motion",
+			[ScenarioKey.utveckling]: "VisualCity-Wall_Crane",
+			[ScenarioKey.rorelse]: "VisualCity-Wall_Tram",
+			[ScenarioKey.klimatet]: "VisualCity-Wall_Rain",
+			[ScenarioKey.ovan]: "VisualCity-Wall_360",
+			[ScenarioKey.ai]: "VisualCity-Wall_360",
+		};
+		this.activateBlocks(blocks[scenario]);
 	}
 
 	setSection(section: Section) {
@@ -184,8 +198,10 @@ export class ScenarioPage extends Page {
 		if (section.legendColors.length > 0) {
 			this.legend.setVisible(true);
 			this.legend.setLegend(section.key + "legend", section.legendColors);
+			this.bread.setWordWrapWidth(layout.scenarioInfo.width);
 		} else {
 			this.legend.setVisible(false);
+			this.bread.setWordWrapWidth(layout.scenarioInner.width);
 		}
 
 		this.layerButtons.forEach((button) => button.setVisible(false));
@@ -229,24 +245,31 @@ export class ScenarioPage extends Page {
 
 		this.activateDataset(section.defaultLayer);
 
-		this.activateBlocks(section.legend);
+		this.activateBlocks("SimStad-" + section.legend);
 	}
 
-	activateDataset(layers: string) {
-		this.emit("map", layers);
-		this.socket.sendReset();
-		this.socket.sendActivateDataset(layers);
-
+	activateDataset(layerString: string) {
+		this.emit("map", layerString);
 		this.layerButtons.forEach((button) => {
-			button.setHighlight(button.getData("layers") == layers);
+			button.setHighlight(button.getData("layers") == layerString);
 		});
+
+		let newLayers = layerString.split(",");
+		let oldLayers = this.currentLayerString.split(",");
+		this.currentLayerString = layerString;
+
+		let removedLayers = oldLayers.filter((layer) => !newLayers.includes(layer));
+		let removedLayerString = removedLayers.join(",");
+
+		this.socket.sendActivateDataset(layerString);
+		this.socket.sendDeactivateDataset(removedLayerString);
 	}
 
 	activateBlocks(legend: string) {
 		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
 			method: "POST",
 			body: JSON.stringify({
-				task: "SimStad-" + legend,
+				task: legend,
 			}),
 			headers: {
 				"Content-type": "application/json; charset=UTF-8",
@@ -257,9 +280,6 @@ export class ScenarioPage extends Page {
 	}
 
 	setVisible(value: boolean): this {
-		if (!value) {
-			this.activateBlocks("default");
-		}
 		return super.setVisible(value);
 	}
 }

@@ -41,7 +41,7 @@ let images: Image[] = [
 	image("chapters/history.png", "history"),
 	image("chapters/ai.png", "ai"),
 
-	image("legends/vislab-stadstvilling.jpg", "legend_default"),
+	image("legends/norrkoping-stad.jpg", "legend_default"),
 ];
 
 /* Load all thumbnails */

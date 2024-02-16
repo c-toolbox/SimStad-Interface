@@ -121,8 +121,13 @@ export class Legend extends Phaser.GameObjects.Container {
 			this.add(label);
 			this.labels.push(label);
 
+			const maxWidth = this.width / 2 - 20 - label.x;
 			if (languageManager.get(title + index, false)) {
-				languageManager.bind(label, title + index);
+				languageManager.bind(label, title + index, () => {
+					if (label.displayWidth > maxWidth) {
+						label.displayWidth = maxWidth;
+					}
+				});
 			}
 		});
 	}

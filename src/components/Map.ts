@@ -32,6 +32,7 @@ export class Map extends Phaser.GameObjects.Container {
 	private lamps: MapLight[];
 	private lampIds: string[];
 	private controlButtons: CircleButton[];
+	private fingerLamp: MapLight;
 
 	constructor(scene: BaseScene, socket: SocketManager) {
 		super(scene);
@@ -81,7 +82,14 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.map
 			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", this.onClick, this);
+			.on("pointerdown", this.onPointerDown, this);
+		// .on("pointermove", this.onPointerMove, this);
+		// .on("pointerup", this.onPointerUp, this)
+		// .on("pointerout", this.onPointerOut, this);
+		// .on("pointerdown", this.onClick, this);
+
+		this.scene.input.on("pointermove", this.onPointerMove, this);
+		this.scene.input.on("pointerup", this.onPointerUp, this);
 
 		/* Controls */
 
@@ -103,7 +111,7 @@ export class Map extends Phaser.GameObjects.Container {
 		const size = cil.height;
 		const xCoords = [cil.left + size / 2, cil.centerX, cil.right - size / 2];
 
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < 0; i++) {
 			let x = xCoords[i];
 			let y = cil.centerY;
 
@@ -142,9 +150,14 @@ export class Map extends Phaser.GameObjects.Container {
 			this.lamps.forEach((lamp) => lamp.destroy());
 			this.lamps = [];
 		});
+
+		this.fingerLamp = new MapLight(this.scene, 0, 0, "finger");
+		this.fingerLamp.setVisible(false);
+		this.add(this.fingerLamp);
 	}
 
 	update(time: number, delta: number) {
+		this.fingerLamp.update(time, delta);
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
 		this.controlButtons.forEach((button) => button.update(time, delta));
 
@@ -193,6 +206,8 @@ export class Map extends Phaser.GameObjects.Container {
 		// 		this.layerContainer.bringToTop(layer.image);
 		// 	}
 		// });
+
+		this.bringToTop(this.fingerLamp);
 	}
 
 	addLayer(texture: string) {
@@ -241,6 +256,34 @@ export class Map extends Phaser.GameObjects.Container {
 		}
 	}
 
+	onPointerDown(pointer: Phaser.Input.Pointer) {
+		this.fingerLamp.setVisible(true);
+		this.fingerLamp.x = pointer.x;
+		this.fingerLamp.y = pointer.y;
+		this.fingerLamp.goalX = pointer.x;
+		this.fingerLamp.goalY = pointer.y;
+		this.updateLamp(this.fingerLamp, "add");
+		this.updateLamp(this.fingerLamp, "update");
+	}
+
+	onPointerMove(pointer: Phaser.Input.Pointer) {
+		if (this.fingerLamp.visible) {
+			this.fingerLamp.setGoal(pointer.x, pointer.y);
+			this.updateLamp(this.fingerLamp, "update");
+		}
+	}
+
+	onPointerOut() {
+		this.onPointerUp();
+	}
+
+	onPointerUp() {
+		if (this.fingerLamp.visible) {
+			this.fingerLamp.setVisible(false);
+			this.updateLamp(this.fingerLamp, "delete");
+		}
+	}
+
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
 		const py = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
 		const px = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
@@ -248,7 +291,7 @@ export class Map extends Phaser.GameObjects.Container {
 		const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 		const color = lamp.color;
 
-		this.socket.sendMapLight(lamp.name, x, y, 150, color, method, true);
+		this.socket.sendMapLight(lamp.name, x, y, lamp.height, color, method, true);
 	}
 
 	reset() {

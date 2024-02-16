@@ -49,12 +49,12 @@ export class HomePage extends Page {
 			// "sunlight"
 		};
 
-		let bg = 32;
-		let bw = (layout.panelInner.width - bg) / 2 - bg;
+		let bg = 64;
+		let bw = (layout.panelInner.width - bg) / 2 - 50;
 		let bh = bw / 2;
 		this.scenarioButtons = [];
 		Object.values(ScenarioKey).forEach((key: ScenarioKey, i: number) => {
-			let x = layout.panelInner.left + bw / 2 + (i % 2) * (bw + bg);
+			let x = layout.panelInner.centerX - (bw + bg) / 2 + (i % 2) * (bw + bg);
 			let y =
 				layout.panelInner.centerY - bh - bg + Math.floor(i / 2) * (bh + bg);
 			let w = bw;
@@ -81,27 +81,11 @@ export class HomePage extends Page {
 			);
 			this.add(button);
 			this.scenarioButtons.push(button);
-		});
 
-		// let cx = layout.panelInner.centerX;
-		// let cy = layout.panelInner.centerY;
-		// let w = 512;
-		// let h = 160;
-		// let c1 = scene.add.image(cx-w, cy-h, "crowd");
-		// c1.setScale(400 / 512);
-		// this.add(c1);
-		// let c2 = scene.add.image(cx, cy-h, "sunlight");
-		// c2.setScale(400 / 512);
-		// this.add(c2);
-		// let c3 = scene.add.image(cx-w, cy, "umbrella");
-		// c3.setScale(400 / 512);
-		// this.add(c3);
-		// let c4 = scene.add.image(cx, cy, "tram");
-		// c4.setScale(400 / 512);
-		// this.add(c4);
-		// let c5 = scene.add.image(cx-w, cy+h, "cranes");
-		// c5.setScale(400 / 512);
-		// this.add(c5);
+			if (key == ScenarioKey.ai) {
+				button.disable();
+			}
+		});
 	}
 
 	update(time: number, delta: number) {

@@ -7,6 +7,7 @@ import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
 import { AttractionView } from "@/components/attraction/AttractionView";
 import { getLocalStorage, setLocalStorage } from "@/utils/functions";
+import { Color } from "@/utils/colors";
 
 export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
@@ -36,10 +37,10 @@ export class UIScene extends BaseScene {
 
 		/* Attraction mode */
 
-		const showAttraction = false;
+		const showAttraction = true;
 		this.idleTimer = -2;
 		// this.add.rectangle(this.CX, this.CY, this.W, this.H, 0xFFFFFF, 0.3);
-		this.attractionView = new AttractionView(this, "#FFF", "streets", 0xffffff);
+		this.attractionView = new AttractionView(this, "#FFF", "streets", Color.Slate400);
 		this.attractionView.on("click", this.wakeUp, this);
 		this.events.emit("attraction", showAttraction);
 
@@ -64,7 +65,9 @@ export class UIScene extends BaseScene {
 			setLocalStorage("guide", value);
 		});
 
-		this.infoWindow.setGuideMode(getLocalStorage("guide", false));
+		if (getLocalStorage("guide", false)) {
+			this.infoWindow.setGuideMode(true);
+		}
 
 		/* Toolbar */
 

@@ -54,9 +54,9 @@ export class AttractionView extends Phaser.GameObjects.Container {
 
 		let mapImage = this.scene.add.image(0, titleY + 100, mapImageKey);
 		mapImage.setOrigin(0.5, 0.5);
-		// mapImage.setAlpha(0.15);
+		// mapImage.setAlpha(0.75);
 		mapImage.setTint(mapTintColor);
-		mapImage.setScale((2*0.36 * this.scene.H) / mapImage.height);
+		mapImage.setScale((1.0 * this.scene.H) / mapImage.height);
 		mapImage.setBlendMode(Phaser.BlendModes.ADD);
 		this.container.add(mapImage);
 

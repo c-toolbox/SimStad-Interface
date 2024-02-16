@@ -15,15 +15,15 @@ import {
 
 const screenWidth = 1920;
 const screenHeight = 1080;
-const margin = 40;
-const padding = 80;
+const margin = 20;
+const padding = 70;
 const separation = 40;
 const radius = 16;
-const titleSize = 90;
+const titleSize = 92;
 const breadSize = 40;
 const legendTitleSize = 40;
 const legendLabelSize = 40;
-const grid = 4;
+const grid = 5;
 
 const bx = margin;
 const by = margin;
@@ -108,9 +108,12 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 		this.graphics.clear();
 		this.title.setText(title);
 
-		// if (this.title.displayWidth >= this.width - 2 * padding) {
-		// 	this.title.setColor(ColorStr.Red700);
-		// }
+		if (
+			this.title.displayWidth >= lw - padding ||
+			this.title.text.includes("?")
+		) {
+			this.title.setColor(ColorStr.Red700);
+		}
 
 		this.labels.forEach((text) => text.destroy());
 		this.labels = [];
@@ -156,11 +159,23 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 			this.add(label);
 			this.labels.push(label);
 		});
+
+		let newHeight =
+			ty +
+			(height + gap) * (stops.length - 1) +
+			height / 2 +
+			height / 2 +
+			this.height / 2 +
+			padding / 2;
+		this.background.setHeight(newHeight);
+		this.background.y = -this.height / 2 + newHeight / 2;
 	}
 }
 
 export class LegendScreen extends Phaser.GameObjects.Container {
 	public id: string;
+
+	private subtitles: Phaser.GameObjects.Text[];
 
 	constructor(
 		scene: BaseScene,
@@ -179,7 +194,7 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 			screenHeight / 2,
 			screenWidth,
 			screenHeight,
-			Color.Slate900
+			Color.Slate950
 		);
 		this.add(background);
 		background.setInteractive({ useHandCursor: true }).on("pointerdown", () => {
@@ -208,7 +223,8 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 
 		let ty = left.top + 1.0 * titleSize + 1.0 * breadSize;
 
-		breadText.split("\n").forEach((paragraph) => {
+		this.subtitles = [];
+		breadText.split("\n").forEach((paragraph, index) => {
 			let subtitle = scene.addText({
 				x: left.left,
 				y: ty,
@@ -219,10 +235,19 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 			subtitle.setWordWrapWidth(left.width);
 			subtitle.setLineSpacing(0.2 * breadSize);
 			this.add(subtitle);
+			this.subtitles.push(subtitle);
 
 			ty += subtitle.displayHeight + 0.75 * breadSize;
-			if (ty > screenHeight) {
+			if (ty > bh) {
 				subtitle.setColor(ColorStr.Red700);
+			}
+
+			console.log(this.id);
+			if (this.id == "centrala_norrk_ping") {
+				if (index == 2) {
+					subtitle.setFontSize(1.25 * breadSize);
+					subtitle.setColor(ColorStr.Amber400);
+				}
 			}
 		});
 
@@ -237,6 +262,13 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 			let legend = new LargeLegend(scene, lx, ly, lw, lh);
 			legend.setLegend(legendTitle, legendColors);
 			this.add(legend);
+		} else {
+			// let ty = left.top + 1.0 * titleSize + 1.0 * breadSize;
+			// this.subtitles.forEach((subtitle) => {
+			// 	subtitle.y = ty;
+			// 	subtitle.setWordWrapWidth(bw - 2 * padding);
+			// 	ty += subtitle.displayHeight + 0.75 * breadSize;
+			// });
 		}
 	}
 
@@ -265,8 +297,9 @@ export class LegendScene extends BaseScene {
 
 		let legend = new LegendScreen(
 			this,
-			"Rubrik",
-			"Excepteur dolor minim est adipisicing consequat do excepteur. Irure labore incididunt esse aliquip nisi laboris ea labore dolor nostrud consequat. Exercitation esse ut exercitation amet fugiat labore ea anim anim. Fugiat ea eu id ad sunt duis ad exercitation. Veniam amet reprehenderit ut non id labore Lorem deserunt exercitation et.\nLaborum quis ex magna incididunt est minim mollit incididunt mollit sunt non dolore sint nostrud. Nostrud ad reprehenderit cupidatat officia laboris eu non labore proident. Mollit ipsum eu adipisicing exercitation sit labore fugiat do adipisicing incididunt ea consectetur commodo dolor. Et aliquip consequat nisi laborum reprehenderit.",
+			"Centrala Norrköping",
+			"Välkommen till Simstad!\nHär kan du utforska Norrköping med hjälp av projiceringar på den 3D-printade stadsmodellen. Ta reda på hur Norrköping skulle påverkas vid höjda havsnivåer eller var Ostlänkens nya järnvägsspår ska byggas.\nTesta själv på stora skärmen mitt emot.",
+			// "Välkommen till en 3D-upplevelse av Norrköping. Här kan du utforska dataset och information om staden.\nModellen är 3D-printad med hjälp utav 5 stycken 3d-printar av modellen Anker Maker.\n3D-modellen består utav 192 rutor, vilka kan uppdateras vid behov allt eftersom staden utvecklas. Varje ruta har tagit i snitt mellan 4 till 6 timmar att producera och total produktionstid har varit ca 6 veckor. Materialet är PLA-plast.\nGrundmodellen är framtagen utifrån Norrköpings kommuns geodata, med mark från laserscanning och manuellt karterade hus. Modellen har sedan förenklats och förberetts för 3d-print med hjälp utav programvaran houdini.",
 			"Legendtitel"
 		);
 		legend.on("click", () => this.select(legend));
@@ -280,7 +313,7 @@ export class LegendScene extends BaseScene {
 			dataStadensSammansattning,
 			dataStadensUtveckling,
 			dataBilderFranOvan,
-			dataAI
+			dataAI,
 		];
 
 		datasets.forEach((dataset) => {

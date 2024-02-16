@@ -5,6 +5,7 @@ import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { interpolateColor } from "@/utils/functions";
 import { languageManager } from "@/utils/LanguageManager";
+import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
 
 export class ScenarioButton extends Button {
 	private border: RoundRectangle;
@@ -30,12 +31,12 @@ export class ScenarioButton extends Button {
 		this.color = color;
 
 		this.border = new RoundRectangle(scene, {
-			width: this.width + 8,
-			height: this.height + 8,
-			radius: layout.radius + 4,
-			color: Color.White,
+			width: this.width + 16,
+			height: this.height + 16,
+			radius: 8,
+			color: Color.Slate600,
 		});
-		this.border.setVisible(false);
+		// this.border.setVisible(false);
 		this.add(this.border);
 
 		// let rect = new RoundRectangle(scene, {
@@ -92,5 +93,11 @@ export class ScenarioButton extends Button {
 		} else {
 			this.title.setText(key);
 		}
+	}
+
+	disable() {
+		this.background.setPostPipeline(GrayScalePostFilter);
+		this.setAlpha(0.5);
+		this.background.input!.enabled = false;
 	}
 }
