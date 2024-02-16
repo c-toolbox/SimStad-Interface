@@ -26,15 +26,15 @@
 						},
 						{
 							"color": "#FC9F01",
-							"text": "700 – 1200"
+							"text": "700 – 1,200"
 						},
 						{
 							"color": "#F94804",
-							"text": "1200 – 1900"
+							"text": "1,200 – 1,900"
 						},
 						{
 							"color": "#D51B1C",
-							"text": "1900 – 3000"
+							"text": "1,900 – 3,000"
 						}
 					]
 				},
@@ -45,7 +45,7 @@
 					"Datasource": "",
 					"Legend1": "arbetsplatstathet",
 					"Legend2": "",
-					"Default": true,
+					"Default": false,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
 					"LegendTitle": "Number of people within 250m",
@@ -60,15 +60,15 @@
 						},
 						{
 							"color": "#FC9F01",
-							"text": "630 – 1200"
+							"text": "630 – 1,200"
 						},
 						{
 							"color": "#F94804",
-							"text": "1200 – 1800"
+							"text": "1,200 – 1,800"
 						},
 						{
 							"color": "#D51B1C",
-							"text": "1800 – 2400"
+							"text": "1,800 – 2,400"
 						}
 					]
 				},

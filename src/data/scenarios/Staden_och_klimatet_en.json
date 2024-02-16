@@ -11,7 +11,7 @@
 					"Datasource": "",
 					"Legend1": "extremaregn",
 					"Legend2": "",
-					"Default": false,
+					"Default": true,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Extremregn100ar",
 					"Buttons": [
@@ -59,7 +59,7 @@
 					"Datasource": "",
 					"Legend1": "havsnivahojning",
 					"Legend2": "",
-					"Default": true,
+					"Default": false,
 					"Idle": true,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 					"Slider": {

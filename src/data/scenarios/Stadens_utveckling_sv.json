@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Stadsutvecklingsområden",
-					"Text1": "Här markeras områden där det planeras eller genomförs mer omfattande stadsutveckling i Norrköping just nu. Visste du om att det ska bli omkring 3 000 nya bostäder i Inre hamnen? Eller att hela Butängen ska omvandlas till en del av innerstaden i samband med att höghastighetsjärnvägen Ostlänken byggs?\nPå modellen kan du även se att Syltenområdet ska få ett ansiktslyft framöver och att Norrköpings västra stadsdelar växer.",
+					"Text1": "Här markeras områden där det planeras eller genomförs mer omfattande stadsutveckling i Norrköping just nu. Visste du om att det ska bli omkring 3 000 nya bostäder i Inre hamnen? Eller att hela Butängen ska omvandlas till en del av innerstaden i samband med att höghastighetsjärnvägen Ostlänken byggs?\nPå modellen kan du även se att Syltenområdet ska få ett ansiktslyft framöver och att Norrköpings västra stadsdelar växer.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "stadsutvecklingsomraden",
@@ -40,7 +40,7 @@
 				},
 				{
 					"Title": "Byggnadsår",
-					"Text1": "Genom att titta på byggnadsår kan vi se hur staden har växt fram över tid och var ny byggnation har tillkommit på senare år.\nRunt förra sekelskiftet befann Norrköping sig i en högkonjunktur. Textilindustrin och hela staden växte. I mitten av 1900-talet slog textilkrisen till och produktionen i det centrala industriområdet minskade successivt. Trots industriernas nedgång satsades det på nya bostäder under 60- och 70-talen. Äldre bostäder revs för att ge plats åt nya modernare. Men medan rivningarna fortsatte så stagnerade staden och behovet av nya bostäder avtog snabbt. Detta ledde till många avrivna tomter och kvarter. Först runt 2010-talet började dessa luckor att fyllas med nya byggnader.",
+					"Text1": "Genom att titta på byggnadsår kan vi se hur staden har växt fram över tid och var ny byggnation har tillkommit på senare år. Runt förra sekelskiftet befann Norrköping sig i en högkonjunktur. Textilindustrin växte och så även staden. I mitten av 1900-talet slog textilkrisen till och produktionen i det centrala industriområdet minskade successivt. Trots industriernas nedgång satsades det på nya bostäder under 60- och 70-talen. Äldre bostäder revs för att ge plats åt nya modernare. Där efter har byggtakten varit mer begränsad och allt mer fokuserad på att förtäta innerstadens olika luckor eller avrivna tomter.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "byggnadsar",
@@ -98,7 +98,7 @@
 				},
 				{
 					"Title": "Stadstyper",
-					"Text1": "Veniam adipisicing do in occaecat ad aliqua. Fugiat aliqua aliquip nisi est mollit. Ex nisi laboris minim irure qui irure occaecat magna consequat in ipsum id ut. Et veniam laboris mollit eu eu. Tempor veniam ut tempor deserunt ullamco.",
+					"Text1": "Historien kommer alltid att vara närvarande och skapa förutsättningarna för stadens planering och utveckling. Norrköpings unika historia med det strategiska läget vid Motala ström formade den växande staden då och formar vår stad än idag. För att få en förståelse för vilka förutsättningar och möjligheter som finns måste man beskriva och förstå de specifika egenskaperna som olika områden har utifrån den historiska bakgrunden.\nStadens utveckling kan liknas vid olika årsringar, var årsring har sin typ av arkitektur och stadskaraktär. Norrköpings kanske mest karaktäristiska stadskaraktär är rutnätsstaden. Rutnätsstaden återfinns i Norrköpings centrala delar.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "stadstyper",
@@ -164,7 +164,7 @@
 				},
 				{
 					"Title": "Kulturminnen",
-					"Text1": "Aliquip anim minim ad mollit in irure magna in. Occaecat aliqua nulla ea quis anim mollit consectetur ullamco amet aliquip id. Non non adipisicing veniam ea. Lorem consequat ut occaecat irure consectetur ea id proident in. Ea sit aliqua minim commodo laborum ea et labore commodo ut. Exercitation deserunt mollit Lorem cupidatat velit mollit aliquip dolore sunt.",
+					"Text1": "Här kan ses vilka byggnader som är högst värderade ur ett kulturhistoriskt perspektiv, dessa har olika grader av skydd för att de skall bevaras till kommande generationer. Det högsta skyddet en byggnad kan ha idag är att klassas som byggnadsminne, det gör att den skyddas av kulturminneslagen och har särskilda krav för dess bevarande.  Promenaderna i Norrköping, bestående av Norra, Östra och Södra Promenaden, är sedan 1994 klassade som byggnadsminne. Inom detta område är det inte tillåtet att förändrar områdets karaktär.\nKlass 1 skyddas också av kulturminneslagen medans Klass 2 har ett särskilt värde men inget juridiskt skydd.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "kulturminnen",
