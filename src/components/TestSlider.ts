@@ -1,11 +1,17 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Slider } from "@/components/elements/Slider";
 import { languageManager } from "@/utils/LanguageManager";
+import { layoutManager as layout } from "@/utils/LayoutManager";
+import { RoundRectangle } from "./elements/RoundRectangle";
+import { Color } from "@/utils/colors";
 
 export class TestSlider extends Phaser.GameObjects.Container {
+	public scene: BaseScene;
+
 	private slider: Slider;
 	private title: Phaser.GameObjects.Text;
-	private label: Phaser.GameObjects.Text;
+	private valueLabel: Phaser.GameObjects.Text;
+	private tickLabels: Phaser.GameObjects.Text[];
 
 	constructor(
 		scene: BaseScene,
@@ -16,15 +22,24 @@ export class TestSlider extends Phaser.GameObjects.Container {
 		text: string,
 		steps: number = 0
 	) {
-		super(scene, x, y);
+		super(scene, x, y - 16);
 		scene.add.existing(this);
+		this.scene = scene;
 		this.width = width;
 		this.height = height;
 
+		let background = new RoundRectangle(scene, {
+			width: width + 1 * 28 + layout.padding + 16,
+			height: height + 3 * 28 + layout.padding + 16,
+			radius: layout.radius,
+			color: Color.Slate700,
+		});
+		this.add(background);
+
 		this.title = scene.addText({
-			x: -this.width / 2,
-			y: -this.height / 2,
-			size: 24,
+			x: -this.width / 2 - 14,
+			y: -this.height / 2 - 8,
+			size: 28,
 			fontFamily: "Lato-Bold",
 			color: "white",
 			text: text,
@@ -32,22 +47,24 @@ export class TestSlider extends Phaser.GameObjects.Container {
 		this.title.setOrigin(0, 1);
 		this.add(this.title);
 
-		this.label = scene.addText({
+		this.valueLabel = scene.addText({
 			x: this.width / 2,
-			y: -this.height / 2,
-			size: 24,
+			y: -this.height / 2 - 8,
+			size: 28,
 			fontFamily: "Lato-Bold",
 			color: "white",
 			text: "...",
 		});
-		this.label.setOrigin(1, 1);
-		this.add(this.label);
+		this.valueLabel.setOrigin(1, 1);
+		this.add(this.valueLabel);
+
+		this.tickLabels = [];
 
 		this.slider = new Slider(
 			scene,
 			0,
 			0,
-			this.width - 20,
+			this.width,
 			this.height,
 			this.height / 2,
 			steps
@@ -74,16 +91,33 @@ export class TestSlider extends Phaser.GameObjects.Container {
 		if (languageManager.get(key, false)) {
 			languageManager.bind(this.title, key);
 		} else {
-			this.label.setText(key);
+			this.valueLabel.setText(key);
 		}
 	}
 
-	setLabels(labels: string[]) {
-		// if (languageManager.get(key, false)) {
-		// 	languageManager.bind(this.title, key);
-		// } else {
-		// 	this.title.setText(key);
-		// }
+	setLabels(labelKeys: string[]) {
+		this.valueLabel.setVisible(false);
+		this.tickLabels.forEach((label) => label.destroy());
+		this.tickLabels = [];
+
+		for (let i = 0; i < labelKeys.length; i++) {
+			let w = this.width;
+			let k = labelKeys.length - 1;
+			let x = w * (i / k - 0.5);
+
+			let label = this.scene.addText({
+				x,
+				y: this.height / 2 + 8,
+				size: 28,
+				fontFamily: "Lato-Bold",
+				color: "white",
+			});
+			languageManager.bind(label, labelKeys[i]);
+			label.setOrigin(0.5, 0.0);
+			this.add(label);
+
+			this.tickLabels.push(label);
+		}
 	}
 
 	setSteps(steps: number) {

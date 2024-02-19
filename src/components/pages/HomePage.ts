@@ -13,9 +13,11 @@ export class HomePage extends Page {
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
+		this.fadeDir *= -1;
+
 		/* Background */
 
-		let background = layout.addRect(scene, layout.panel, Color.Slate800);
+		let background = layout.addRect(scene, layout.panel, Color.Slate900);
 		this.add(background);
 
 		/* Text */
@@ -86,6 +88,23 @@ export class HomePage extends Page {
 				button.disable();
 			}
 		});
+
+		// let nineslice = scene.add.nineslice(
+		// 	layout.panel.centerX,
+		// 	layout.panel.centerY,
+		// 	"nineslice",
+		// 	0,
+		// 	256,
+		// 	256,
+		// 	256,
+		// 	256,
+		// 	256,
+		// 	256
+		// );
+		// nineslice.setScale(8 / 256);
+		// nineslice.setTint(Color.Slate700);
+		// nineslice.setSize((layout.panel.width - 16) / (8 / 256), (layout.panel.height - 16) / (8 / 256));
+		// this.add(nineslice);
 	}
 
 	update(time: number, delta: number) {

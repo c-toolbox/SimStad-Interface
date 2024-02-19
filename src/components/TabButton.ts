@@ -1,70 +1,114 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Button } from "@/components/elements/Button";
+import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color } from "@/utils/colors";
-import { RoundRectangle } from "./elements/RoundRectangle";
+import { layoutManager as layout } from "@/utils/LayoutManager";
+import { interpolateColor } from "@/utils/functions";
+import { languageManager } from "@/utils/LanguageManager";
 
 export class TabButton extends Button {
-	// private border: Phaser.GameObjects.Ellipse;
-	// private background: Phaser.GameObjects.Ellipse;
 	private border: RoundRectangle;
 	private background: RoundRectangle;
-	private image: Phaser.GameObjects.Image;
+	private title: Phaser.GameObjects.Text;
 
 	constructor(
 		scene: BaseScene,
 		x: number,
 		y: number,
-		size: number,
-		texture: string,
-		color: number
+		width: number,
+		height: number,
+		text: string
 	) {
 		super(scene, x, y);
-
-		// this.border = scene.add.ellipse(0, 0, size + 8, size + 8, Color.White);
-		// this.border.setVisible(false);
-		// this.add(this.border);
-
-		// this.background = scene.add.ellipse(0, 0, size, size, color);
-		// this.add(this.background);
-		// this.bindInteractive(this.background);
-
-		const radius = 32;
+		this.width = width;
+		this.height = height;
 
 		this.border = new RoundRectangle(scene, {
-			x: size / 2,
-			width: size + 8 + size,
-			height: size + 8,
+			y: -8,
+			width: this.width + 8,
+			height: this.height + 8 + 16,
+			radius: layout.radius + 4,
 			color: Color.White,
-			radius: radius + 4,
+			topLeft: false,
 			topRight: false,
-			bottomRight: false,
 		});
 		this.border.setVisible(false);
 		this.add(this.border);
 
 		this.background = new RoundRectangle(scene, {
-			x: size / 2,
-			width: size + size,
-			height: size,
-			color,
-			radius,
+			y: -16,
+			width: this.width,
+			height: this.height + 32,
+			radius: layout.radius,
+			color: Color.Slate700,
+			topLeft: false,
 			topRight: false,
-			bottomRight: false,
 		});
 		this.add(this.background);
-		this.bindInteractive(this.background);
 
-		this.image = scene.add.image(0, 0, texture);
-		this.image.setScale(size / this.image.width);
-		this.add(this.image);
+		this.title = scene.addText({
+			size: 32,
+			fontFamily: "Lato-Bold",
+			color: "white",
+			text: text,
+		});
+		this.title.setOrigin(0.5);
+		this.setText(text);
+		this.add(this.title);
+
+		this.bindInteractive(this.background);
+		this.background.on("wheel", (...args: any) => this.emit("wheel", ...args));
+		this.background.on("dragstart", (...args: any) =>
+			this.emit("dragstart", ...args)
+		);
+		this.background.on("drag", (...args: any) => this.emit("drag", ...args));
+		this.background.on("dragend", (...args: any) =>
+			this.emit("dragend", ...args)
+		);
+
+		this.setHighlight(false);
 	}
 
 	update(time: number, delta: number) {
 		this.setScale(1 - 0.1 * this.holdSmooth);
 	}
 
+	setDraggable() {
+		this.bindInteractive(this.background, true);
+	}
+
+	setWidth(width: number) {
+		this.background.setWidth(width);
+		this.background.input?.hitArea.setSize(
+			this.background.width,
+			this.background.height
+		);
+	}
+
 	setHighlight(value: boolean) {
-		this.setAlpha(value ? 1.0 : 0.5);
-		this.border.setVisible(value);
+		// this.border.setVisible(value);
+		this.background.setColor(value ? Color.Slate800 : Color.Slate900);
+		this.title.setAlpha(value ? 1.0 : 0.5);
+	}
+
+	setColor(color: number) {
+		this.background.setColor(color);
+	}
+
+	setText(key: string) {
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.title, key, () => {
+				this.title.setScale(1);
+				if (this.title.displayWidth > this.background.width - 40) {
+					this.title.displayWidth = this.background.width - 40;
+				}
+			});
+		} else {
+			this.title.setText(key);
+		}
+	}
+
+	getText() {
+		return this.title.text;
 	}
 }

@@ -130,6 +130,15 @@ export class Legend extends Phaser.GameObjects.Container {
 				});
 			}
 		});
+
+		let newHeight =
+			ty +
+			(height + gap) * (stops.length - 1) +
+			height / 2 +
+			this.height / 2 +
+			padding / 2;
+		this.background.setHeight(newHeight);
+		this.background.y = -this.height / 2 + newHeight / 2;
 	}
 
 	setTitle(key: string) {

@@ -99,7 +99,7 @@ export class Map extends Phaser.GameObjects.Container {
 			width: layout.mapControls.width + 8,
 			height: layout.mapControls.height + 8,
 			radius: layout.radius,
-			color: Color.Slate800,
+			color: Color.Slate900,
 		});
 		this.add(controlsBg);
 
@@ -162,7 +162,7 @@ export class Map extends Phaser.GameObjects.Container {
 		this.controlButtons.forEach((button) => button.update(time, delta));
 
 		this.layers.forEach((layer) => {
-			let dx = ((layer.active ? delta : -delta) / 1000) * 5;
+			let dx = ((layer.active ? delta : -delta) / 1000) * 2;
 			if (layer.texture.includes("Flood")) dx = 1;
 
 			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);

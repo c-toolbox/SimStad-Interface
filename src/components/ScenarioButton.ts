@@ -31,10 +31,10 @@ export class ScenarioButton extends Button {
 		this.color = color;
 
 		this.border = new RoundRectangle(scene, {
-			width: this.width + 16,
-			height: this.height + 16,
-			radius: 8,
-			color: Color.Slate600,
+			width: this.width + 4,
+			height: this.height + 4,
+			radius: 2,
+			color: Color.Slate300,
 		});
 		// this.border.setVisible(false);
 		this.add(this.border);
@@ -97,7 +97,8 @@ export class ScenarioButton extends Button {
 
 	disable() {
 		this.background.setPostPipeline(GrayScalePostFilter);
-		this.setAlpha(0.5);
+		this.border.setColor(Color.Slate800);
+		this.background.setAlpha(0.5);
 		this.background.input!.enabled = false;
 	}
 }

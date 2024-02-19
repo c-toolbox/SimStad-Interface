@@ -3,24 +3,29 @@ import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import { Color } from "@/utils/colors";
+import { Color, ColorStr } from "@/utils/colors";
 import { Legend } from "@/components/Legend";
 import { HSVToRGB, colorToString, interpolateColor } from "@/utils/functions";
 import { ScenarioKey, Section, scenarioManager } from "@/utils/ScenarioManager";
 import { TextButton } from "../TextButton";
 import { TestSlider } from "../TestSlider";
 import { TabButton } from "../TabButton";
+import { ONLINE } from "@/utils/constants";
+import { RoundRectangle } from "../elements/RoundRectangle";
 
 export class ScenarioPage extends Page {
+	private background: RoundRectangle;
+	private foreground: RoundRectangle;
 	private subtitle: Phaser.GameObjects.Text;
 	private title: Phaser.GameObjects.Text;
 	private bread: Phaser.GameObjects.Text;
 	private legend: Legend;
-	private backButton: TextButton;
-	private tabButtons: TextButton[];
+	private backButton: TabButton;
+	private tabButtons: TabButton[];
 	private layerButtons: TextButton[];
 	private layerSlider: TestSlider;
 
+	private currentSection: Section;
 	private currentLayerString: string;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
@@ -28,8 +33,23 @@ export class ScenarioPage extends Page {
 
 		this.currentLayerString = "";
 
-		let background = layout.addRect(scene, layout.scenario, Color.Slate800);
-		this.add(background);
+		this.background = new RoundRectangle(scene, {
+			rect: layout.scenario,
+			radius: layout.radius,
+			color: Color.Slate800,
+			bottomLeft: false,
+			bottomRight: false,
+		});
+		this.add(this.background);
+
+		this.foreground = new RoundRectangle(scene, {
+			rect: layout.scenario,
+			radius: layout.radius,
+			color: Color.Slate800,
+			bottomLeft: false,
+			bottomRight: false,
+		});
+		this.add(this.foreground);
 
 		/* Text */
 
@@ -43,7 +63,7 @@ export class ScenarioPage extends Page {
 
 		this.title = scene.addText({
 			x: layout.scenarioInfo.left,
-			y: this.subtitle.y + 1.25 * this.subtitle.displayHeight,
+			y: this.subtitle.y + 1.3 * this.subtitle.displayHeight,
 			size: 58,
 			color: "white",
 		});
@@ -75,7 +95,7 @@ export class ScenarioPage extends Page {
 		const bw = (bl.width - (bn - 1) * layout.separation) / bn;
 		const by = bl.centerY;
 		const bh = bl.height;
-		const bc = Color.Yellow600;
+		const bc = Color.Yellow700;
 
 		this.layerButtons = [];
 		for (let i = 0; i < 3; i++) {
@@ -94,46 +114,54 @@ export class ScenarioPage extends Page {
 		const tw = (tl.width - (tn - 1) * layout.separation) / tn;
 		const ty = tl.centerY;
 		const th = tl.height;
-		const tc = Color.Slate700;
 
 		this.tabButtons = [];
 		for (let i = 0; i < tn; i++) {
 			let tt = "Tab " + (i + 1);
 			let tx = tl.right - (i + 0.5) * tw - i * layout.separation;
 
-			let button = new TextButton(scene, tx, ty, tw, th, tt, tc);
+			let button = new TabButton(scene, tx, ty, tw, th, tt);
 			this.add(button);
+			this.sendToBack(button);
 			this.tabButtons.push(button);
 		}
 
-		this.backButton = new TextButton(
+		this.backButton = new TabButton(
 			scene,
 			tl.left + 0.5 * tw,
 			ty,
 			tw,
 			th,
-			"Back",
-			tc
+			"Back"
 		);
 		this.add(this.backButton);
+		this.sendToBack(this.backButton);
 		this.backButton.removeListener("click");
 		this.backButton.on("click", () => {
 			this.emit("state", PageState.Home);
 			// this.activateDataset("");
 		});
 		this.backButton.setText("back");
+		this.backButton.setHighlight(true);
+		// this.backButton.setColor(Color.Slate700);
 
 		/* Slider */
 
 		const sl = layout.scenarioControls;
 		const sx = sl.centerX;
 		const sy = sl.top;
-		const sw = 0.5 * sl.width;
-		const sh = sl.height / 2;
+		const sw = sl.width - 64;
+		const sh = 0.7 * sl.height;
 
 		this.layerSlider = new TestSlider(scene, sx, sy, sw, sh, "Slider", 10);
 		this.layerSlider.setVisible(false);
 		this.add(this.layerSlider);
+
+		/* Fader */
+
+		this.foreground.setAlpha(0);
+		this.bringToTop(this.foreground);
+		this.foreground.setInteractive();
 	}
 
 	update(time: number, delta: number) {
@@ -152,13 +180,16 @@ export class ScenarioPage extends Page {
 			throw "More sections than tabs";
 		}
 
+		this.updateTabs(sections.length);
 		this.tabButtons.forEach((tab) => tab.setVisible(false));
 		sections.forEach((section, index) => {
 			this.tabButtons[index].setVisible(true);
 			this.tabButtons[index].setText(section.key + "title");
 			this.tabButtons[index].removeListener("click");
 			this.tabButtons[index].on("click", () => {
-				this.setSection(section);
+				if (this.currentSection != section) {
+					this.fadeSection(section);
+				}
 			});
 			this.tabButtons[index].setData("section", section.key);
 		});
@@ -179,7 +210,46 @@ export class ScenarioPage extends Page {
 		this.activateBlocks(blocks[scenario]);
 	}
 
+	updateTabs(count: number) {
+		const tn = count + 1;
+		const tl = layout.scenarioTabs;
+		const tw = (tl.width - (tn - 1) * layout.separation) / tn;
+
+		for (let i = 0; i < tn; i++) {
+			let tx = tl.right - (i + 0.5) * tw - i * layout.separation;
+
+			this.tabButtons[i].x = tx;
+			this.tabButtons[i].setWidth(tw);
+		}
+
+		// this.backButton.x = tl.left + 0.5 * tw;
+		// this.backButton.setWidth(tw);
+	}
+
+	fadeSection(section: Section) {
+		if (this.foreground.alpha > 0) return;
+
+		this.scene.add.tween({
+			targets: this.foreground,
+			duration: 200,
+			ease: "Cubic.Out",
+			alpha: { from: 0, to: 1 },
+			onComplete: () => {
+				this.scene.add.tween({
+					targets: this.foreground,
+					duration: 200,
+					ease: "Cubic.Out",
+					alpha: { from: 1, to: 0 },
+				});
+
+				this.setSection(section);
+			},
+		});
+	}
+
 	setSection(section: Section) {
+		this.currentSection = section;
+
 		languageManager.bind(this.subtitle, section.scenario + "title");
 		languageManager.bind(this.title, section.key + "title");
 		languageManager.bind(this.bread, section.key + "bread");
@@ -266,6 +336,8 @@ export class ScenarioPage extends Page {
 	}
 
 	activateBlocks(legend: string) {
+		if (!ONLINE) return;
+
 		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
 			method: "POST",
 			body: JSON.stringify({
@@ -277,9 +349,5 @@ export class ScenarioPage extends Page {
 		})
 			.then((response) => response.json())
 			.then((json) => console.log("Blocks:", json));
-	}
-
-	setVisible(value: boolean): this {
-		return super.setVisible(value);
 	}
 }

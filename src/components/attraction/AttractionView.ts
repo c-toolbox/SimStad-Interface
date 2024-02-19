@@ -1,5 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { languageManager } from "@/utils/LanguageManager";
+import { Color, ColorStr } from "@/utils/colors";
 import { SCALE, QUESTION_TIME } from "@/utils/constants";
 
 export class AttractionView extends Phaser.GameObjects.Container {
@@ -9,6 +10,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 	private container: Phaser.GameObjects.Container;
 	private title: Phaser.GameObjects.Text;
 	private heading: Phaser.GameObjects.Text;
+	private mapImage: Phaser.GameObjects.Image;
 
 	private questionKeys: string[];
 	private questionTimer: number;
@@ -19,12 +21,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 
 	private alphaGoal: number;
 
-	constructor(
-		scene: BaseScene,
-		textColor: string,
-		mapImageKey: string,
-		mapTintColor: number
-	) {
+	constructor(scene: BaseScene) {
 		super(scene, scene.CX, scene.CY);
 		this.scene = scene;
 		scene.add.existing(this);
@@ -52,20 +49,19 @@ export class AttractionView extends Phaser.GameObjects.Container {
 		// const titleY = -0.31 * scene.H;
 		const titleY = -120;
 
-		let mapImage = this.scene.add.image(0, titleY + 100, mapImageKey);
-		mapImage.setOrigin(0.5, 0.5);
-		// mapImage.setAlpha(0.75);
-		mapImage.setTint(mapTintColor);
-		mapImage.setScale((1.0 * this.scene.H) / mapImage.height);
-		mapImage.setBlendMode(Phaser.BlendModes.ADD);
-		this.container.add(mapImage);
+		this.mapImage = this.scene.add.image(0, titleY + 100, "streets");
+		this.mapImage.setOrigin(0.5, 0.5);
+		this.mapImage.setTint(0xb89581);
+		this.mapImage.setScale((1.0 * this.scene.H) / this.mapImage.height);
+		this.mapImage.setBlendMode(Phaser.BlendModes.ADD);
+		this.container.add(this.mapImage);
 
 		this.title = this.scene.addText({
 			x: 0,
 			y: titleY + 0.02 * scene.H,
 			size: 54 * SCALE,
 			fontFamily: "Lato-Bold",
-			color: textColor,
+			color: ColorStr.White,
 			text: "Title",
 		});
 		languageManager.bind(this.title, "attraction_title");
@@ -75,7 +71,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 			y: titleY + 0.13 * scene.H,
 			size: 80 * SCALE,
 			fontFamily: "Lato-Bold",
-			color: textColor,
+			color: ColorStr.White,
 			text: "Heading",
 		});
 		languageManager.bind(this.heading, "attraction_heading");
@@ -110,7 +106,7 @@ export class AttractionView extends Phaser.GameObjects.Container {
 				y: 0,
 				size: 60 * SCALE,
 				weight: 300,
-				color: textColor,
+				color: ColorStr.White,
 				text: "Question?",
 			});
 			text.setVisible(false);
@@ -147,6 +143,8 @@ export class AttractionView extends Phaser.GameObjects.Container {
 		);
 		this.container.y = -Phaser.Math.Easing.Sine.In(1 - this.alpha) * 20;
 		this.setVisible(this.alpha > 0);
+
+		this.mapImage.angle = time / 1000;
 
 		if (this.visible) {
 			this.questionTimer += delta / 1000;

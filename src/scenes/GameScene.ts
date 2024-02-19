@@ -41,7 +41,7 @@ export class GameScene extends BaseScene {
 
 	create(): void {
 		this.fade(false, 200, Color.Black);
-		this.cameras.main.setBackgroundColor(Color.Slate900);
+		this.cameras.main.setBackgroundColor(Color.Slate950);
 		this.initBlur();
 
 		// this.input.dragDistanceThreshold = 16;
@@ -108,6 +108,7 @@ export class GameScene extends BaseScene {
 		});
 
 		this.map = new Map(this, this.socket);
+		this.map.setDepth(1);
 		this.add.existing(this.map);
 
 		this.restart();
@@ -140,6 +141,7 @@ export class GameScene extends BaseScene {
 
 		this.pages.forEach((page) => {
 			page.setVisible(page.state == state);
+			page.setDepth(page.state == state ? 2 : 0);
 		});
 
 		if (state == PageState.Home) {

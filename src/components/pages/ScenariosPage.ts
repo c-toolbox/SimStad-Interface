@@ -127,10 +127,6 @@ export class ScenariosPage extends Page {
 		});
 	}
 
-	setVisible(value: boolean): this {
-		return super.setVisible(value);
-	}
-
 	clearScenarios() {
 		this.scrollArea.clear();
 		this.scenariosButtons = [];

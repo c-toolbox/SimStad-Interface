@@ -16,6 +16,8 @@ export class Page extends Phaser.GameObjects.Container {
 	public state: PageState;
 	public socket: SocketManager;
 
+	protected fadeTween: Phaser.Tweens.Tween;
+	protected fadeDir: number;
 	protected buttons: TextButton[];
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
@@ -25,6 +27,7 @@ export class Page extends Phaser.GameObjects.Container {
 		this.socket = socket;
 		scene.add.existing(this);
 
+		this.fadeDir = 64;
 		this.buttons = [];
 	}
 
@@ -49,5 +52,32 @@ export class Page extends Phaser.GameObjects.Container {
 		this.buttons.push(button);
 
 		return button;
+	}
+
+	setVisible(value: boolean): this {
+		let start = value ? 0.0 : 1.0;
+		let stop = value ? 1.0 : 0.0;
+
+		if (this.fadeTween) {
+			this.fadeTween.stop();
+		}
+
+		this.fadeTween = this.scene.add.tween({
+			targets: this,
+			duration: value ? 500 : 250,
+			ease: "Cubic.Out",
+			alpha: { from: start, to: stop },
+			y: { from: value ? this.fadeDir : 0, to: value ? 0 : this.fadeDir },
+			onStart: () => {
+				if (value) {
+					super.setVisible(true);
+				}
+			},
+			onComplete: () => {
+				super.setVisible(value);
+			},
+		});
+		return this;
+		// return super.setVisible(value);
 	}
 }

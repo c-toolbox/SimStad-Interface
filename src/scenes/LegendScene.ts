@@ -163,8 +163,7 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 		let newHeight =
 			ty +
 			(height + gap) * (stops.length - 1) +
-			height / 2 +
-			height / 2 +
+			height +
 			this.height / 2 +
 			padding / 2;
 		this.background.setHeight(newHeight);

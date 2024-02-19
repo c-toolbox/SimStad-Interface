@@ -114,10 +114,6 @@ export class LayerPage extends Page {
 		});
 	}
 
-	setVisible(value: boolean): this {
-		return super.setVisible(value);
-	}
-
 	clearLayers() {
 		this.scrollArea.clear();
 		this.layerButtons = [];

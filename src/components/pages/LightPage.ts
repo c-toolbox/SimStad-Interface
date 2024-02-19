@@ -2,14 +2,12 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { TimeSetter } from "@/components/TimeSetter";
-import { Map } from "@/components/Map";
 import { SunDial } from "@/components/SunDial";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
 
 export class LightPage extends Page {
 	private timeSetter: TimeSetter;
-	private map: Map;
 	private sunDial: SunDial;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
@@ -63,15 +61,11 @@ export class LightPage extends Page {
 			th
 		);
 		this.add(this.sunDial);
-
-		this.map = new Map(this.scene, socket);
-		this.add(this.map);
 	}
 
 	update(time: number, delta: number) {
 		super.update(time, delta);
 
 		this.timeSetter.update(time, delta);
-		this.map.update(time, delta);
 	}
 }

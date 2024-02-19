@@ -3,6 +3,7 @@ import { Color, ColorStr } from "./colors";
 import * as P from "./protocol";
 import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
+import { ONLINE } from "./constants";
 
 const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
 // const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152";
@@ -65,6 +66,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	connect(): void {
+		if (!ONLINE) return;
+
 		this.socket = new WebSocket(URL);
 
 		this.socket.onopen = () => {
@@ -87,7 +90,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	send(data: object) {
-		return;
+		if (!ONLINE) return;
+
 		if (this.isConnectedToSocket) {
 			this.socket.send(JSON.stringify(data));
 			this.addDebug(data, ColorStr.Blue600);
@@ -341,6 +345,11 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			weight: 600,
 		});
 		this.unrealLabel.setOrigin(0, 0.5);
+
+		this.omniIcon.setVisible(false);
+		this.omniLabel.setVisible(false);
+		this.unrealIcon.setVisible(false);
+		this.unrealLabel.setVisible(false);
 	}
 
 	updateStatusIcons() {

@@ -7,6 +7,7 @@ let images: Image[] = [
 	image("karta.jpg", "karta"),
 	image("streets.png", "streets"),
 	image("blank.png", "blank"),
+	image("nineslice.png", "nineslice"),
 
 	image("vis_c_logo.png", "vis_c_logo"),
 	image("light.png", "light"),
