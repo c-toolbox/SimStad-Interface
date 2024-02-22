@@ -32,23 +32,23 @@ export default () => {
 			neuBuild(),
 			neuInject(),
 			buildWinApp(),
-			buildMacApp(),
-			buildLinuxApp(),
-			zip({
-				inDir: './dist/web',
-				outDir: './dist',
-				outFileName: `${title_dashed}-web.zip`,
-			}),
-			zip({
-				inDir: `./dist/win`,
-				outDir: './dist',
-				outFileName: `${title_dashed}-win.zip`,
-			}),
-			zip({
-				inDir: `./dist/linux`,
-				outDir: './dist',
-				outFileName: `${title_dashed}-linux.zip`,
-			}),
+			// buildMacApp(),
+			// buildLinuxApp(),
+			// zip({
+			// 	inDir: './dist/web',
+			// 	outDir: './dist',
+			// 	outFileName: `${title_dashed}-web.zip`,
+			// }),
+			// zip({
+			// 	inDir: `./dist/win`,
+			// 	outDir: './dist',
+			// 	outFileName: `${title_dashed}-win.zip`,
+			// }),
+			// zip({
+			// 	inDir: `./dist/linux`,
+			// 	outDir: './dist',
+			// 	outFileName: `${title_dashed}-linux.zip`,
+			// }),
 			buildCleanup(),
 		],
 		build: {
