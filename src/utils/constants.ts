@@ -1,4 +1,6 @@
-export const VERSION: string = "v1.5";
+import { title, version } from "@/version.json";
+
+export const VERSION: string = version.split(".")[0];
 export const SCALE: number = 1.0;
 
 export const IDLE_TIME = 5 * 60;
