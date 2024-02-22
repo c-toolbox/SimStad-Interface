@@ -1,9 +1,9 @@
-import swedishLocales from "@/assets/locales/sv-SE.json";
-import englishLocales from "@/assets/locales/en-US.json";
+import swedishLocales from "@/assets/locales/sv_SE.json";
+import englishLocales from "@/assets/locales/en_GB.json";
 import { scenarioManager } from "./ScenarioManager";
 
 export enum LanguageKey {
-	English = "en-US",
+	English = "en-GB",
 	Swedish = "sv-SE",
 }
 

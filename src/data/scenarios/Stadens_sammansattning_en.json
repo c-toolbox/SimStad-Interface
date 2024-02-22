@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Housing density",
-					"Text1": "Where do most people live in Norrköping? The model has taken into account the city's barriers and calculated how many residents you reach within 250 meters of each point. The analysis can be used to more accurately calculate data when, for example, planning public transport and school places.",
+					"Text1": "Where do the most people live in Norrköping? In this calculation, the city's barriers have been taken into account in order to model how many residents you can reach within 250 meters of each point. The analysis can be used to more accurately calculate data when, for example, planning public transport and school places.\n\nThe highest residential densities in the city are found in the Nordantill, Östantill, and Berget districts. After that, there is a relatively high concentration of residents in Haga, Marielund, Söderstaden, and around the center of Hageby. Ljura, Ektorp, and central parts of Vilbergen and Enebymo in turn have a higher residential density than the single-family and townhouse areas in, for example, Skarphagen, Smedby, and Lindö.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "boendetathet",
@@ -40,7 +40,7 @@
 				},
 				{
 					"Title": "Workplace density",
-					"Text1": "Here you can see where there are most workplaces in Norrköping today. As you can see, it is in central Norrköping and at Vrinnevisjukhuset that there is the densest number of workplaces. But if we look ahead to 2050, we can see that the party workplaces can be found in Butängen, on Sylten and in Norra Himmelstalund.",
+					"Text1": "When it comes to the distribution of jobs, it can be seen that it is much more centralized than for residents. There is a large concentration of workplaces within the central city with the highest density within the promenades. The image shows this effect with the help of numbers and statistics.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "arbetsplatstathet",
@@ -48,7 +48,7 @@
 					"Default": false,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
-					"LegendTitle": "Number of people within 250m",
+					"LegendTitle": "Number of workplaces within 250m",
 					"LegendColors": [
 						{
 							"color": "#F8FD35",
@@ -73,8 +73,8 @@
 					]
 				},
 				{
-					"Title": "15-minute city",
-					"Text1": "Voluptate irure nulla excepteur labore non ullamco laborum incididunt commodo sint aliquip eu fugiat velit. Pariatur ad magna sint tempor et eu ex officia ex consequat consectetur consectetur. Officia dolor occaecat sit nisi deserunt. Consequat commodo laborum quis adipisicing est nostrud ut deserunt velit fugiat. Non veniam officia nisi id nulla qui in dolore anim do ut qui nisi. Sit tempor adipisicing adipisicing do fugiat quis amet est Lorem consectetur veniam commodo.",
+					"Title": "The 15-minute city",
+					"Text1": "In everyday life, we move between several different places and destinations to work, study, drop off, pick up children at preschool, exercise, buy food, shop, etc.\n\nIf you have many of these things close at hand, you have a large selection that is available to you. If it is longer to the destination and there are fewer of them, you will often have to travel longer distances to put together your everyday puzzle.\n\nTo describe the degree of access to the functions of everyday life, the concept of the 15-minute city has been established — to be able to reach many of the destinations needed in daily life within 15 minutes of movement on foot or on bicycle.\n\nTo measure this accessibility, the \"everyday life index\" (VLX) has been developed. This index quantifies the accessibility of important everyday functions.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "vardagslivsindex",
@@ -86,31 +86,31 @@
 					"LegendColors": [
 						{
 							"color": "#ea7879",
-							"text": "6,2 – 8,2"
+							"text": "6.2 – 8.2"
 						},
 						{
 							"color": "#f8ac8d",
-							"text": "4,6 – 6,2"
+							"text": "4.6 – 6.2"
 						},
 						{
 							"color": "#f4cda0",
-							"text": "3,5 – 4,6"
+							"text": "3.5 – 4.6"
 						},
 						{
 							"color": "#dfd7ae",
-							"text": "2,7 – 3,5"
+							"text": "2.7 – 3.5"
 						},
 						{
 							"color": "#cae4be",
-							"text": "1,9 – 2,7"
+							"text": "1.9 – 2.7"
 						},
 						{
 							"color": "#a6d6c9",
-							"text": "0,9 – 1,9"
+							"text": "0.9 – 1.9"
 						},
 						{
 							"color": "#73b1d1",
-							"text": "0,0 – 0,9"
+							"text": "0.0 – 0.9"
 						}
 					]
 				}

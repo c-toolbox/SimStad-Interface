@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Boendetäthet",
-					"Text1": "Var bor det flest människor i Norrköping? I modellen har man tagit hänsyn till stadens barriärer och räknat med hur många boende du når inom 250 meter från varje punkt. Analysen kan användas för att mer noggrant beräkna underlag vid till exempel planering av kollektivtrafik och skolplatser.\nDe högsta boendetätheterna i staden finns i stadsdelarna Nordantill, Östantill och Berget. Därefter finns det relativt hög koncentration av boende i Haga, Marielund, Söderstaden och runt Hageby centrum. Ljura, Ektorp och centrala delar av Vilbergen och Enebymo har i sin tur en högre boendetäthet än småhus- och radhusområdena i exempelvis Skarphagen, Smedby och Lindö.",
+					"Text1": "Var bor det flest människor i Norrköping? I modellen har man tagit hänsyn till stadens barriärer och räknat med hur många boende du når inom 250 meter från varje punkt. Analysen kan användas för att mer noggrant beräkna underlag vid till exempel planering av kollektivtrafik och skolplatser.\n\nDe högsta boendetätheterna i staden finns i stadsdelarna Nordantill, Östantill och Berget. Därefter finns det relativt hög koncentration av boende i Haga, Marielund, Söderstaden och runt Hageby centrum. Ljura, Ektorp och centrala delar av Vilbergen och Enebymo har i sin tur en högre boendetäthet än småhus- och radhusområdena i exempelvis Skarphagen, Smedby och Lindö.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "boendetathet",
@@ -40,7 +40,7 @@
 				},
 				{
 					"Title": "Arbetsplatstäthet",
-					"Text1": "När det gäller spridningen av arbetstillfällen ser man att den är mycket mer ”centralistisk” än för boende. Det finns en stor koncentration av arbetsplatser inom den centrala staden, med högst täthet innanför promenaderna. Bilden visar, med andra ord, det som tidigare beskrivits med hjälp av siffror och statistik: att nästan vart annat jobb i kommunen finns i centrala staden och vart fjärde innanför promenaderna. Norrköpings kommun har 69 000 arbetstillfällen, varav 55 000 i staden (80 %) Av stadens arbetstillfällen finns 33 000 i den centrala staden. Med andra ord, nästan hälften av stadens arbetstillfälle finns i den centrala staden.",
+					"Text1": "När det gäller spridningen av arbetstillfällen ser man att den är mycket mer ”centralistisk” än för boende. Det finns en stor koncentration av arbetsplatser inom den centrala staden, med högst täthet innanför promenaderna. Bilden visar, med andra ord, det som tidigare beskrivits med hjälp av siffror och statisti",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "arbetsplatstathet",
@@ -48,7 +48,7 @@
 					"Default": false,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
-					"LegendTitle": "Antal personer inom 250m",
+					"LegendTitle": "Antal arbetsplatser inom 250m",
 					"LegendColors": [
 						{
 							"color": "#F8FD35",
@@ -74,7 +74,7 @@
 				},
 				{
 					"Title": "15-minutersstaden",
-					"Text1": "I det vardagliga livet förflyttar vi oss mellan flera olika platser och målpunkter för att arbeta, studera, lämna och hämta barn på förskola, träna, köpa mat, handla, osv.\nHar man många av dessa saker nära till hands så har man ett stort utbud som är lätt att nå. Om det är längre till målpunkterna och de är färre så blir man oftare tvungen att resa längre sträckor för att få ihop sitt vardagspussel.\nFör att beskriva graden av tillgänglighet till vardagslivets funktioner har begreppet 15- minutersstaden etablerats - att inom 15 minuters förflyttning till fots eller med cykel nå många av de målpunkter som behövs i det dagliga livet.\nFör att mäta denna tillgänglighet har \"vardagslivsindex\" (VLX) utvecklats. Detta index kvantifierar tillgängligheten till viktiga vardagsfunktioner.",
+					"Text1": "I det vardagliga livet förflyttar vi oss mellan flera olika platser och målpunkter för att arbeta, studera, lämna och hämta barn på förskola, träna, köpa mat, handla, osv.\n\nHar man många av dessa saker nära till hands så har man ett stort utbud som är lätt att nå. Om det är längre till målpunkterna och de är färre så blir man oftare tvungen att resa längre sträckor för att få ihop sitt vardagspussel.\n\nFör att beskriva graden av tillgänglighet till vardagslivets funktioner har begreppet 15- minutersstaden etablerats - att inom 15 minuters förflyttning till fots eller med cykel nå många av de målpunkter som behövs i det dagliga livet.\n\nFör att mäta denna tillgänglighet har \"vardagslivsindex\" (VLX) utvecklats. Detta index kvantifierar tillgängligheten till viktiga vardagsfunktioner.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "vardagslivsindex",

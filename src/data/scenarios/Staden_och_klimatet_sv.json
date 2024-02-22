@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Extrema regn",
-					"Text1": "Ett 100-års regn inträffar statistiskt en gång per hundra år. De belysta områdena på modellen är de områden som riskerar att översvämmas vid extremregn. I hus med källare kan även vatten komma in bakvägen via ledningsnätet. Dessa översvämningsrisker syns inte i modellen. När kommunen planerar för ny bebyggelse tar man hänsyn till översvämningsrisker och ställer krav på olika åtgärder.\nDet kan till exempel handla om att höja marknivån och grundläggningsnivån vid byggnation av nya hus. Men minst lika viktigt är att se till så att stora vattenmängder har någonstans att ta vägen. En av åtgärderna kommunen arbetar med är att skapa nedsänkta ytor i parker och naturområden.",
+					"Text1": "Ett 100-års regn inträffar statistiskt en gång per hundra år. De belysta områdena på modellen är de områden som riskerar att översvämmas vid extremregn. I hus med källare kan även vatten komma in bakvägen via ledningsnätet. Dessa översvämningsrisker syns inte i modellen. När kommunen planerar för ny bebyggelse tar man hänsyn till översvämningsrisker och ställer krav på olika åtgärder.\n\nDet kan till exempel handla om att höja marknivån och grundläggningsnivån vid byggnation av nya hus. Men minst lika viktigt är att se till så att stora vattenmängder har någonstans att ta vägen. En av åtgärderna kommunen arbetar med är att skapa nedsänkta ytor i parker och naturområden.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "extremaregn",
@@ -54,7 +54,7 @@
 				},
 				{
 					"Title": "Havsnivåhöjning",
-					"Text1": "Havet stiger globalt och kommer göra så länge till på grund av den globala uppvärmningen. I Norrköping har vi fortfarande landhöjning efter den senaste istiden men den avtar sakta så inom kort kommer vi börja se effekten av de stigande havsnivåerna. Om uppvärmningen begränsas blir även havsnivåhöjningen mindre.\nI Norrköping har vi under lång tid inte tillåtit bebyggelse på områden som ligger för nära havet. För viss bebyggelse ställs krav att marken först måste höjas innan bebyggelse kan tillåtas. På lång sikt kommer vi behöva skydda bebyggelse som ligger lågt. Just nu utreder kommunen möjligheten att bygga vallar utmed havskanten på vissa områden eller anlägga någon form av sluss i Kvarsebo.",
+					"Text1": "Havet stiger globalt och kommer göra så länge till på grund av den globala uppvärmningen. I Norrköping har vi fortfarande landhöjning efter den senaste istiden men den avtar sakta så inom kort kommer vi börja se effekten av de stigande havsnivåerna. Om uppvärmningen begränsas blir även havsnivåhöjningen mindre.\n\nI Norrköping har vi under lång tid inte tillåtit bebyggelse på områden som ligger för nära havet. För viss bebyggelse ställs krav att marken först måste höjas innan bebyggelse kan tillåtas. På lång sikt kommer vi behöva skydda bebyggelse som ligger lågt. Just nu utreder kommunen möjligheten att bygga vallar utmed havskanten på vissa områden eller anlägga någon form av sluss i Kvarsebo.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "havsnivahojning",
@@ -64,7 +64,12 @@
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 					"Slider": {
 						"Title": "Vattennivå i meter",
-						"Labels": ["0", "5", "10", "15"],
+						"Labels": [
+							"0.0",
+							"5.0",
+							"10.0",
+							"15.0"
+						],
 						"Layers": [
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_01",
@@ -129,12 +134,12 @@
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_60"
 						]
 					},
-					"LegendTitle": "",
+					"LegendTitle": "None",
 					"LegendColors": []
 				},
 				{
 					"Title": "Träd",
-					"Text1": "Här kan du se var det finns träd i staden. Träd i stadsmiljö är viktiga för vårt välmående. De bidrar till grönska och förbättrar den förorenade luften som kommer från bilar och fabriker. Träden i staden har dessutom en temperaturutjämnande effekt genom att använda solenergi för sin tillväxt. Samtidigt ger lövverket skugga och svalka i städer under varma sommardagar. När det gäller nederbörd kan de minska belastningen på stadens avloppssystem genom att ta upp stora mängder vatten. De gynnar biologisk mångfald och erbjuder boplats för fåglar, insekter och lavar.\nTräden är karterade på plats ute i fält eller med hjälp av analyser från laserdata. I framtiden kan AI hjälpa till med detta arbete.",
+					"Text1": "Här kan du se var det finns träd i staden. Träd i stadsmiljö är viktiga för vårt välmående. De bidrar till grönska och förbättrar den förorenade luften som kommer från bilar och fabriker. Träden i staden har dessutom en temperaturutjämnande effekt genom att använda solenergi för sin tillväxt. Samtidigt ger lövverket skugga och svalka i städer under varma sommardagar. När det gäller nederbörd kan de minska belastningen på stadens avloppssystem genom att ta upp stora mängder vatten. De gynnar biologisk mångfald och erbjuder boplats för fåglar, insekter och lavar.\n\nTräden är karterade på plats ute i fält eller med hjälp av analyser från laserdata. I framtiden kan AI hjälpa till med detta arbete.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trad",

@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Urban development areas",
-					"Text1": "This area the areas where more extensive urban development is planned or implemented now in Norrköping. Did you know that there will be around 3,000 new homes in the Inner Harbour? Or that the whole of Butängen will be converted into a part of the inner city in connection with the construction of the Ostlänken high-speed railway?/nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western districts are growing.",
+					"Text1": "Here, areas are marked in which more extensive urban development is ongoing or planned in Norrköping right now. Did you know that there will be around 3000 new homes in the Inner Harbor? Or that the whole of Butängen will be converted into a part of the inner city in connection with the high-speed railway Ostlänken being built?\n\nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western districts are growing.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "stadsutvecklingsomraden",
@@ -18,29 +18,29 @@
 					"LegendColors": [
 						{
 							"color": "#e9cf87",
-							"text": "Development area"
+							"text": "Area of development"
 						},
 						{
 							"color": "#e5b636",
-							"text": "New quarters"
+							"text": "New city blocks"
 						},
 						{
 							"color": "#e75a23",
-							"text": "The east link"
+							"text": "East Link Project"
 						},
 						{
 							"color": "#ad7aa9",
-							"text": "The east link tunnel"
+							"text": "East Link Tunnel"
 						},
 						{
 							"color": "#c0c0c0",
-							"text": "New road"
+							"text": "New ring road"
 						}
 					]
 				},
 				{
 					"Title": "Year of construction",
-					"Text1": "By looking at the year of construction, we can see how the city has developed over time and where new construction has been added in recent years./nNorrköping was booming around the turn of the last century. The textile industry grew and so did the city. However, the textile crisis hit in the middle of the 20th century, and production in the central industrial area gradually declined./nDespite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make way for new, more modern ones. While the demolitions continued, the city stagnated and the need for new housing quickly diminished. This led to many demolished plots and blocks that were not developed. Only around the turn of the last millennium did these gaps gradually begin to be filled with new housing, workplaces, restaurants, commerce, etc.",
+					"Text1": "By looking at the year of construction, we can see how the city has grown over time and where new construction has been added in recent years. Around the turn of the last century, Norrköping was in a boom. The textile industry grew and so did the city. In the middle of the 20th century, the textile crisis hit and production in the central industrial area gradually declined. Despite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make space for new, more modern buildings. After that, the pace of construction has been more limited and increasingly focused on densifying the inner city's various gaps or demolished lots.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "byggnadsar",
@@ -48,7 +48,7 @@
 					"Default": false,
 					"Idle": true,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Byggnadsar",
-					"LegendTitle": "Period",
+					"LegendTitle": "Time period",
 					"LegendColors": [
 						{
 							"color": "#440154",
@@ -97,8 +97,8 @@
 					]
 				},
 				{
-					"Title": "Stadstyper",
-					"Text1": "Veniam adipisicing do in occaecat ad aliqua. Fugiat aliqua aliquip nisi est mollit. Ex nisi laboris minim irure qui irure occaecat magna consequat in ipsum id ut. Et veniam laboris mollit eu eu. Tempor veniam ut tempor deserunt ullamco.",
+					"Title": "City types",
+					"Text1": "The history of a city always influences the conditions for the city's planning and development. Norrköping's unique history with its strategic location by the Motala river shaped the growing city then and is still shaping our city today. To gain an understanding of what conditions and opportunities exist, one must describe and understand the specific characteristics of different areas based on the historical background.\n\nThe city's development can be compared to different annual rings, each annual ring has its own type of architecture and urban character. Perhaps Norrköping's most characteristic urban character is the city grid, which can be found in the central parts of Norrköping.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "stadstyper",
@@ -106,23 +106,23 @@
 					"Default": true,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Stadskaraktar_V2,Nkpg/Vattenytor,Nkpg/Vagnat",
-					"LegendTitle": "Stadstyper",
+					"LegendTitle": "Urban types",
 					"LegendColors": [
 						{
 							"color": "#c90fc3",
-							"text": "Rutnätsstaden"
+							"text": "Grid street plan"
 						},
 						{
 							"color": "#d231a3",
-							"text": "Egnahem"
+							"text": "Own-home activity"
 						},
 						{
 							"color": "#db5482",
-							"text": "Trädgårdsstaden"
+							"text": "Garden city movement"
 						},
 						{
 							"color": "#e47662",
-							"text": "Funktionalism"
+							"text": "Functionalism"
 						},
 						{
 							"color": "#ed9841",
@@ -130,41 +130,41 @@
 						},
 						{
 							"color": "#f6bb20",
-							"text": "Miljonprogram"
+							"text": "Million Programme"
 						},
 						{
 							"color": "#ffdd00",
-							"text": "1970-tal"
+							"text": "1970s"
 						},
 						{
 							"color": "#bdd605",
-							"text": "1980-tal"
+							"text": "1980s"
 						},
 						{
 							"color": "#7cd009",
-							"text": "1990-tal"
+							"text": "1990s"
 						},
 						{
 							"color": "#3ac90e",
-							"text": "2000-tal"
+							"text": "2000s"
 						},
 						{
 							"color": "#2563eb",
-							"text": "Blandad bebyggelse"
+							"text": "Mixed housing"
 						},
 						{
 							"color": "#475569",
-							"text": "Verksamhet"
+							"text": "Businesses"
 						},
 						{
 							"color": "#0ea5e9",
-							"text": "Villastad"
+							"text": "Suburbs"
 						}
 					]
 				},
 				{
-					"Title": "Kulturminnen",
-					"Text1": "Aliquip anim minim ad mollit in irure magna in. Occaecat aliqua nulla ea quis anim mollit consectetur ullamco amet aliquip id. Non non adipisicing veniam ea. Lorem consequat ut occaecat irure consectetur ea id proident in. Ea sit aliqua minim commodo laborum ea et labore commodo ut. Exercitation deserunt mollit Lorem cupidatat velit mollit aliquip dolore sunt.",
+					"Title": "Cultural history",
+					"Text1": "Here you can see which buildings are most valued from a cultural-historical perspective. These buildlings have different degrees of protection in order for them to be preserved for future generations. The highest protection a building can have today is to be classified as a building monument, which means that it is protected by the Cultural Heritage Act which imposes special requirements for its preservation. The promenades in Norrköping, consisting of Norra, Östra, and Södra Promenaden, have been classified as architectural monuments since 1994. Within this area, it is not permitted to change the character of the area.\n\nClass 1 is also protected by the Cultural Heritage Act, while Class 2 has a special value without legal protection.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "kulturminnen",
@@ -172,19 +172,19 @@
 					"Default": true,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Kulturhistorisktvardefulla_byggnader,Nkpg/Vattenytor",
-					"LegendTitle": "Klasser",
+					"LegendTitle": "Classes",
 					"LegendColors": [
 						{
 							"color": "#d7191c",
-							"text": "Byggnadsminne"
+							"text": "Listed buildings"
 						},
 						{
 							"color": "#ff8000",
-							"text": "Klass 1"
+							"text": "Class 1"
 						},
 						{
 							"color": "#ffb800",
-							"text": "Klass 2"
+							"text": "Class 2"
 						}
 					]
 				}

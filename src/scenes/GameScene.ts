@@ -45,7 +45,7 @@ export class GameScene extends BaseScene {
 		this.initBlur();
 
 		// this.input.dragDistanceThreshold = 16;
-		this.input.addPointer(10);
+		this.input.addPointer(1);
 
 		this.socket = new SocketManager(this);
 		this.socket.setDepth(1000);

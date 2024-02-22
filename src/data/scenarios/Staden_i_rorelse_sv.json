@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Kollektivtrafik",
-					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjlighet har nära till kollektivtrafik i staden.\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar, denna data kommer från Östgötatrafikens öppna API, Hinner du till nästa buss?",
+					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjlighet har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\n\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar, denna data kommer från Östgötatrafikens öppna API, Hinner du till nästa buss?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "kollektivtrafik",
@@ -16,17 +16,35 @@
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Tillganglighet_kollektivtrafik,Nkpg/Kollektivtrafik",
 					"LegendTitle": "Typ av trafik",
 					"LegendColors": [
-						{ "color": "#ebc34c", "text": "Expressbussar" },
-						{ "color": "#bbeb77", "text": "Landsbygdstrafik" },
-						{ "color": "#e39189", "text": "Spårväg" },
-						{ "color": "#2f9fea", "text": "Tåg" },
-						{ "color": "#57e6c0", "text": "Tätortstrafik" },
-						{ "color": "#ffb800", "text": "Hållplatser" }
+						{
+							"color": "#ebc34c",
+							"text": "Expressbussar"
+						},
+						{
+							"color": "#bbeb77",
+							"text": "Landsbygdstrafik"
+						},
+						{
+							"color": "#e39189",
+							"text": "Spårväg"
+						},
+						{
+							"color": "#2f9fea",
+							"text": "Tåg"
+						},
+						{
+							"color": "#57e6c0",
+							"text": "Tätortstrafik"
+						},
+						{
+							"color": "#ffb800",
+							"text": "Hållplatser"
+						}
 					]
 				},
 				{
 					"Title": "Trafikbuller",
-					"Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar från trafikmängder. Alla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år. Beräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur väl isolerat huset är och vilka fönster som finns. Hur upplevelser du trafikbuller där du bor?",
+					"Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar från trafikmängder. Alla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år.\n\nBeräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur väl isolerat huset är och vilka fönster som finns.\n\nHur upplevelser du trafikbuller där du bor?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trafikbuller",
@@ -56,7 +74,7 @@
 				},
 				{
 					"Title": "Trafikmängder",
-					"Text1": "Här kan ses hur trafikerade olika gator i Norrköping är, trafikmätningen görs med hjälp av ”slangar”, även kända som pneumatiska vägrör. Dessa rör är flexibla slangar som läggs tvärs över vägen. När ett fordon passerar över röret, pressas luft genom röret och skapar en tryckvåg som detekteras av en sensor. Detta genererar en elektrisk signal som registreras av en räknare eller analysprogramvara. Denna metod är portabel och kan drivas av batterier, vilket gör den lämplig för tillfälliga trafikstudier.\nUnderlaget ligger till grund för den trafikberäkningsmodell som sedan avvänds i beräkningen av bullerkartläggningen som också visas här i modellen.",
+					"Text1": "Här kan ses hur trafikerade olika gator i Norrköping är, trafikmätningen görs med hjälp av ”slangar”, även kända som pneumatiska vägrör. Dessa rör är flexibla slangar som läggs tvärs över vägen. När ett fordon passerar över röret, pressas luft genom röret och skapar en tryckvåg som detekteras av en sensor. Detta genererar en elektrisk signal som registreras av en räknare eller analysprogramvara. Denna metod är portabel och kan drivas av batterier, vilket gör den lämplig för tillfälliga trafikstudier.\n\nUnderlaget ligger till grund för den trafikberäkningsmodell som sedan avvänds i beräkningen av bullerkartläggningen som också visas här i modellen.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trafikmangder",

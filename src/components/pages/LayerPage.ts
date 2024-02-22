@@ -41,8 +41,10 @@ export class LayerPage extends Page {
 
 		/* Button */
 
+		let folders = [...new Set(layerNames.map((layer) => layer.split("/")[0]))];
+		let n = folders.length + 1;
 		let s = 20;
-		let w = 220;
+		let w = (layout.panelInner.width - s * (n - 1)) / n;
 		let h = 64;
 		let x = layout.panelInner.right - w / 2;
 		let y = layout.panelInner.bottom - h / 2;
@@ -52,7 +54,6 @@ export class LayerPage extends Page {
 			this.emit("map", "");
 		});
 
-		let folders = [...new Set(layerNames.map((layer) => layer.split("/")[0]))];
 		folders.forEach((folder, index) => {
 			let x = layout.panelInner.left + w / 2 + (w + s) * index;
 			this.addButton(x, y, w, h, folder, Color.Cyan800, () => {

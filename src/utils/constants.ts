@@ -1,4 +1,4 @@
-export const VERSION: string = "v1.4";
+export const VERSION: string = "v1.5";
 export const SCALE: number = 1.0;
 
 export const IDLE_TIME = 5 * 60;

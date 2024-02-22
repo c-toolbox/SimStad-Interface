@@ -1,12 +1,12 @@
 {
-	"Title": "Aerial images",
+	"Title": "Pictures from above",
 	"Sections": [
 		{
 			"Label1": "",
 			"SectionObject": [
 				{
 					"Title": "Aerial photo 2022",
-					"Text1": "An orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning, and environmental monitoring to provide a detailed and accurate view of an area.\nThe process of creating an orthophoto involves processing original images to correct for topographic changes. This image was captured in the summer of 2022 and is a compilation of approx. 10,000 high-resolution aerial images.",
+					"Text1": "An orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning, and environmental monitoring to provide a detailed and accurate view of an area.\n\nThe process of creating an orthophoto involves processing original images to correct for topographic changes. This image was captured in the summer of 2022 and is a compilation of approximately 10,000 high-resolution aerial images.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "karta2022",
@@ -19,7 +19,7 @@
 				},
 				{
 					"Title": "Aerial photo 1974",
-					"Text1": "This is the Lantmäteriet's orthophoto covering the entire municipality from 1947 (east of Vånga from 1972). Resolution 0.5m.\nAn orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning and environmental monitoring to provide a detailed and accurate view of an area.",
+					"Text1": "This is orthophoto by the Swedish Mapping, Cadastral and Land Registration Authority (Lantmäteriet) covering the entire municipality from 1947 (east of Vånga from 1972) with a resolution of 0.5m.\n\nAn orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning, and environmental monitoring to provide a detailed and accurate view of an area.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "karta1974",
@@ -32,7 +32,7 @@
 				},
 				{
 					"Title": "Aerial photo 1959",
-					"Text1": "This is the Lantmäteriet's orthophoto covering the entire municipality from 1959. Resolution 0.5 meters.\nAn orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning and environmental monitoring to provide a detailed and accurate view of an area.",
+					"Text1": "This is the an orthophoto covering the entire municipality from 1959 provided by the Swedish Mapping, Cadastral and Land Registration Authority (Landmäteriet) with a resolution of 0.5 meters.\n\nAn orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning, and environmental monitoring to provide a detailed and accurate view of an area.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "karta1959",
@@ -45,7 +45,7 @@
 				},
 				{
 					"Title": "City map 1930",
-					"Text1": "The map shows Norrköping's conurbation in 1930. The map was drawn by Norrköping's city engineering office.",
+					"Text1": "Map of Norrköping's conurbation in 1930. The map was drawn by Norrköping's city engineering office.\n\nWith the construction of the Hamnbron, which was opened to traffic in 1915, the appearance of the urban plan changed drastically in that part of the city. Several old neighborhoods such as Lisbon, Paris, the West and East Indies are disappearing. A number of new residential areas have been added, including Oxelbergen, Karlshov, Taborsberg, Pryssgården, Egna hem, and the area between Västra/Södra Promenaderna and Albrektsvägen.\n\nThe city's population now amounts to roughly 61,000 inhabitants.\n\nAuthor: City Engineer John E. Petterson (1878 – 1949).",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "karta1930",
@@ -58,7 +58,7 @@
 				},
 				{
 					"Title": "City map 1879",
-					"Text1": "The map shows Norrköping's conurbation in 1879. The map was drawn by Lundgren.",
+					"Text1": "Map of Norrköping's urban area in 1879. Created and published by Norrköping's city building committee.\n\nThrough the regulations and extensions of the city plan that came to fruition in 1863, 1873, and 1877, the entire area that lies within the city's planned walking system has now been utilized.\n\nRoughly 27,000 people now live in the city.\n\nAuthor: Surveyor Alfred Rudolf Lundgren. (1852 – 1929)",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "karta1879",

@@ -81,13 +81,13 @@ export class UIScene extends BaseScene {
 					this.onRestartButton(true);
 				},
 			},
-			// {
-			// 	image:
-			// 		this.currentLanguage == LanguageKey.Swedish
-			// 			? "icon-menu-flag-en"
-			// 			: "icon-menu-flag-se",
-			// 	function: this.onLanguageButton,
-			// },
+			{
+				image:
+					this.currentLanguage == LanguageKey.Swedish
+						? "icon-menu-flag-en"
+						: "icon-menu-flag-se",
+				function: this.onLanguageButton,
+			},
 		];
 
 		this.toolButtons = [];

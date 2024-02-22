@@ -34,7 +34,7 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 		this.width = width;
 		this.height = height;
 
-		this.year = 2023;
+		this.year = 2024;
 		this.month = 1;
 		this.day = 1;
 		this.hour = 0;

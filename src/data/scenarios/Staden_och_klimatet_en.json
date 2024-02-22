@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Extreme rainfall",
-					"Text1": "A 100-year rainfall occurs statistically once every hundred years. The highlighted areas on the model are the areas that are at risk of flooding via overland flooding during extreme rain. In houses with basements, water can also enter from the back via the pipe network. These flood risks are not visible in the model. When the municipality plans for new buildings, flood risks are taken into account and demands are made for various measures. It could, for example, be about raising the ground level and foundation level when building new houses. It is equally as important to ensure that large amounts of water have somewhere to go. One of the measures the municipality is working with is to create submerged surfaces in parks and natural areas. By making submerged surfaces in suitable places and creating them lower than surrounding buildings or roads, the water can collect there instead of causing flooding in places where it causes damage.",
+					"Text1": "A 100-year rain event occurs statistically once every century. The highlighted areas on the model are the areas that are at risk of flooding in the event of extreme rain. In houses with basements, water can also enter via the pipe network. These flood risks are not visible in the model. When the municipality plans for new buildings, flood risks are taken into account and demands are made for various measures.\n\nIt could, for example, be about raising the ground level and foundation level when building new houses. But it is at least as important to ensure that large amounts of water have somewhere to go. One of the measures the municipality is working on is to create submerged surfaces in parks and natural areas.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "extremaregn",
@@ -28,33 +28,33 @@
 							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Extremregn500ar"
 						}
 					],
-					"LegendTitle": "Water rise",
+					"LegendTitle": "Water level",
 					"LegendColors": [
 						{
 							"color": "#00AAFF",
-							"text": "0,1 – 0,2 meters"
+							"text": "0.1 – 0.2 meters"
 						},
 						{
 							"color": "#0000FF",
-							"text": "0,2 – 0,3 meters"
+							"text": "0.2 – 0.3 meters"
 						},
 						{
 							"color": "#000078",
-							"text": "0,3 – 0,5 meters"
+							"text": "0.3 – 0.5 meters"
 						},
 						{
 							"color": "#FFFF00",
-							"text": "0,5 – 1 meters"
+							"text": "0.5 – 1 meter"
 						},
 						{
 							"color": "#FF0000",
-							"text": "mer än 1 meters"
+							"text": "more than 1 meter"
 						}
 					]
 				},
 				{
 					"Title": "Sea level rise",
-					"Text1": "Seas are rising globally and will continue to do so for a long time due to global warming. In Norrköping, we still have land uplift after the last ice age, but it is slowly decreasing. Soon we will start to see the effect of the rising sea levels. If warming is limited, sea level rise will also be less./nIn Norrköping, we have for a long time not allowed construction on areas that are too close to the sea. For certain developments, there is a requirement that the ground must first be raised before development can be permitted. In the long term, we will need to protect low-lying buildings. Right now, the municipality is investigating the possibility of building dikes along the edge of the sea in certain areas or building some kind of lock in Kvarsebo.",
+					"Text1": "The sea is rising globally and will continue to do so for a long time due to global warming. In Norrköping, we still have land rise after the last ice age (post-glacial rebound), but it is slowing down and we will start to see the effect of the rising sea levels. If the global warming is limited, the sea level will rise less.\n\nIn Norrköping, we have for a long time not allowed construction on areas that are too close to the sea. For certain developments, there is a requirement that the ground must first be raised before development can be permitted. In the long term, we will need to protect low-lying buildings. Right now, the municipality is investigating the possibility of building dikes along the edge of the sea in certain areas or building some kind of lock in Kvarsebo.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "havsnivahojning",
@@ -64,7 +64,12 @@
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 					"Slider": {
 						"Title": "Water level in meters",
-						"Labels": ["0", "5", "10", "15"],
+						"Labels": [
+							"0.0",
+							"5.0",
+							"10.0",
+							"15.0"
+						],
 						"Layers": [
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_01",
@@ -129,12 +134,12 @@
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_60"
 						]
 					},
-					"LegendTitle": "",
+					"LegendTitle": "None",
 					"LegendColors": []
 				},
 				{
 					"Title": "Trees",
-					"Text1": "Here you can see where there are trees in the city. Trees in urban environments are important for our well-being. They contribute to greenery and improve the polluted air coming from cars and factories. The trees in the city also have a temperature equalizing effect by using solar energy for their growth. At the same time, the foliage provides shade and coolness in cities during hot summer days. In the case of rainfall, they can reduce the load on the city's sewage system by absorbing large amounts of water. Trees also act as a node in a green network in the city. They favor biodiversity and provide nesting sites for birds and habitat for a number of plants, mosses, insects and lichens. \nDo you think Norrköping is a green city?",
+					"Text1": "Here you can see where there are trees in the city. Trees in an urban environment are important for our well-being. They contribute to greenery and improve the air which is polluted by cars and factories. The trees in the city also have a equalizing effect on the temperature by using solar energy for their growth. At the same time, the foliage provides shade and coolness in cities on hot summer days. When it comes to rainfall, they can reduce the load on the city's sewage system by absorbing large amounts of water. They benefit biodiversity and provide habitat for birds, insects, and lichens.\n\nThe trees are mapped on site out in the field or with the help of analyzes from laser data. In the future, AI can help with this work.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trad",
@@ -142,7 +147,7 @@
 					"Default": true,
 					"Idle": true,
 					"Filenames": "Nkpg/Kommunkartan,Nkpg/Trad",
-					"LegendTitle": "Tjolahopp",
+					"LegendTitle": "Map layers",
 					"LegendColors": [
 						{
 							"color": "#90cf80",
