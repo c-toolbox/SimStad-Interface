@@ -257,6 +257,8 @@ export class Map extends Phaser.GameObjects.Container {
 	}
 
 	onPointerDown(pointer: Phaser.Input.Pointer) {
+		if (pointer.identifier != 0) return;
+
 		this.fingerLamp.setVisible(true);
 		this.fingerLamp.x = pointer.x;
 		this.fingerLamp.y = pointer.y;
@@ -267,17 +269,23 @@ export class Map extends Phaser.GameObjects.Container {
 	}
 
 	onPointerMove(pointer: Phaser.Input.Pointer) {
+		if (pointer.identifier != 0) return;
+
 		if (this.fingerLamp.visible) {
 			this.fingerLamp.setGoal(pointer.x, pointer.y);
 			this.updateLamp(this.fingerLamp, "update");
 		}
 	}
 
-	onPointerOut() {
-		this.onPointerUp();
+	onPointerOut(pointer: Phaser.Input.Pointer) {
+		if (pointer.identifier != 0) return;
+
+		this.onPointerUp(pointer);
 	}
 
-	onPointerUp() {
+	onPointerUp(pointer: Phaser.Input.Pointer) {
+		if (pointer.identifier != 0) return;
+
 		if (this.fingerLamp.visible) {
 			this.fingerLamp.setVisible(false);
 			this.updateLamp(this.fingerLamp, "delete");
