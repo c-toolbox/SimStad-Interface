@@ -23,8 +23,13 @@
 	"info_rights_1": "Om rättigheterna",
 	"info_rights_2": "Dolore occaecat nostrud adipisicing non. Fugiat veniam ut nisi veniam in nisi exercitation tempor commodo consectetur deserunt fugiat. Consectetur et occaecat duis in veniam Lorem proident. Aliquip dolor nisi officia occaecat quis consequat. Consequat esse reprehenderit ullamco nisi.",
 	"info_copyright": "Copyright @2024 Visualiseringscenter C",
+	"legend_default_title": "Centrala Norrköping",
+	"legend_default_bread": "Välkommen till Simstad!\n\nHär kan du utforska Norrköping med hjälp av projiceringar på den 3D-printade stadsmodellen. Ta reda på hur Norrköping skulle påverkas vid höjda havsnivåer eller var Ostlänkens nya järnvägsspår ska byggas.",
+	"legend_default_forward": "Testa själv på stora skärmen mitt emot.",
+	"legend_default_right": "Testa själv på stora skärmen till höger.",
+	"legend_default_left": "Testa själv på stora skärmen till vänster.",
 	"guide_mode": "Avancerat läge",
 	"back": "Tillbaka",
 	"page_layer": "Datalager",
-	"map_hint": "Peta på kartan"
+	"map_hint": "Peka på kartan"
 }
