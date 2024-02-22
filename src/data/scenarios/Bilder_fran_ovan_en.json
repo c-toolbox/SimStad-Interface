@@ -11,7 +11,7 @@
 					"Datasource": "",
 					"Legend1": "karta2022",
 					"Legend2": "",
-					"Default": true,
+					"Default": false,
 					"Idle": false,
 					"Filenames": "Nkpg/Orto20230921",
 					"LegendTitle": "",
@@ -63,9 +63,9 @@
 					"Datasource": "",
 					"Legend1": "karta1879",
 					"Legend2": "",
-					"Default": false,
+					"Default": true,
 					"Idle": false,
-					"Filenames": "Color/navy_blue,Nkpg/Lundgren1879",
+					"Filenames": "Color/black,Nkpg/Lundgren1879",
 					"LegendTitle": "",
 					"LegendColors": []
 				}
