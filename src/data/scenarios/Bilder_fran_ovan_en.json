@@ -22,7 +22,7 @@
 					"Text1": "This is orthophoto by the Swedish Mapping, Cadastral and Land Registration Authority (Lantmäteriet) covering the entire municipality from 1974 (east of Vånga from 1972) with a resolution of 0.5m.\n\nAn orthographic photo, or orthophoto, is an aerial or satellite photo that has been corrected to remove distortions from camera angles and the slope of the terrain. This allows the photo to represent an accurate and to-scale image of the ground surface, similar to a map, allowing distances and details to be accurately measured. Orthophotos are used in fields such as cartography, urban planning, and environmental monitoring to provide a detailed and accurate view of an area.",
 					"Text2": "",
 					"Datasource": "",
-					"Legend1": "karta1974",
+					"Legend1": "karta1947",
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
