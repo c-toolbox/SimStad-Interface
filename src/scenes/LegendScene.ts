@@ -1,6 +1,7 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
+import { languageManager as language } from "@/utils/LanguageManager";
 import * as dataStadenIRorelse from "@/data/scenarios/Staden_i_rorelse_sv.json";
 import * as dataStadenOchKlimatet from "@/data/scenarios/Staden_och_klimatet_sv.json";
 import * as dataStadensSammansattning from "@/data/scenarios/Stadens_sammansattning_sv.json";
@@ -81,6 +82,7 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 			fontFamily: "Lato-Bold",
 			color: ColorStr.White,
 		});
+		this.title.setShadow(0, 2, "black", 4);
 		this.add(this.title);
 
 		let hr = this.scene.add.rectangle(
@@ -156,6 +158,7 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 				text,
 			});
 			label.setOrigin(0, 0.5);
+			label.setShadow(0, 2, "black", 4);
 			this.add(label);
 			this.labels.push(label);
 		});
@@ -180,13 +183,19 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 		scene: BaseScene,
 		titleText: string,
 		breadText: string,
-		legendTitle: string,
+		legendTitle?: string,
 		legendColors?: { color: string; text: string }[]
 	) {
 		super(scene, 0, 0);
 		this.scene = scene;
 
-		this.id = titleText.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+		this.id = titleText
+			.toLowerCase()
+			.replace(" ", "")
+			.replace("-", "")
+			.replace("å", "a")
+			.replace("ä", "a")
+			.replace("ö", "o");
 
 		let background = scene.add.rectangle(
 			screenWidth / 2,
@@ -211,9 +220,10 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 			x: left.left,
 			y: left.top,
 			size: titleSize,
-			color: "white",
+			color: ColorStr.White,
 			text: titleText,
 		});
+		title.setShadow(0, 2, "black", 4);
 		this.add(title);
 
 		if (title.displayWidth > left.width) {
@@ -222,17 +232,23 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 
 		let ty = left.top + 1.0 * titleSize + 1.0 * breadSize;
 
+		const paragraphs = breadText
+			.split("\n")
+			.map((line) => line.trim())
+			.filter((line) => !!line);
+
 		this.subtitles = [];
-		breadText.split("\n").forEach((paragraph, index) => {
+		paragraphs.forEach((paragraph, index) => {
 			let subtitle = scene.addText({
 				x: left.left,
 				y: ty,
 				size: breadSize,
-				color: "white",
+				color: ColorStr.White,
 				text: paragraph,
 			});
 			subtitle.setWordWrapWidth(left.width);
 			subtitle.setLineSpacing(0.2 * breadSize);
+			subtitle.setShadow(0, 2, "black", 4);
 			this.add(subtitle);
 			this.subtitles.push(subtitle);
 
@@ -241,8 +257,7 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 				subtitle.setColor(ColorStr.Red700);
 			}
 
-			console.log(this.id);
-			if (this.id == "centrala_norrk_ping") {
+			if (this.id == "centralanorrkoping") {
 				if (index == 2) {
 					subtitle.setFontSize(1.25 * breadSize);
 					subtitle.setColor(ColorStr.Amber400);
@@ -257,7 +272,7 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 		let lx = right.centerX;
 		let ly = right.centerY;
 
-		if (legendColors && legendColors.length > 0) {
+		if (legendTitle && legendColors && legendColors.length > 0) {
 			let legend = new LargeLegend(scene, lx, ly, lw, lh);
 			legend.setLegend(legendTitle, legendColors);
 			this.add(legend);
@@ -284,6 +299,8 @@ export class LegendScene extends BaseScene {
 	private legendScreens: LegendScreen[];
 	private currentScreen?: LegendScreen;
 
+	private base64Output: string;
+
 	constructor() {
 		super({ key: "LegendScene" });
 	}
@@ -294,17 +311,24 @@ export class LegendScene extends BaseScene {
 
 		this.legendScreens = [];
 
-		let legend = new LegendScreen(
-			this,
-			"Centrala Norrköping",
-			"Välkommen till Simstad!\nHär kan du utforska Norrköping med hjälp av projiceringar på den 3D-printade stadsmodellen. Ta reda på hur Norrköping skulle påverkas vid höjda havsnivåer eller var Ostlänkens nya järnvägsspår ska byggas.\nTesta själv på stora skärmen mitt emot.",
-			// "Välkommen till en 3D-upplevelse av Norrköping. Här kan du utforska dataset och information om staden.\nModellen är 3D-printad med hjälp utav 5 stycken 3d-printar av modellen Anker Maker.\n3D-modellen består utav 192 rutor, vilka kan uppdateras vid behov allt eftersom staden utvecklas. Varje ruta har tagit i snitt mellan 4 till 6 timmar att producera och total produktionstid har varit ca 6 veckor. Materialet är PLA-plast.\nGrundmodellen är framtagen utifrån Norrköpings kommuns geodata, med mark från laserscanning och manuellt karterade hus. Modellen har sedan förenklats och förberetts för 3d-print med hjälp utav programvaran houdini.",
-			"Legendtitel"
-		);
-		legend.on("click", () => this.select(legend));
-		this.legendScreens.push(legend);
-		this.add.existing(legend);
-		legend.addImage("legend_default");
+		const defaultDirs = [
+			"legend_default_forward",
+			"legend_default_right",
+			"legend_default_left",
+		];
+
+		defaultDirs.forEach((dirKey) => {
+			let legend = new LegendScreen(
+				this,
+				language.get("legend_default_title"),
+				language.get("legend_default_bread") + "\n" + language.get(dirKey)
+			);
+			legend.id = dirKey.replace("legend_", "").replace("_", "");
+			legend.on("click", () => this.select(legend));
+			this.legendScreens.push(legend);
+			this.add.existing(legend);
+			legend.addImage("legend_default");
+		});
 
 		let datasets = [
 			dataStadenIRorelse,
@@ -357,15 +381,11 @@ export class LegendScene extends BaseScene {
 		this.input.keyboard?.on("keydown-ESC", this.reset, this);
 		this.reset();
 
-		// this.input.keyboard?.on("keydown-SPACE", () => {
-		// 	if (this.currentScreen) {
-		// 		let link = document.createElement("a");
-		// 		link.download = this.currentScreen.id + ".png";
-		// 		link.href = this.game.canvas.toDataURL("image/png");
-		// 		link.click();
-		// 		console.log("Download!");
-		// 	}
-		// });
+		this.input.keyboard?.on("keydown-SPACE", () => {
+			this.automaticDownload();
+			// console.log(this.game.canvas);
+			// console.log(this.game.canvas.toDataURL("image/png"));
+		});
 	}
 
 	update(time: number, delta: number) {}
@@ -403,5 +423,40 @@ export class LegendScene extends BaseScene {
 			graphics.lineStyle(2, color as number);
 			graphics.strokeRectShape(rect as Phaser.Geom.Rectangle);
 		});
+	}
+
+	automaticDownload() {
+		this.base64Output = "";
+
+		this.legendScreens.forEach((legend, index) => {
+			this.addEvent(200 * index, () => {
+				this.select(legend);
+				this.addEvent(100, () => {
+					let base64 = this.game.canvas.toDataURL();
+					this.base64Output += legend.id + " " + base64 + "\n";
+				});
+			});
+		});
+
+		this.addEvent(1000 + 200 * this.legendScreens.length, () => {
+			this.downloadText("images.txt", this.base64Output);
+			this.reset();
+		});
+	}
+
+	downloadText(filename: string, text: string) {
+		var element = document.createElement("a");
+		element.setAttribute(
+			"href",
+			"data:text/plain;charset=utf-8," + encodeURIComponent(text)
+		);
+		element.setAttribute("download", filename);
+
+		element.style.display = "none";
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
 	}
 }
