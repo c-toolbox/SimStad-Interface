@@ -6,6 +6,7 @@ import { MapLight } from "./MapLight";
 import { SocketManager } from "@/utils/SocketManager";
 import { Response } from "@/utils/protocol";
 import { CircleButton } from "./CircleButton";
+import { MapHint } from "./MapHint";
 
 // Bottom right
 const MIN_X = 129411.4;
@@ -29,6 +30,7 @@ export class Map extends Phaser.GameObjects.Container {
 	private map: Phaser.GameObjects.Image;
 	private layerContainer: Phaser.GameObjects.Container;
 	private layers: MapLayer[];
+	private mapHint: MapHint;
 	private lamps: MapLight[];
 	private lampIds: string[];
 	private controlButtons: CircleButton[];
@@ -77,6 +79,13 @@ export class Map extends Phaser.GameObjects.Container {
 				image: layer,
 			});
 		}
+
+		this.mapHint = new MapHint(
+			scene,
+			layout.map.centerX,
+			layout.map.bottom - 90
+		);
+		this.add(this.mapHint);
 
 		this.width = this.map.displayHeight;
 
@@ -259,6 +268,7 @@ export class Map extends Phaser.GameObjects.Container {
 	onPointerDown(pointer: Phaser.Input.Pointer) {
 		if (pointer.identifier != 0) return;
 
+		this.mapHint.setVisible(false);
 		this.fingerLamp.setVisible(true);
 		this.fingerLamp.x = pointer.x;
 		this.fingerLamp.y = pointer.y;
@@ -309,5 +319,6 @@ export class Map extends Phaser.GameObjects.Container {
 			lamp.destroy();
 		});
 		this.lamps = [];
+		this.mapHint.setVisible(true);
 	}
 }

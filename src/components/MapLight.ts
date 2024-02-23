@@ -90,8 +90,8 @@ export class MapLight extends Button {
 	update(time: number, delta: number) {
 		this.container.setScale(this.aliveValue * (1 - 0.1 * this.holdSmooth));
 
-		this.x += (this.goalX - this.x) / 4;
-		this.y += (this.goalY - this.y) / 4;
+		this.x += (this.goalX - this.x) / 3;
+		this.y += (this.goalY - this.y) / 3;
 	}
 
 	onDrag(pointer: Phaser.Input.Pointer): void {
