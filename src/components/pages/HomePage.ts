@@ -77,7 +77,9 @@ export class HomePage extends Page {
 			button.on(
 				"click",
 				() => {
-					this.emit("scenario", key);
+					if (this.allowInput()) {
+						this.emit("scenario", key);
+					}
 				},
 				this
 			);

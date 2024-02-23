@@ -18,7 +18,7 @@ export class ScenarioPage extends Page {
 	private foreground: RoundRectangle;
 	private subtitle: Phaser.GameObjects.Text;
 	private title: Phaser.GameObjects.Text;
-	private bread: Phaser.GameObjects.Text;
+	private bread: Phaser.GameObjects.Text[];
 	private legend: Legend;
 	private backButton: TabButton;
 	private tabButtons: TabButton[];
@@ -69,15 +69,19 @@ export class ScenarioPage extends Page {
 		});
 		this.add(this.title);
 
-		this.bread = scene.addText({
-			x: layout.scenarioInfo.left,
-			y: this.title.y + 1.5 * this.title.displayHeight,
-			size: 28,
-			color: "white",
-		});
-		this.add(this.bread);
-		this.bread.setLineSpacing(0.25 * 28);
-		this.bread.setWordWrapWidth(layout.scenarioInfo.width);
+		this.bread = [];
+		for (let i = 0; i < 10; i++) {
+			let bread = scene.addText({
+				x: layout.scenarioInfo.left,
+				size: 28,
+				color: "white",
+			});
+			bread.setVisible(false);
+			bread.setLineSpacing(0.25 * 28);
+			bread.setWordWrapWidth(layout.scenarioInfo.width);
+			this.bread.push(bread);
+			this.add(bread);
+		}
 
 		/* Legend */
 
@@ -111,35 +115,27 @@ export class ScenarioPage extends Page {
 
 		const tn = 6;
 		const tl = layout.scenarioTabs;
-		const tw = (tl.width - (tn - 1) * layout.separation) / tn;
 		const ty = tl.centerY;
 		const th = tl.height;
 
 		this.tabButtons = [];
 		for (let i = 0; i < tn; i++) {
-			let tt = "Tab " + (i + 1);
-			let tx = tl.right - (i + 0.5) * tw - i * layout.separation;
-
-			let button = new TabButton(scene, tx, ty, tw, th, tt);
+			let button = new TabButton(scene, 0, ty, 100, th, "Tab");
+			button.setVisible(false);
 			this.add(button);
 			this.sendToBack(button);
 			this.tabButtons.push(button);
 		}
 
-		this.backButton = new TabButton(
-			scene,
-			tl.left + 0.5 * tw,
-			ty,
-			tw,
-			th,
-			"Back"
-		);
+		const tw = 180;
+		this.backButton = new TabButton(scene, tl.left + 0.5 * tw, ty, tw, th, "");
 		this.add(this.backButton);
 		this.sendToBack(this.backButton);
 		this.backButton.removeListener("click");
 		this.backButton.on("click", () => {
-			this.emit("state", PageState.Home);
-			// this.activateDataset("");
+			if (this.allowInput()) {
+				this.emit("state", PageState.Home);
+			}
 		});
 		this.backButton.setText("back");
 		this.backButton.setHighlight(true);
@@ -211,12 +207,15 @@ export class ScenarioPage extends Page {
 	}
 
 	updateTabs(count: number) {
-		const tn = count + 1;
+		const tn = count;
+		const tg = 15;
 		const tl = layout.scenarioTabs;
-		const tw = (tl.width - (tn - 1) * layout.separation) / tn;
+		const tw =
+			(tl.width - (tn - 1) * tg - this.backButton.width - layout.separation) /
+			tn;
 
 		for (let i = 0; i < tn; i++) {
-			let tx = tl.right - (i + 0.5) * tw - i * layout.separation;
+			let tx = tl.right - (i + 0.5) * tw - i * tg;
 
 			this.tabButtons[i].x = tx;
 			this.tabButtons[i].setWidth(tw);
@@ -247,12 +246,28 @@ export class ScenarioPage extends Page {
 		});
 	}
 
+	realignText() {
+		const breadText = this.bread[9].text;
+		const paragraphs = breadText
+			.split("\n")
+			.map((line) => line.trim())
+			.filter((line) => !!line);
+
+		let ty = this.title.y + 1.5 * this.title.displayHeight;
+
+		this.bread.forEach((text) => text.setVisible(false));
+		paragraphs.forEach((paragraph, index) => {
+			let bread = this.bread[index];
+			bread.setVisible(true);
+			bread.setText(paragraph);
+			bread.y = ty;
+
+			ty += bread.displayHeight + 0.75 * 28;
+		});
+	}
+
 	setSection(section: Section) {
 		this.currentSection = section;
-
-		languageManager.bind(this.subtitle, section.scenario + "title");
-		languageManager.bind(this.title, section.key + "title");
-		languageManager.bind(this.bread, section.key + "bread");
 
 		this.tabButtons.forEach((button) => {
 			button.setHighlight(button.getData("section") == section.key);
@@ -268,10 +283,14 @@ export class ScenarioPage extends Page {
 		if (section.legendColors.length > 0) {
 			this.legend.setVisible(true);
 			this.legend.setLegend(section.key + "legend", section.legendColors);
-			this.bread.setWordWrapWidth(layout.scenarioInfo.width);
+			this.bread.forEach((text) =>
+				text.setWordWrapWidth(layout.scenarioInfo.width)
+			);
 		} else {
 			this.legend.setVisible(false);
-			this.bread.setWordWrapWidth(layout.scenarioInner.width);
+			this.bread.forEach((text) =>
+				text.setWordWrapWidth(layout.scenarioInner.width)
+			);
 		}
 
 		this.layerButtons.forEach((button) => button.setVisible(false));
@@ -312,6 +331,12 @@ export class ScenarioPage extends Page {
 				}
 			});
 		}
+
+		languageManager.bind(this.subtitle, section.scenario + "title");
+		languageManager.bind(this.title, section.key + "title");
+		languageManager.bind(this.bread[9], section.key + "bread", () => {
+			this.realignText();
+		});
 
 		this.activateDataset(section.defaultLayer);
 

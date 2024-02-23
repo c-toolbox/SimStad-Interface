@@ -82,4 +82,8 @@ export class Page extends Phaser.GameObjects.Container {
 		return this;
 		// return super.setVisible(value);
 	}
+
+	allowInput() {
+		return !(this.fadeTween && this.fadeTween.isPlaying());
+	}
 }

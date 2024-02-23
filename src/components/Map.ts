@@ -83,7 +83,7 @@ export class Map extends Phaser.GameObjects.Container {
 		this.mapHint = new MapHint(
 			scene,
 			layout.map.centerX,
-			layout.map.bottom - 90
+			layout.map.bottom - 60
 		);
 		this.add(this.mapHint);
 

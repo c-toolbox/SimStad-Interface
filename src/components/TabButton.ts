@@ -52,6 +52,7 @@ export class TabButton extends Button {
 			color: "white",
 			text: text,
 		});
+		this.title.setShadow(0, 0, "black", 4);
 		this.title.setOrigin(0.5);
 		this.setText(text);
 		this.add(this.title);

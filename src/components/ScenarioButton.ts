@@ -71,6 +71,7 @@ export class ScenarioButton extends Button {
 			color: "white",
 			text: text,
 		});
+		this.title.setShadow(0, 2, "black", 4);
 		this.title.setOrigin(0.5);
 		this.setText(text);
 		this.add(this.title);
