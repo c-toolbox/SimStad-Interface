@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Kollektivtrafik",
-					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjlighet har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\n\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar, denna data kommer från Östgötatrafikens öppna API, Hinner du till nästa buss?",
+					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjlighet har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\n\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar, denna data kommer från Östgötatrafikens öppna API. Hinner du till nästa buss?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "kollektivtrafik",

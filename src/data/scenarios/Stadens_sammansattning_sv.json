@@ -85,31 +85,31 @@
 					"LegendTitle": "Vardagslivsindex",
 					"LegendColors": [
 						{
-							"color": "#ea7879",
+							"color": "#ff6364",
 							"text": "6,2 – 8,2"
 						},
 						{
-							"color": "#f8ac8d",
+							"color": "#ffa986",
 							"text": "4,6 – 6,2"
 						},
 						{
-							"color": "#f4cda0",
+							"color": "#ffce95",
 							"text": "3,5 – 4,6"
 						},
 						{
-							"color": "#dfd7ae",
+							"color": "#f8e896",
 							"text": "2,7 – 3,5"
 						},
 						{
-							"color": "#cae4be",
+							"color": "#c3f7ab",
 							"text": "1,9 – 2,7"
 						},
 						{
-							"color": "#a6d6c9",
+							"color": "#8eeed4",
 							"text": "0,9 – 1,9"
 						},
 						{
-							"color": "#73b1d1",
+							"color": "#45c0ff",
 							"text": "0,0 – 0,9"
 						}
 					]

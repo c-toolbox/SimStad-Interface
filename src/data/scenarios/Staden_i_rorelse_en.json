@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Public transport",
-					"Text1": "The map shows the public transport network. The round circles indicate a distance of 300m from the nearest stop. It is important that as many people as possible have access to public transport in the city.\n\nThe municipality strives that the distance to public transport in the central city should not be longer than 300m.\n\nHere, you can see where busses and trams are located in real time. The data in this model is the same data used for traffic information at stops and in apps. The data comes from Östgötatrafiken's open API. Are you on time for the next bus?",
+					"Text1": "The map shows the public transport network. The round circles indicate a distance of 300m from the nearest stop. It is important that as many people as possible have access to public transport in the city.\n\nThe municipality strives that the distance to public transport in the central city should not be longer than 300m.\n\nHere, you can see where busses and trams are located in real time. The data in this model is the same data used for traffic information at stops and in apps. The data comes from Östgötatrafiken's open API. Can you catch the next bus?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "kollektivtrafik",

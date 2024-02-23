@@ -31,23 +31,23 @@
 					"LegendTitle": "Vattennivå",
 					"LegendColors": [
 						{
-							"color": "#00AAFF",
+							"color": "#1aa4ea",
 							"text": "0,1 – 0,2 meter"
 						},
 						{
-							"color": "#0000FF",
+							"color": "#1a1aea",
 							"text": "0,2 – 0,3 meter"
 						},
 						{
-							"color": "#000078",
+							"color": "#0b0b74",
 							"text": "0,3 – 0,5 meter"
 						},
 						{
-							"color": "#FFFF00",
+							"color": "#eaea1a",
 							"text": "0,5 – 1 meter"
 						},
 						{
-							"color": "#FF0000",
+							"color": "#ea1a1a",
 							"text": "mer än 1 meter"
 						}
 					]
@@ -64,12 +64,7 @@
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 					"Slider": {
 						"Title": "Vattennivå i meter",
-						"Labels": [
-							"0.0",
-							"5.0",
-							"10.0",
-							"15.0"
-						],
+						"Labels": ["0.0", "5.0", "10.0", "15.0"],
 						"Layers": [
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_01",
@@ -150,11 +145,11 @@
 					"LegendTitle": "Kartlager",
 					"LegendColors": [
 						{
-							"color": "#90cf80",
+							"color": "#76d35f",
 							"text": "Träd"
 						},
 						{
-							"color": "#daebd2",
+							"color": "#cff1bf",
 							"text": "Gräsytor"
 						},
 						{
