@@ -64,7 +64,12 @@
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 					"Slider": {
 						"Title": "Water level in meters",
-						"Labels": ["0.0", "5.0", "10.0", "15.0"],
+						"Labels": [
+							"0",
+							"5",
+							"10",
+							"15"
+						],
 						"Layers": [
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_00",
 							"Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Flood/Flood_01",
