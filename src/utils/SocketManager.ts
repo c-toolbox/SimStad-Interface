@@ -5,11 +5,11 @@ import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
 import { ONLINE } from "./constants";
 
-const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5";
-// const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152";
+const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
+// const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
-const PING_TIMEOUT = 2000;
+const PING_TIMEOUT = 3000;
 
 export enum ConnectionStatus {
 	Disconnected = "Disconnected",
@@ -25,6 +25,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private pingTimeout: NodeJS.Timeout;
 	private pingAttempts: number;
 	private scenariosLoaded: boolean;
+	private localTrafficEnabled: boolean;
+	private serverTrafficEnabled: boolean;
 
 	public scene: BaseScene;
 	private debugTexts: Phaser.GameObjects.Text[];
@@ -58,6 +60,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.unrealConnectionStatus = ConnectionStatus.Disconnected;
 		this.pingAttempts = 0;
 		this.scenariosLoaded = false;
+		this.localTrafficEnabled = false;
+		this.serverTrafficEnabled = false;
 
 		this.debugTexts = [];
 
@@ -171,10 +175,18 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	onActivateTraffic(data: P.ActivateTrafficResponse) {
+		this.serverTrafficEnabled = true;
+		if (!this.localTrafficEnabled) {
+			this.sendDeactivateTraffic();
+		}
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
 	onDeactivateTraffic(data: P.DeactivateTrafficResponse) {
+		this.serverTrafficEnabled = false;
+		if (this.localTrafficEnabled) {
+			this.sendActivateTraffic();
+		}
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
@@ -218,17 +230,23 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	sendActivateTraffic() {
-		let data: P.ActivateTrafficRequest = {
-			type: P.Request.ActivateTraffic,
-		};
-		this.sendRequest(data);
+		if (!this.localTrafficEnabled) {
+			let data: P.ActivateTrafficRequest = {
+				type: P.Request.ActivateTraffic,
+			};
+			this.sendRequest(data);
+		}
+		this.localTrafficEnabled = true;
 	}
 
 	sendDeactivateTraffic() {
-		let data: P.DeactivateTrafficRequest = {
-			type: P.Request.DeactivateTraffic,
-		};
-		this.sendRequest(data);
+		if (this.localTrafficEnabled) {
+			let data: P.DeactivateTrafficRequest = {
+				type: P.Request.DeactivateTraffic,
+			};
+			this.sendRequest(data);
+		}
+		this.localTrafficEnabled = false;
 	}
 
 	sendLight(year: number, month: number, day: number, hour: number) {

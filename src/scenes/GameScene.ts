@@ -150,6 +150,7 @@ export class GameScene extends BaseScene {
 			this.map.setLayers("Nkpg/Orto20230921");
 			this.socket.sendReset();
 			this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+			this.socket.sendDeactivateTraffic();
 		}
 	}
 

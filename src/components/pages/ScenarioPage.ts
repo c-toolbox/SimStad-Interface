@@ -204,6 +204,12 @@ export class ScenarioPage extends Page {
 			[ScenarioKey.ai]: "VisualCity-Wall_360",
 		};
 		this.activateBlocks(blocks[scenario]);
+
+		if (scenario == ScenarioKey.rorelse) {
+			this.socket.sendActivateTraffic();
+		} else {
+			this.socket.sendDeactivateTraffic();
+		}
 	}
 
 	updateTabs(count: number) {
