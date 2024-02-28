@@ -77,7 +77,7 @@
 					"Text1": "I det vardagliga livet förflyttar vi oss mellan flera olika platser och målpunkter för att arbeta, studera, lämna och hämta barn på förskola, träna, köpa mat, handla, osv.\n\nHar man många av dessa saker nära till hands så har man ett stort utbud som är lätt att nå. Om det är längre till målpunkterna och de är färre så blir man oftare tvungen att resa längre sträckor för att få ihop sitt vardagspussel.\n\nFör att beskriva graden av tillgänglighet till vardagslivets funktioner har begreppet 15- minutersstaden etablerats - att inom 15 minuters förflyttning till fots eller med cykel nå många av de målpunkter som behövs i det dagliga livet.\n\nFör att mäta denna tillgänglighet har \"vardagslivsindex\" (VLX) utvecklats. Detta index kvantifierar tillgängligheten till viktiga vardagsfunktioner.",
 					"Text2": "",
 					"Datasource": "",
-					"Legend1": "vardagslivsindex",
+					"Legend1": "15minutersstaden",
 					"Legend2": "",
 					"Default": false,
 					"Idle": true,

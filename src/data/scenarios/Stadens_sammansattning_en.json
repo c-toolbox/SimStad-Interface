@@ -77,7 +77,7 @@
 					"Text1": "In everyday life, we move between several different places and destinations to work, study, drop off, pick up children at preschool, exercise, buy food, shop, etc.\n\nIf you have many of these things close at hand, you have a large selection that is available to you. If it is longer to the destination and there are fewer of them, you will often have to travel longer distances to put together your everyday puzzle.\n\nTo describe the degree of access to the functions of everyday life, the concept of the 15-minute city has been established — to be able to reach many of the destinations needed in daily life within 15 minutes of movement on foot or on bicycle.\n\nTo measure this accessibility, the \"everyday life index\" (VLX) has been developed. This index quantifies the accessibility of important everyday functions.",
 					"Text2": "",
 					"Datasource": "",
-					"Legend1": "vardagslivsindex",
+					"Legend1": "15minutersstaden",
 					"Legend2": "",
 					"Default": false,
 					"Idle": true,
