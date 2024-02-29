@@ -106,7 +106,7 @@
 					"Default": true,
 					"Idle": false,
 					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Stadskaraktar_V2,Nkpg/Vattenytor,Nkpg/Vagnat",
-					"LegendTitle": "Urban types",
+					"LegendTitle": "Urban morphology",
 					"LegendColors": [
 						{
 							"color": "#c90fc3",

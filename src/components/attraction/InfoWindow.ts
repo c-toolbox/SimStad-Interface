@@ -129,7 +129,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 					text: "Text",
 					weight: line.weight,
 				});
-				// text.setLineSpacing(10);
+				text.setLineSpacing(2);
 				// text.setBlendMode(Phaser.BlendModes.SCREEN);
 				text.setPadding(this.shadowSize);
 				text.setShadow(0, 0, "#111", this.shadowSize);
@@ -275,7 +275,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 				this.lines[i]!.y = y;
 				y += this.lines[i]!.height;
 			}
-			y += this.sep - this.shadowSize;
+			y += 0.75 * this.sep - this.shadowSize;
 		}
 
 		this.scrollArea.updateSize();

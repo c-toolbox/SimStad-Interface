@@ -44,7 +44,7 @@
 				},
 				{
 					"Title": "Traffic noise",
-					"Text1": "Here you can see how central Norrköping is affected by traffic noise. The circles around each station show the area in which the noise spreads. All cities with more than 100,000 inhabitants have an obligation to measure and calculate traffic noise at least every five years.\n\nThe calculations are made on the basis of many different parameters such as traffic flows, the design of the road, adjacent buildings and speed levels. The noise level is calculated at the facade, i.e. outside the house. How the noise level is perceived inside the house largely depends on how the house is built, how well insulated the house is and what kind of windows there are.\n\nHow do you experience traffic noise where you live?",
+					"Text1": "Here you can see how central Norrköping is affected by traffic noise. The circles around each station show the area in which the noise spreads. All cities with more than 100,000 inhabitants have an obligation to measure and calculate traffic noise at least every five years.\n\nThe simulations are made on the basis of many different parameters such as traffic flows, the design of the road, adjacent buildings and speed levels. The noise level is calculated at the facade, i.e. outside the house. How the noise level is perceived inside the house largely depends on how the house is built, how well insulated the house is and what kind of windows there are.\n\nHow do you experience traffic noise where you live?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trafikbuller",
