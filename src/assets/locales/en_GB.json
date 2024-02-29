@@ -5,7 +5,7 @@
 	"info_how_1": "How do I use it?",
 	"info_how_2": "The installation presents a number of different thematic areas that you as a user can learn more about. These are The city and the climate, The city in motion, The development of the city, The composition of the city, and The city with AI. Click on the layers to start exploring the city.",
 	"info_data_1": "What data is used here?",
-	"info_data_2": "The installation showcases a variety of thematic areas that you, as a user, can learn more about. These include the City and the Climate, the City in Motion, the City's Development, the City's Composition, and the City with AI. Click on the layers to begin exploring the city.\n",
+	"info_data_2": "The installation showcases a variety of thematic areas that you, as a user, can learn more about. These include The city and the climate, The city in motion, The city's development, The city's composition, and The city with AI. Click on the layers to begin exploring the city.\n",
 	"info_who_1": "Who collected this data?",
 	"info_who_2": "The base model was developed using geodata from the Norrköping municipality, with a terrain model produced by airborne laser scanning and manually mapped buildings. The model was then simplified and prepared for 3D printing using the Houdini software.",
 	"info_model_1": "Which data was used?",
