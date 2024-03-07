@@ -25,6 +25,7 @@ let images: Image[] = [
 	image("icons/list.png", "list"),
 	image("icons/map.png", "map"),
 	image("icons/marker.png", "marker"),
+	image("icons/pointer.png", "pointer"),
 	image("icons/projector.png", "projector"),
 	image("icons/server.png", "server"),
 	image("icons/sun.png", "sun"),
@@ -43,6 +44,8 @@ let images: Image[] = [
 	image("chapters/ai.png", "ai"),
 
 	image("legends/norrkoping-stad.jpg", "legend_default"),
+	image("legends/stadskarta1879.png", "stadskarta1879"),
+	image("legends/stadskarta1930.jpg", "stadskarta1930"),
 ];
 
 /* Load all thumbnails */

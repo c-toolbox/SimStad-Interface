@@ -191,11 +191,12 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 
 		this.id = titleText
 			.toLowerCase()
-			.replace(" ", "")
-			.replace("-", "")
-			.replace("å", "a")
-			.replace("ä", "a")
-			.replace("ö", "o");
+			.replaceAll(" ", "")
+			.replaceAll("-", "")
+			.replaceAll("!", "")
+			.replaceAll("å", "a")
+			.replaceAll("ä", "a")
+			.replaceAll("ö", "o");
 
 		let background = scene.add.rectangle(
 			screenWidth / 2,
