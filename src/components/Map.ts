@@ -304,8 +304,8 @@ export class Map extends Phaser.GameObjects.Container {
 	}
 
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
-		const py = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
-		const px = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
+		const px = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
+		const py = (lamp.goalY - layout.map.top) / layout.map.height;
 		const x = MIN_X + (MAX_X - MIN_X) * px;
 		const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 		const color = lamp.color;
