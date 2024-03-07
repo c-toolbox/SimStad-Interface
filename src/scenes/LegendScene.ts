@@ -175,6 +175,7 @@ export class LargeLegend extends Phaser.GameObjects.Container {
 }
 
 export class LegendScreen extends Phaser.GameObjects.Container {
+	public scene: BaseScene;
 	public id: string;
 
 	private subtitles: Phaser.GameObjects.Text[];
@@ -258,10 +259,20 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 				subtitle.setColor(ColorStr.Red700);
 			}
 
-			if (this.id == "centralanorrkoping") {
-				if (index == 2) {
+			if (this.id == "valkommentillsimstad") {
+				if (index == 1) {
 					subtitle.setFontSize(1.25 * breadSize);
 					subtitle.setColor(ColorStr.Amber400);
+
+					// let pointer = this.scene.add.image(
+					// 	left.centerX,
+					// 	subtitle.y,
+					// 	"arrow-left"
+					// );
+					// pointer.setScale(128 / pointer.width);
+					// pointer.setAngle(90);
+					// pointer.setTint(Color.Amber400);
+					// this.add(pointer);
 				}
 			}
 		});
@@ -354,6 +365,10 @@ export class LegendScene extends BaseScene {
 					legend.on("click", () => this.select(legend));
 					this.legendScreens.push(legend);
 					this.add.existing(legend);
+
+					if (this.textures.exists(object.Legend1)) {
+						legend.addImage(object.Legend1);
+					}
 				});
 			});
 			// });

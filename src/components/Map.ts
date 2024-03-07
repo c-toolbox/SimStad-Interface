@@ -44,8 +44,8 @@ export class Map extends Phaser.GameObjects.Container {
 		let background = new RoundRectangle(scene, {
 			x: layout.map.centerX,
 			y: layout.map.centerY,
-			width: layout.map.width + 8,
-			height: layout.map.height + 8,
+			width: layout.map.width,
+			height: layout.map.height,
 			radius: 4,
 			color: Color.Slate800,
 		});
@@ -57,7 +57,7 @@ export class Map extends Phaser.GameObjects.Container {
 			"minimaps/Nkpg/Hillshade"
 		);
 		// this.map.angle = -90;
-		// this.map.setScale(layout.map.height / this.map.width);
+		this.map.setScale(layout.map.width / this.map.width);
 		this.add(this.map);
 
 		this.layerContainer = scene.add.container();
@@ -72,6 +72,7 @@ export class Map extends Phaser.GameObjects.Container {
 			);
 			this.layerContainer.add(layer);
 			layer.setVisible(false);
+			layer.setScale(layout.map.width / layer.width);
 			this.layers.push({
 				active: false,
 				fade: 0.0,
@@ -105,8 +106,8 @@ export class Map extends Phaser.GameObjects.Container {
 		let controlsBg = new RoundRectangle(scene, {
 			x: layout.mapControls.centerX,
 			y: layout.mapControls.centerY,
-			width: layout.mapControls.width + 8,
-			height: layout.mapControls.height + 8,
+			width: layout.mapControls.width,
+			height: layout.mapControls.height,
 			radius: layout.radius,
 			color: Color.Slate900,
 		});

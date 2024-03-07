@@ -290,6 +290,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
+	/* Time settings */
+
+	setHour(value: number) {
+		let hour = (23 + 59 / 60) * value;
+		this.sendLight(2024, 7, 1, hour);
+	}
+
 	/* Connection establishing */
 
 	reconnectToUnreal() {
@@ -364,10 +371,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		});
 		this.unrealLabel.setOrigin(0, 0.5);
 
-		this.omniIcon.setVisible(false);
-		this.omniLabel.setVisible(false);
-		this.unrealIcon.setVisible(false);
-		this.unrealLabel.setVisible(false);
+		const showOmni = this.omniConnectionStatus != ConnectionStatus.Connected;
+		const showUnreal = this.omniConnectionStatus != ConnectionStatus.Connected;
+		this.omniIcon.setVisible(showOmni);
+		this.omniLabel.setVisible(showOmni);
+		this.unrealIcon.setVisible(showUnreal);
+		this.unrealLabel.setVisible(showUnreal);
 	}
 
 	updateStatusIcons() {

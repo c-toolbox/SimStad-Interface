@@ -130,36 +130,16 @@ export class DebugPage extends Page {
 
 		x -= w + s;
 		y += h + s;
-		this.addButton(x, y, w, h, "Activate Buller", Color.Amber600, () => {
+		this.addButton(x, y, w, h, "Activate Movie", Color.Green700, () => {
 			this.socket.send({
 				type: "ActivateDatasetRequest",
-				datasets: "Nkpg/Buller_V2",
+				datasets: "Idle/Idle_Movie",
 			});
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "Deactivate Buller", Color.Amber900, () => {
-			this.socket.send({
-				type: "DeactivateDatasetRequest",
-				datasets: "Nkpg/Buller_V2",
-			});
-		});
-
-		x -= w + s;
-		y += h + s;
-		this.addButton(x, y, w, h, "Activate Flood_60", Color.Amber600, () => {
-			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "Flood/Flood_60",
-			});
-		});
-
-		x += w + s;
-		this.addButton(x, y, w, h, "Deactivate Flood_60", Color.Amber900, () => {
-			this.socket.send({
-				type: "DeactivateDatasetRequest",
-				datasets: "Flood/Flood_60",
-			});
+		this.addButton(x, y, w, h, "Deactivate Movie", Color.Red800, () => {
+			this.socket.sendReset();
 		});
 	}
 
