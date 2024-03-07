@@ -36,6 +36,7 @@ export class UIScene extends BaseScene {
 
 		this.currentLanguage = languageManager.getCurrentLanguage();
 		this.audioEnabled = true;
+		this.sendBlocksAudio();
 
 		this.allowInput = false;
 		setTimeout(() => {
@@ -262,6 +263,8 @@ export class UIScene extends BaseScene {
 			audioButton.setTexture("audio-loud");
 			audioButton.setTint(0xffffff);
 		}
+
+		this.sendBlocksAudio();
 	}
 
 	sendBlocksAudio() {
