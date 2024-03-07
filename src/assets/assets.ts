@@ -15,11 +15,16 @@ let images: Image[] = [
 	image("icons/arrow-left.png", "arrow-left"),
 	image("icons/arrows-rotate.png", "arrows-rotate"),
 	image("icons/arrows-swap.png", "arrows-swap"),
+	image("icons/audio-loud.png", "audio-loud"),
+	image("icons/audio-mute.png", "audio-mute"),
 	image("icons/book.png", "book"),
 	image("icons/city.png", "city"),
+	image("icons/flag-en.png", "flag-en"),
+	image("icons/flag-se.png", "flag-se"),
 	image("icons/gear-code.png", "gear-code"),
 	image("icons/gears.png", "gears"),
 	image("icons/globe.png", "globe"),
+	image("icons/info.png", "info"),
 	image("icons/layers.png", "layers"),
 	image("icons/lightbulb.png", "lightbulb"),
 	image("icons/list.png", "list"),
@@ -27,6 +32,7 @@ let images: Image[] = [
 	image("icons/marker.png", "marker"),
 	image("icons/pointer.png", "pointer"),
 	image("icons/projector.png", "projector"),
+	image("icons/reset.png", "reset"),
 	image("icons/server.png", "server"),
 	image("icons/sun.png", "sun"),
 	image("icons/sunrise.png", "sunrise"),
@@ -72,9 +78,7 @@ for (let path in minimapImageGlob) {
 }
 
 /* Spritesheets */
-const spritesheets: SpriteSheet[] = [
-	spritesheet("icons_128.png", "icons", 128, 128),
-];
+const spritesheets: SpriteSheet[] = [];
 
 /* Audios */
 const audios: Audio[] = [];

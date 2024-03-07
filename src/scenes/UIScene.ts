@@ -1,7 +1,13 @@
 import { BaseScene } from "./BaseScene";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import { VERSION, IDLE_TIME, IDLE_FADE, SCALE } from "@/utils/constants";
+import {
+	VERSION,
+	IDLE_TIME,
+	IDLE_FADE,
+	SCALE,
+	ONLINE,
+} from "@/utils/constants";
 
 import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
@@ -17,6 +23,7 @@ export class UIScene extends BaseScene {
 	// private storyWindow: StoryWindow;
 	private toolButtons: ToolboxButton[];
 	private currentLanguage: LanguageKey;
+	private audioEnabled: boolean;
 
 	private allowInput: boolean;
 
@@ -28,6 +35,7 @@ export class UIScene extends BaseScene {
 		this.fade(false, 250, 0x000000);
 
 		this.currentLanguage = languageManager.getCurrentLanguage();
+		this.audioEnabled = true;
 
 		this.allowInput = false;
 		setTimeout(() => {
@@ -72,20 +80,22 @@ export class UIScene extends BaseScene {
 
 		const toolButtons = [
 			{
-				image: "icon-info-dot",
+				image: "info",
 				function: this.onInfoButton,
 			},
 			{
-				image: "icon-reset",
+				image: this.audioEnabled ? "audio-loud" : "audio-mute",
+				function: this.onAudioButton,
+			},
+			{
+				image: "reset",
 				function: () => {
 					this.onRestartButton(true);
 				},
 			},
 			{
 				image:
-					this.currentLanguage == LanguageKey.Swedish
-						? "icon-menu-flag-en"
-						: "icon-menu-flag-se",
+					this.currentLanguage == LanguageKey.Swedish ? "flag-en" : "flag-se",
 				function: this.onLanguageButton,
 			},
 		];
@@ -157,7 +167,8 @@ export class UIScene extends BaseScene {
 			if (
 				!this.attractionView.visible ||
 				this.infoWindow.isOpen ||
-				this.currentLanguage != LanguageKey.Swedish
+				this.currentLanguage != LanguageKey.Swedish ||
+				!this.audioEnabled
 			) {
 				if (this.idleTimer > IDLE_TIME) {
 					this.fader.setVisible(true);
@@ -215,22 +226,62 @@ export class UIScene extends BaseScene {
 		if (this.currentLanguage == LanguageKey.English) {
 			this.onLanguageButton();
 		}
+
+		if (!this.audioEnabled) {
+			this.onAudioButton();
+		}
 	}
 
 	onLanguageButton() {
 		if (!this.allowInput) return;
 
-		const languageButton = this.toolButtons[this.toolButtons.length - 1];
+		const languageButton = this.toolButtons[3];
 
 		if (this.currentLanguage == LanguageKey.Swedish) {
 			this.currentLanguage = LanguageKey.English;
 			languageManager.setLanguage(LanguageKey.English);
-			languageButton.setTexture("icon-menu-flag-se");
+			languageButton.setTexture("flag-se");
 		} else {
 			this.currentLanguage = LanguageKey.Swedish;
 			languageManager.setLanguage(LanguageKey.Swedish);
-			languageButton.setTexture("icon-menu-flag-en");
+			languageButton.setTexture("flag-en");
 		}
+	}
+
+	onAudioButton() {
+		if (!this.allowInput) return;
+
+		const audioButton = this.toolButtons[1];
+
+		if (this.audioEnabled) {
+			this.audioEnabled = false;
+			audioButton.setTexture("audio-mute");
+			audioButton.setTint(0xff0000);
+		} else {
+			this.audioEnabled = true;
+			audioButton.setTexture("audio-loud");
+			audioButton.setTint(0xffffff);
+		}
+	}
+
+	sendBlocksAudio() {
+		if (!ONLINE) return;
+
+		const task = this.audioEnabled
+			? "VisualCity-Wall_PlayAudio"
+			: "VisualCity-Wall_PauseAudio";
+
+		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
+			method: "POST",
+			body: JSON.stringify({
+				task,
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8",
+			},
+		})
+			.then((response) => response.json())
+			.then((json) => console.log("Blocks:", json));
 	}
 
 	wakeUp() {
