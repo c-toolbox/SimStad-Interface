@@ -85,10 +85,6 @@ export class HomePage extends Page {
 			);
 			this.add(button);
 			this.scenarioButtons.push(button);
-
-			if (key == ScenarioKey.ai) {
-				button.disable();
-			}
 		});
 
 		// let nineslice = scene.add.nineslice(

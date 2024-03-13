@@ -1,21 +1,167 @@
 {
-	"Title": "Coming soon",
+	"Title": "The city with AI",
 	"Sections": [
 		{
 			"Label1": "",
 			"SectionObject": [
 				{
-					"Title": "AI",
-					"Text1": "Adipisicing ea incididunt duis aute in. Lorem culpa minim velit dolor sit qui est esse velit esse Lorem aliqua. Fugiat commodo velit occaecat quis do cillum esse eu esse ex nisi exercitation consectetur eu. Sint non nisi et ut sunt aliquip veniam adipisicing commodo cillum consectetur reprehenderit. Ipsum enim voluptate proident et id labore consectetur qui laborum anim eu nostrud ipsum. Sunt eiusmod enim irure est eiusmod nostrud velit cupidatat veniam quis.",
+					"Title": "Buildings",
+					"Text1": "Culpa eu ipsum anim anim veniam in exercitation eiusmod deserunt pariatur magna qui fugiat. Veniam aliqua nostrud adipisicing voluptate nisi pariatur culpa aliquip ex occaecat. Pariatur irure velit quis nisi officia et velit cillum non sint minim.",
 					"Text2": "",
 					"Datasource": "",
-					"Legend1": "?????",
+					"Legend1": "byggnader",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Byggnad/0",
+					"Slider": {
+						"Title": "?????",
+						"Labels": [
+							"0",
+							"10",
+							"20",
+							"40"
+						],
+						"Layers": [
+							"Byggnad/Byggnad_X",
+							"Byggnad/Byggnad_00",
+							"Byggnad/Byggnad_01",
+							"Byggnad/Byggnad_02",
+							"Byggnad/Byggnad_03",
+							"Byggnad/Byggnad_04",
+							"Byggnad/Byggnad_05",
+							"Byggnad/Byggnad_06",
+							"Byggnad/Byggnad_07",
+							"Byggnad/Byggnad_08",
+							"Byggnad/Byggnad_09",
+							"Byggnad/Byggnad_10",
+							"Byggnad/Byggnad_12",
+							"Byggnad/Byggnad_14",
+							"Byggnad/Byggnad_16",
+							"Byggnad/Byggnad_19",
+							"Byggnad/Byggnad_22",
+							"Byggnad/Byggnad_25",
+							"Byggnad/Byggnad_28",
+							"Byggnad/Byggnad_31",
+							"Byggnad/Byggnad_34",
+							"Byggnad/Byggnad_37",
+							"Byggnad/Byggnad_40"
+						]
+					},
+					"LegendTitle": "?????",
+					"LegendColors": [
+						{
+							"color": "#f4d12b",
+							"text": "?????"
+						},
+						{
+							"color": "#ff0000",
+							"text": "?????"
+						}
+					]
+				},
+				{
+					"Title": "Vegetation",
+					"Text1": "Esse velit laboris cupidatat amet culpa id. Qui veniam amet qui cupidatat proident tempor elit enim labore eu eu pariatur. Ut qui anim id ad laborum quis deserunt excepteur incididunt. Dolor do dolore irure anim commodo magna qui cillum sint Lorem. Officia eu qui qui voluptate do amet mollit proident consequat incididunt officia in laborum nostrud. Deserunt proident labore laboris laborum esse mollit deserunt tempor irure aliquip non.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "vegetation",
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Nkpg/Hillshade",
-					"LegendTitle": "",
-					"LegendColors": []
+					"Filenames": "Vegitation/0",
+					"Slider": {
+						"Title": "?????",
+						"Labels": [
+							"0",
+							"10",
+							"20",
+							"40"
+						],
+						"Layers": [
+							"Vegitation/Vegitation_X",
+							"Vegitation/Vegitation_00",
+							"Vegitation/Vegitation_01",
+							"Vegitation/Vegitation_08",
+							"Vegitation/Vegitation_09",
+							"Vegitation/Vegitation_10",
+							"Vegitation/Vegitation_11",
+							"Vegitation/Vegitation_12",
+							"Vegitation/Vegitation_13",
+							"Vegitation/Vegitation_14",
+							"Vegitation/Vegitation_16",
+							"Vegitation/Vegitation_18",
+							"Vegitation/Vegitation_23",
+							"Vegitation/Vegitation_26",
+							"Vegitation/Vegitation_29",
+							"Vegitation/Vegitation_33",
+							"Vegitation/Vegitation_36",
+							"Vegitation/Vegitation_40"
+						]
+					},
+					"LegendTitle": "?????",
+					"LegendColors": [
+						{
+							"color": "#12c45d",
+							"text": "?????"
+						},
+						{
+							"color": "#ff0000",
+							"text": "?????"
+						}
+					]
+				},
+				{
+					"Title": "Asphalt",
+					"Text1": "Esse veniam quis velit sint cupidatat nulla eu sit ullamco consectetur ad culpa consequat. Occaecat sit ullamco ullamco nulla incididunt qui sunt in voluptate Lorem sit aliqua labore. Cillum nulla cupidatat sit veniam nisi ullamco exercitation occaecat ipsum enim laboris commodo esse et.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "asfalt",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Asfalt/0",
+					"Slider": {
+						"Title": "?????",
+						"Labels": [
+							"0",
+							"10",
+							"20",
+							"40"
+						],
+						"Layers": [
+							"Asfalt/Asfalt_X",
+							"Asfalt/Asfalt_00",
+							"Asfalt/Asfalt_02",
+							"Asfalt/Asfalt_03",
+							"Asfalt/Asfalt_04",
+							"Asfalt/Asfalt_05",
+							"Asfalt/Asfalt_06",
+							"Asfalt/Asfalt_07",
+							"Asfalt/Asfalt_08",
+							"Asfalt/Asfalt_09",
+							"Asfalt/Asfalt_10",
+							"Asfalt/Asfalt_11",
+							"Asfalt/Asfalt_14",
+							"Asfalt/Asfalt_18",
+							"Asfalt/Asfalt_22",
+							"Asfalt/Asfalt_26",
+							"Asfalt/Asfalt_30",
+							"Asfalt/Asfalt_36",
+							"Asfalt/Asfalt_40"
+						]
+					},
+					"LegendTitle": "?????",
+					"LegendColors": [
+						{
+							"color": "#ff7800",
+							"text": "?????"
+						},
+						{
+							"color": "#ff0000",
+							"text": "?????"
+						}
+					]
 				}
 			]
 		}

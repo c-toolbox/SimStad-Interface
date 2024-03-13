@@ -27,7 +27,7 @@ export class MapLight extends Button {
 		this.goalY = y;
 
 		this.height = 100;
-		const size = 20;
+		const size = 10;
 
 		let maskGraphics = this.scene.make.graphics({}, false);
 		maskGraphics.fillStyle(Color.White);

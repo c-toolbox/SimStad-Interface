@@ -1,21 +1,167 @@
 {
-	"Title": "Kommer snart",
+	"Title": "Staden med AI",
 	"Sections": [
 		{
 			"Label1": "",
 			"SectionObject": [
 				{
-					"Title": "AI",
-					"Text1": "Adipisicing ea incididunt duis aute in. Lorem culpa minim velit dolor sit qui est esse velit esse Lorem aliqua. Fugiat commodo velit occaecat quis do cillum esse eu esse ex nisi exercitation consectetur eu. Sint non nisi et ut sunt aliquip veniam adipisicing commodo cillum consectetur reprehenderit. Ipsum enim voluptate proident et id labore consectetur qui laborum anim eu nostrud ipsum. Sunt eiusmod enim irure est eiusmod nostrud velit cupidatat veniam quis.",
+					"Title": "Byggnader",
+					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera ett objekt eller ett material och blir säkrare och säkrare på att identifiera dessa. Det går också att se att AI modellen inte är perfekt, på många ställen uppstår fel, att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i urvalet.\n\nDe röda områdena visar på de två urvalsområden som använts för att träna AI-modellen. Urvals områdena är från en mycket begränsad del av Staden men kan ändå berätta något om den samlade bilden av hela stadens sammansättning.\n\nProcessen att skapa masker kallas för bildannotering och inlärningsmetoden för AI-modellen kallas för övervakad inlärning, dvs vi människor styr och hjälper AI-modellen att förstå.",
 					"Text2": "",
 					"Datasource": "",
-					"Legend1": "?????",
+					"Legend1": "byggnader",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Byggnad/0",
+					"Slider": {
+						"Title": "Träningssteg",
+						"Labels": [
+							"0",
+							"10",
+							"20",
+							"40"
+						],
+						"Layers": [
+							"Byggnad/Byggnad_X",
+							"Byggnad/Byggnad_00",
+							"Byggnad/Byggnad_01",
+							"Byggnad/Byggnad_02",
+							"Byggnad/Byggnad_03",
+							"Byggnad/Byggnad_04",
+							"Byggnad/Byggnad_05",
+							"Byggnad/Byggnad_06",
+							"Byggnad/Byggnad_07",
+							"Byggnad/Byggnad_08",
+							"Byggnad/Byggnad_09",
+							"Byggnad/Byggnad_10",
+							"Byggnad/Byggnad_12",
+							"Byggnad/Byggnad_14",
+							"Byggnad/Byggnad_16",
+							"Byggnad/Byggnad_19",
+							"Byggnad/Byggnad_22",
+							"Byggnad/Byggnad_25",
+							"Byggnad/Byggnad_28",
+							"Byggnad/Byggnad_31",
+							"Byggnad/Byggnad_34",
+							"Byggnad/Byggnad_37",
+							"Byggnad/Byggnad_40"
+						]
+					},
+					"LegendTitle": "Klassificering",
+					"LegendColors": [
+						{
+							"color": "#f4d12b",
+							"text": "Byggnader"
+						},
+						{
+							"color": "#ff0000",
+							"text": "Träningsområde"
+						}
+					]
+				},
+				{
+					"Title": "Vegetation",
+					"Text1": "Finns det tillgång till önskad mängd grönyta i Norrköping? Att ha tillgång till grönyta är både en fråga om ökad upplevelse och livskvalité men också viktigt ur ett klimatanpssningsperspektiv. Grönytan hjälper både till att infiltrera vatten vid regn och reducera höga temperaturer på sommaren. AI-modellen kan mäta mängden grönyta över en hel stad på ett sätt som inte kunnat göras innan.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "vegetation",
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Nkpg/Hillshade",
-					"LegendTitle": "",
-					"LegendColors": []
+					"Filenames": "Vegitation/0",
+					"Slider": {
+						"Title": "Träningssteg",
+						"Labels": [
+							"0",
+							"10",
+							"20",
+							"40"
+						],
+						"Layers": [
+							"Vegitation/Vegitation_X",
+							"Vegitation/Vegitation_00",
+							"Vegitation/Vegitation_01",
+							"Vegitation/Vegitation_08",
+							"Vegitation/Vegitation_09",
+							"Vegitation/Vegitation_10",
+							"Vegitation/Vegitation_11",
+							"Vegitation/Vegitation_12",
+							"Vegitation/Vegitation_13",
+							"Vegitation/Vegitation_14",
+							"Vegitation/Vegitation_16",
+							"Vegitation/Vegitation_18",
+							"Vegitation/Vegitation_23",
+							"Vegitation/Vegitation_26",
+							"Vegitation/Vegitation_29",
+							"Vegitation/Vegitation_33",
+							"Vegitation/Vegitation_36",
+							"Vegitation/Vegitation_40"
+						]
+					},
+					"LegendTitle": "Klassificering",
+					"LegendColors": [
+						{
+							"color": "#12c45d",
+							"text": "Vegetation"
+						},
+						{
+							"color": "#ff0000",
+							"text": "Träningsområde"
+						}
+					]
+				},
+				{
+					"Title": "Asfalt",
+					"Text1": "Att veta vart det finns hårdgjorda asfaltsytor är intressant både för att kunna kalkylera på behovet av ex snöskottning men också för att få en förståelse för vart varma ytor kan uppstå. Asfalt absorberar och lagrar värme under lång tid, något som kan ge upphov till en varmare stad.",
+					"Text2": "",
+					"Datasource": "",
+					"Legend1": "asfalt",
+					"Legend2": "",
+					"Default": true,
+					"Idle": false,
+					"Filenames": "Asfalt/0",
+					"Slider": {
+						"Title": "Träningssteg",
+						"Labels": [
+							"0",
+							"10",
+							"20",
+							"40"
+						],
+						"Layers": [
+							"Asfalt/Asfalt_X",
+							"Asfalt/Asfalt_00",
+							"Asfalt/Asfalt_02",
+							"Asfalt/Asfalt_03",
+							"Asfalt/Asfalt_04",
+							"Asfalt/Asfalt_05",
+							"Asfalt/Asfalt_06",
+							"Asfalt/Asfalt_07",
+							"Asfalt/Asfalt_08",
+							"Asfalt/Asfalt_09",
+							"Asfalt/Asfalt_10",
+							"Asfalt/Asfalt_11",
+							"Asfalt/Asfalt_14",
+							"Asfalt/Asfalt_18",
+							"Asfalt/Asfalt_22",
+							"Asfalt/Asfalt_26",
+							"Asfalt/Asfalt_30",
+							"Asfalt/Asfalt_36",
+							"Asfalt/Asfalt_40"
+						]
+					},
+					"LegendTitle": "Klassificering",
+					"LegendColors": [
+						{
+							"color": "#ff7800",
+							"text": "Asfalt"
+						},
+						{
+							"color": "#ff0000",
+							"text": "Träningsområde"
+						}
+					]
 				}
 			]
 		}

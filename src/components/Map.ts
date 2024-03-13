@@ -173,7 +173,10 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.layers.forEach((layer) => {
 			let dx = ((layer.active ? delta : -delta) / 1000) * 2;
-			if (layer.texture.includes("Flood")) dx = 1;
+
+			if (["Flood", "Asfalt", "Byggnad", "Vegitation"].some(name => layer.texture.includes(name))) {
+				dx = 1;
+			}
 
 			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
 			layer.image.setVisible(layer.fade > 0);
