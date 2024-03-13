@@ -13,7 +13,7 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Byggnad/0",
+					"Filenames": "Byggnad/Byggnad_00",
 					"Slider": {
 						"Title": "Träningssteg",
 						"Labels": [
@@ -23,7 +23,6 @@
 							"40"
 						],
 						"Layers": [
-							"Byggnad/Byggnad_X",
 							"Byggnad/Byggnad_00",
 							"Byggnad/Byggnad_01",
 							"Byggnad/Byggnad_02",
@@ -69,7 +68,7 @@
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Vegitation/0",
+					"Filenames": "Vegitation/Vegitation_00",
 					"Slider": {
 						"Title": "Träningssteg",
 						"Labels": [
@@ -79,7 +78,6 @@
 							"40"
 						],
 						"Layers": [
-							"Vegitation/Vegitation_X",
 							"Vegitation/Vegitation_00",
 							"Vegitation/Vegitation_01",
 							"Vegitation/Vegitation_08",
@@ -120,7 +118,7 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Asfalt/0",
+					"Filenames": "Asfalt/Asfalt_00",
 					"Slider": {
 						"Title": "Träningssteg",
 						"Labels": [
@@ -130,7 +128,6 @@
 							"40"
 						],
 						"Layers": [
-							"Asfalt/Asfalt_X",
 							"Asfalt/Asfalt_00",
 							"Asfalt/Asfalt_02",
 							"Asfalt/Asfalt_03",

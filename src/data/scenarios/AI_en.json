@@ -6,16 +6,16 @@
 			"SectionObject": [
 				{
 					"Title": "Buildings",
-					"Text1": "Culpa eu ipsum anim anim veniam in exercitation eiusmod deserunt pariatur magna qui fugiat. Veniam aliqua nostrud adipisicing voluptate nisi pariatur culpa aliquip ex occaecat. Pariatur irure velit quis nisi officia et velit cillum non sint minim.",
+					"Text1": "The image sequence shows how the AI model gradually learns to identify an object or a material and becomes more and more confident in identifying these. It is also possible to see that the AI model is not perfect, in many places errors occur, that these errors occur can for example due to the small amount of training data that has been in the sample.\n\nThe red areas show the two sample areas used to train the AI model. The selected areas are from a very limited part of the City, but can still tell us something about the overall picture of the composition of the entire city.\n\nThe process of creating masks is called image annotation and the learning method for the AI model is called supervised learning, i.e. we humans control and help the AI model understand.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "byggnader",
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Byggnad/0",
+					"Filenames": "Byggnad/Byggnad_00",
 					"Slider": {
-						"Title": "?????",
+						"Title": "Training steps",
 						"Labels": [
 							"0",
 							"10",
@@ -23,7 +23,6 @@
 							"40"
 						],
 						"Layers": [
-							"Byggnad/Byggnad_X",
 							"Byggnad/Byggnad_00",
 							"Byggnad/Byggnad_01",
 							"Byggnad/Byggnad_02",
@@ -48,30 +47,30 @@
 							"Byggnad/Byggnad_40"
 						]
 					},
-					"LegendTitle": "?????",
+					"LegendTitle": "Classification",
 					"LegendColors": [
 						{
 							"color": "#f4d12b",
-							"text": "?????"
+							"text": "Buildings"
 						},
 						{
 							"color": "#ff0000",
-							"text": "?????"
+							"text": "Training area"
 						}
 					]
 				},
 				{
 					"Title": "Vegetation",
-					"Text1": "Esse velit laboris cupidatat amet culpa id. Qui veniam amet qui cupidatat proident tempor elit enim labore eu eu pariatur. Ut qui anim id ad laborum quis deserunt excepteur incididunt. Dolor do dolore irure anim commodo magna qui cillum sint Lorem. Officia eu qui qui voluptate do amet mollit proident consequat incididunt officia in laborum nostrud. Deserunt proident labore laboris laborum esse mollit deserunt tempor irure aliquip non.",
+					"Text1": "Is there access to the desired amount of green space in Norrköping? Having access to green space is both a matter of increased experience and quality of life, but also important from a climate adaptation perspective. The green surface helps both to infiltrate water in the event of rain and to reduce high temperatures in the summer. The AI model can measure the amount of green space over an entire city in a way that could not be done before.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "vegetation",
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Vegitation/0",
+					"Filenames": "Vegitation/Vegitation_00",
 					"Slider": {
-						"Title": "?????",
+						"Title": "Training steps",
 						"Labels": [
 							"0",
 							"10",
@@ -79,7 +78,6 @@
 							"40"
 						],
 						"Layers": [
-							"Vegitation/Vegitation_X",
 							"Vegitation/Vegitation_00",
 							"Vegitation/Vegitation_01",
 							"Vegitation/Vegitation_08",
@@ -99,30 +97,30 @@
 							"Vegitation/Vegitation_40"
 						]
 					},
-					"LegendTitle": "?????",
+					"LegendTitle": "Classification",
 					"LegendColors": [
 						{
 							"color": "#12c45d",
-							"text": "?????"
+							"text": "Vegetation"
 						},
 						{
 							"color": "#ff0000",
-							"text": "?????"
+							"text": "Training area"
 						}
 					]
 				},
 				{
 					"Title": "Asphalt",
-					"Text1": "Esse veniam quis velit sint cupidatat nulla eu sit ullamco consectetur ad culpa consequat. Occaecat sit ullamco ullamco nulla incididunt qui sunt in voluptate Lorem sit aliqua labore. Cillum nulla cupidatat sit veniam nisi ullamco exercitation occaecat ipsum enim laboris commodo esse et.",
+					"Text1": "Knowing where there are hard asphalt surfaces is interesting both to be able to calculate the need for e.g. snow shoveling but also to gain an understanding of where hot surfaces can occur. Asphalt absorbs and stores heat for a long time, something that can give rise to a warmer city.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "asfalt",
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Asfalt/0",
+					"Filenames": "Asfalt/Asfalt_00",
 					"Slider": {
-						"Title": "?????",
+						"Title": "Training steps",
 						"Labels": [
 							"0",
 							"10",
@@ -130,7 +128,6 @@
 							"40"
 						],
 						"Layers": [
-							"Asfalt/Asfalt_X",
 							"Asfalt/Asfalt_00",
 							"Asfalt/Asfalt_02",
 							"Asfalt/Asfalt_03",
@@ -151,15 +148,15 @@
 							"Asfalt/Asfalt_40"
 						]
 					},
-					"LegendTitle": "?????",
+					"LegendTitle": "Classification",
 					"LegendColors": [
 						{
 							"color": "#ff7800",
-							"text": "?????"
+							"text": "Asphalt"
 						},
 						{
 							"color": "#ff0000",
-							"text": "?????"
+							"text": "Training area"
 						}
 					]
 				}
