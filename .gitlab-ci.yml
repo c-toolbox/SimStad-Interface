@@ -33,6 +33,11 @@ build-job:
     - npm run build
     - echo "Compile complete."
 
+  artifacts:
+    paths:
+      - dist/win/digitaltwincity-interface
+
+
   cache:
     key: build-cache
     paths:
