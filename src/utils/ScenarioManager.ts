@@ -32,6 +32,7 @@ export interface ScenarioData {
 				color: string;
 				text: string;
 			}[];
+			LegendSource?: string;
 			Buttons?: {
 				Title: string;
 				Layers: string;
@@ -207,6 +208,12 @@ export class ScenarioManager {
 				}
 				if (sectionEn.Slider) {
 					englishLocales[sectionKey + "sliderTitle"] = sectionEn.Slider.Title;
+				}
+				if (sectionSv.LegendSource) {
+					swedishLocales[sectionKey + "legendSource"] = sectionSv.LegendSource;
+				}
+				if (sectionEn.LegendSource) {
+					englishLocales[sectionKey + "legendSource"] = sectionEn.LegendSource;
 				}
 			}
 		});

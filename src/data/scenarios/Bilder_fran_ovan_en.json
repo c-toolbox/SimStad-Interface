@@ -15,7 +15,8 @@
 					"Idle": false,
 					"Filenames": "Nkpg/Orto20230921",
 					"LegendTitle": "",
-					"LegendColors": []
+					"LegendColors": [],
+					"LegendSource": "Source: Municipality of Norrköping"
 				},
 				{
 					"Title": "Aerial photo 1974",
@@ -28,7 +29,8 @@
 					"Idle": false,
 					"Filenames": "Nkpg/Norrkoping1974",
 					"LegendTitle": "",
-					"LegendColors": []
+					"LegendColors": [],
+					"LegendSource": "Photo: Bladh, Oskar"
 				},
 				{
 					"Title": "Aerial photo 1959",
@@ -41,7 +43,8 @@
 					"Idle": false,
 					"Filenames": "Nkpg/Norrkoping1959",
 					"LegendTitle": "",
-					"LegendColors": []
+					"LegendColors": [],
+					"LegendSource": "Photo: AB Flygfotografi / Östergötlands museum"
 				},
 				{
 					"Title": "City map 1930",
@@ -54,7 +57,8 @@
 					"Idle": false,
 					"Filenames": "Nkpg/1930_centrala_norrkoping",
 					"LegendTitle": "",
-					"LegendColors": []
+					"LegendColors": [],
+					"LegendSource": "Source: Municipality of Norrköping"
 				},
 				{
 					"Title": "City map 1879",
@@ -67,7 +71,8 @@
 					"Idle": false,
 					"Filenames": "Color/black,Nkpg/Lundgren1879",
 					"LegendTitle": "",
-					"LegendColors": []
+					"LegendColors": [],
+					"LegendSource": "Source: Municipality of Norrköping"
 				}
 			]
 		}

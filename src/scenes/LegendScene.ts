@@ -13,6 +13,8 @@ import {
 	colorToNumber,
 	interpolateColor,
 } from "@/utils/functions";
+import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
+import { ScenarioData } from "@/utils/ScenarioManager";
 
 const screenWidth = 1920;
 const screenHeight = 1080;
@@ -261,18 +263,45 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 
 			if (this.id == "valkommentillsimstad") {
 				if (index == 1) {
-					subtitle.setFontSize(1.25 * breadSize);
-					subtitle.setColor(ColorStr.Amber400);
+					let x = left.centerX - separation / 2;
+					// let y = (left.bottom + subtitle.y) / 2 - 75;
+					let y = left.bottom - 330;
+					let r = 60;
 
-					// let pointer = this.scene.add.image(
-					// 	left.centerX,
-					// 	subtitle.y,
-					// 	"arrow-left"
-					// );
-					// pointer.setScale(128 / pointer.width);
-					// pointer.setAngle(90);
-					// pointer.setTint(Color.Amber400);
-					// this.add(pointer);
+					let panel = new RoundRectangle(scene, {
+						x: x,
+						y: y + (separation + 1.2 * breadSize) / 2,
+						width: left.width - separation,
+						height: 310,
+						radius,
+						color: Color.Slate900,
+					});
+					panel.setAlpha(0.5);
+					this.add(panel);
+					this.moveDown(panel);
+
+					subtitle.setFontFamily("Lato-Bold");
+					subtitle.setFontSize(1.2 * breadSize);
+					subtitle.setColor(ColorStr.Amber400);
+					subtitle.setOrigin(0.5, 0.0);
+					subtitle.x = x;
+					subtitle.y = y + r + separation;
+
+					let circleShadow = this.scene.add.circle(x, y + 2, r, Color.Black);
+					this.add(circleShadow);
+					circleShadow.setPostPipeline(BlurPostFilter);
+
+					let circle = this.scene.add.circle(x, y, r, Color.Amber400);
+					this.add(circle);
+
+					let pointer = this.scene.add.image(circle.x, circle.y, "arrow-left");
+					pointer.setScale((1.1 * circle.width) / pointer.width);
+					pointer.setTint(Color.Slate950);
+					this.add(pointer);
+
+					if (paragraph.includes("vänster")) pointer.setAngle(0);
+					if (paragraph.includes("emot")) pointer.setAngle(90);
+					if (paragraph.includes("höger")) pointer.setAngle(180);
 				}
 			}
 		});
@@ -298,12 +327,33 @@ export class LegendScreen extends Phaser.GameObjects.Container {
 		}
 	}
 
-	addImage(key: string) {
+	addImage(key: string, legendSource?: string) {
+		let shadow = this.scene.add.image(right.centerX, right.centerY + 2, key);
+		shadow.setScale(
+			Math.min(right.width / shadow.width, right.height / shadow.height)
+		);
+		shadow.setTint(0);
+		shadow.setPostPipeline(BlurPostFilter);
+		this.add(shadow);
+
 		let image = this.scene.add.image(right.centerX, right.centerY, key);
 		image.setScale(
 			Math.min(right.width / image.width, right.height / image.height)
 		);
 		this.add(image);
+
+		if (legendSource) {
+			let source = this.scene.addText({
+				x: image.x + image.displayWidth / 2,
+				y: image.y + image.displayHeight / 2 + 8,
+				size: breadSize / 2.2,
+				color: ColorStr.White,
+				text: legendSource,
+			});
+			source.setOrigin(1.0, 0.0);
+			source.setShadow(0, 2, "black", 4);
+			this.add(source);
+		}
 	}
 }
 
@@ -342,7 +392,7 @@ export class LegendScene extends BaseScene {
 			legend.addImage("legend_default");
 		});
 
-		let datasets = [
+		let datasets: ScenarioData[] = [
 			dataStadenIRorelse,
 			dataStadenOchKlimatet,
 			dataStadensSammansattning,
@@ -367,7 +417,7 @@ export class LegendScene extends BaseScene {
 					this.add.existing(legend);
 
 					if (this.textures.exists(object.Legend1)) {
-						legend.addImage(object.Legend1);
+						legend.addImage(object.Legend1, object.LegendSource);
 					}
 				});
 			});

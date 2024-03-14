@@ -135,7 +135,8 @@
 						]
 					},
 					"LegendTitle": "None",
-					"LegendColors": []
+					"LegendColors": [],
+					"LegendSource": "Photo: Jonn Leffmann"
 				},
 				{
 					"Title": "Trees",
