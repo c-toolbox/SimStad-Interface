@@ -42,6 +42,7 @@ build-job:
 
 
 deploy-manually:
+  image: node:21-alpine3.18
   stage: deploy
   when: manual
   tags:
