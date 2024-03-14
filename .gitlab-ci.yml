@@ -25,7 +25,7 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 build-job:
-  image: ["node:21-alpine3.18","docker:stable-git"]
+  image: node:21-alpine3.18,docker
   stage: build
 
   script:
