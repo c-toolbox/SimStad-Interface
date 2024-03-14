@@ -43,7 +43,7 @@ build-job:
   cache:
     key: build-cache
     paths:
-    - dist/visualiseringscenter-c-digitaltwincity-interface/
+    - dist/win/digitaltwincity-interface
 
 
 
