@@ -26,12 +26,11 @@ stages:          # List of stages for jobs, and their order of execution
 
 build-job:
   stage: build
-  tags:
-    - windows
-    - unreal
+
   script:
     - echo "Compiling the code..."
     - echo "Compile complete."
+    - echo $PATH
     - npm run build
 
 
