@@ -25,7 +25,7 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 build-job:
-  image: node:17-alpine3.14
+  image: node:21-alpine3.18
   stage: build
 
   script:
