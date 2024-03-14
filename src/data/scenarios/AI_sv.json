@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Byggnader",
-					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera ett objekt eller ett material och blir säkrare och säkrare på att identifiera dessa. Det går också att se att AI modellen inte är perfekt, på många ställen uppstår fel, att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i urvalet.\n\nDe röda områdena visar på de två urvalsområden som använts för att träna AI-modellen. Urvals områdena är från en mycket begränsad del av Staden men kan ändå berätta något om den samlade bilden av hela stadens sammansättning.\n\nProcessen att skapa masker kallas för bildannotering och inlärningsmetoden för AI-modellen kallas för övervakad inlärning, dvs vi människor styr och hjälper AI-modellen att förstå.",
+					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera byggnader och blir säkrare och säkrare på att identifiera dessa. Det går också att se att AI modellen inte är perfekt och på många ställen uppstår fel. Att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i det röda träningsområdet.\n\nDe röda områdena visar på de två träningsområden som använts för att träna AI-modellen. Dessa områden är från en mycket begränsad del av staden men kan ändå berätta något om den samlade bilden av hela stadens sammansättning.\n\nTräningsmetoden för AI-modellen kallas för övervakad inlärning, dvs vi människor styr och hjälper AI-modellen att förstå.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "byggnader",
@@ -61,7 +61,7 @@
 				},
 				{
 					"Title": "Vegetation",
-					"Text1": "Finns det tillgång till önskad mängd grönyta i Norrköping? Att ha tillgång till grönyta är både en fråga om ökad upplevelse och livskvalité men också viktigt ur ett klimatanpssningsperspektiv. Grönytan hjälper både till att infiltrera vatten vid regn och reducera höga temperaturer på sommaren. AI-modellen kan mäta mängden grönyta över en hel stad på ett sätt som inte kunnat göras innan.",
+					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera vegetation och blir säkrare och säkrare på att identifiera detta. Det går också att se att AI modellen inte är perfekt och på många ställen uppstår fel. Att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i det röda träningsområdet.\n\nFinns det tillgång till önskad mängd grönyta i Norrköping? Att ha tillgång till grönyta är både en fråga om ökad upplevelse och livskvalité men också viktigt ur ett klimatanpssningsperspektiv. Grönytan hjälper både till att infiltrera vatten vid regn och reducera höga temperaturer på sommaren. AI-modellen kan mäta mängden grönyta över en hel stad på ett sätt som inte kunnat göras innan.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "vegetation",
@@ -111,7 +111,7 @@
 				},
 				{
 					"Title": "Asfalt",
-					"Text1": "Att veta vart det finns hårdgjorda asfaltsytor är intressant både för att kunna kalkylera på behovet av ex snöskottning men också för att få en förståelse för vart varma ytor kan uppstå. Asfalt absorberar och lagrar värme under lång tid, något som kan ge upphov till en varmare stad.",
+					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera asfalt och blir säkrare och säkrare på att identifiera detta. Det går också att se att AI modellen inte är perfekt och på många ställen uppstår fel. Att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i det röda träningsområdet.\n\nAtt veta var det finns asfaltsytor är intressant både för att kunna kalkylera på behovet av t.ex. snöskottning men också för att få en förståelse för var varma ytor kan uppstå. Asfalt absorberar och lagrar värme under lång tid, något som kan ge upphov till en varmare stad.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "asfalt",

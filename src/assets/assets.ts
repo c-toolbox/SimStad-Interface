@@ -3,8 +3,6 @@ import { image, sound, music, loadFont, spritesheet } from "./util";
 
 /* Images */
 let images: Image[] = [
-	image("norrköping.jpg", "norrköping"),
-	image("karta.jpg", "karta"),
 	image("streets.png", "streets"),
 	image("blank.png", "blank"),
 	image("nineslice.png", "nineslice"),
@@ -49,7 +47,11 @@ let images: Image[] = [
 	image("chapters/history.png", "history"),
 	image("chapters/ai.png", "ai"),
 
-	image("legends/norrkoping-stad.jpg", "legend_default"),
+	image("legends/norrkoping_stad.jpg", "legend_default"),
+	image("legends/flygfoto1959.jpg", "flygfoto1959"),
+	image("legends/flygfoto1974.jpg", "flygfoto1974"),
+	image("legends/flygfoto2022.png", "flygfoto2022"),
+	image("legends/havsnivahojning.jpg", "havsnivahojning"),
 	image("legends/stadskarta1879.png", "stadskarta1879"),
 	image("legends/stadskarta1930.jpg", "stadskarta1930"),
 ];

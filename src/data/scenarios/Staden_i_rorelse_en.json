@@ -85,28 +85,48 @@
 					"LegendTitle": "Cars per day",
 					"LegendColors": [
 						{
-							"color": "#ffffff",
+							"color": "#ffffb2",
 							"text": "60 – 6,000"
 						},
 						{
-							"color": "#ffcccc",
+							"color": "#ffeb90",
 							"text": "6,000 – 12,000"
 						},
 						{
-							"color": "#ff9999",
+							"color": "#fed66d",
 							"text": "12,000 – 17,000"
 						},
 						{
-							"color": "#ff6666",
+							"color": "#febf56",
 							"text": "17,000 – 22,000"
 						},
 						{
-							"color": "#ff3333",
+							"color": "#fda649",
 							"text": "22,000 – 28,000"
 						},
 						{
-							"color": "#ff0000",
+							"color": "#fd8d3c",
 							"text": "28,000 – 34,000"
+						},
+						{
+							"color": "#f86c31",
+							"text": "10,000 – 14,000"
+						},
+						{
+							"color": "#f34b26",
+							"text": "14,000 – 18,000"
+						},
+						{
+							"color": "#e62f21",
+							"text": "18,000 – 22,000"
+						},
+						{
+							"color": "#d11824",
+							"text": "22,000 – 24,000"
+						},
+						{
+							"color": "#bd0026",
+							"text": "24,000 –"
 						}
 					]
 				}

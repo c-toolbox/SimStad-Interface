@@ -109,55 +109,55 @@
 					"LegendTitle": "Urban morphology",
 					"LegendColors": [
 						{
-							"color": "#c90fc3",
+							"color": "#a47158",
 							"text": "Grid street plan"
 						},
 						{
-							"color": "#d231a3",
+							"color": "#e44b33",
 							"text": "Own-home activity"
 						},
 						{
-							"color": "#db5482",
+							"color": "#f07c4a",
 							"text": "Garden city movement"
 						},
 						{
-							"color": "#e47662",
+							"color": "#fdae61",
 							"text": "Functionalism"
 						},
 						{
-							"color": "#ed9841",
+							"color": "#fee133",
 							"text": "Modernism"
 						},
 						{
-							"color": "#f6bb20",
+							"color": "#fea083",
 							"text": "Million Programme"
 						},
 						{
-							"color": "#ffdd00",
+							"color": "#ffffbf",
 							"text": "1970s"
 						},
 						{
-							"color": "#bdd605",
+							"color": "#209cce",
 							"text": "1980s"
 						},
 						{
-							"color": "#7cd009",
+							"color": "#56e6a0",
 							"text": "1990s"
 						},
 						{
-							"color": "#3ac90e",
+							"color": "#abd9e9",
 							"text": "2000s"
 						},
 						{
-							"color": "#2563eb",
+							"color": "#d5b43c",
 							"text": "Mixed housing"
 						},
 						{
-							"color": "#475569",
+							"color": "#987db7",
 							"text": "Businesses"
 						},
 						{
-							"color": "#0ea5e9",
+							"color": "#2c7bb6",
 							"text": "Suburbs"
 						}
 					]

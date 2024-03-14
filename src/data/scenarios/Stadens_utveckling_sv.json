@@ -109,55 +109,55 @@
 					"LegendTitle": "Stadstypologi",
 					"LegendColors": [
 						{
-							"color": "#c90fc3",
+							"color": "#a47158",
 							"text": "Rutnätsstaden"
 						},
 						{
-							"color": "#d231a3",
+							"color": "#e44b33",
 							"text": "Egnahem"
 						},
 						{
-							"color": "#db5482",
+							"color": "#f07c4a",
 							"text": "Trädgårdsstaden"
 						},
 						{
-							"color": "#e47662",
+							"color": "#fdae61",
 							"text": "Funktionalism"
 						},
 						{
-							"color": "#ed9841",
+							"color": "#fee133",
 							"text": "Modernism"
 						},
 						{
-							"color": "#f6bb20",
+							"color": "#fea083",
 							"text": "Miljonprogram"
 						},
 						{
-							"color": "#ffdd00",
+							"color": "#ffffbf",
 							"text": "1970-tal"
 						},
 						{
-							"color": "#bdd605",
+							"color": "#209cce",
 							"text": "1980-tal"
 						},
 						{
-							"color": "#7cd009",
+							"color": "#56e6a0",
 							"text": "1990-tal"
 						},
 						{
-							"color": "#3ac90e",
+							"color": "#abd9e9",
 							"text": "2000-tal"
 						},
 						{
-							"color": "#2563eb",
+							"color": "#d5b43c",
 							"text": "Blandad bebyggelse"
 						},
 						{
-							"color": "#475569",
+							"color": "#987db7",
 							"text": "Verksamhet"
 						},
 						{
-							"color": "#0ea5e9",
+							"color": "#2c7bb6",
 							"text": "Villastad"
 						}
 					]
