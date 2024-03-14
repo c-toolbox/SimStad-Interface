@@ -41,7 +41,6 @@ build-job:
     - dist/win/digitaltwincity-interface
 
 
-
 deploy-manually:
   stage: deploy
   when: manual
