@@ -46,9 +46,8 @@ deploy-manually:
   tags:
     - windows
     - unreal
-  script:
-    - npm install 
-    - npm run build
+  script: 
+    - ls
     - Compress-Archive -Path dist/win/digitaltwincity-interface  DigitalTwinInterface.zip
 
   artifacts:
