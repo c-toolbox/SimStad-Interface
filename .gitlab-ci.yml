@@ -25,6 +25,7 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 build-job:
+  image: node:17-alpine3.14
   stage: build
 
   script:
@@ -32,6 +33,7 @@ build-job:
     - echo "Compile complete."
     - echo $PATH
     - npm run build
+
 
 
 
