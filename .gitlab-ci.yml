@@ -37,6 +37,8 @@ build-job:
     - ls
     - cd dist
     - ls 
+    - cd win
+    - ls 
 
   cache:
     key: build-cache
