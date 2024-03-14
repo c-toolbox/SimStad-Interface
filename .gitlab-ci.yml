@@ -17,15 +17,13 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 
-
+image: node:21-alpine3.18
 
 stages:          # List of stages for jobs, and their order of execution
   - build
-  - test
   - deploy
 
 build-job:
-  image: node:21-alpine3.18
   stage: build
 
   script:
@@ -42,7 +40,7 @@ build-job:
 
 
 deploy-manually:
-  image: node:21-alpine3.18
+
   stage: deploy
   when: manual
   tags:
