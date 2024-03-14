@@ -30,10 +30,10 @@ build-job:
 
   script:
     - echo "Compiling the code..."
-    - echo "Compile complete."
     - echo $PATH
     - npm install 
     - npm run build
+    - echo "Compile complete."
 
   cache:
     key: build-cache
@@ -49,6 +49,8 @@ deploy-manually:
     - windows
     - unreal
   script:
+    - npm install 
+    - npm run build
     - Compress-Archive -Path dist/win/digitaltwincity-interface  DigitalTwinInterface.zip
 
   artifacts:
