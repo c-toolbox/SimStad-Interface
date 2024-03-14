@@ -34,11 +34,6 @@ build-job:
     - echo $PATH
     - npm install 
     - npm run build
-    - ls
-    - cd dist
-    - ls 
-    - cd win
-    - ls 
 
   cache:
     key: build-cache
@@ -47,10 +42,24 @@ build-job:
 
 
 
-
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
+deploy-manually:
+  stage: deploy
+  when: manual
+  tags:
+    - windows
+    - unreal
   script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    - Compress-Archive -Path dist/win/digitaltwincity-interface  DigitalTwinInterface.zip
+
+  artifacts:
+    paths:
+      - dist/win/digitaltwincity-interface
+    expire_in: 10 days
+  cache:
+    key: build-cache
+    paths:
+      - dist/win/digitaltwincity-interface
+
+
+
+
