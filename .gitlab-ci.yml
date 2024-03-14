@@ -32,6 +32,7 @@ build-job:
     - echo "Compiling the code..."
     - echo "Compile complete."
     - echo $PATH
+    - npm install vite
     - npm run build
 
 
