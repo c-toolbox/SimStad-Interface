@@ -36,6 +36,11 @@ build-job:
     - npm run build
     - ls
 
+  cache:
+    key: build-cache
+    paths:
+    - dist/visualiseringscenter-c-digitaltwincity-interface/
+
 
 
 
