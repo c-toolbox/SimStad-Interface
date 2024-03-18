@@ -44,7 +44,7 @@
 				},
 				{
 					"Title": "Trafikbuller",
-					"Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar från trafikmängder. Alla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år.\n\nBeräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur väl isolerat huset är och vilka fönster som finns.\n\nHur upplevelser du trafikbuller där du bor?",
+					"Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar från trafikmängder. Alla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år.\n\nBeräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur välisolerat huset är och vilka fönster som finns.\n\nHur upplever du trafikbuller där du bor?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trafikbuller",
@@ -74,7 +74,7 @@
 				},
 				{
 					"Title": "Trafikmängder",
-					"Text1": "Här kan ses hur trafikerade olika gator i Norrköping är, trafikmätningen görs med hjälp av ”slangar”, även kända som pneumatiska vägrör. Dessa rör är flexibla slangar som läggs tvärs över vägen. När ett fordon passerar över röret, pressas luft genom röret och skapar en tryckvåg som detekteras av en sensor. Detta genererar en elektrisk signal som registreras av en räknare eller analysprogramvara. Denna metod är portabel och kan drivas av batterier, vilket gör den lämplig för tillfälliga trafikstudier.\n\nUnderlaget ligger till grund för den trafikberäkningsmodell som sedan avvänds i beräkningen av bullerkartläggningen som också visas här i modellen.",
+					"Text1": "Här kan ses hur trafikerade olika gator i Norrköping är, trafikmätningen görs med hjälp av ”slangar”, även kända som pneumatiska vägrör. Dessa rör är flexibla slangar som läggs tvärs över vägen. När ett fordon passerar över röret, pressas luft genom röret och skapar en tryckvåg som detekteras av en sensor. Detta genererar en elektrisk signal som registreras av en räknare eller analysprogramvara. Denna metod är portabel och kan drivas av batterier, vilket gör den lämplig för tillfälliga trafikstudier.\n\nUnderlaget ligger till grund för den trafikberäkningsmodell som sedan används i beräkningen av bullerkartläggningen som också visas här i modellen.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "trafikmangder",

@@ -61,7 +61,7 @@
 				},
 				{
 					"Title": "Vegetation",
-					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera vegetation och blir säkrare och säkrare på att identifiera detta. Det går också att se att AI modellen inte är perfekt och på många ställen uppstår fel. Att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i det röda träningsområdet.\n\nFinns det tillgång till önskad mängd grönyta i Norrköping? Att ha tillgång till grönyta är både en fråga om ökad upplevelse och livskvalité men också viktigt ur ett klimatanpssningsperspektiv. Grönytan hjälper både till att infiltrera vatten vid regn och reducera höga temperaturer på sommaren. AI-modellen kan mäta mängden grönyta över en hel stad på ett sätt som inte kunnat göras innan.",
+					"Text1": "Bildsekvensen visar hur AI modellen successivt lär sig att identifiera vegetation och blir säkrare och säkrare på att identifiera detta. Det går också att se att AI modellen inte är perfekt och på många ställen uppstår fel. Att dessa fel uppstår kan exempelvis bero på den lilla mängden träningsdata som har funnits i det röda träningsområdet.\n\nFinns det tillgång till önskad mängd grönyta i Norrköping? Att ha tillgång till grönyta är både en fråga om ökad upplevelse och livskvalitet men också viktigt ur ett klimatanpssningsperspektiv. Grönytan hjälper både till att infiltrera vatten vid regn och reducera höga temperaturer på sommaren. AI-modellen kan mäta mängden grönyta över en hel stad på ett sätt som inte kunnat göras innan.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "vegetation",

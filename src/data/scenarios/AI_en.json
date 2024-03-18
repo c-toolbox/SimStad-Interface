@@ -6,7 +6,7 @@
 			"SectionObject": [
 				{
 					"Title": "Buildings",
-					"Text1": "The image sequence shows how the AI model gradually learns to identify an object or a material and becomes more and more confident in identifying these. It is also possible to see that the AI model is not perfect, in many places errors occur, that these errors occur can for example due to the small amount of training data that has been in the sample.\n\nThe red areas show the two sample areas used to train the AI model. The selected areas are from a very limited part of the City, but can still tell us something about the overall picture of the composition of the entire city.\n\nThe process of creating masks is called image annotation and the learning method for the AI model is called supervised learning, i.e. we humans control and help the AI model understand.",
+					"Text1": "The image sequence shows how the AI model gradually learns to identify buildings and becomes more and more confident in identifying them. It is also possible to see that the AI model is not perfect and in many places errors occur. The fact that these errors occur can, for example, be due to the small the amount of training data that has been in the red training area.\n\nThe red areas show the two training areas used to train the AI model. These areas are from a very limited part of the city but can still tell us something about the overall picture of the composition of the whole city.\n\nThe training method for the AI model is called supervised learning, i.e. we humans control and help the AI model to understand.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "byggnader",
@@ -61,7 +61,7 @@
 				},
 				{
 					"Title": "Vegetation",
-					"Text1": "Is there access to the desired amount of green space in Norrköping? Having access to green space is both a matter of increased experience and quality of life, but also important from a climate adaptation perspective. The green surface helps both to infiltrate water in the event of rain and to reduce high temperatures in the summer. The AI model can measure the amount of green space over an entire city in a way that could not be done before.",
+					"Text1": "The image sequence shows how the AI model gradually learns to identify vegetation and becomes more and more confident in identifying it. It is also possible to see that the AI model is not perfect and in many places errors occur. The fact that these errors occur can, for example, be due to the small the amount of training data that has been in the red training area.\n\nIs there access to the desired amount of green space in Norrköping? Having access to green space is both a matter of increased experience and quality of life, but also important from a climate adaptation perspective. The green surface helps both to infiltrate water in the event of rain and to reduce high temperatures in the summer. The AI model can measure the amount of green space over an entire city in a way that could not be done before.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "vegetation",
@@ -111,7 +111,7 @@
 				},
 				{
 					"Title": "Asphalt",
-					"Text1": "Knowing where there are hard asphalt surfaces is interesting both to be able to calculate the need for e.g. snow shoveling but also to gain an understanding of where hot surfaces can occur. Asphalt absorbs and stores heat for a long time, something that can give rise to a warmer city.",
+					"Text1": "The image sequence shows how the AI model gradually learns to identify asphalt and becomes more and more confident in identifying it. It is also possible to see that the AI model is not perfect and in many places errors occur. The fact that these errors occur can, for example, be due to the small the amount of training data that has been in the red training area.\n\nKnowing where there are asphalt surfaces is interesting both to be able to calculate e.g. snow shoveling but also to gain an understanding of hot surfaces can occur. Asphalt absorbs and stores heat for a long time, something that can give rise to a warmer city.",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "asfalt",
