@@ -6,14 +6,14 @@
 			"SectionObject": [
 				{
 					"Title": "Kollektivtrafik",
-					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjlighet har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.",
+					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjligt har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\n\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar. Denna data kommer från Trafiklabs öppna API som samarbetar med Östgötatrafiken. Hinner du till nästa buss?",
 					"Text2": "",
 					"Datasource": "",
 					"Legend1": "kollektivtrafik",
 					"Legend2": "",
 					"Default": true,
 					"Idle": true,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Tillganglighet_kollektivtrafik,Nkpg/Kollektivtrafik",
+					"Filenames": "Finals/Kollektivtrafik",
 					"LegendTitle": "Typ av trafik",
 					"LegendColors": [
 						{
@@ -51,7 +51,7 @@
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Nkpg/Buller_V2,Nkpg/Vattenytor,Nkpg/Byggnader_gra",
+					"Filenames": "Finals/Buller",
 					"LegendTitle": "Ljudnivå i decibel",
 					"LegendColors": [
 						{
@@ -81,7 +81,7 @@
 					"Legend2": "",
 					"Default": false,
 					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Trafikmangder",
+					"Filenames": "Finals/Trafikmangder",
 					"LegendTitle": "Bilar per dygn",
 					"LegendColors": [
 						{

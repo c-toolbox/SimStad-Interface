@@ -13,19 +13,19 @@
 					"Legend2": "",
 					"Default": true,
 					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Extremregn100ar",
+					"Filenames": "Finals/100ar_regn",
 					"Buttons": [
 						{
 							"Title": "100-årsflöde",
-							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Extremregn100ar"
+							"Layers": "Finals/100ar_regn"
 						},
 						{
 							"Title": "200-årsflöde",
-							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Extremregn200ar"
+							"Layers": "Finals/200ar_regn"
 						},
 						{
 							"Title": "500-årsflöde",
-							"Layers": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Extremregn500ar"
+							"Layers": "Finals/500ar_regn"
 						}
 					],
 					"LegendTitle": "Vattennivå",
