@@ -323,6 +323,6 @@ export class Map extends Phaser.GameObjects.Container {
 			lamp.destroy();
 		});
 		this.lamps = [];
-		this.mapHint.setVisible(true);
+		this.mapHint.setVisible(false);
 	}
 }
