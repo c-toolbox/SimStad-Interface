@@ -370,13 +370,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			weight: 600,
 		});
 		this.unrealLabel.setOrigin(0, 0.5);
-
-		const showOmni = this.omniConnectionStatus != ConnectionStatus.Connected;
-		const showUnreal = this.omniConnectionStatus != ConnectionStatus.Connected;
-		this.omniIcon.setVisible(showOmni);
-		this.omniLabel.setVisible(showOmni);
-		this.unrealIcon.setVisible(showUnreal);
-		this.unrealLabel.setVisible(showUnreal);
 	}
 
 	updateStatusIcons() {
@@ -392,6 +385,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.omniLabel.setTint(statusColor[this.omniConnectionStatus]);
 		this.unrealLabel.setText(this.unrealConnectionStatus);
 		this.unrealLabel.setTint(statusColor[this.unrealConnectionStatus]);
+
+		const showOmni = this.omniConnectionStatus != ConnectionStatus.Connected;
+		const showUnreal = this.unrealConnectionStatus != ConnectionStatus.Connected;
+		this.omniIcon.setVisible(showOmni);
+		this.omniLabel.setVisible(showOmni);
+		this.unrealIcon.setVisible(showUnreal);
+		this.unrealLabel.setVisible(showUnreal);
 
 		this.emit(
 			"connectionStatus",
