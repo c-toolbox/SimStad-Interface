@@ -297,6 +297,24 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendLight(2024, 7, 1, hour);
 	}
 
+	fadeLight(callback: () => void, fadeDuration = 1000) {
+		this.scene.addEvent(fadeDuration / 2, () => {
+			callback();
+		});
+
+		this.scene.tweens.addCounter({
+			from: 0,
+			to: 1,
+			duration: fadeDuration,
+			onUpdate: (tween, target, key, current) => {
+				// let t = Math.abs(1 - current);
+				// let ease = 1 - Phaser.Math.Easing.Cubic.In(t);
+				let ease = Phaser.Math.Easing.Quadratic.InOut(current);
+				this.setHour((0.5 + 1.0 * ease) % 1);
+			},
+		});
+	}
+
 	/* Connection establishing */
 
 	reconnectToUnreal() {
@@ -387,7 +405,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.unrealLabel.setTint(statusColor[this.unrealConnectionStatus]);
 
 		const showOmni = this.omniConnectionStatus != ConnectionStatus.Connected;
-		const showUnreal = this.unrealConnectionStatus != ConnectionStatus.Connected;
+		const showUnreal =
+			this.unrealConnectionStatus != ConnectionStatus.Connected;
 		this.omniIcon.setVisible(showOmni);
 		this.omniLabel.setVisible(showOmni);
 		this.unrealIcon.setVisible(showUnreal);

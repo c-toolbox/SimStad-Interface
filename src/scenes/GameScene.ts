@@ -85,7 +85,7 @@ export class GameScene extends BaseScene {
 
 		this.pages.forEach((page) => {
 			page.on("state", (state: PageState) => {
-				this.setState(state);
+				this.setState(state, true);
 			});
 
 			page.on("send", (data: object) => {
@@ -134,7 +134,7 @@ export class GameScene extends BaseScene {
 		this.setState(PageState.Home);
 	}
 
-	setState(state: PageState) {
+	setState(state: PageState, smooth = false) {
 		this.state = state;
 
 		this.navigation.setState(state);
@@ -145,12 +145,21 @@ export class GameScene extends BaseScene {
 		});
 
 		if (state == PageState.Home) {
-			this.scenarioPage.activateBlocks("SimStad-default");
-			// this.scenarioPage.activateBlocks("VisualCity-Wall_360");
-			this.map.setLayers("Nkpg/Orto20230921");
-			this.socket.sendReset();
-			this.scenarioPage.activateDataset("Nkpg/Orto20230921");
-			this.socket.sendDeactivateTraffic();
+			if (smooth) {
+				this.socket.fadeLight(() => {
+					this.scenarioPage.activateBlocks("SimStad-default");
+					this.socket.sendReset();
+					this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+					this.map.setLayers("Nkpg/Orto20230921");
+					this.socket.sendDeactivateTraffic();
+				});
+			} else {
+				this.scenarioPage.activateBlocks("SimStad-default");
+				this.socket.sendReset();
+				this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+				this.map.setLayers("Nkpg/Orto20230921");
+				this.socket.sendDeactivateTraffic();
+			}
 		}
 	}
 
@@ -165,6 +174,18 @@ export class GameScene extends BaseScene {
 
 				this.updateBlur();
 				// this.foodWeb.toggleAttraction(state);
+
+				if (state) {
+					this.socket.send({
+						type: "ActivateDatasetRequest",
+						datasets: "Idle/Idle_Movie",
+					});
+				} else {
+					this.socket.fadeLight(() => {
+						this.socket.sendReset();
+						this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+					});
+				}
 			},
 			this
 		);

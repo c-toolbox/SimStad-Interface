@@ -45,12 +45,11 @@ export class UIScene extends BaseScene {
 
 		/* Attraction mode */
 
-		const showAttraction = true;
+		const showAttraction = false;
 		this.idleTimer = -2;
 		// this.add.rectangle(this.CX, this.CY, this.W, this.H, 0xFFFFFF, 0.3);
 		this.attractionView = new AttractionView(this);
 		this.attractionView.on("click", this.wakeUp, this);
-		this.events.emit("attraction", showAttraction);
 
 		if (showAttraction) {
 			this.attractionView.show();

@@ -192,7 +192,11 @@ export class ScenarioPage extends Page {
 
 		let activeSection = sections.find((section) => section.default);
 		if (activeSection) {
-			this.setSection(activeSection);
+			this.setSection(activeSection, false);
+
+			this.socket.fadeLight(() => {
+				this.setSection(activeSection!);
+			});
 		}
 
 		const blocks: { [key in ScenarioKey]: string } = {
@@ -236,20 +240,20 @@ export class ScenarioPage extends Page {
 
 		this.scene.add.tween({
 			targets: this.foreground,
-			duration: 200,
+			duration: 500,
 			ease: "Cubic.Out",
 			alpha: { from: 0, to: 1 },
 			onComplete: () => {
 				this.scene.add.tween({
 					targets: this.foreground,
-					duration: 200,
+					duration: 500,
 					ease: "Cubic.Out",
 					alpha: { from: 1, to: 0 },
 				});
-
-				this.setSection(section);
 			},
 		});
+
+		this.socket.fadeLight(() => this.setSection(section));
 	}
 
 	realignText() {
@@ -272,7 +276,7 @@ export class ScenarioPage extends Page {
 		});
 	}
 
-	setSection(section: Section) {
+	setSection(section: Section, sendDataset = true) {
 		this.currentSection = section;
 
 		this.tabButtons.forEach((button) => {
@@ -344,9 +348,10 @@ export class ScenarioPage extends Page {
 			this.realignText();
 		});
 
-		this.activateDataset(section.defaultLayer);
-
-		this.activateBlocks("SimStad-" + section.legend);
+		if (sendDataset) {
+			this.activateDataset(section.defaultLayer);
+			this.activateBlocks("SimStad-" + section.legend);
+		}
 	}
 
 	activateDataset(layerString: string) {
