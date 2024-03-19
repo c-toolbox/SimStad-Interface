@@ -5,8 +5,8 @@ import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
 import { ONLINE } from "./constants";
 
-const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
-// const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
+//const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
+const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
 const PING_TIMEOUT = 3000;
