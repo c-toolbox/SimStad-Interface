@@ -1,6 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { RoundRectangle } from "./elements/RoundRectangle";
-import { TestSlider } from "./TestSlider";
+import { LayerSlider } from "./LayerSlider";
 import { Color } from "@/utils/colors";
 import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
@@ -12,8 +12,8 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
 	private background: RoundRectangle;
-	private dateSlider: TestSlider;
-	private hourSlider: TestSlider;
+	private dateSlider: LayerSlider;
+	private hourSlider: LayerSlider;
 
 	private year: number;
 	private month: number;
@@ -51,12 +51,12 @@ export class TimeSetter extends Phaser.GameObjects.Container {
 
 		let sw = width - layout.padding;
 
-		this.dateSlider = new TestSlider(scene, 0, -50, sw, 40, "Date");
+		this.dateSlider = new LayerSlider(scene, 0, -50, sw, 40, "Date");
 		this.dateSlider.on("onChange", this.setDate, this);
 		this.dateSlider.value = 0.497;
 		this.add(this.dateSlider);
 
-		this.hourSlider = new TestSlider(scene, 0, 70, sw, 40, "Time");
+		this.hourSlider = new LayerSlider(scene, 0, 70, sw, 40, "Time");
 		this.hourSlider.on("onChange", this.setHour, this);
 		this.hourSlider.value = 0.501;
 		this.add(this.hourSlider);

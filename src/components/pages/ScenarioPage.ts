@@ -8,7 +8,7 @@ import { Legend } from "@/components/Legend";
 import { HSVToRGB, colorToString, interpolateColor } from "@/utils/functions";
 import { ScenarioKey, Section, scenarioManager } from "@/utils/ScenarioManager";
 import { TextButton } from "../TextButton";
-import { TestSlider } from "../TestSlider";
+import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
 import { ONLINE } from "@/utils/constants";
 import { RoundRectangle } from "../elements/RoundRectangle";
@@ -23,7 +23,7 @@ export class ScenarioPage extends Page {
 	private backButton: TabButton;
 	private tabButtons: TabButton[];
 	private layerButtons: TextButton[];
-	private layerSlider: TestSlider;
+	private layerSlider: LayerSlider;
 
 	private currentSection: Section;
 	private currentLayerString: string;
@@ -149,7 +149,7 @@ export class ScenarioPage extends Page {
 		const sw = sl.width - 64;
 		const sh = 0.7 * sl.height;
 
-		this.layerSlider = new TestSlider(scene, sx, sy, sw, sh, "Slider", 10);
+		this.layerSlider = new LayerSlider(scene, sx, sy, sw, sh, "Slider", 10);
 		this.layerSlider.setVisible(false);
 		this.add(this.layerSlider);
 

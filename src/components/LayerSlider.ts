@@ -5,7 +5,7 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { Color } from "@/utils/colors";
 
-export class TestSlider extends Phaser.GameObjects.Container {
+export class LayerSlider extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
 	private slider: Slider;
@@ -22,7 +22,7 @@ export class TestSlider extends Phaser.GameObjects.Container {
 		text: string,
 		steps: number = 0
 	) {
-		super(scene, x, y - 16);
+		super(scene, x, y);
 		scene.add.existing(this);
 		this.scene = scene;
 		this.width = width;
@@ -30,7 +30,7 @@ export class TestSlider extends Phaser.GameObjects.Container {
 
 		let background = new RoundRectangle(scene, {
 			width: width + 1 * 28 + layout.padding + 16,
-			height: height + 3 * 28 + layout.padding + 16,
+			height: height + 2 * 28 + layout.padding + 16,
 			radius: layout.radius,
 			color: Color.Slate700,
 		});
