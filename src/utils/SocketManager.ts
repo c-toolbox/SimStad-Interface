@@ -376,7 +376,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.omniLabel = this.scene.addText({
 			x: x + 0.75 * size,
 			y: y - size / 2,
-			size: 20,
+			size: layout.margin / 4,
 			weight: 600,
 		});
 		this.omniLabel.setOrigin(0, 0.5);
@@ -384,7 +384,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.unrealLabel = this.scene.addText({
 			x: x + 0.75 * size,
 			y: y + size / 2,
-			size: 20,
+			size: layout.margin / 4,
 			weight: 600,
 		});
 		this.unrealLabel.setOrigin(0, 0.5);

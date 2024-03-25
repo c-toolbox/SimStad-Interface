@@ -27,7 +27,7 @@ export class DebugPage extends Page {
 			y: title.y + 1.5 * 64,
 			size: 28,
 			color: "white",
-			text: "Debug page with direct access to certain behind the scenes calls. Intended for advanced mode.",
+			text: "Debug page with direct access to certain behind the scenes calls.",
 		});
 		this.add(subtitle);
 

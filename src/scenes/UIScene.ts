@@ -103,7 +103,7 @@ export class UIScene extends BaseScene {
 		this.toolButtons = [];
 		for (let i = 0; i < toolButtons.length; i++) {
 			let button = toolButtons[i];
-			let size = layout.margin / 2;
+			let size = 35;
 			let x = layout.toolbar.centerX;
 			let y =
 				layout.toolbar.bottom -

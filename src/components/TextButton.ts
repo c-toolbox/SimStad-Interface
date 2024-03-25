@@ -83,14 +83,18 @@ export class TextButton extends Button {
 
 	setText(key: string) {
 		if (languageManager.get(key, false)) {
-			languageManager.bind(this.title, key, () => {
-				this.title.setScale(1);
-				if (this.title.displayWidth > this.background.width - 40) {
-					this.title.displayWidth = this.background.width - 40;
-				}
-			});
+			languageManager.bind(this.title, key, this.rescaleText.bind(this));
 		} else {
 			this.title.setText(key);
+			this.rescaleText();
+		}
+	}
+
+	rescaleText() {
+		this.title.setScale(1);
+		if (this.title.displayWidth > this.background.width - 20) {
+			this.title.displayWidth = this.background.width - 20;
+			this.title.scaleY = (1 + this.title.scaleX) / 2;
 		}
 	}
 

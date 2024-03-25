@@ -29,7 +29,7 @@ class LayoutManager {
 	constructor() {}
 
 	get margin(): number {
-		return 80;
+		return 60;
 	}
 
 	get padding(): number {
@@ -172,7 +172,7 @@ class LayoutManager {
 	get scenarioTabs(): Phaser.Geom.Rectangle {
 		if (this._scenarioTabs) return this._scenarioTabs;
 
-		const h = this.margin;
+		const h = 80;
 		const x = this.panel.left;
 		const y = this.panel.bottom - h;
 		const w = this.panel.width;
@@ -208,7 +208,7 @@ class LayoutManager {
 	get scenarioControls(): Phaser.Geom.Rectangle {
 		if (this._scenarioControls) return this._scenarioControls;
 
-		const h = this.margin;
+		const h = 80;
 		const x = this.scenarioInner.left;
 		const y = this.scenarioInner.bottom - h;
 		const w = this.scenarioInner.width;
@@ -252,7 +252,7 @@ class LayoutManager {
 	/* Debug drawing */
 
 	drawLayout(scene: BaseScene) {
-		if (!this.graphics) this.graphics = scene.add.graphics();
+		if (!this.graphics) this.graphics = scene.add.graphics().setDepth(1000);
 
 		this.graphics.clear();
 
