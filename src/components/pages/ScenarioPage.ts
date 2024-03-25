@@ -12,14 +12,22 @@ import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
 import { ONLINE } from "@/utils/constants";
 import { RoundRectangle } from "../elements/RoundRectangle";
+import { ScrollArea } from "../elements/ScrollArea";
+import { ScrollBar } from "../elements/ScrollBar";
+import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 
 export class ScenarioPage extends Page {
 	private background: RoundRectangle;
 	private foreground: RoundRectangle;
 	private subtitle: Phaser.GameObjects.Text;
 	private title: Phaser.GameObjects.Text;
+	private scrollArea: ScrollArea;
+	private scrollBar: ScrollBar;
 	private bread: Phaser.GameObjects.Text[];
 	private legend: Legend;
+	private legendShadow: Phaser.GameObjects.Image;
+	private legendImage: Phaser.GameObjects.Image;
+	private legendSource: Phaser.GameObjects.Text;
 	private backButton: TabButton;
 	private tabButtons: TabButton[];
 	private layerButtons: TextButton[];
@@ -59,28 +67,53 @@ export class ScenarioPage extends Page {
 			size: 20,
 			color: "white",
 		});
+		this.subtitle.setShadow(0, 2, "#00000077", 4);
 		this.add(this.subtitle);
 
 		this.title = scene.addText({
 			x: layout.scenarioInfo.left,
-			y: this.subtitle.y + 1.3 * this.subtitle.displayHeight,
+			y: this.subtitle.y + 1.2 * this.subtitle.displayHeight,
 			size: 58,
 			color: "white",
 		});
+		this.title.setShadow(0, 2, "#00000077", 4);
 		this.add(this.title);
+
+		let ay = this.title.y + 1.3 * this.title.displayHeight;
+		let ah = layout.scenarioInner.height - (ay - layout.scenarioInner.top);
+		this.scrollArea = new ScrollArea(
+			scene,
+			layout.scenarioInfo.left,
+			ay,
+			layout.scenarioInfo.width,
+			ah,
+			0
+		);
+		this.add(this.scrollArea);
+
+		this.scrollBar = new ScrollBar(
+			this.scene,
+			layout.scenarioInfo.right + layout.separation / 2 - 3,
+			this.scrollArea.y + this.scrollArea.height / 2,
+			6,
+			this.scrollArea.height - 0 * 32
+		);
+		this.add(this.scrollBar);
 
 		this.bread = [];
 		for (let i = 0; i < 10; i++) {
 			let bread = scene.addText({
-				x: layout.scenarioInfo.left,
+				// x: layout.scenarioInfo.left,
 				size: 28,
 				color: "white",
 			});
 			bread.setVisible(false);
 			bread.setLineSpacing(0.25 * 28);
 			bread.setWordWrapWidth(layout.scenarioInfo.width);
+			bread.setShadow(0, 2, "#00000077", 4);
 			this.bread.push(bread);
-			this.add(bread);
+			// this.add(bread);
+			this.scrollArea.apply(bread);
 		}
 
 		/* Legend */
@@ -91,6 +124,33 @@ export class ScenarioPage extends Page {
 		let ly = layout.scenarioLegend.centerY;
 		this.legend = new Legend(scene, lx, ly, lw, lh);
 		this.add(this.legend);
+
+		this.legendShadow = scene.add.image(
+			layout.scenarioLegend.centerX,
+			layout.scenarioLegend.centerY + 2,
+			"legend_default"
+		);
+		this.legendShadow.setOrigin(0.5, 0.0);
+		this.legendShadow.setTint(0);
+		this.legendShadow.setAlpha(0.5);
+		this.legendShadow.setPostPipeline(BlurPostFilter);
+		this.add(this.legendShadow);
+
+		this.legendImage = scene.add.image(
+			layout.scenarioLegend.centerX,
+			layout.scenarioLegend.centerY,
+			"legend_default"
+		);
+		this.legendImage.setOrigin(0.5, 0.0);
+		this.add(this.legendImage);
+
+		this.legendSource = scene.addText({
+			size: 16,
+			color: ColorStr.White,
+		});
+		this.legendSource.setOrigin(1.0, 0.0);
+		this.legendSource.setShadow(0, 2, "#00000077", 4);
+		this.add(this.legendSource);
 
 		/* Layer buttons */
 
@@ -167,6 +227,8 @@ export class ScenarioPage extends Page {
 		this.tabButtons.forEach((button) => button.update(time, delta));
 		this.layerButtons.forEach((button) => button.update(time, delta));
 		this.layerSlider.update(time, delta);
+		this.scrollArea.update(time, delta);
+		this.scrollBar.set(this.scrollArea.getScroll());
 	}
 
 	setScenario(scenario: ScenarioKey) {
@@ -257,13 +319,26 @@ export class ScenarioPage extends Page {
 	}
 
 	realignText() {
+		let ay = this.title.y + 1.3 * this.title.displayHeight;
+		let ah = layout.scenarioInner.height - (ay - layout.scenarioInner.top);
+		if (this.layerSlider.visible) {
+			ah -= 3 * this.layerSlider.height + layout.separation;
+		}
+		if (this.layerButtons[0].visible) {
+			ah -= layout.scenarioControls.height + layout.separation;
+		}
+		this.scrollArea.setHeight(ah);
+		this.scrollBar.setHeight(ah);
+		this.scrollBar.y = this.scrollArea.y + this.scrollArea.height / 2;
+
 		const breadText = this.bread[9].text;
 		const paragraphs = breadText
 			.split("\n")
 			.map((line) => line.trim())
 			.filter((line) => !!line);
 
-		let ty = this.title.y + 1.5 * this.title.displayHeight;
+		let ty = this.title.y + 1.3 * this.title.displayHeight;
+		ty -= this.scrollArea.y;
 
 		this.bread.forEach((text) => text.setVisible(false));
 		paragraphs.forEach((paragraph, index) => {
@@ -274,6 +349,8 @@ export class ScenarioPage extends Page {
 
 			ty += bread.displayHeight + 0.75 * 28;
 		});
+
+		this.scrollArea.updateSize();
 	}
 
 	setSection(section: Section, sendDataset = true) {
@@ -293,14 +370,19 @@ export class ScenarioPage extends Page {
 		if (section.legendColors.length > 0) {
 			this.legend.setVisible(true);
 			this.legend.setLegend(section.key + "legend", section.legendColors);
-			this.bread.forEach((text) =>
-				text.setWordWrapWidth(layout.scenarioInfo.width)
-			);
 		} else {
 			this.legend.setVisible(false);
-			this.bread.forEach((text) =>
-				text.setWordWrapWidth(layout.scenarioInner.width)
-			);
+		}
+
+		if (this.scene.textures.exists(section.legend)) {
+			this.legendShadow.setVisible(true);
+			this.legendImage.setVisible(true);
+			this.legendSource.setVisible(true);
+			this.setLegendImage(section.legend, section.key + "legendSource");
+		} else {
+			this.legendShadow.setVisible(false);
+			this.legendImage.setVisible(false);
+			this.legendSource.setVisible(false);
 		}
 
 		this.layerButtons.forEach((button) => button.setVisible(false));
@@ -352,6 +434,27 @@ export class ScenarioPage extends Page {
 			this.activateDataset(section.defaultLayer);
 			this.activateBlocks("SimStad-" + section.legend);
 		}
+	}
+
+	setLegendImage(key: string, textKey: string) {
+		this.legendImage.setTexture(key);
+		this.legendImage.setScale(
+			Math.min(
+				layout.scenarioLegend.width / this.legendImage.width,
+				layout.scenarioLegend.height / this.legendImage.height
+			)
+		);
+		this.legendImage.y = this.title.y;
+
+		this.legendShadow.setTexture(key);
+		this.legendShadow.y = this.legendImage.y + 2;
+		this.legendShadow.setScale(this.legendImage.scaleX);
+
+		this.legendSource.x =
+			this.legendImage.x + this.legendImage.displayWidth / 2;
+		this.legendSource.y =
+			this.legendImage.y + this.legendImage.displayHeight + 8;
+		languageManager.bind(this.legendSource, textKey);
 	}
 
 	activateDataset(layerString: string) {

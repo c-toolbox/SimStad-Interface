@@ -43,6 +43,12 @@ export class ScrollBar extends Phaser.GameObjects.Container {
 		this.add(this.fg);
 	}
 
+	setHeight(height: number) {
+		this.height = height;
+		this.bg.setHeight(height);
+		this.fg.setHeight(height);
+	}
+
 	set(scroll: any) {
 		let h = this.height * scroll.ratio;
 		this.fg.setHeight(h);

@@ -216,6 +216,14 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		};
 	}
 
+	setHeight(newHeight: number) {
+		this.height = newHeight;
+		this.area.height = newHeight;
+		this.maskGraphics.clear();
+		this.maskGraphics.fillRect(0, 0, this.width, this.height);
+		this.updateSize();
+	}
+
 	get centerX(): number {
 		return this.x + this.width / 2;
 	}
