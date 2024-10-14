@@ -55,3 +55,21 @@ The game will start normally from now on.
 You may have to mark the games as executable before it will let you run them.
 
 There have been reports of the game freezing, so the web version might be preferred in that case. 
+
+
+# Guides
+
+## Add new raster image for testing
+
+1) Clone [Exhibition](https://gitlab.liu.se/simstad/exhibition) and [Interface](https://gitlab.liu.se/Exploranation/City/digitaltwincity-plattform/digitaltwincityinterface/) repositories into the same folder
+1) Add a new raster image (5120x3849) to Exhibition/Rasters/\<Folder\>
+1) Go to /Scripts and run `python rasters_to_thumbnails.py`
+    - This action may take a few minutes on first use
+    - These thumbnail images populate the layer page list in advanced mode
+1) Go to /Scripts and run `python rasters_to_minimaps.py`
+    - This action may take a few minutes on first use
+1) Run `python transfer_minimaps.py`
+    - Type "Y" to proceed
+1) Run `python transfer_thumbnails.py`
+    - Type "Y" to proceed
+1) Go to /digitaltwincityinterface and rebuild application
