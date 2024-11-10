@@ -5,6 +5,7 @@ import { image, sound, music, loadFont, spritesheet } from "./util";
 let images: Image[] = [
 	image("streets.png", "streets"),
 	image("blank.png", "blank"),
+	image("circle.png", "circle"),
 	image("nineslice.png", "nineslice"),
 
 	image("vis_c_logo.png", "vis_c_logo"),
@@ -38,45 +39,41 @@ let images: Image[] = [
 	image("icons/wifi.png", "wifi"),
 	image("icons/wifi-slash.png", "wifi-slash"),
 	image("icons/x.png", "x"),
-
-	image("chapters/crowd.png", "crowd"),
-	image("chapters/sunlight.png", "sunlight"),
-	image("chapters/umbrella.png", "umbrella"),
-	image("chapters/tram.png", "tram"),
-	image("chapters/cranes.png", "cranes"),
-	image("chapters/history.png", "history"),
-	image("chapters/ai.png", "ai"),
-
-	image("legends/norrkoping_stad.jpg", "legend_default"),
-	image("legends/flygfoto1959.jpg", "flygfoto1959"),
-	image("legends/flygfoto1974.jpg", "flygfoto1974"),
-	image("legends/flygfoto2022.png", "flygfoto2022"),
-	image("legends/havsnivahojning.jpg", "havsnivahojning"),
-	image("legends/stadskarta1879.png", "stadskarta1879"),
-	image("legends/stadskarta1930.jpg", "stadskarta1930"),
+	image("icons/season_spring.png", "season_spring"),
+	image("icons/season_summer.png", "season_summer"),
+	image("icons/season_fall.png", "season_fall"),
+	image("icons/season_winter.png", "season_winter"),
+	image("icons/day_sun.png", "day_sun"),
+	image("icons/day_moon.png", "day_moon"),
 ];
 
-/* Load all thumbnails */
-const thumbnailImageGlob = import.meta.glob("./images/thumbnails/*/*.png", {
-	as: "url",
-	eager: true,
-});
-for (let path in thumbnailImageGlob) {
+/* Thumbnails (only shown in debug layers page) */
+for (let path in import.meta.glob("./images/thumbnails/*/*.png")) {
 	let file = path.replace("./images/thumbnails/", "").replace(".png", "");
 	images.push(image(`thumbnails/${file}.png`, file));
 }
 
-/* Load all map images */
-const minimapImageGlob = import.meta.glob("./images/minimaps/*/*.png", {
-	as: "url",
-	eager: true,
-});
-const layerNames: string[] = [];
-for (let path in minimapImageGlob) {
+/* Minimaps (shown to the right) */
+export const layerNames: string[] = [];
+for (let path in import.meta.glob("./images/minimaps/*/*.png")) {
 	let file = path.replace("./images/", "").replace(".png", "");
 	images.push(image(`${file}.png`, file));
 
 	layerNames.push(file.replace("minimaps/", ""));
+}
+
+/* Chapters (images for the home page) */
+for (const path in import.meta.glob("./images/chapters/*")) {
+	const file = path.replace("./images/chapters/", "");
+	const key = file.replace(/\..+$/, "");
+	images.push(image(`chapters/${file}`, key));
+}
+
+/* Legends (used in LegendScene) */
+for (const path in import.meta.glob("./images/legends/*")) {
+	const file = path.replace("./images/legends/", "");
+	const key = file.replace(/\..+$/, "");
+	images.push(image(`legends/${file}`, key));
 }
 
 /* Spritesheets */
@@ -97,7 +94,7 @@ await loadFont("Lato-Regular", "Lato-Regular");
 await loadFont("Lato-Thin", "Lato-Thin");
 await loadFont("Lato-ThinItalic", "Lato-ThinItalic");
 
-export { images, spritesheets, audios, layerNames };
+export { images, spritesheets, audios };
 
 export const iconSizes: { [key: string]: { width: number; height: number } } = {
 	"arrow-left": { width: 141, height: 120 },
