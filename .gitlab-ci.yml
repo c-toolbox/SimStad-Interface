@@ -27,8 +27,18 @@ build-job:
   stage: build
 
   script:
+    #- apt-get update -qy && apt-get upgrade -qy    # This line used for updating OS repositories
+    #- apt-get install -y git
     - echo "Compiling the code..."
-    - echo $PATH
+    #- echo $PATH
+    #- pwd
+    #- ls 
+    #- cd ..
+    #- ls 
+    #- git clone git@gitlab.liu.se:simstad/exhibition.git
+    #- cd exhibition/Scripts
+    #- python convert_localization_excel.py
+    #- ls
     - npm install 
     - npm run build
     - echo "Compile complete."
