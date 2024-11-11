@@ -27,6 +27,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private scenariosLoaded: boolean;
 	private localTrafficEnabled: boolean;
 	private serverTrafficEnabled: boolean;
+	private loggingEnabled: boolean;
 
 	public scene: BaseScene;
 	private debugTexts: Phaser.GameObjects.Text[];
@@ -62,6 +63,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.scenariosLoaded = false;
 		this.localTrafficEnabled = false;
 		this.serverTrafficEnabled = false;
+		this.loggingEnabled = false;
 
 		this.debugTexts = [];
 
@@ -214,6 +216,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	sendActivateDataset(datasets: string) {
+		console.log(datasets);
 		let data: P.ActivateDatasetRequest = {
 			type: P.Request.ActivateDataset,
 			datasets,
@@ -425,9 +428,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	/* Debug messages */
 
+	setLoggingEnabled(enabled: boolean) {
+		this.loggingEnabled = enabled;
+	}
+
 	addDebug(text: any, color: string) {
 		console.log(text);
-		return;
+		if (!this.loggingEnabled) return;
 		if (typeof text !== "string") text = JSON.stringify(text);
 
 		if (text.length > 100) {
