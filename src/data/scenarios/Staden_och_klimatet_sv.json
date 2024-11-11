@@ -136,7 +136,7 @@
 			"Text1": "Här kan du se var det finns träd i staden. Träd i stadsmiljö är viktiga för vårt välmående. De bidrar till grönska och förbättrar den förorenade luften som kommer från bilar och fabriker. Träden i staden har dessutom en temperaturutjämnande effekt genom att använda solenergi för sin tillväxt. Samtidigt ger lövverket skugga och svalka i städer under varma sommardagar. När det gäller nederbörd kan de minska belastningen på stadens avloppssystem genom att ta upp stora mängder vatten. De gynnar biologisk mångfald och erbjuder boplats för fåglar, insekter och lavar.\n\nTräden är karterade på plats ute i fält eller med hjälp av analyser från laserdata. I framtiden kan AI hjälpa till med detta arbete.",
 			"Legend1": "trad",
 			"Default": true,
-			"Filenames": "Nkpg/Kommunkartan,Nkpg/Trad",
+			"Filenames": "Nkpg/Hillshade,Nkpg/Kommunkartan,Nkpg/Trad",
 			"LegendTitle": "Kartlager",
 			"LegendColors": [
 				{

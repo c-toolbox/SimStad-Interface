@@ -237,9 +237,43 @@ export class ScenarioManager {
 
 export const scenarioManager: ScenarioManager = new ScenarioManager();
 
+import scenarioAI_en from "@/data/scenarios/AI_en.json";
+import scenarioAI_sv from "@/data/scenarios/AI_sv.json";
+import scenarioBilder_fran_ovan_en from "@/data/scenarios/Bilder_fran_ovan_en.json";
+import scenarioBilder_fran_ovan_sv from "@/data/scenarios/Bilder_fran_ovan_sv.json";
+import scenarioKommunen_en from "@/data/scenarios/Kommunen_en.json";
+import scenarioKommunen_sv from "@/data/scenarios/Kommunen_sv.json";
+import scenarioStaden_i_rorelse_en from "@/data/scenarios/Staden_i_rorelse_en.json";
+import scenarioStaden_i_rorelse_sv from "@/data/scenarios/Staden_i_rorelse_sv.json";
+import scenarioStaden_och_klimatet_en from "@/data/scenarios/Staden_och_klimatet_en.json";
+import scenarioStaden_och_klimatet_sv from "@/data/scenarios/Staden_och_klimatet_sv.json";
+import scenarioStadens_sammansattning_en from "@/data/scenarios/Stadens_sammansattning_en.json";
+import scenarioStadens_sammansattning_sv from "@/data/scenarios/Stadens_sammansattning_sv.json";
+import scenarioStadens_utveckling_en from "@/data/scenarios/Stadens_utveckling_en.json";
+import scenarioStadens_utveckling_sv from "@/data/scenarios/Stadens_utveckling_sv.json";
+import scenarioTrafikverket_en from "@/data/scenarios/Trafikverket_en.json";
+import scenarioTrafikverket_sv from "@/data/scenarios/Trafikverket_sv.json";
+
 // Load all scenario json files
-for (const path in import.meta.glob("../data/scenarios/*")) {
-	import(path).then((module) => {
-		scenarioManager.loadScenario(module.default);
-	});
-}
+// for (const path in import.meta.glob("../data/scenarios/*")) {
+// 	import(path).then((module) => {
+// 		scenarioManager.loadScenario(module.default);
+// 	});
+// }
+
+scenarioManager.loadScenario(scenarioAI_en);
+scenarioManager.loadScenario(scenarioAI_sv);
+scenarioManager.loadScenario(scenarioBilder_fran_ovan_en);
+scenarioManager.loadScenario(scenarioBilder_fran_ovan_sv);
+scenarioManager.loadScenario(scenarioKommunen_en);
+scenarioManager.loadScenario(scenarioKommunen_sv);
+scenarioManager.loadScenario(scenarioStaden_i_rorelse_en);
+scenarioManager.loadScenario(scenarioStaden_i_rorelse_sv);
+scenarioManager.loadScenario(scenarioStaden_och_klimatet_en);
+scenarioManager.loadScenario(scenarioStaden_och_klimatet_sv);
+scenarioManager.loadScenario(scenarioStadens_sammansattning_en);
+scenarioManager.loadScenario(scenarioStadens_sammansattning_sv);
+scenarioManager.loadScenario(scenarioStadens_utveckling_en);
+scenarioManager.loadScenario(scenarioStadens_utveckling_sv);
+scenarioManager.loadScenario(scenarioTrafikverket_en);
+scenarioManager.loadScenario(scenarioTrafikverket_sv);

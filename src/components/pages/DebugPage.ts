@@ -141,6 +141,17 @@ export class DebugPage extends Page {
 		this.addButton(x, y, w, h, "Deactivate Movie", Color.Red800, () => {
 			this.socket.sendReset();
 		});
+
+		x -= w + s;
+		y += h + s;
+		this.addButton(x, y, w, h, "Show logging", Color.Green700, () => {
+			this.socket.setLoggingEnabled(true);
+		});
+
+		x += w + s;
+		this.addButton(x, y, w, h, "Hide logging", Color.Red800, () => {
+			this.socket.setLoggingEnabled(false);
+		});
 	}
 
 	update(time: number, delta: number) {

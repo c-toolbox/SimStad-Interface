@@ -136,7 +136,7 @@
 			"Text1": "Here you can see where there are trees in the city. Trees in an urban environment are important for our well-being. They contribute to greenery and improve the air which is polluted by cars and factories. The trees in the city also have a equalizing effect on the temperature by using solar energy for their growth. At the same time, the foliage provides shade and coolness in cities on hot summer days. When it comes to rainfall, they can reduce the load on the city's sewage system by absorbing large amounts of water. They benefit biodiversity and provide habitat for birds, insects, and lichens.\n\nThe trees are mapped on site out in the field or with the help of analyzes from airborn laserscan data. In the future, AI can help with this work.",
 			"Legend1": "trad",
 			"Default": true,
-			"Filenames": "Nkpg/Kommunkartan,Nkpg/Trad",
+			"Filenames": "Nkpg/Hillshade,Nkpg/Kommunkartan,Nkpg/Trad",
 			"LegendTitle": "Map layers",
 			"LegendColors": [
 				{
