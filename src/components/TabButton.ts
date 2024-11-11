@@ -3,7 +3,7 @@ import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import { interpolateColor } from "@/utils/functions";
+import { interpolateColor, splitText } from "@/utils/functions";
 import { languageManager } from "@/utils/LanguageManager";
 
 export class TabButton extends Button {
@@ -54,6 +54,7 @@ export class TabButton extends Button {
 		});
 		this.title.setShadow(0, 0, "black", 4);
 		this.title.setOrigin(0.5);
+		this.title.setAlign("center");
 		this.setText(text);
 		this.add(this.title);
 
@@ -108,8 +109,10 @@ export class TabButton extends Button {
 	rescaleText() {
 		this.title.setScale(1);
 		if (this.title.displayWidth > this.background.width - 20) {
+			this.title.setText(splitText(this.title.text));
 			this.title.displayWidth = this.background.width - 20;
-			this.title.scaleY = (1 + this.title.scaleX) / 2;
+			this.title.scaleY = Math.min(0.8, this.title.scaleX);
+			this.title.scaleX = this.title.scaleY;
 		}
 	}
 

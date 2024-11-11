@@ -3,6 +3,7 @@ import {
 	colorToGrayscale,
 	colorToNumber,
 	interpolateColor,
+	splitText,
 } from "@/utils/functions";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
@@ -88,7 +89,6 @@ export class Legend extends Phaser.GameObjects.Container {
 		const count = Math.max(stops.length, 10);
 		const height = (th - gap * (count - 1)) / count;
 		const width = 2 * height;
-		// const dotRadius = size / 2;
 
 		stops.forEach(({ color, text }, index) => {
 			let x = this.title.x;
@@ -98,11 +98,9 @@ export class Legend extends Phaser.GameObjects.Container {
 			let bc = interpolateColor(c, gc, 0.3);
 
 			this.graphics.fillStyle(bc);
-			// this.graphics.fillCircle(x, y, dotRadius);
 			this.graphics.fillRect(x, y - height / 2, width, height);
 
 			this.graphics.fillStyle(colorToNumber(color));
-			// this.graphics.fillCircle(x, y, dotRadius - border);
 			this.graphics.fillRect(
 				x + border,
 				y - height / 2 + border,
@@ -111,21 +109,27 @@ export class Legend extends Phaser.GameObjects.Container {
 			);
 
 			let label = this.scene.addText({
-				// x: x + dotRadius + separation,
-				x: x + width + gap,
+				x: x + width + gap / 2,
 				y,
 				size: Math.min(1000 * height, legendLabelSize),
-				// fontFamily: "Lato-Regular",
 			});
 			label.setOrigin(0, 0.5);
 			this.add(label);
 			this.labels.push(label);
 
-			const maxWidth = this.width / 2 - 20 - label.x;
+			const maxWidth = this.width / 2 - gap / 2 - label.x;
 			if (languageManager.get(title + index, false)) {
 				languageManager.bind(label, title + index, () => {
+					if (label.displayWidth > maxWidth && label.text.includes(" ")) {
+						label.setText(splitText(label.text));
+					}
 					if (label.displayWidth > maxWidth) {
 						label.displayWidth = maxWidth;
+						label.scaleY = label.scaleX;
+					}
+					if (label.text.includes("\n")) {
+						label.scaleX = Math.min(0.7, label.scaleX);
+						label.scaleY = label.scaleX;
 					}
 				});
 			}

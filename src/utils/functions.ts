@@ -76,11 +76,6 @@ export function colorToNumber(color: string): number {
 	return Phaser.Display.Color.HexStringToColor(color).color;
 }
 
-// Returns a safe version of a string
-export function safeString(text: string): string {
-	return text.replace(/[^a-zA-Z0-9]/g, "");
-}
-
 // Check availibility of localStorage
 export function isLocalStorageAvailable() {
 	var test = "test";
@@ -105,4 +100,30 @@ export function setLocalStorage(key: string, value: any): void {
 	if (isLocalStorageAvailable()) {
 		localStorage.setItem(key, JSON.stringify(value));
 	}
+}
+
+export function splitText(text: string) {
+	if (!text.includes(" ")) return text;
+
+	const spaceIndices = [];
+	for (let i = 0; i < text.length; i++) {
+		if (text[i] === " ") {
+			spaceIndices.push(i);
+		}
+	}
+
+	const middle = text.length / 2;
+
+	let closestSpace = 0;
+	let closestDistance = text.length;
+	spaceIndices.forEach((spaceIndex) => {
+		if (Math.abs(spaceIndex - middle) < closestDistance) {
+			closestSpace = spaceIndex;
+			closestDistance = Math.abs(spaceIndex - middle);
+		}
+	});
+
+	return (
+		text.substring(0, closestSpace) + "\n" + text.substring(closestSpace + 1)
+	);
 }

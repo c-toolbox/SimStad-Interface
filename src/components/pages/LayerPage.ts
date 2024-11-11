@@ -64,7 +64,7 @@ export class LayerPage extends Page {
 		/* Scroll area */
 
 		let scrollTop = title.y + title.displayHeight + s;
-		let scrollBottom = layout.panelInner.bottom - h - s;
+		let scrollBottom = layout.panelInner.bottom - 2 * (h - s);
 		let scrollHeight = scrollBottom - scrollTop;
 
 		this.scrollArea = new ScrollArea(

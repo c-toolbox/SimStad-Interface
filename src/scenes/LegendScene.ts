@@ -1,20 +1,17 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
-import { languageManager as language } from "@/utils/LanguageManager";
-import * as dataStadenIRorelse from "@/data/scenarios/Staden_i_rorelse_sv.json";
-import * as dataStadenOchKlimatet from "@/data/scenarios/Staden_och_klimatet_sv.json";
-import * as dataStadensSammansattning from "@/data/scenarios/Stadens_sammansattning_sv.json";
-import * as dataStadensUtveckling from "@/data/scenarios/Stadens_utveckling_sv.json";
-import * as dataBilderFranOvan from "@/data/scenarios/Bilder_fran_ovan_sv.json";
-import * as dataAI from "@/data/scenarios/AI_sv.json";
+import {
+	languageManager as language,
+	languageManager,
+} from "@/utils/LanguageManager";
 import {
 	colorToGrayscale,
 	colorToNumber,
 	interpolateColor,
 } from "@/utils/functions";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
-import { ScenarioData } from "@/utils/ScenarioManager";
+import { scenarioManager } from "@/utils/ScenarioManager";
 
 const screenWidth = 1920;
 const screenHeight = 1080;
@@ -26,7 +23,7 @@ const titleSize = 92;
 const breadSize = 40;
 const legendTitleSize = 40;
 const legendLabelSize = 40;
-const grid = 5;
+const grid = 6;
 
 const bx = margin;
 const by = margin;
@@ -392,36 +389,33 @@ export class LegendScene extends BaseScene {
 			legend.addImage("legend_default");
 		});
 
-		let datasets: ScenarioData[] = [
-			dataStadenIRorelse,
-			dataStadenOchKlimatet,
-			dataStadensSammansattning,
-			dataStadensUtveckling,
-			dataBilderFranOvan,
-			dataAI,
-		];
+		const scenarios = scenarioManager.getScenarios();
+		scenarios.forEach((scenario) => {
+			scenario.sections.forEach((section) => {
+				const base = `${section.scenarioId}_${section.key}`;
+				const titleText = languageManager.get(`${base}_title`);
+				const breadText = languageManager.get(`${base}_bread`);
+				const legendTitle = languageManager.get(`${base}_legend`);
+				const legendColors = section.legendColors.map((color) => ({
+					color: color.color,
+					text: color.text,
+				}));
 
-		datasets.forEach((dataset) => {
-			// scenarioData.scenarios.forEach((scenario) => {
-			dataset.Sections.forEach((section) => {
-				section.SectionObject.forEach((object) => {
-					let legend = new LegendScreen(
-						this,
-						object.Title,
-						object.Text1,
-						object.LegendTitle,
-						object.LegendColors
-					);
-					legend.on("click", () => this.select(legend));
-					this.legendScreens.push(legend);
-					this.add.existing(legend);
+				let legend = new LegendScreen(
+					this,
+					titleText,
+					breadText,
+					legendTitle,
+					legendColors
+				);
+				legend.on("click", () => this.select(legend));
+				this.legendScreens.push(legend);
+				this.add.existing(legend);
 
-					if (this.textures.exists(object.Legend1)) {
-						legend.addImage(object.Legend1, object.LegendSource);
-					}
-				});
+				if (this.textures.exists(section.legendImage)) {
+					legend.addImage(section.legendImage, section.legendSource);
+				}
 			});
-			// });
 		});
 
 		// scenarioDataEn.scenarios.forEach((scenario) => {
