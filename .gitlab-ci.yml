@@ -29,8 +29,12 @@ build-job:
   script:
     - echo "Compiling the code..."
     - echo $PATH
-    - npm install 
-    - npm run build
+    - pwd
+    - ls 
+    - cd ..
+    - ls 
+    #- npm install 
+    #- npm run build
     - echo "Compile complete."
 
   artifacts:
