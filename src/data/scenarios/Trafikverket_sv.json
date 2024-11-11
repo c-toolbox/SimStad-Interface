@@ -1,0 +1,234 @@
+{
+	"Id": "trafikverket",
+	"Title": "Trafik under byggtid",
+	"Sections": [
+		{
+			"Id": "oversikt",
+			"Title": "Översikt",
+			"Text1": "Kartan visar översiktligt etableringsområden och huvudsakliga vägar som påverkas då Ostlänken och Norrköpings nya centralstation byggs. Klicka på flikarna för mer information om det som visas på kartan.",
+			"Legend1": "legendnamn",
+			"Default": true,
+			"Filenames": "Trafikverket/oversikt",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "Ostlänken"
+				},
+				{
+					"color": "#794979",
+					"text": "Etableringsområde"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Huvudsakligt vägstråk för byggtrafik"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+				},
+				{
+					"color": "#23af75",
+					"text": "Möjlig större tillgänglighetsökande åtgärd"
+				}
+			]
+		},
+		{
+			"Id": "etableringsomraden",
+			"Title": "Etableringsområden",
+			"Text1": "När Ostlänken och Norrköpings nya centralstation byggs kommer ett etableringsområde för produktionen att anläggas i södra Butängen. Etableringsområdet inrymmer bland annat betongfabrik för produktion av betong till stationens broar, byggkranar och personalbodar samt möjliggör uppställning av fordon/maskiner samt lagring av material. Området stängslas in i sin helhet och transporter till och från området sker genom utpekade in- och utfarter.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Etableringsomrade",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "Ostlänken"
+				},
+				{
+					"color": "#794979",
+					"text": "Etableringsområde"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Huvudsakligt vägstråk för byggtrafik"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+				},
+				{
+					"color": "#23af75",
+					"text": "Möjlig större tillgänglighetsökande åtgärd"
+				}
+			]
+		},
+		{
+			"Id": "byggtrafik",
+			"Title": "Byggtrafik",
+			"Text1": "Etableringsområdet i Södra Butängen kommer att alstra stora mängder byggtrafik. Huvudsakliga vägstråk som kommer att nyttjas av byggtrafiken är Finspångsvägen, Riksvägen, Norra Promenaden, Ståthögavägen, Sjötullsgatan samt Stockholmsvägen.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Byggtrafik",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "Ostlänken"
+				},
+				{
+					"color": "#794979",
+					"text": "Etableringsområde"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Huvudsakligt vägstråk för byggtrafik"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+				},
+				{
+					"color": "#23af75",
+					"text": "Möjlig större tillgänglighetsökande åtgärd"
+				}
+			]
+		},
+		{
+			"Id": "paverkan",
+			"Title": "Påverkan på allmän trafik",
+			"Text1": "Under stora delar av byggtiden kommer det allmänna trafiknätet att påverkas. Det kan bland annat handla om att gator stängs av i sin helhet och att gator får reducerad kapacitet. De gator som huvudsakligen påverkas är Stockholmsvägen, Ingelstagatan och Ståthögavägen. Huvudsakliga omledningsstråk för allmän trafik kommer att vara Riksvägen, Stockholmsvägen och Norra Promenaden.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Paverkan_pa_allm",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "Ostlänken"
+				},
+				{
+					"color": "#794979",
+					"text": "Etableringsområde"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Huvudsakligt vägstråk för byggtrafik"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+				},
+				{
+					"color": "#23af75",
+					"text": "Möjlig större tillgänglighetsökande åtgärd"
+				}
+			]
+		},
+		{
+			"Id": "atgarder",
+			"Title": "Möjliga åtgärder",
+			"Text1": "Det pågår ett arbete med analysera trafikpåverkan och att finna åtgärder för att hantera störningarna på den allmänna trafiken. Det kan exempelvis handla om ändringar i linjedragningar och tidtabeller för kollektivtrafiken samt åtgärder som förbättrar framkomligheten i det allmänna vägnätet. Några åtgärder som diskuteras är en ny bro för allmän trafik mellan Fredriksdalsgatan och Stockholmsvägen samt att bygga Johannisborgsförbindelsen före eller i samband med att den nya stationsanläggningen byggs.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/M_Atgarder",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "Ostlänken"
+				},
+				{
+					"color": "#794979",
+					"text": "Etableringsområde"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Huvudsakligt vägstråk för byggtrafik"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+				},
+				{
+					"color": "#23af75",
+					"text": "Möjlig större tillgänglighetsökande åtgärd"
+				}
+			]
+		},
+		{
+			"Id": "tillganglighet",
+			"Title": "Tillgänglighet till och från befintligt resecentrum",
+			"Text1": "Norrköpings kommun och Trafikverket arbetar gemensamt för att säkerställa tillgänglighet till och från befintligt resecentrum samt viktiga resenärsfunktioner under byggtiden. Bland annat studeras möjligheten att ersätta pendlarparkeringar som behöver rivas då Ostlänken byggs. Ersättningsytor behöver ha rimliga gångavstånd till resecentrum. I kartan illustreras avstånden 400 meter och 800 meter. Det bedöms motsvara ca 5-10 minuters gångväg.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Tillgang",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#005f37",
+					"text": "Befintligt resecentrum"
+				},
+				{
+					"color": "#569f84",
+					"text": "400 meter radie från resecentrum"
+				},
+				{
+					"color": "#90d6bf",
+					"text": "800 meter radie från resecentrum"
+				}
+			]
+		}
+	]
+}

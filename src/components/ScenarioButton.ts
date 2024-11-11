@@ -2,8 +2,6 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color } from "@/utils/colors";
-import { layoutManager as layout } from "@/utils/LayoutManager";
-import { interpolateColor } from "@/utils/functions";
 import { languageManager } from "@/utils/LanguageManager";
 import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
 
@@ -13,8 +11,6 @@ export class ScenarioButton extends Button {
 	private titleBg: Phaser.GameObjects.Rectangle;
 	private title: Phaser.GameObjects.Text;
 
-	private color: number;
-
 	constructor(
 		scene: BaseScene,
 		x: number,
@@ -22,38 +18,31 @@ export class ScenarioButton extends Button {
 		width: number,
 		height: number,
 		text: string,
-		color: number,
 		textureKey: string
 	) {
 		super(scene, x, y);
 		this.width = width;
 		this.height = height;
-		this.color = color;
 
+		const p = 8;
 		this.border = new RoundRectangle(scene, {
-			width: this.width + 4,
-			height: this.height + 4,
-			radius: 2,
+			width: this.width + p,
+			height: this.height + p,
+			radius: 4,
 			color: Color.Slate300,
 		});
-		// this.border.setVisible(false);
 		this.add(this.border);
-
-		// let rect = new RoundRectangle(scene, {
-		// 	x,
-		// 	y,
-		// 	width: this.width,
-		// 	height: this.height,
-		// 	radius: layout.radius,
-		// 	color: color,
-		// });
-		// rect.setVisible(false);
 
 		this.background = scene.add.image(0, 0, textureKey);
 		this.background.setScale(width / this.background.width);
+		const cropW = width / this.background.scaleX;
+		const cropH = height / this.background.scaleY;
+		const cropX = 0;
+		const cropY = (this.background.displayHeight - height + p) / 2;
+		this.background.setCrop(cropX, cropY, cropW, cropH);
 		this.add(this.background);
 
-		const titleHeight = height / 4;
+		const titleHeight = width / 8;
 		this.titleBg = scene.add.rectangle(
 			0,
 			height / 2 - titleHeight / 2,
@@ -77,6 +66,7 @@ export class ScenarioButton extends Button {
 		this.add(this.title);
 
 		this.bindInteractive(this.background);
+		this.background.input!.hitArea.setTo(cropX, cropY, cropW, cropH);
 	}
 
 	update(time: number, delta: number) {
@@ -87,8 +77,8 @@ export class ScenarioButton extends Button {
 		if (languageManager.get(key, false)) {
 			languageManager.bind(this.title, key, () => {
 				this.title.setScale(1);
-				if (this.title.displayWidth > this.background.width - 40) {
-					this.title.displayWidth = this.background.width - 40;
+				if (this.title.displayWidth > this.background.displayWidth - 40) {
+					this.title.displayWidth = this.background.displayWidth - 40;
 				}
 			});
 		} else {

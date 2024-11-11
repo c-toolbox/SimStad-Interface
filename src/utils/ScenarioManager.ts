@@ -1,66 +1,41 @@
-import * as dataStadenIRorelseSv from "@/data/scenarios/Staden_i_rorelse_sv.json";
-import * as dataStadenIRorelseEn from "@/data/scenarios/Staden_i_rorelse_en.json";
-import * as dataStadenOchKlimatetSv from "@/data/scenarios/Staden_och_klimatet_sv.json";
-import * as dataStadenOchKlimatetEn from "@/data/scenarios/Staden_och_klimatet_en.json";
-import * as dataStadensSammansattningSv from "@/data/scenarios/Stadens_sammansattning_sv.json";
-import * as dataStadensSammansattningEn from "@/data/scenarios/Stadens_sammansattning_en.json";
-import * as dataStadensUtvecklingSv from "@/data/scenarios/Stadens_utveckling_sv.json";
-import * as dataStadensUtvecklingEn from "@/data/scenarios/Stadens_utveckling_en.json";
-import * as dataBilderFranOvanSv from "@/data/scenarios/Bilder_fran_ovan_sv.json";
-import * as dataBilderFranOvanEn from "@/data/scenarios/Bilder_fran_ovan_en.json";
-import * as dataAISv from "@/data/scenarios/AI_sv.json";
-import * as dataAIEn from "@/data/scenarios/AI_en.json";
-import { languageManager } from "./LanguageManager";
-import { safeString } from "./functions";
+import scenarioConfig from "@/data/scenarios.json";
 
-export interface ScenarioData {
+interface ScenarioJson {
+	Id: string;
 	Title: string;
 	Sections: {
-		Label1: string;
-		SectionObject: {
-			Title: string;
-			Text1: string;
-			Text2: string;
-			Datasource: string;
-			Legend1: string;
-			Legend2: string;
-			Default: boolean;
-			Idle: boolean;
-			Filenames: string;
-			LegendTitle: string;
-			LegendColors: {
-				color: string;
-				text: string;
-			}[];
-			LegendSource?: string;
-			Buttons?: {
-				Title: string;
-				Layers: string;
-			}[];
-			Slider?: {
-				Title: string;
-				Labels: string[];
-				Layers: string[];
-			};
+		Id: string;
+		Title: string;
+		Text1: string;
+		Legend1: string;
+		Default: boolean;
+		Filenames: string;
+		LegendTitle: string;
+		LegendColors: {
+			color: string;
+			text: string;
 		}[];
+		LegendSource?: string;
+		Buttons?: {
+			Title: string;
+			Layers: string;
+		}[];
+		Slider?: {
+			Title: string;
+			Labels: string[];
+			Layers: string[];
+		};
 	}[];
 }
 
-export enum ScenarioKey {
-	rorelse = "rorelse",
-	klimatet = "klimatet",
-	sammansattning = "sammansattning",
-	utveckling = "utveckling",
-	ovan = "ovan",
-	ai = "ai",
-}
+export type ScenarioId = string;
 
 export interface Section {
 	key: string; // Used to fetch localized texts
-	scenario: ScenarioKey; // Parent scenario id
-	legend: string; // Legend image id sent to blocks
+	scenarioId: ScenarioId; // Parent scenario id
+	legendImage: string; // Legend image id sent to blocks
+	legendSource: string; // Legend image source text
 	default: boolean; // If section is selected by default
-	idle: boolean; // If section is shown during attraction mode
 	defaultLayer: string; // Datalayer used by default
 	layerButtons?: string[];
 	layerSlider?: {
@@ -73,18 +48,49 @@ export interface Section {
 	}[];
 }
 
+export interface Scenario {
+	id: string;
+	thumbnail: string;
+	blocksVideo: string;
+	sections: Section[];
+}
+
 export class ScenarioManager {
-	private sections: { [key in ScenarioKey]: Section[] };
+	private scenarios: Scenario[];
 
 	constructor() {
-		this.sections = {
-			[ScenarioKey.rorelse]: [],
-			[ScenarioKey.klimatet]: [],
-			[ScenarioKey.sammansattning]: [],
-			[ScenarioKey.utveckling]: [],
-			[ScenarioKey.ovan]: [],
-			[ScenarioKey.ai]: [],
-		};
+		this.scenarios = [];
+		scenarioConfig.scenarios.forEach((scenario) => {
+			this.scenarios.push({
+				id: scenario.id,
+				thumbnail: scenario.thumbnail,
+				blocksVideo: scenario.blocksVideo,
+				sections: [],
+			});
+		});
+	}
+
+	loadScenario(scenarioData: ScenarioJson) {
+		const { Id, Sections } = scenarioData;
+		const scenario = this.getScenario(Id);
+		scenario.sections = Sections.map((section) => {
+			return {
+				key: section.Id,
+				scenarioId: scenario.id,
+				legendImage: section.Legend1,
+				legendSource: section.LegendSource || "",
+				default: section.Default,
+				defaultLayer: section.Filenames,
+				layerButtons: section.Buttons?.map((button) => button.Layers) || [],
+				layerSlider: section.Slider
+					? {
+							labels: section.Slider.Labels.length,
+							layers: section.Slider.Layers,
+					  }
+					: undefined,
+				legendColors: section.LegendColors,
+			};
+		});
 	}
 
 	// Called by LanguageManager. Extracts raw scenario data and localization.
@@ -92,38 +98,16 @@ export class ScenarioManager {
 		swedishLocales: { [key: string]: string },
 		englishLocales: { [key: string]: string }
 	) {
-		// Raw scenario data
-		const scenariosSv: { [key in ScenarioKey]: ScenarioData } = {
-			[ScenarioKey.rorelse]: dataStadenIRorelseSv,
-			[ScenarioKey.klimatet]: dataStadenOchKlimatetSv,
-			[ScenarioKey.sammansattning]: dataStadensSammansattningSv,
-			[ScenarioKey.utveckling]: dataStadensUtvecklingSv,
-			[ScenarioKey.ovan]: dataBilderFranOvanSv,
-			[ScenarioKey.ai]: dataAISv,
-		};
-		const scenariosEn: { [key in ScenarioKey]: ScenarioData } = {
-			[ScenarioKey.rorelse]: dataStadenIRorelseEn,
-			[ScenarioKey.klimatet]: dataStadenOchKlimatetEn,
-			[ScenarioKey.sammansattning]: dataStadensSammansattningEn,
-			[ScenarioKey.utveckling]: dataStadensUtvecklingEn,
-			[ScenarioKey.ovan]: dataBilderFranOvanEn,
-			[ScenarioKey.ai]: dataAIEn,
-		};
-
+		/*
 		// Iterate over all scenarios
 		Object.values(ScenarioKey).forEach((scenarioKey: ScenarioKey) => {
 			// Add scenario titles to locales
 			swedishLocales[scenarioKey + "title"] = scenariosSv[scenarioKey].Title;
 			englishLocales[scenarioKey + "title"] = scenariosEn[scenarioKey].Title;
 
-			// Not sure why it even is an array
-			if (scenariosSv[scenarioKey].Sections.length != 1) {
-				console.error("Not supported");
-			}
-
 			// Fetch section lists
-			const sectionsSv = scenariosSv[scenarioKey].Sections[0].SectionObject;
-			const sectionsEn = scenariosEn[scenarioKey].Sections[0].SectionObject;
+			const sectionsSv = scenariosSv[scenarioKey].Sections;
+			const sectionsEn = scenariosEn[scenarioKey].Sections;
 			if (sectionsSv.length != sectionsEn.length) {
 				console.error("Swedish and english scenario sections not matching");
 			}
@@ -154,6 +138,7 @@ export class ScenarioManager {
 
 				// Make safe string
 				let sectionKey = scenarioKey + safeString(sectionSv.Title);
+				// let sectionKey = scenarioKey + safeString(sectionSv.Id);
 
 				// Setup custom section object
 				let section: Section = {
@@ -161,7 +146,6 @@ export class ScenarioManager {
 					scenario: scenarioKey,
 					legend: sectionSv.Legend1,
 					default: sectionSv.Default,
-					idle: sectionSv.Idle,
 					legendColors: sectionSv.LegendColors,
 					defaultLayer: sectionSv.Filenames,
 				};
@@ -217,17 +201,45 @@ export class ScenarioManager {
 				}
 			}
 		});
+		*/
 	}
 
-	getScenarioKeys(): string[] {
-		return Object.keys(ScenarioKey);
+	getScenarios(): Scenario[] {
+		return this.scenarios;
 	}
 
-	getScenarioSections(scenario: ScenarioKey) {
-		return this.sections[scenario];
+	getScenarioIds(): ScenarioId[] {
+		return this.scenarios.map((scenario) => scenario.id);
+	}
+
+	getScenario(id: ScenarioId): Scenario {
+		return this.scenarios.find((scenario) => scenario.id == id)!;
+	}
+
+	getSectionIds(scenarioId: ScenarioId): string[] {
+		const scenario = this.getScenario(scenarioId);
+		if (scenario) {
+			return scenario.sections.map((section) => section.key);
+		}
+		return [];
+	}
+
+	getScenarioSection(
+		scenarioId: ScenarioId,
+		sectionId: string
+	): Section | undefined {
+		const scenario = this.getScenario(scenarioId);
+		if (scenario) {
+			return scenario.sections.find((section) => section.key == sectionId);
+		}
 	}
 }
 
-const scenarioManager: ScenarioManager = new ScenarioManager();
+export const scenarioManager: ScenarioManager = new ScenarioManager();
 
-export { scenarioManager };
+// Load all scenario json files
+for (const path in import.meta.glob("../data/scenarios/*")) {
+	import(path).then((module) => {
+		scenarioManager.loadScenario(module.default);
+	});
+}

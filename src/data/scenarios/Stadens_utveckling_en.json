@@ -1,192 +1,145 @@
 {
-	"Title": "The development of the city",
+	"Id": "utveckling",
+	"Title": "Urban setting",
 	"Sections": [
 		{
-			"Label1": "",
-			"SectionObject": [
+			"Id": "byggnadsar",
+			"Title": "Year of construction",
+			"Text1": "By looking at the year of construction, we can see how the city has grown over time and where new construction has been added in recent years. Around the turn of the last century, Norrköping was in a boom. The textile industry grew and so did the city. In the middle of the 20th century, the textile crisis hit and production in the central industrial area gradually declined. Despite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make space for new, more modern buildings. After that, the pace of construction has been more limited and increasingly focused on densifying the inner city's various gaps or demolished lots.",
+			"Legend1": "byggnadsar",
+			"Default": true,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Byggnadsar",
+			"LegendTitle": "Time period",
+			"LegendColors": [
 				{
-					"Title": "Urban development areas",
-					"Text1": "Here, areas are marked in which more extensive urban development is ongoing or planned in Norrköping right now. Did you know that there will be around 3000 new homes in the Inner Harbor? Or that the whole of Butängen will be converted into a part of the inner city in connection with the high-speed railway Ostlänken being built?\n\nOn the model, you can also see that the Sylten area will get a facelift in the future and that Norrköping's western districts are growing.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "stadsutvecklingsomraden",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Framtidens_norrkoping",
-					"LegendTitle": "Type of area",
-					"LegendColors": [
-						{
-							"color": "#e9cf87",
-							"text": "Area of development"
-						},
-						{
-							"color": "#e5b636",
-							"text": "New city blocks"
-						},
-						{
-							"color": "#e75a23",
-							"text": "East Link Project"
-						},
-						{
-							"color": "#ad7aa9",
-							"text": "East Link Tunnel"
-						},
-						{
-							"color": "#c0c0c0",
-							"text": "New ring road"
-						}
-					]
+					"color": "#440154",
+					"text": "<1800"
 				},
 				{
-					"Title": "Year of construction",
-					"Text1": "By looking at the year of construction, we can see how the city has grown over time and where new construction has been added in recent years. Around the turn of the last century, Norrköping was in a boom. The textile industry grew and so did the city. In the middle of the 20th century, the textile crisis hit and production in the central industrial area gradually declined. Despite the decline of industries, investments were made in new housing during the 60s and 70s. Older homes were demolished to make space for new, more modern buildings. After that, the pace of construction has been more limited and increasingly focused on densifying the inner city's various gaps or demolished lots.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "byggnadsar",
-					"Legend2": "",
-					"Default": false,
-					"Idle": true,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Byggnadsar",
-					"LegendTitle": "Time period",
-					"LegendColors": [
-						{
-							"color": "#440154",
-							"text": "<1800"
-						},
-						{
-							"color": "#482576",
-							"text": "1800 – 1850"
-						},
-						{
-							"color": "#414387",
-							"text": "1850 – 1900"
-						},
-						{
-							"color": "#345F8D",
-							"text": "1900 – 1920"
-						},
-						{
-							"color": "#2A788E",
-							"text": "1920 – 1940"
-						},
-						{
-							"color": "#21908D",
-							"text": "1940 – 1960"
-						},
-						{
-							"color": "#23A884",
-							"text": "1960 – 1980"
-						},
-						{
-							"color": "#43BF70",
-							"text": "1980 – 2000"
-						},
-						{
-							"color": "#7AD151",
-							"text": "2000 – 2010"
-						},
-						{
-							"color": "#BCDF27",
-							"text": "2010 – 2020"
-						},
-						{
-							"color": "#FDE725",
-							"text": "2020 – 2023"
-						}
-					]
+					"color": "#482576",
+					"text": "1800 – 1850"
 				},
 				{
-					"Title": "City types",
-					"Text1": "The history of a city always influences the conditions for the city's planning and development. Norrköping's unique history with its strategic location by the Motala river shaped the growing city then and is still shaping our city today. To gain an understanding of what conditions and opportunities exist, one must describe and understand the specific characteristics of different areas based on the historical background.\n\nThe city's development can be compared to different annual rings, each annual ring has its own type of architecture and urban character. Perhaps Norrköping's most characteristic urban character is the city grid, which can be found in the central parts of Norrköping.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "stadstyper",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Finals/Stadskaraktar",
-					"LegendTitle": "Urban morphology",
-					"LegendColors": [
-						{
-							"color": "#a47158",
-							"text": "Grid street plan"
-						},
-						{
-							"color": "#e44b33",
-							"text": "Own-home activity"
-						},
-						{
-							"color": "#f07c4a",
-							"text": "Garden city movement"
-						},
-						{
-							"color": "#fdae61",
-							"text": "Functionalism"
-						},
-						{
-							"color": "#fee133",
-							"text": "Modernism"
-						},
-						{
-							"color": "#fea083",
-							"text": "Million Programme"
-						},
-						{
-							"color": "#ffffbf",
-							"text": "1970s"
-						},
-						{
-							"color": "#209cce",
-							"text": "1980s"
-						},
-						{
-							"color": "#56e6a0",
-							"text": "1990s"
-						},
-						{
-							"color": "#abd9e9",
-							"text": "2000s"
-						},
-						{
-							"color": "#d5b43c",
-							"text": "Mixed housing"
-						},
-						{
-							"color": "#987db7",
-							"text": "Businesses"
-						},
-						{
-							"color": "#2c7bb6",
-							"text": "Suburbs"
-						}
-					]
+					"color": "#414387",
+					"text": "1850 – 1900"
 				},
 				{
-					"Title": "Cultural history",
-					"Text1": "Here you can see which buildings are most valued from a cultural-historical perspective. These buildings have different degrees of protection in order for them to be preserved for future generations. The highest protection a building can have today is to be classified as a building monument, which means that it is protected by the Cultural Heritage Act which imposes special requirements for its preservation. The promenades in Norrköping, consisting of Norra, Östra, and Södra Promenaden, have been classified as architectural monuments since 1994. Within this area, it is not permitted to change the character of the area.\n\nClass 1 is also protected by the Cultural Heritage Act, while Class 2 has a special value without legal protection.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "kulturminnen",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Kulturhistorisktvardefulla_byggnader,Nkpg/Vattenytor",
-					"LegendTitle": "Classes",
-					"LegendColors": [
-						{
-							"color": "#d7191c",
-							"text": "Listed buildings"
-						},
-						{
-							"color": "#ff8000",
-							"text": "Class 1"
-						},
-						{
-							"color": "#ffb800",
-							"text": "Class 2"
-						}
-					]
+					"color": "#345F8D",
+					"text": "1900 – 1920"
+				},
+				{
+					"color": "#2A788E",
+					"text": "1920 – 1940"
+				},
+				{
+					"color": "#21908D",
+					"text": "1940 – 1960"
+				},
+				{
+					"color": "#23A884",
+					"text": "1960 – 1980"
+				},
+				{
+					"color": "#43BF70",
+					"text": "1980 – 2000"
+				},
+				{
+					"color": "#7AD151",
+					"text": "2000 – 2010"
+				},
+				{
+					"color": "#BCDF27",
+					"text": "2010 – 2020"
+				},
+				{
+					"color": "#FDE725",
+					"text": "2020 – 2023"
+				}
+			]
+		},
+		{
+			"Id": "stadstyper",
+			"Title": "City types",
+			"Text1": "The history of a city always influences the conditions for the city's planning and development. Norrköping's unique history with its strategic location by the Motala river shaped the growing city then and is still shaping our city today. To gain an understanding of what conditions and opportunities exist, one must describe and understand the specific characteristics of different areas based on the historical background.\n\nThe city's development can be compared to different annual rings, each annual ring has its own type of architecture and urban character. Perhaps Norrköping's most characteristic urban character is the city grid, which can be found in the central parts of Norrköping.",
+			"Legend1": "stadstyper",
+			"Default": false,
+			"Filenames": "Finals/Stadskaraktar",
+			"LegendTitle": "Urban morphology",
+			"LegendColors": [
+				{
+					"color": "#a47158",
+					"text": "Grid street plan"
+				},
+				{
+					"color": "#e44b33",
+					"text": "Own-home activity"
+				},
+				{
+					"color": "#f07c4a",
+					"text": "Garden city movement"
+				},
+				{
+					"color": "#fdae61",
+					"text": "Functionalism"
+				},
+				{
+					"color": "#fee133",
+					"text": "Modernism"
+				},
+				{
+					"color": "#fea083",
+					"text": "Million Programme"
+				},
+				{
+					"color": "#ffffbf",
+					"text": "1970s"
+				},
+				{
+					"color": "#209cce",
+					"text": "1980s"
+				},
+				{
+					"color": "#56e6a0",
+					"text": "1990s"
+				},
+				{
+					"color": "#abd9e9",
+					"text": "2000s"
+				},
+				{
+					"color": "#d5b43c",
+					"text": "Mixed housing"
+				},
+				{
+					"color": "#987db7",
+					"text": "Businesses"
+				},
+				{
+					"color": "#2c7bb6",
+					"text": "Suburbs"
+				}
+			]
+		},
+		{
+			"Id": "kulturminnen",
+			"Title": "Cultural history",
+			"Text1": "Here you can see which buildings are most valued from a cultural-historical perspective. These buildings have different degrees of protection in order for them to be preserved for future generations. The highest protection a building can have today is to be classified as a building monument, which means that it is protected by the Cultural Heritage Act which imposes special requirements for its preservation. The promenades in Norrköping, consisting of Norra, Östra, and Södra Promenaden, have been classified as architectural monuments since 1994. Within this area, it is not permitted to change the character of the area.\n\nClass 1 is also protected by the Cultural Heritage Act, while Class 2 has a special value without legal protection.",
+			"Legend1": "kulturminnen",
+			"Default": false,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Kulturhistorisktvardefulla_byggnader,Nkpg/Vattenytor",
+			"LegendTitle": "Classes",
+			"LegendColors": [
+				{
+					"color": "#d7191c",
+					"text": "Listed buildings"
+				},
+				{
+					"color": "#ff8000",
+					"text": "Class 1"
+				},
+				{
+					"color": "#ffb800",
+					"text": "Class 2"
 				}
 			]
 		}

@@ -1,118 +1,105 @@
 {
+	"Id": "sammansattning",
 	"Title": "Stadens sammansättning",
 	"Sections": [
 		{
-			"Label1": "",
-			"SectionObject": [
+			"Id": "boendetathet",
+			"Title": "Boendetäthet",
+			"Text1": "Var bor det flest människor i Norrköping? I modellen har man tagit hänsyn till stadens barriärer och räknat med hur många boende du når inom 250 meter från varje punkt. Analysen kan användas för att mer noggrant beräkna underlag vid till exempel planering av kollektivtrafik och skolplatser.\n\nDe högsta boendetätheterna i staden finns i stadsdelarna Nordantill, Östantill och Berget. Därefter finns det relativt hög koncentration av boende i Haga, Marielund, Söderstaden och runt Hageby centrum. Ljura, Ektorp och centrala delar av Vilbergen och Enebymo har i sin tur en högre boendetäthet än småhus- och radhusområdena i exempelvis Skarphagen, Smedby och Lindö.",
+			"Legend1": "boendetathet",
+			"Default": true,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetathet_nulage",
+			"LegendTitle": "Antal personer inom 250m",
+			"LegendColors": [
 				{
-					"Title": "Boendetäthet",
-					"Text1": "Var bor det flest människor i Norrköping? I modellen har man tagit hänsyn till stadens barriärer och räknat med hur många boende du når inom 250 meter från varje punkt. Analysen kan användas för att mer noggrant beräkna underlag vid till exempel planering av kollektivtrafik och skolplatser.\n\nDe högsta boendetätheterna i staden finns i stadsdelarna Nordantill, Östantill och Berget. Därefter finns det relativt hög koncentration av boende i Haga, Marielund, Söderstaden och runt Hageby centrum. Ljura, Ektorp och centrala delar av Vilbergen och Enebymo har i sin tur en högre boendetäthet än småhus- och radhusområdena i exempelvis Skarphagen, Smedby och Lindö.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "boendetathet",
-					"Legend2": "",
-					"Default": true,
-					"Idle": true,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Boendetathet_nulage",
-					"LegendTitle": "Antal personer inom 250m",
-					"LegendColors": [
-						{
-							"color": "#F8FD35",
-							"text": "1 – 300"
-						},
-						{
-							"color": "#FBD708",
-							"text": "300 – 700"
-						},
-						{
-							"color": "#FC9F01",
-							"text": "700 – 1,200"
-						},
-						{
-							"color": "#F94804",
-							"text": "1,200 – 1,900"
-						},
-						{
-							"color": "#D51B1C",
-							"text": "1,900 – 3,000"
-						}
-					]
+					"color": "#F8FD35",
+					"text": "1 – 300"
 				},
 				{
-					"Title": "Arbetsplatstäthet",
-					"Text1": "När det gäller spridningen av arbetstillfällen ser man att den är mycket mer ”centralistisk” än för boende. Det finns en stor koncentration av arbetsplatser inom den centrala staden, med högst täthet innanför promenaderna. Bilden visar, med andra ord, det som tidigare beskrivits med hjälp av siffror och statistik.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "arbetsplatstathet",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
-					"LegendTitle": "Antal arbetsplatser inom 250m",
-					"LegendColors": [
-						{
-							"color": "#F8FD35",
-							"text": "1 – 230"
-						},
-						{
-							"color": "#FBD708",
-							"text": "230 – 630"
-						},
-						{
-							"color": "#FC9F01",
-							"text": "630 – 1,200"
-						},
-						{
-							"color": "#F94804",
-							"text": "1,200 – 1,800"
-						},
-						{
-							"color": "#D51B1C",
-							"text": "1,800 – 2,400"
-						}
-					]
+					"color": "#FBD708",
+					"text": "300 – 700"
 				},
 				{
-					"Title": "15-minutersstaden",
-					"Text1": "I det vardagliga livet förflyttar vi oss mellan flera olika platser och målpunkter för att arbeta, studera, lämna och hämta barn på förskola, träna, köpa mat, handla, osv.\n\nHar man många av dessa saker nära till hands så har man ett stort utbud som är lätt att nå. Om det är längre till målpunkterna och de är färre så blir man oftare tvungen att resa längre sträckor för att få ihop sitt vardagspussel.\n\nFör att beskriva graden av tillgänglighet till vardagslivets funktioner har begreppet 15- minutersstaden etablerats - att inom 15 minuters förflyttning till fots eller med cykel nå många av de målpunkter som behövs i det dagliga livet.\n\nFör att mäta denna tillgänglighet har \"vardagslivsindex\" (VLX) utvecklats. Detta index kvantifierar tillgängligheten till viktiga vardagsfunktioner.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "15minutersstaden",
-					"Legend2": "",
-					"Default": false,
-					"Idle": true,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vardagslivsindex_nulage",
-					"LegendTitle": "Vardagslivsindex",
-					"LegendColors": [
-						{
-							"color": "#ff6364",
-							"text": "6,2 – 8,2"
-						},
-						{
-							"color": "#ffa986",
-							"text": "4,6 – 6,2"
-						},
-						{
-							"color": "#ffce95",
-							"text": "3,5 – 4,6"
-						},
-						{
-							"color": "#f8e896",
-							"text": "2,7 – 3,5"
-						},
-						{
-							"color": "#c3f7ab",
-							"text": "1,9 – 2,7"
-						},
-						{
-							"color": "#8eeed4",
-							"text": "0,9 – 1,9"
-						},
-						{
-							"color": "#45c0ff",
-							"text": "0,0 – 0,9"
-						}
-					]
+					"color": "#FC9F01",
+					"text": "700 – 1,200"
+				},
+				{
+					"color": "#F94804",
+					"text": "1,200 – 1,900"
+				},
+				{
+					"color": "#D51B1C",
+					"text": "1,900 – 3,000"
+				}
+			]
+		},
+		{
+			"Id": "arbetsplatstathet",
+			"Title": "Arbetsplatstäthet",
+			"Text1": "När det gäller spridningen av arbetstillfällen ser man att den är mycket mer ”centralistisk” än för boende. Det finns en stor koncentration av arbetsplatser inom den centrala staden, med högst täthet innanför promenaderna. Bilden visar, med andra ord, det som tidigare beskrivits med hjälp av siffror och statistik.",
+			"Legend1": "arbetsplatstathet",
+			"Default": false,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Arbetsplatstathet_nulage",
+			"LegendTitle": "Antal arbetsplatser inom 250m",
+			"LegendColors": [
+				{
+					"color": "#F8FD35",
+					"text": "1 – 230"
+				},
+				{
+					"color": "#FBD708",
+					"text": "230 – 630"
+				},
+				{
+					"color": "#FC9F01",
+					"text": "630 – 1,200"
+				},
+				{
+					"color": "#F94804",
+					"text": "1,200 – 1,800"
+				},
+				{
+					"color": "#D51B1C",
+					"text": "1,800 – 2,400"
+				}
+			]
+		},
+		{
+			"Id": "15minutersstaden",
+			"Title": "15-minutersstaden",
+			"Text1": "I det vardagliga livet förflyttar vi oss mellan flera olika platser och målpunkter för att arbeta, studera, lämna och hämta barn på förskola, träna, köpa mat, handla, osv.\n\nHar man många av dessa saker nära till hands så har man ett stort utbud som är lätt att nå. Om det är längre till målpunkterna och de är färre så blir man oftare tvungen att resa längre sträckor för att få ihop sitt vardagspussel.\n\nFör att beskriva graden av tillgänglighet till vardagslivets funktioner har begreppet 15- minutersstaden etablerats - att inom 15 minuters förflyttning till fots eller med cykel nå många av de målpunkter som behövs i det dagliga livet.\n\nFör att mäta denna tillgänglighet har \"vardagslivsindex\" (VLX) utvecklats. Detta index kvantifierar tillgängligheten till viktiga vardagsfunktioner.",
+			"Legend1": "15minutersstaden",
+			"Default": false,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vardagslivsindex_nulage",
+			"LegendTitle": "Vardagslivsindex",
+			"LegendColors": [
+				{
+					"color": "#ff6364",
+					"text": "6,2 – 8,2"
+				},
+				{
+					"color": "#ffa986",
+					"text": "4,6 – 6,2"
+				},
+				{
+					"color": "#ffce95",
+					"text": "3,5 – 4,6"
+				},
+				{
+					"color": "#f8e896",
+					"text": "2,7 – 3,5"
+				},
+				{
+					"color": "#c3f7ab",
+					"text": "1,9 – 2,7"
+				},
+				{
+					"color": "#8eeed4",
+					"text": "0,9 – 1,9"
+				},
+				{
+					"color": "#45c0ff",
+					"text": "0,0 – 0,9"
 				}
 			]
 		}

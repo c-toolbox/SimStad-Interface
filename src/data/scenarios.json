@@ -1,0 +1,44 @@
+{
+	"scenarios": [
+		{
+			"id": "rorelse",
+			"blocksVideo": "VisualCity-Wall_Tram",
+			"thumbnail": "tram"
+		},
+		{
+			"id": "klimatet",
+			"blocksVideo": "VisualCity-Wall_Rain",
+			"thumbnail": "umbrella"
+		},
+		{
+			"id": "sammansattning",
+			"blocksVideo": "VisualCity-Wall_Motion",
+			"thumbnail": "crowd"
+		},
+		{
+			"id": "utveckling",
+			"blocksVideo": "VisualCity-Wall_Crane",
+			"thumbnail": "museum"
+		},
+		{
+			"id": "ovan",
+			"blocksVideo": "VisualCity-Wall_360",
+			"thumbnail": "history"
+		},
+		{
+			"id": "ai",
+			"blocksVideo": "VisualCity-Wall_360",
+			"thumbnail": "ai"
+		},
+		{
+			"id": "kommunen",
+			"blocksVideo": "VisualCity-Wall_Motion",
+			"thumbnail": "station"
+		},
+		{
+			"id": "trafikverket",
+			"blocksVideo": "VisualCity-Wall_Motion",
+			"thumbnail": "cranes"
+		}
+	]
+}

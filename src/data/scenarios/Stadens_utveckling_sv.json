@@ -1,192 +1,145 @@
 {
-	"Title": "Stadens utveckling",
+	"Id": "utveckling",
+	"Title": "Stadsmiljö",
 	"Sections": [
 		{
-			"Label1": "",
-			"SectionObject": [
+			"Id": "byggnadsar",
+			"Title": "Byggnadsår",
+			"Text1": "Genom att titta på byggnadsår kan vi se hur staden har växt fram över tid och var nybyggnation har tillkommit på senare år. Runt förra sekelskiftet befann Norrköping sig i en högkonjunktur. Textilindustrin växte och så även staden. I mitten av 1900-talet slog textilkrisen till och produktionen i det centrala industriområdet minskade successivt. Trots industrins nedgång satsades det på nya bostäder under 60- och 70-talen. Äldre bostäder revs för att ge plats åt nya modernare. Därefter har byggtakten varit mer begränsad och allt mer fokuserad på att förtäta innerstadens olika luckor eller avrivna tomter.",
+			"Legend1": "byggnadsar",
+			"Default": true,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Byggnadsar",
+			"LegendTitle": "Tidsperiod",
+			"LegendColors": [
 				{
-					"Title": "Stadsutvecklingsområden",
-					"Text1": "Här markeras områden där det planeras eller genomförs mer omfattande stadsutveckling i Norrköping just nu. Visste du om att det ska bli omkring 3 000 nya bostäder i Inre hamnen? Eller att hela Butängen ska omvandlas till en del av innerstaden i samband med att höghastighetsjärnvägen Ostlänken byggs?\n\nPå modellen kan du även se att Syltenområdet ska få ett ansiktslyft framöver och att Norrköpings västra stadsdelar växer.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "stadsutvecklingsomraden",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Framtidens_norrkoping",
-					"LegendTitle": "Typ av område",
-					"LegendColors": [
-						{
-							"color": "#e9cf87",
-							"text": "Utvecklingsområde"
-						},
-						{
-							"color": "#e5b636",
-							"text": "Nya kvarter"
-						},
-						{
-							"color": "#e75a23",
-							"text": "Ostlänken"
-						},
-						{
-							"color": "#ad7aa9",
-							"text": "Tunnel Ostlänken"
-						},
-						{
-							"color": "#c0c0c0",
-							"text": "Ny ringled"
-						}
-					]
+					"color": "#440154",
+					"text": "<1800"
 				},
 				{
-					"Title": "Byggnadsår",
-					"Text1": "Genom att titta på byggnadsår kan vi se hur staden har växt fram över tid och var nybyggnation har tillkommit på senare år. Runt förra sekelskiftet befann Norrköping sig i en högkonjunktur. Textilindustrin växte och så även staden. I mitten av 1900-talet slog textilkrisen till och produktionen i det centrala industriområdet minskade successivt. Trots industrins nedgång satsades det på nya bostäder under 60- och 70-talen. Äldre bostäder revs för att ge plats åt nya modernare. Därefter har byggtakten varit mer begränsad och allt mer fokuserad på att förtäta innerstadens olika luckor eller avrivna tomter.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "byggnadsar",
-					"Legend2": "",
-					"Default": false,
-					"Idle": true,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Vattenytor,Nkpg/Vagnat,Nkpg/Byggnadsar",
-					"LegendTitle": "Tidsperiod",
-					"LegendColors": [
-						{
-							"color": "#440154",
-							"text": "<1800"
-						},
-						{
-							"color": "#482576",
-							"text": "1800 – 1850"
-						},
-						{
-							"color": "#414387",
-							"text": "1850 – 1900"
-						},
-						{
-							"color": "#345F8D",
-							"text": "1900 – 1920"
-						},
-						{
-							"color": "#2A788E",
-							"text": "1920 – 1940"
-						},
-						{
-							"color": "#21908D",
-							"text": "1940 – 1960"
-						},
-						{
-							"color": "#23A884",
-							"text": "1960 – 1980"
-						},
-						{
-							"color": "#43BF70",
-							"text": "1980 – 2000"
-						},
-						{
-							"color": "#7AD151",
-							"text": "2000 – 2010"
-						},
-						{
-							"color": "#BCDF27",
-							"text": "2010 – 2020"
-						},
-						{
-							"color": "#FDE725",
-							"text": "2020 – 2023"
-						}
-					]
+					"color": "#482576",
+					"text": "1800 – 1850"
 				},
 				{
-					"Title": "Stadstyper",
-					"Text1": "Historien kommer alltid att vara närvarande och skapa förutsättningarna för stadens planering och utveckling. Norrköpings unika historia med det strategiska läget vid Motala ström formade den växande staden då och formar vår stad än idag. För att få en förståelse för vilka förutsättningar och möjligheter som finns måste man beskriva och förstå de specifika egenskaperna som olika områden har utifrån den historiska bakgrunden.\n\nStadens utveckling kan liknas vid olika årsringar, var årsring har sin typ av arkitektur och stadskaraktär. Norrköpings kanske mest karaktäristiska stadskaraktär är rutnätsstaden. Rutnätsstaden återfinns i Norrköpings centrala delar.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "stadstyper",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Finals/Stadskaraktar",
-					"LegendTitle": "Stadstypologi",
-					"LegendColors": [
-						{
-							"color": "#a47158",
-							"text": "Rutnätsstaden"
-						},
-						{
-							"color": "#e44b33",
-							"text": "Egnahem"
-						},
-						{
-							"color": "#f07c4a",
-							"text": "Trädgårdsstaden"
-						},
-						{
-							"color": "#fdae61",
-							"text": "Funktionalism"
-						},
-						{
-							"color": "#fee133",
-							"text": "Modernism"
-						},
-						{
-							"color": "#fea083",
-							"text": "Miljonprogram"
-						},
-						{
-							"color": "#ffffbf",
-							"text": "1970-tal"
-						},
-						{
-							"color": "#209cce",
-							"text": "1980-tal"
-						},
-						{
-							"color": "#56e6a0",
-							"text": "1990-tal"
-						},
-						{
-							"color": "#abd9e9",
-							"text": "2000-tal"
-						},
-						{
-							"color": "#d5b43c",
-							"text": "Blandad bebyggelse"
-						},
-						{
-							"color": "#987db7",
-							"text": "Verksamhet"
-						},
-						{
-							"color": "#2c7bb6",
-							"text": "Villastad"
-						}
-					]
+					"color": "#414387",
+					"text": "1850 – 1900"
 				},
 				{
-					"Title": "Kulturminnen",
-					"Text1": "Här kan ses vilka byggnader som är högst värderade ur ett kulturhistoriskt perspektiv, dessa har olika grader av skydd för att de skall bevaras till kommande generationer. Det högsta skyddet en byggnad kan ha idag är att klassas som byggnadsminne, det gör att den skyddas av kulturminneslagen och har särskilda krav för dess bevarande. Promenaderna i Norrköping, bestående av Norra, Östra och Södra Promenaden, är sedan 1994 klassade som byggnadsminne. Inom detta område är det inte tillåtet att förändrar områdets karaktär.\n\nKlass 1 skyddas också av kulturminneslagen medans Klass 2 har ett särskilt värde men inget juridiskt skydd.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "kulturminnen",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Kulturhistorisktvardefulla_byggnader,Nkpg/Vattenytor",
-					"LegendTitle": "Klasser",
-					"LegendColors": [
-						{
-							"color": "#d7191c",
-							"text": "Byggnadsminne"
-						},
-						{
-							"color": "#ff8000",
-							"text": "Klass 1"
-						},
-						{
-							"color": "#ffb800",
-							"text": "Klass 2"
-						}
-					]
+					"color": "#345F8D",
+					"text": "1900 – 1920"
+				},
+				{
+					"color": "#2A788E",
+					"text": "1920 – 1940"
+				},
+				{
+					"color": "#21908D",
+					"text": "1940 – 1960"
+				},
+				{
+					"color": "#23A884",
+					"text": "1960 – 1980"
+				},
+				{
+					"color": "#43BF70",
+					"text": "1980 – 2000"
+				},
+				{
+					"color": "#7AD151",
+					"text": "2000 – 2010"
+				},
+				{
+					"color": "#BCDF27",
+					"text": "2010 – 2020"
+				},
+				{
+					"color": "#FDE725",
+					"text": "2020 – 2023"
+				}
+			]
+		},
+		{
+			"Id": "stadstyper",
+			"Title": "Stadstyper",
+			"Text1": "Historien kommer alltid att vara närvarande och skapa förutsättningarna för stadens planering och utveckling. Norrköpings unika historia med det strategiska läget vid Motala ström formade den växande staden då och formar vår stad än idag. För att få en förståelse för vilka förutsättningar och möjligheter som finns måste man beskriva och förstå de specifika egenskaperna som olika områden har utifrån den historiska bakgrunden.\n\nStadens utveckling kan liknas vid olika årsringar, var årsring har sin typ av arkitektur och stadskaraktär. Norrköpings kanske mest karaktäristiska stadskaraktär är rutnätsstaden. Rutnätsstaden återfinns i Norrköpings centrala delar.",
+			"Legend1": "stadstyper",
+			"Default": false,
+			"Filenames": "Finals/Stadskaraktar",
+			"LegendTitle": "Stadstypologi",
+			"LegendColors": [
+				{
+					"color": "#a47158",
+					"text": "Rutnätsstaden"
+				},
+				{
+					"color": "#e44b33",
+					"text": "Egnahem"
+				},
+				{
+					"color": "#f07c4a",
+					"text": "Trädgårdsstaden"
+				},
+				{
+					"color": "#fdae61",
+					"text": "Funktionalism"
+				},
+				{
+					"color": "#fee133",
+					"text": "Modernism"
+				},
+				{
+					"color": "#fea083",
+					"text": "Miljonprogram"
+				},
+				{
+					"color": "#ffffbf",
+					"text": "1970-tal"
+				},
+				{
+					"color": "#209cce",
+					"text": "1980-tal"
+				},
+				{
+					"color": "#56e6a0",
+					"text": "1990-tal"
+				},
+				{
+					"color": "#abd9e9",
+					"text": "2000-tal"
+				},
+				{
+					"color": "#d5b43c",
+					"text": "Blandad bebyggelse"
+				},
+				{
+					"color": "#987db7",
+					"text": "Verksamhet"
+				},
+				{
+					"color": "#2c7bb6",
+					"text": "Villastad"
+				}
+			]
+		},
+		{
+			"Id": "kulturminnen",
+			"Title": "Kulturminnen",
+			"Text1": "Här kan ses vilka byggnader som är högst värderade ur ett kulturhistoriskt perspektiv, dessa har olika grader av skydd för att de skall bevaras till kommande generationer. Det högsta skyddet en byggnad kan ha idag är att klassas som byggnadsminne, det gör att den skyddas av kulturminneslagen och har särskilda krav för dess bevarande. Promenaderna i Norrköping, bestående av Norra, Östra och Södra Promenaden, är sedan 1994 klassade som byggnadsminne. Inom detta område är det inte tillåtet att förändrar områdets karaktär.\n\nKlass 1 skyddas också av kulturminneslagen medans Klass 2 har ett särskilt värde men inget juridiskt skydd.",
+			"Legend1": "kulturminnen",
+			"Default": false,
+			"Filenames": "Nkpg/Kommunkarta_dark,Nkpg/Kulturhistorisktvardefulla_byggnader,Nkpg/Vattenytor",
+			"LegendTitle": "Klasser",
+			"LegendColors": [
+				{
+					"color": "#d7191c",
+					"text": "Byggnadsminne"
+				},
+				{
+					"color": "#ff8000",
+					"text": "Klass 1"
+				},
+				{
+					"color": "#ffb800",
+					"text": "Klass 2"
 				}
 			]
 		}

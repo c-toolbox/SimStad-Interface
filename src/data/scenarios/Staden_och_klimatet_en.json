@@ -1,168 +1,155 @@
 {
+	"Id": "klimatet",
 	"Title": "The city and the climate",
 	"Sections": [
 		{
-			"Label1": "",
-			"SectionObject": [
+			"Id": "extremaregn",
+			"Title": "Extreme rainfall",
+			"Text1": "A 100-year rain event occurs statistically once every century. The highlighted areas on the model are the areas that are at risk of flooding in the event of extreme rain. In houses with basements, water can also enter via the pipe network. These flood risks are not visible in the model. When the municipality plans for new buildings, flood risks are taken into account and demands are made for various measures.\n\nIt could, for example, be about raising the ground level and foundation level when building new houses. But it is at least as important to ensure that large amounts of water have somewhere to go. One of the measures the municipality is working on is to create submerged surfaces in parks and natural areas.",
+			"Legend1": "extremaregn",
+			"Default": true,
+			"Filenames": "Finals/100ars_regn",
+			"Buttons": [
 				{
-					"Title": "Extreme rainfall",
-					"Text1": "A 100-year rain event occurs statistically once every century. The highlighted areas on the model are the areas that are at risk of flooding in the event of extreme rain. In houses with basements, water can also enter via the pipe network. These flood risks are not visible in the model. When the municipality plans for new buildings, flood risks are taken into account and demands are made for various measures.\n\nIt could, for example, be about raising the ground level and foundation level when building new houses. But it is at least as important to ensure that large amounts of water have somewhere to go. One of the measures the municipality is working on is to create submerged surfaces in parks and natural areas.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "extremaregn",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Finals/100ars_regn",
-					"Buttons": [
-						{
-							"Title": "100-year flood",
-							"Layers": "Finals/100ars_regn"
-						},
-						{
-							"Title": "200-year flood",
-							"Layers": "Finals/200ars_regn"
-						},
-						{
-							"Title": "500-year flood",
-							"Layers": "Finals/500ars_regn"
-						}
-					],
-					"LegendTitle": "Water level",
-					"LegendColors": [
-						{
-							"color": "#1aa4ea",
-							"text": "0.1 – 0.2 meters"
-						},
-						{
-							"color": "#1a1aea",
-							"text": "0.2 – 0.3 meters"
-						},
-						{
-							"color": "#0b0b74",
-							"text": "0.3 – 0.5 meters"
-						},
-						{
-							"color": "#eaea1a",
-							"text": "0.5 – 1 meter"
-						},
-						{
-							"color": "#ea1a1a",
-							"text": "more than 1 meter"
-						}
-					]
+					"Title": "100-year flood",
+					"Layers": "Finals/100ars_regn"
 				},
 				{
-					"Title": "Sea level rise",
-					"Text1": "The sea is rising globally and will continue to do so for a long time due to global warming. In Norrköping, we still have land rise after the last ice age (post-glacial rebound), but it is slowing down and we will start to see the effect of the rising sea levels. If the global warming is limited, the sea level will rise less.\n\nIn Norrköping, we have for a long time not allowed construction on areas that are too close to the sea. For certain developments, there is a requirement that the ground must first be raised before development can be permitted. In the long term, we will need to protect low-lying buildings. Right now, the municipality is investigating the possibility of building dikes along the edge of the sea in certain areas or building some kind of lock in Kvarsebo.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "havsnivahojning",
-					"Legend2": "",
-					"Default": false,
-					"Idle": true,
-					"Filenames": "Flood/Flood_00",
-					"Slider": {
-						"Title": "Water level in meters",
-						"Labels": [
-							"0",
-							"5",
-							"10",
-							"15"
-						],
-						"Layers": [
-							"Flood/Flood_00",
-							"Flood/Flood_01",
-							"Flood/Flood_02",
-							"Flood/Flood_03",
-							"Flood/Flood_04",
-							"Flood/Flood_05",
-							"Flood/Flood_06",
-							"Flood/Flood_07",
-							"Flood/Flood_08",
-							"Flood/Flood_09",
-							"Flood/Flood_10",
-							"Flood/Flood_11",
-							"Flood/Flood_12",
-							"Flood/Flood_13",
-							"Flood/Flood_14",
-							"Flood/Flood_15",
-							"Flood/Flood_16",
-							"Flood/Flood_17",
-							"Flood/Flood_18",
-							"Flood/Flood_19",
-							"Flood/Flood_20",
-							"Flood/Flood_21",
-							"Flood/Flood_22",
-							"Flood/Flood_23",
-							"Flood/Flood_24",
-							"Flood/Flood_25",
-							"Flood/Flood_26",
-							"Flood/Flood_27",
-							"Flood/Flood_28",
-							"Flood/Flood_29",
-							"Flood/Flood_30",
-							"Flood/Flood_31",
-							"Flood/Flood_32",
-							"Flood/Flood_33",
-							"Flood/Flood_34",
-							"Flood/Flood_35",
-							"Flood/Flood_36",
-							"Flood/Flood_37",
-							"Flood/Flood_38",
-							"Flood/Flood_39",
-							"Flood/Flood_40",
-							"Flood/Flood_41",
-							"Flood/Flood_42",
-							"Flood/Flood_43",
-							"Flood/Flood_44",
-							"Flood/Flood_45",
-							"Flood/Flood_46",
-							"Flood/Flood_47",
-							"Flood/Flood_48",
-							"Flood/Flood_49",
-							"Flood/Flood_50",
-							"Flood/Flood_51",
-							"Flood/Flood_52",
-							"Flood/Flood_53",
-							"Flood/Flood_54",
-							"Flood/Flood_55",
-							"Flood/Flood_56",
-							"Flood/Flood_57",
-							"Flood/Flood_58",
-							"Flood/Flood_59",
-							"Flood/Flood_60"
-						]
-					},
-					"LegendTitle": "None",
-					"LegendColors": [],
-					"LegendSource": "Photo: Jonn Leffmann"
+					"Title": "200-year flood",
+					"Layers": "Finals/200ars_regn"
 				},
 				{
-					"Title": "Trees",
-					"Text1": "Here you can see where there are trees in the city. Trees in an urban environment are important for our well-being. They contribute to greenery and improve the air which is polluted by cars and factories. The trees in the city also have a equalizing effect on the temperature by using solar energy for their growth. At the same time, the foliage provides shade and coolness in cities on hot summer days. When it comes to rainfall, they can reduce the load on the city's sewage system by absorbing large amounts of water. They benefit biodiversity and provide habitat for birds, insects, and lichens.\n\nThe trees are mapped on site out in the field or with the help of analyzes from airborn laserscan data. In the future, AI can help with this work.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "trad",
-					"Legend2": "",
-					"Default": true,
-					"Idle": true,
-					"Filenames": "Nkpg/Kommunkartan,Nkpg/Trad",
-					"LegendTitle": "Map layers",
-					"LegendColors": [
-						{
-							"color": "#76d35f",
-							"text": "Trees"
-						},
-						{
-							"color": "#cff1bf",
-							"text": "Grass areas"
-						},
-						{
-							"color": "#8bbdff",
-							"text": "Water"
-						}
-					]
+					"Title": "500-year flood",
+					"Layers": "Finals/500ars_regn"
+				}
+			],
+			"LegendTitle": "Water level",
+			"LegendColors": [
+				{
+					"color": "#1aa4ea",
+					"text": "0.1 – 0.2 meters"
+				},
+				{
+					"color": "#1a1aea",
+					"text": "0.2 – 0.3 meters"
+				},
+				{
+					"color": "#0b0b74",
+					"text": "0.3 – 0.5 meters"
+				},
+				{
+					"color": "#eaea1a",
+					"text": "0.5 – 1 meter"
+				},
+				{
+					"color": "#ea1a1a",
+					"text": "more than 1 meter"
+				}
+			]
+		},
+		{
+			"Id": "havsnivahojning",
+			"Title": "Sea level rise",
+			"Text1": "The sea is rising globally and will continue to do so for a long time due to global warming. In Norrköping, we still have land rise after the last ice age (post-glacial rebound), but it is slowing down and we will start to see the effect of the rising sea levels. If the global warming is limited, the sea level will rise less.\n\nIn Norrköping, we have for a long time not allowed construction on areas that are too close to the sea. For certain developments, there is a requirement that the ground must first be raised before development can be permitted. In the long term, we will need to protect low-lying buildings. Right now, the municipality is investigating the possibility of building dikes along the edge of the sea in certain areas or building some kind of lock in Kvarsebo.",
+			"Legend1": "havsnivahojning",
+			"Default": false,
+			"Filenames": "Flood/Flood_00",
+			"Slider": {
+				"Title": "Water level in meters",
+				"Labels": [
+					"0",
+					"5",
+					"10",
+					"15"
+				],
+				"Layers": [
+					"Flood/Flood_00",
+					"Flood/Flood_01",
+					"Flood/Flood_02",
+					"Flood/Flood_03",
+					"Flood/Flood_04",
+					"Flood/Flood_05",
+					"Flood/Flood_06",
+					"Flood/Flood_07",
+					"Flood/Flood_08",
+					"Flood/Flood_09",
+					"Flood/Flood_10",
+					"Flood/Flood_11",
+					"Flood/Flood_12",
+					"Flood/Flood_13",
+					"Flood/Flood_14",
+					"Flood/Flood_15",
+					"Flood/Flood_16",
+					"Flood/Flood_17",
+					"Flood/Flood_18",
+					"Flood/Flood_19",
+					"Flood/Flood_20",
+					"Flood/Flood_21",
+					"Flood/Flood_22",
+					"Flood/Flood_23",
+					"Flood/Flood_24",
+					"Flood/Flood_25",
+					"Flood/Flood_26",
+					"Flood/Flood_27",
+					"Flood/Flood_28",
+					"Flood/Flood_29",
+					"Flood/Flood_30",
+					"Flood/Flood_31",
+					"Flood/Flood_32",
+					"Flood/Flood_33",
+					"Flood/Flood_34",
+					"Flood/Flood_35",
+					"Flood/Flood_36",
+					"Flood/Flood_37",
+					"Flood/Flood_38",
+					"Flood/Flood_39",
+					"Flood/Flood_40",
+					"Flood/Flood_41",
+					"Flood/Flood_42",
+					"Flood/Flood_43",
+					"Flood/Flood_44",
+					"Flood/Flood_45",
+					"Flood/Flood_46",
+					"Flood/Flood_47",
+					"Flood/Flood_48",
+					"Flood/Flood_49",
+					"Flood/Flood_50",
+					"Flood/Flood_51",
+					"Flood/Flood_52",
+					"Flood/Flood_53",
+					"Flood/Flood_54",
+					"Flood/Flood_55",
+					"Flood/Flood_56",
+					"Flood/Flood_57",
+					"Flood/Flood_58",
+					"Flood/Flood_59",
+					"Flood/Flood_60"
+				]
+			},
+			"LegendTitle": "None",
+			"LegendColors": [],
+			"LegendSource": "Photo: Jonn Leffmann"
+		},
+		{
+			"Id": "trad",
+			"Title": "Trees",
+			"Text1": "Here you can see where there are trees in the city. Trees in an urban environment are important for our well-being. They contribute to greenery and improve the air which is polluted by cars and factories. The trees in the city also have a equalizing effect on the temperature by using solar energy for their growth. At the same time, the foliage provides shade and coolness in cities on hot summer days. When it comes to rainfall, they can reduce the load on the city's sewage system by absorbing large amounts of water. They benefit biodiversity and provide habitat for birds, insects, and lichens.\n\nThe trees are mapped on site out in the field or with the help of analyzes from airborn laserscan data. In the future, AI can help with this work.",
+			"Legend1": "trad",
+			"Default": true,
+			"Filenames": "Nkpg/Kommunkartan,Nkpg/Trad",
+			"LegendTitle": "Map layers",
+			"LegendColors": [
+				{
+					"color": "#76d35f",
+					"text": "Trees"
+				},
+				{
+					"color": "#cff1bf",
+					"text": "Grass areas"
+				},
+				{
+					"color": "#8bbdff",
+					"text": "Water"
 				}
 			]
 		}

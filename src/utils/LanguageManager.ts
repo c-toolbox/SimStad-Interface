@@ -156,7 +156,7 @@ class LanguageManager {
 
 	getDate(date: Date) {
 		return date.toLocaleString(this.currentLanguage, {
-			month: "long",
+			month: "short",
 			day: "numeric",
 		});
 	}

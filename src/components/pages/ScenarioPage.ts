@@ -5,8 +5,7 @@ import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { Legend } from "@/components/Legend";
-import { HSVToRGB, colorToString, interpolateColor } from "@/utils/functions";
-import { ScenarioKey, Section, scenarioManager } from "@/utils/ScenarioManager";
+import { ScenarioId, Section, scenarioManager } from "@/utils/ScenarioManager";
 import { TextButton } from "../TextButton";
 import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
@@ -15,6 +14,7 @@ import { RoundRectangle } from "../elements/RoundRectangle";
 import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "../elements/ScrollBar";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
+import { splitText } from "@/utils/functions";
 
 export class ScenarioPage extends Page {
 	private background: RoundRectangle;
@@ -231,8 +231,8 @@ export class ScenarioPage extends Page {
 		this.scrollBar.set(this.scrollArea.getScroll());
 	}
 
-	setScenario(scenario: ScenarioKey) {
-		const sections = scenarioManager.getScenarioSections(scenario);
+	setScenario(scenarioId: ScenarioId) {
+		const sections = scenarioManager.getScenario(scenarioId).sections;
 
 		if (sections.length > this.tabButtons.length) {
 			throw "More sections than tabs";
@@ -241,8 +241,13 @@ export class ScenarioPage extends Page {
 		this.updateTabs(sections.length);
 		this.tabButtons.forEach((tab) => tab.setVisible(false));
 		sections.forEach((section, index) => {
+			let textKey = `${scenarioId}_${section.key}_tab`;
+			if (!languageManager.get(textKey, false)) {
+				textKey = `${scenarioId}_${section.key}_title`;
+			}
+
 			this.tabButtons[index].setVisible(true);
-			this.tabButtons[index].setText(section.key + "title");
+			this.tabButtons[index].setText(textKey);
 			this.tabButtons[index].removeListener("click");
 			this.tabButtons[index].on("click", () => {
 				if (this.currentSection != section) {
@@ -261,17 +266,9 @@ export class ScenarioPage extends Page {
 			});
 		}
 
-		const blocks: { [key in ScenarioKey]: string } = {
-			[ScenarioKey.sammansattning]: "VisualCity-Wall_Motion",
-			[ScenarioKey.utveckling]: "VisualCity-Wall_Crane",
-			[ScenarioKey.rorelse]: "VisualCity-Wall_Tram",
-			[ScenarioKey.klimatet]: "VisualCity-Wall_Rain",
-			[ScenarioKey.ovan]: "VisualCity-Wall_360",
-			[ScenarioKey.ai]: "VisualCity-Wall_360",
-		};
-		this.activateBlocks(blocks[scenario]);
+		this.activateBlocks(scenarioManager.getScenario(scenarioId).blocksVideo);
 
-		if (scenario == ScenarioKey.rorelse) {
+		if (scenarioId == "rorelse") {
 			this.socket.sendActivateTraffic();
 		} else {
 			this.socket.sendDeactivateTraffic();
@@ -369,16 +366,22 @@ export class ScenarioPage extends Page {
 
 		if (section.legendColors.length > 0) {
 			this.legend.setVisible(true);
-			this.legend.setLegend(section.key + "legend", section.legendColors);
+			this.legend.setLegend(
+				`${section.scenarioId}_${section.key}_legend`,
+				section.legendColors
+			);
 		} else {
 			this.legend.setVisible(false);
 		}
 
-		if (this.scene.textures.exists(section.legend)) {
+		if (this.scene.textures.exists(section.legendImage)) {
 			this.legendShadow.setVisible(true);
 			this.legendImage.setVisible(true);
 			this.legendSource.setVisible(true);
-			this.setLegendImage(section.legend, section.key + "legendSource");
+			this.setLegendImage(
+				section.legendImage,
+				`${section.scenarioId}_${section.key}_legendSource`
+			);
 		} else {
 			this.legendShadow.setVisible(false);
 			this.legendImage.setVisible(false);
@@ -392,7 +395,7 @@ export class ScenarioPage extends Page {
 				const layers = section.layerButtons![index];
 
 				button.setVisible(true);
-				button.setText(section.key + "button" + index);
+				button.setText(`${section.scenarioId}_${section.key}_button${index}`);
 				button.setData("layers", layers);
 				button.removeListener("click");
 				button.on("click", () => {
@@ -406,10 +409,12 @@ export class ScenarioPage extends Page {
 			this.layerSlider.setVisible(true);
 			this.layerSlider.value = 0;
 			this.layerSlider.setSteps(section.layerSlider.layers.length);
-			this.layerSlider.setTitle(section.key + "sliderTitle");
+			this.layerSlider.setTitle(
+				`${section.scenarioId}_${section.key}_sliderTitle`
+			);
 			let labels = [];
 			for (let i = 0; i < section.layerSlider.labels; i++) {
-				labels.push(section.key + "sliderLabel" + i);
+				labels.push(`${section.scenarioId}_${section.key}_sliderLabel${i}`);
 			}
 			this.layerSlider.setLabels(labels);
 
@@ -424,15 +429,34 @@ export class ScenarioPage extends Page {
 			});
 		}
 
-		languageManager.bind(this.subtitle, section.scenario + "title");
-		languageManager.bind(this.title, section.key + "title");
-		languageManager.bind(this.bread[9], section.key + "bread", () => {
-			this.realignText();
-		});
+		languageManager.bind(this.subtitle, `${section.scenarioId}_title`);
+		languageManager.bind(
+			this.title,
+			`${section.scenarioId}_${section.key}_title`,
+			() => {
+				this.title.setScale(1);
+				if (this.title.width > layout.scenarioInfo.width) {
+					this.title.displayWidth = layout.scenarioInfo.width;
+					if (this.title.scaleX < 0.9) {
+						this.title.setText(splitText(this.title.text));
+						this.title.setScale(0.9);
+					} else {
+						this.title.scaleY = this.title.scaleX;
+					}
+				}
+			}
+		);
+		languageManager.bind(
+			this.bread[9],
+			`${section.scenarioId}_${section.key}_bread`,
+			() => {
+				this.realignText();
+			}
+		);
 
 		if (sendDataset) {
 			this.activateDataset(section.defaultLayer);
-			this.activateBlocks("SimStad-" + section.legend);
+			this.activateBlocks("SimStad-" + section.legendImage);
 		}
 	}
 

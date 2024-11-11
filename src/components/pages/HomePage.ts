@@ -1,10 +1,9 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
-import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
-import { ScenarioKey, scenarioManager } from "@/utils/ScenarioManager";
+import { Scenario, scenarioManager } from "@/utils/ScenarioManager";
 import { ScenarioButton } from "../ScenarioButton";
 
 export class HomePage extends Page {
@@ -41,44 +40,34 @@ export class HomePage extends Page {
 
 		/* Scenario buttons */
 
-		const chapters: { [key in ScenarioKey]: string } = {
-			sammansattning: "crowd",
-			utveckling: "cranes",
-			rorelse: "tram",
-			klimatet: "umbrella",
-			ovan: "history",
-			ai: "ai",
-			// "sunlight"
-		};
+		let M = 2;
+		let N = 4;
+		let bg = 48;
+		let bw = (layout.panelInner.width - bg * (M - 1)) / M;
+		let bh = (layout.panelInner.height - bg * (N - 1)) / N;
+		let left = layout.panelInner.centerX - (bw + bg) * ((M - 1) / 2);
+		let top = layout.panelInner.centerY - (bh + bg) * ((N - 1) / 2);
 
-		let bg = 64;
-		let bw = (layout.panelInner.width - bg) / 2 - 50;
-		let bh = bw / 2;
 		this.scenarioButtons = [];
-		Object.values(ScenarioKey).forEach((key: ScenarioKey, i: number) => {
-			let x = layout.panelInner.centerX - (bw + bg) / 2 + (i % 2) * (bw + bg);
-			let y =
-				layout.panelInner.centerY - bh - bg + Math.floor(i / 2) * (bh + bg);
-			let w = bw;
-			let h = bh;
-			let text = key + "title";
-			let color = Color.Yellow600;
+		scenarioManager.getScenarios().forEach((scenario: Scenario, i: number) => {
+			let x = left + (bw + bg) * (i % 2);
+			let y = top + (bh + bg) * Math.floor(i / 2);
+			let text = scenario.id + "_title";
 
 			let button = new ScenarioButton(
 				this.scene,
 				x,
 				y,
-				w,
-				h,
+				bw,
+				bh,
 				text,
-				color,
-				chapters[key]
+				scenario.thumbnail
 			);
 			button.on(
 				"click",
 				() => {
 					if (this.allowInput()) {
-						this.emit("scenario", key);
+						this.emit("scenario", scenario.id);
 					}
 				},
 				this

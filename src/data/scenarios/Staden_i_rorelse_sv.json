@@ -1,134 +1,121 @@
 {
+	"Id": "rorelse",
 	"Title": "Staden i rörelse",
 	"Sections": [
 		{
-			"Label1": "",
-			"SectionObject": [
+			"Id": "kollektivtrafik",
+			"Title": "Kollektivtrafik",
+			"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjligt har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\n\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar. Denna data kommer från Trafiklabs öppna API som samarbetar med Östgötatrafiken. Hinner du till nästa buss?",
+			"Legend1": "kollektivtrafik",
+			"Default": true,
+			"Filenames": "Finals/Kollektivtrafik",
+			"LegendTitle": "Typ av trafik",
+			"LegendColors": [
 				{
-					"Title": "Kollektivtrafik",
-					"Text1": "Kartan visar linjenätet för kollektivtrafiken, de runda cirklarna visar en radie om 300m från närmsta hållplats. Det är viktigt att så många som möjligt har nära till kollektivtrafik i staden.\n\nKommunen eftersträvar att avståndet till kollektivtrafik i den centrala staden inte skall vara längre än 300m.\n\nHär kan du se var bussar och spårvagnar i kollektivtrafik befinner sig i realtid. Samma data som används i modellen används för trafikinformation vid hållplatser och i appar. Denna data kommer från Trafiklabs öppna API som samarbetar med Östgötatrafiken. Hinner du till nästa buss?",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "kollektivtrafik",
-					"Legend2": "",
-					"Default": true,
-					"Idle": true,
-					"Filenames": "Finals/Kollektivtrafik",
-					"LegendTitle": "Typ av trafik",
-					"LegendColors": [
-						{
-							"color": "#ebc34c",
-							"text": "Expressbussar"
-						},
-						{
-							"color": "#bbeb77",
-							"text": "Landsbygdstrafik"
-						},
-						{
-							"color": "#e39189",
-							"text": "Spårväg"
-						},
-						{
-							"color": "#2f9fea",
-							"text": "Tåg"
-						},
-						{
-							"color": "#57e6c0",
-							"text": "Tätortstrafik"
-						},
-						{
-							"color": "#ffb800",
-							"text": "Hållplatser"
-						}
-					]
+					"color": "#ebc34c",
+					"text": "Expressbussar"
 				},
 				{
-					"Title": "Trafikbuller",
-					"Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar från trafikmängder. Alla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år.\n\nBeräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur välisolerat huset är och vilka fönster som finns.\n\nHur upplever du trafikbuller där du bor?",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "trafikbuller",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Finals/Buller",
-					"LegendTitle": "Ljudnivå i decibel",
-					"LegendColors": [
-						{
-							"color": "#6cc86e",
-							"text": "50 dBa"
-						},
-						{
-							"color": "#feb751",
-							"text": "55 dBa"
-						},
-						{
-							"color": "#f45629",
-							"text": "60 dBa"
-						},
-						{
-							"color": "#bd0026",
-							"text": "65 dBa"
-						}
-					]
+					"color": "#bbeb77",
+					"text": "Landsbygdstrafik"
 				},
 				{
-					"Title": "Trafikmängder",
-					"Text1": "Här kan ses hur trafikerade olika gator i Norrköping är, trafikmätningen görs med hjälp av ”slangar”, även kända som pneumatiska vägrör. Dessa rör är flexibla slangar som läggs tvärs över vägen. När ett fordon passerar över röret, pressas luft genom röret och skapar en tryckvåg som detekteras av en sensor. Detta genererar en elektrisk signal som registreras av en räknare eller analysprogramvara. Denna metod är portabel och kan drivas av batterier, vilket gör den lämplig för tillfälliga trafikstudier.\n\nUnderlaget ligger till grund för den trafikberäkningsmodell som sedan används i beräkningen av bullerkartläggningen som också visas här i modellen.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "trafikmangder",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Finals/Trafikmangder",
-					"LegendTitle": "Bilar per dygn",
-					"LegendColors": [
-						{
-							"color": "#ffffb2",
-							"text": "60 – 6,000"
-						},
-						{
-							"color": "#ffeb90",
-							"text": "6,000 – 12,000"
-						},
-						{
-							"color": "#fed66d",
-							"text": "12,000 – 17,000"
-						},
-						{
-							"color": "#febf56",
-							"text": "17,000 – 22,000"
-						},
-						{
-							"color": "#fda649",
-							"text": "22,000 – 28,000"
-						},
-						{
-							"color": "#fd8d3c",
-							"text": "28,000 – 34,000"
-						},
-						{
-							"color": "#f86c31",
-							"text": "10,000 – 14,000"
-						},
-						{
-							"color": "#f34b26",
-							"text": "14,000 – 18,000"
-						},
-						{
-							"color": "#e62f21",
-							"text": "18,000 – 22,000"
-						},
-						{
-							"color": "#d11824",
-							"text": "22,000 – 24,000"
-						},
-						{
-							"color": "#bd0026",
-							"text": "24,000 –"
-						}
-					]
+					"color": "#e39189",
+					"text": "Spårväg"
+				},
+				{
+					"color": "#2f9fea",
+					"text": "Tåg"
+				},
+				{
+					"color": "#57e6c0",
+					"text": "Tätortstrafik"
+				},
+				{
+					"color": "#ffb800",
+					"text": "Hållplatser"
+				}
+			]
+		},
+		{
+			"Id": "trafikbuller",
+			"Title": "Trafikbuller",
+			"Text1": "Här kan du se hur centrala Norrköping påverkas av buller från trafiken. Illustrationen visar hur stor yta bullret sprider sig som medelvärde. Buller kan både mätas och beräknas, det som redovisas här är beräkningar från trafikmängder. Alla städer med fler än 100 000 invånare har en skyldighet att göra beräkningar för buller från trafiken minst var femte år.\n\nBeräkningarna görs utifrån många olika parametrar som trafikflöden, vägens utformning, intilliggande bebyggelse och hastigheter. Bullernivån beräknas vid fasaden, alltså utanför huset. Hur ljudnivån uppfattas inne i huset beror till stor del på hur huset är byggt, hur välisolerat huset är och vilka fönster som finns.\n\nHur upplever du trafikbuller där du bor?",
+			"Legend1": "trafikbuller",
+			"Default": false,
+			"Filenames": "Finals/Buller",
+			"LegendTitle": "Ljudnivå i decibel",
+			"LegendColors": [
+				{
+					"color": "#6cc86e",
+					"text": "50 dBa"
+				},
+				{
+					"color": "#feb751",
+					"text": "55 dBa"
+				},
+				{
+					"color": "#f45629",
+					"text": "60 dBa"
+				},
+				{
+					"color": "#bd0026",
+					"text": "65 dBa"
+				}
+			]
+		},
+		{
+			"Id": "trafikmangder",
+			"Title": "Trafikmängder",
+			"Text1": "Här kan ses hur trafikerade olika gator i Norrköping är, trafikmätningen görs med hjälp av ”slangar”, även kända som pneumatiska vägrör. Dessa rör är flexibla slangar som läggs tvärs över vägen. När ett fordon passerar över röret, pressas luft genom röret och skapar en tryckvåg som detekteras av en sensor. Detta genererar en elektrisk signal som registreras av en räknare eller analysprogramvara. Denna metod är portabel och kan drivas av batterier, vilket gör den lämplig för tillfälliga trafikstudier.\n\nUnderlaget ligger till grund för den trafikberäkningsmodell som sedan används i beräkningen av bullerkartläggningen som också visas här i modellen.",
+			"Legend1": "trafikmangder",
+			"Default": false,
+			"Filenames": "Finals/Trafikmangder",
+			"LegendTitle": "Bilar per dygn",
+			"LegendColors": [
+				{
+					"color": "#ffffb2",
+					"text": "60 – 6,000"
+				},
+				{
+					"color": "#ffeb90",
+					"text": "6,000 – 12,000"
+				},
+				{
+					"color": "#fed66d",
+					"text": "12,000 – 17,000"
+				},
+				{
+					"color": "#febf56",
+					"text": "17,000 – 22,000"
+				},
+				{
+					"color": "#fda649",
+					"text": "22,000 – 28,000"
+				},
+				{
+					"color": "#fd8d3c",
+					"text": "28,000 – 34,000"
+				},
+				{
+					"color": "#f86c31",
+					"text": "10,000 – 14,000"
+				},
+				{
+					"color": "#f34b26",
+					"text": "14,000 – 18,000"
+				},
+				{
+					"color": "#e62f21",
+					"text": "18,000 – 22,000"
+				},
+				{
+					"color": "#d11824",
+					"text": "22,000 – 24,000"
+				},
+				{
+					"color": "#bd0026",
+					"text": "24,000 –"
 				}
 			]
 		}

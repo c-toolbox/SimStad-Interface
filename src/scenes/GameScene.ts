@@ -2,20 +2,20 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { Navigation } from "@/components/Navigation";
-
-import { SocketManager } from "@/utils/SocketManager";
-import { layoutManager as layout } from "@/utils/LayoutManager";
+import { Map } from "@/components/Map";
+import { ScenarioId } from "@/utils/ScenarioManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
 import { ScenarioPage } from "@/components/pages/ScenarioPage";
 import { ScenariosPage } from "@/components/pages/ScenariosPage";
 import { LayerPage } from "@/components/pages/LayerPage";
-import { LightPage } from "@/components/pages/LightPage";
 import { DebugPage } from "@/components/pages/DebugPage";
+
+import { SocketManager } from "@/utils/SocketManager";
 import { Response, ScenariosResponse } from "@/utils/protocol";
-import { Map } from "@/components/Map";
-import { ScenarioKey } from "@/utils/ScenarioManager";
+import { layoutManager } from "@/utils/LayoutManager";
+
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -92,9 +92,9 @@ export class GameScene extends BaseScene {
 				this.map.setLayers(layers);
 			});
 
-			page.on("scenario", (scenario: ScenarioKey) => {
+			page.on("scenario", (scenarioId: ScenarioId) => {
 				this.setState(PageState.Scenario);
-				this.scenarioPage.setScenario(scenario);
+				this.scenarioPage.setScenario(scenarioId);
 			});
 		});
 
@@ -108,7 +108,7 @@ export class GameScene extends BaseScene {
 		this.add.existing(this.map);
 
 		this.restart();
-		// layout.drawLayout(this);
+		// layoutManager.drawLayout(this);
 	}
 
 	update(time: number, delta: number) {

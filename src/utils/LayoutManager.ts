@@ -13,7 +13,8 @@ class LayoutManager {
 	private _status: Phaser.Geom.Rectangle;
 	private _toolbar: Phaser.Geom.Rectangle;
 	private _mapControls: Phaser.Geom.Rectangle;
-	private _mapControlsInner: Phaser.Geom.Rectangle;
+	private _mapControlsUpper: Phaser.Geom.Rectangle;
+	private _mapControlsLower: Phaser.Geom.Rectangle;
 	private _map: Phaser.Geom.Rectangle;
 	private _nav: Phaser.Geom.Rectangle;
 	private _navInner: Phaser.Geom.Rectangle;
@@ -93,17 +94,32 @@ class LayoutManager {
 		return this._mapControls;
 	}
 
-	get mapControlsInner(): Phaser.Geom.Rectangle {
-		if (this._mapControlsInner) return this._mapControlsInner;
+	get mapControlsUpper(): Phaser.Geom.Rectangle {
+		if (this._mapControlsUpper) return this._mapControlsUpper;
 
 		const p = this.padding / 2;
-		const x = this.mapControls.left + p;
-		const y = this.mapControls.top + p;
-		const w = this.mapControls.width - 2 * p;
-		const h = this.mapControls.height - 2 * p;
+		const x = this.mapControls.left;
+		const y = this.mapControls.top;
+		const w = this.mapControls.width;
+		const h = w / 2;
 
-		this._mapControlsInner = new Phaser.Geom.Rectangle(x, y, w, h);
-		return this._mapControlsInner;
+		this._mapControlsUpper = new Phaser.Geom.Rectangle(x, y, w, h);
+		return this._mapControlsUpper;
+	}
+
+	get mapControlsLower(): Phaser.Geom.Rectangle {
+		if (this._mapControlsLower) return this._mapControlsLower;
+
+		const w = this.mapControls.width;
+		const h =
+			this.mapControls.height -
+			this.mapControlsUpper.height -
+			this.padding / 2;
+		const x = this.mapControls.left;
+		const y = this.mapControls.bottom - h;
+
+		this._mapControlsLower = new Phaser.Geom.Rectangle(x, y, w, h);
+		return this._mapControlsLower;
 	}
 
 	get map(): Phaser.Geom.Rectangle {
@@ -125,7 +141,7 @@ class LayoutManager {
 		const y = this.margin;
 		const w = this.margin;
 		const h = this.body.height;
-		
+
 		this._nav = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._nav;
 	}
@@ -160,10 +176,10 @@ class LayoutManager {
 	get panelInner(): Phaser.Geom.Rectangle {
 		if (this._panelInner) return this._panelInner;
 
-		const x = this.panel.left + this.padding;
-		const y = this.panel.top + this.padding;
-		const w = this.panel.width - 2 * this.padding;
-		const h = this.panel.height - 2 * this.padding;
+		const x = this.panel.left + this.padding * 2;
+		const y = this.panel.top + this.padding * 2;
+		const w = this.panel.width - 2 * this.padding * 2;
+		const h = this.panel.height - 2 * this.padding * 2;
 
 		this._panelInner = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._panelInner;
@@ -248,7 +264,6 @@ class LayoutManager {
 		return this._scenarioInfo;
 	}
 
-
 	/* Debug drawing */
 
 	drawLayout(scene: BaseScene) {
@@ -263,19 +278,20 @@ class LayoutManager {
 			[this.body, Color.Red900, 0],
 			[this.nav, Color.Pink600, 4],
 			[this.navInner, Color.Pink400, 0],
-			// [this.panel, Color.Orange700, 0],
-			// [this.panelInner, Color.Yellow500, 4],
+			[this.panel, Color.Orange700, 0],
+			[this.panelInner, Color.Yellow500, 4],
 			[this.mapControls, Color.Orange700, 4],
-			[this.mapControlsInner, Color.Yellow500, 0],
+			[this.mapControlsUpper, Color.Green500, 4],
+			[this.mapControlsLower, Color.Green500, 4],
 			[this.map, Color.Orange700, 4],
-			[this.status, Color.Purple600, 4],
-			[this.toolbar, Color.Fuchsia600, 0],
-			[this.scenarioTabs, Color.Orange700, 4],
-			[this.scenario, Color.Orange700, 4],
-			[this.scenarioInner, Color.Yellow500, 0],
-			[this.scenarioControls, Color.Green500, 4],
-			[this.scenarioLegend, Color.Green500, 4],
-			[this.scenarioInfo, Color.Green500, 4],
+			// [this.status, Color.Purple600, 4],
+			// [this.toolbar, Color.Fuchsia600, 0],
+			// [this.scenarioTabs, Color.Orange700, 4],
+			// [this.scenario, Color.Orange700, 4],
+			// [this.scenarioInner, Color.Yellow500, 0],
+			// [this.scenarioControls, Color.Green500, 4],
+			// [this.scenarioLegend, Color.Green500, 4],
+			// [this.scenarioInfo, Color.Green500, 4],
 		];
 
 		rects.forEach(([rect, color, offset]) => {

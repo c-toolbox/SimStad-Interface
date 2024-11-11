@@ -1,0 +1,234 @@
+{
+	"Id": "trafikverket",
+	"Title": "Traffic during construction",
+	"Sections": [
+		{
+			"Id": "oversikt",
+			"Title": "Overview",
+			"Text1": "The map shows an overview of establishment areas and main roads affected by Ostlänken and Norrköping's new central station construction. Click on the tabs for more information about what is shown on the map.",
+			"Legend1": "legendnamn",
+			"Default": true,
+			"Filenames": "Trafikverket/oversikt",
+			"LegendTitle": "Legend",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "The east link"
+				},
+				{
+					"color": "#794979",
+					"text": "Establishment area"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Section of road that is closed to public traffic for large parts of the construction period"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Road section with reduced capacity during large parts of the construction period"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Main stretch of road for construction traffic"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Main diversion route for public traffic"
+				},
+				{
+					"color": "#23af75",
+					"text": "Possible larger accessibility search measure"
+				}
+			]
+		},
+		{
+			"Id": "etableringsomraden",
+			"Title": "Establishment areas",
+			"Text1": "When Ostlänken and Norrköping's new central station are built, an establishment area for production will be established in southern Butängen. The establishment area includes, among other things, a concrete factory for the production of concrete for the station's bridges, construction cranes and staff sheds, as well as preparatory setup of vehicles/machines and storage of materials. The area is fenced off in its entirety and transport to and from the area takes place through designated entrances and exits.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Etableringsomrade",
+			"LegendTitle": "Legend",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "The east link"
+				},
+				{
+					"color": "#794979",
+					"text": "Establishment area"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Section of road that is closed to public traffic for large parts of the construction period"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Road section with reduced capacity during large parts of the construction period"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Main stretch of road for construction traffic"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Main diversion route for public traffic"
+				},
+				{
+					"color": "#23af75",
+					"text": "Possible larger accessibility search measure"
+				}
+			]
+		},
+		{
+			"Id": "byggtrafik",
+			"Title": "Construction traffic",
+			"Text1": "The establishment area in Södra Butängen will generate large amounts of construction traffic. The main roads that will be used by construction traffic are Finspångsvägen, Riksvägen, Norra Promenaden, Ståthögavägen, Sjötullsgatan and Stockholmsvägen.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Byggtrafik",
+			"LegendTitle": "Legend",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "The east link"
+				},
+				{
+					"color": "#794979",
+					"text": "Establishment area"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Section of road that is closed to public traffic for large parts of the construction period"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Road section with reduced capacity during large parts of the construction period"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Main stretch of road for construction traffic"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Main diversion route for public traffic"
+				},
+				{
+					"color": "#23af75",
+					"text": "Possible larger accessibility search measure"
+				}
+			]
+		},
+		{
+			"Id": "paverkan",
+			"Title": "Impact on public traffic",
+			"Text1": "During large parts of the construction period, the public transport network will be affected. Among other things, this may involve streets being closed off in their entirety and streets being reduced in capacity. The streets that are mainly affected are Stockholmsvägen, Ingelstagatan and Ståthögavägen. The main diversion routes for public traffic will be Riksvägen, Stockholmsvägen and Norra Promenaden.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Paverkan_pa_allm",
+			"LegendTitle": "Legend",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "The east link"
+				},
+				{
+					"color": "#794979",
+					"text": "Establishment area"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Section of road that is closed to public traffic for large parts of the construction period"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Road section with reduced capacity during large parts of the construction period"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Main stretch of road for construction traffic"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Main diversion route for public traffic"
+				},
+				{
+					"color": "#23af75",
+					"text": "Possible larger accessibility search measure"
+				}
+			]
+		},
+		{
+			"Id": "atgarder",
+			"Title": "Possible actions",
+			"Text1": "Work is underway to analyze the impact on traffic and to find measures to deal with disruptions to public traffic. This could, for example, be about changes in routes and timetables for public transport as well as measures that improve the accessibility of the public road network. Some of the measures being discussed are a new bridge for public traffic between Fredriksdalsgatan and Stockholmsvägen and to build the Johannisborg connection before or in connection with the construction of the new station facility.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/M_Atgarder",
+			"LegendTitle": "Legend",
+			"LegendColors": [
+				{
+					"color": "#6c3068",
+					"text": "The east link"
+				},
+				{
+					"color": "#794979",
+					"text": "Establishment area"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Section of road that is closed to public traffic for large parts of the construction period"
+				},
+				{
+					"color": "#ff0000",
+					"image": "123",
+					"text": "Road section with reduced capacity during large parts of the construction period"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Main stretch of road for construction traffic"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Main diversion route for public traffic"
+				},
+				{
+					"color": "#23af75",
+					"text": "Possible larger accessibility search measure"
+				}
+			]
+		},
+		{
+			"Id": "tillganglighet",
+			"Title": "Accessibility to and from the existing travel center",
+			"Text1": "The municipality of Norrköping and the Swedish Transport Agency are working together to ensure accessibility to and from the existing travel center as well as important traveler functions during the construction period. Among other things, the possibility of replacing commuter parking lots that need to be demolished when Ostlänken is built is being studied. Replacement areas need to be within reasonable walking distance to the travel center. The distances 400 meters and 800 meters are illustrated in the map. It is estimated to correspond to approx. 5-10 minutes' walk.",
+			"Legend1": "legendnamn",
+			"Default": false,
+			"Filenames": "Trafikverket/Tillgang",
+			"LegendTitle": "Legend",
+			"LegendColors": [
+				{
+					"color": "#005f37",
+					"text": "Existing travel center"
+				},
+				{
+					"color": "#569f84",
+					"text": "400 meter radius from the travel center"
+				},
+				{
+					"color": "#90d6bf",
+					"text": "800 meter radius from the travel center"
+				}
+			]
+		}
+	]
+}

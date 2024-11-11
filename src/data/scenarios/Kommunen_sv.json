@@ -1,0 +1,116 @@
+{
+	"Id": "kommunen",
+	"Title": "Stadsutveckling",
+	"Sections": [
+		{
+			"Id": "stadsutveckling",
+			"Title": "Stadsutveckling",
+			"Text1": "Kartan visar det framtida Butängen med ny järnväg, centralstation och en fullt utbyggd stadsdel. Den ny centralstation planeras strax norr om dagens station integrerad med den upphöjda järnvägen. Runtomkring den nya stationen planeras en innerstadsmiljö med en blandning av bostäder, kontor och handel, där det också ska finnas plats för skolor, idrotts- och kulturaktiviteter. Den nya stadsdelen planeras att rymma cirka 12 000 lägenheter och cirka 200 000 - 300 000 kvadratmeter verksamhetsyta.",
+			"Legend1": "kommun_stadsutveckling",
+			"Default": true,
+			"Filenames": "Kommun/Illustrationsplan",
+			"LegendTitle": "Missing",
+			"LegendColors": [],
+			"LegendSource": "Källa: Norrköpings kommun"
+		},
+		{
+			"Id": "plangranser",
+			"Title": "Plangränser",
+			"Text1": "Här syns plangränserna för två av de tre detaljplaner som är på samråd. Detaljplan för nya spår och stationsområde inom Butängen samt detaljplan för Johannisbrogsförbindelsens fjärde etapp med bro över järnvägsspåren.\n\nResterande delar av stadsutvecklingen i Butängen ligger längre fram i tiden och kommer att planläggas etappvis.\n\nHär syns även delar av järnvägsplanen Loddby.",
+			"Legend1": "kommun_plangranser",
+			"Default": false,
+			"Filenames": "Kommun/Plangranser",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#ff0000",
+					"text": "Detaljplan för stationsområde och spår"
+				},
+				{
+					"color": "#000000",
+					"text": "Detaljplan Johannisborgsförbindelsen"
+				},
+				{
+					"color": "#bebe7e",
+					"text": "Järnvägsplan, tillfälligt markanspråk"
+				},
+				{
+					"color": "#9167ae",
+					"text": "Järnvägsplan nytt markanspråk"
+				},
+				{
+					"color": "#979797",
+					"text": "Befintlig järnväg"
+				}
+			],
+			"LegendSource": "Source: Municipality of Norrköping"
+		},
+		{
+			"Id": "trafik",
+			"Title": "Trafik- och stationsfunktioner",
+			"Text1": "Den upphöjda järnvägen skapar möjligheter - dels att sömlöst länka samman innerstadens delar och trafikstråk, dels för att lokalisera många av stationens ytkrävande funktioner under bron, vilket ger bra förutsättningar för korta bytestider och stadsutveckling.\n\nDrottninggatan förlängs som stadskärnas naturliga huvudaxel, med ny stationsbyggnad under bron som får uppgångar till tågen på båda sidor om gatan. Cykelparkeringar, hållplatslägen för kollektivtrafik, taxizon, m.m. placeras nära varandra och stationsbyggnad. Under bron placeras även platser för att lätt kunna hämta och lämna med bil samt parkeringsgarage.\n\nDe centrala delarna kring stationen bildar en sammanhängande zon där gång, angöring med cykel och kollektivtrafik är prioriterat.",
+			"Legend1": "kommun_trafik",
+			"Default": false,
+			"Filenames": "Kommun/Trafik_stationsfunktioner",
+			"LegendTitle": "Missing",
+			"LegendColors": [],
+			"LegendSource": "Källa: Norrköpings kommun"
+		},
+		{
+			"Id": "torg",
+			"Title": "Torg och parker",
+			"Text1": "Den första detaljplanen omfattar några av de viktigaste parkerna och torgbildningarna i det framtida Butängen.\n\nStråket av platser och parker längs Drottninggatan förlängs genom stationsområdet, från Carl Johans park, förbi Norra Promenaden och in i Butängen. Befintlig stationsbyggnad och nytt stationstorg bildar en södra entré till nya stationen, stråket fortsätter sen under den upphöjda järnvägen och vid stationens norra entré planeras en ny park med en större lekplats. Längs Fredriksdalsgatan och järnvägsbron planeras parkstråk med öppna dagvattenlösningar som leds vidare i en kanal mot Bråviken. Gator får träd eller annan grönska som bidrar till bra mikroklimat och sammanläkning av grönstruktur i staden.",
+			"Legend1": "kommun_torg",
+			"Default": false,
+			"Filenames": "Kommun/Torg_parker",
+			"LegendTitle": "Missing",
+			"LegendColors": [
+				{
+					"color": "#7030a0",
+					"text": "Befintliga parker och grönstråk"
+				},
+				{
+					"color": "#d2ce1c",
+					"text": "Nya parker för vistelse och aktivitet"
+				},
+				{
+					"color": "#ff0000",
+					"text": "Nya park/grönytor intill & under järnvägsbron"
+				},
+				{
+					"color": "#ff0000",
+					"text": "Nya gator mer park-/grönsstråk"
+				},
+				{
+					"color": "#99dfb9",
+					"text": "Nya gator med träd eller annan grönska (större)"
+				},
+				{
+					"color": "#b797cf",
+					"text": "Nya gator med träd eller annan grönska (mindre)"
+				},
+				{
+					"color": "#d2d2d2",
+					"text": "Nya torgytor/torggator"
+				},
+				{
+					"color": "#d2d2d2",
+					"text": "Vattenspegel/Fontän"
+				},
+				{
+					"color": "#d2d2d2",
+					"text": "Dagvattendam"
+				},
+				{
+					"color": "#d2d2d2",
+					"text": "Dagvatten-/Skyfallsstråk"
+				},
+				{
+					"color": "#d2d2d2",
+					"text": "Dagvattenkanal"
+				}
+			],
+			"LegendSource": "Source: Municipality of Norrköping"
+		}
+	]
+}

@@ -1,80 +1,61 @@
 {
+	"Id": "ovan",
 	"Title": "Bilder från ovan",
 	"Sections": [
 		{
-			"Label1": "",
-			"SectionObject": [
-				{
-					"Title": "Flygfoto 2022",
-					"Text1": "Ett ortografiskt foto, eller ortofoto, är ett flyg- eller satellitfoto som har korrigerats för att ta bort distorsioner från kameravinklar och terrängens lutning. Detta gör att fotot representerar en exakt och skalenlig avbild av markytan, liknande en karta, vilket gör det möjligt att mäta avstånd och detaljer noggrant. Ortofoton används inom områden som kartografi, stadsplanering och miljöövervakning för att ge en detaljerad och exakt vy av ett område.\n\nProcessen för att skapa ett ortofoto involverar bearbetning av ursprungliga bilder för att korrigera för topografiska förändringar. Denna bild är fångad sommaren 2022 och är en sammanräkning av ca 10.000 högupplösta flygbilder.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "flygfoto2022",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Nkpg/Orto20230921",
-					"LegendTitle": "",
-					"LegendColors": [],
-					"LegendSource": "Källa: Norrköpings kommun"
-				},
-				{
-					"Title": "Flygfoto 1974",
-					"Text1": "Det här är Lantmäteriets ortofoto som täcker hela kommunen från 1974 (öster om Vånga från 1972). Upplösning 0.5m.\n\nEtt ortografiskt foto, eller ortofoto, är ett flyg- eller satellitfoto som har korrigerats för att ta bort distorsioner från kameravinklar och terrängens lutning. Detta gör att fotot representerar en exakt och skalenlig avbild av markytan, liknande en karta, vilket gör det möjligt att mäta avstånd och detaljer noggrant. Ortofoton används inom områden som kartografi, stadsplanering och miljöövervakning för att ge en detaljerad och exakt vy av ett område.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "flygfoto1974",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Nkpg/Norrkoping1974",
-					"LegendTitle": "",
-					"LegendColors": [],
-					"LegendSource": "Foto: Bladh, Oskar"
-				},
-				{
-					"Title": "Flygfoto 1959",
-					"Text1": "Det här är Lantmäteriets ortofoto som täcker hela kommunen från 1959. Upplösning 0.5 meter.\n\nEtt ortografiskt foto, eller ortofoto, är ett flyg- eller satellitfoto som har korrigerats för att ta bort distorsioner från kameravinklar och terrängens lutning. Detta gör att fotot representerar en exakt och skalenlig avbild av markytan, liknande en karta, vilket gör det möjligt att mäta avstånd och detaljer noggrant. Ortofoton används inom områden som kartografi, stadsplanering och miljöövervakning för att ge en detaljerad och exakt vy av ett område.",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "flygfoto1959",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Nkpg/Norrkoping1959",
-					"LegendTitle": "",
-					"LegendColors": [],
-					"LegendSource": "Foto: AB Flygfotografi / Östergötlands museum"
-				},
-				{
-					"Title": "Stadskarta 1930",
-					"Text1": "Karta över Norrköpings tätort år 1930. Kartan är ritad av Norrköpings stadsingenjörskontor.\n\nMed anläggandet av Hamnbron som öppnades för trafik 1915 förändras stadsplanens utseende drastiskt i denna del av staden. Flera gamla kvarter som Lissabon, Paris, Väst- och Ostindien försvinner. En rad nya bostadsområden har tillkommit, bland annat Oxelbergen, Karlshov, Taborsberg, Pryssgården, Egna hem och området emellan Västra/Södra Promenaderna och Albrektsvägen.\n\nStadens befolkning uppgår nu till drygt 61.000 invånare.\n\nUpphovsman: Stadsingenjör John E. Petterson (1878 – 1949).",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "stadskarta1930",
-					"Legend2": "",
-					"Default": false,
-					"Idle": false,
-					"Filenames": "Nkpg/1930_centrala_norrkoping",
-					"LegendTitle": "",
-					"LegendColors": [],
-					"LegendSource": "Källa: Norrköpings kommun"
-				},
-				{
-					"Title": "Stadskarta 1879",
-					"Text1": "Karta över Norrköpings tätort år 1879. Upprättad och utgiven genom Norrköpings stads byggnadsnämnd.\n\nGenom de regleringar och utvidgningar av stadsplanen som kommit till utförande 1863, 1873 och 1877 har nu hela det område som ligger inom stadens planerade promenadsystem utnyttjats.\n\nI staden bor nu drygt 27.000 personer.\n\nUpphovsman: Lantmätaren Alfred Rudolf Lundgren. (1852 - 1929)",
-					"Text2": "",
-					"Datasource": "",
-					"Legend1": "stadskarta1879",
-					"Legend2": "",
-					"Default": true,
-					"Idle": false,
-					"Filenames": "Finals/Lundgren1879",
-					"LegendTitle": "",
-					"LegendColors": [],
-					"LegendSource": "Källa: Norrköpings kommun"
-				}
-			]
+			"Id": "flygfoto2022",
+			"Title": "Flygfoto 2022",
+			"Text1": "Ett ortografiskt foto, eller ortofoto, är ett flyg- eller satellitfoto som har korrigerats för att ta bort distorsioner från kameravinklar och terrängens lutning. Detta gör att fotot representerar en exakt och skalenlig avbild av markytan, liknande en karta, vilket gör det möjligt att mäta avstånd och detaljer noggrant. Ortofoton används inom områden som kartografi, stadsplanering och miljöövervakning för att ge en detaljerad och exakt vy av ett område.\n\nProcessen för att skapa ett ortofoto involverar bearbetning av ursprungliga bilder för att korrigera för topografiska förändringar. Denna bild är fångad sommaren 2022 och är en sammanräkning av ca 10.000 högupplösta flygbilder.",
+			"Legend1": "flygfoto2022",
+			"Default": false,
+			"Filenames": "Nkpg/Orto20230921",
+			"LegendTitle": "",
+			"LegendColors": [],
+			"LegendSource": "Källa: Norrköpings kommun"
+		},
+		{
+			"Id": "flygfoto1974",
+			"Title": "Flygfoto 1974",
+			"Text1": "Det här är Lantmäteriets ortofoto som täcker hela kommunen från 1974 (öster om Vånga från 1972). Upplösning 0.5m.\n\nEtt ortografiskt foto, eller ortofoto, är ett flyg- eller satellitfoto som har korrigerats för att ta bort distorsioner från kameravinklar och terrängens lutning. Detta gör att fotot representerar en exakt och skalenlig avbild av markytan, liknande en karta, vilket gör det möjligt att mäta avstånd och detaljer noggrant. Ortofoton används inom områden som kartografi, stadsplanering och miljöövervakning för att ge en detaljerad och exakt vy av ett område.",
+			"Legend1": "flygfoto1974",
+			"Default": false,
+			"Filenames": "Nkpg/Norrkoping1974",
+			"LegendTitle": "",
+			"LegendColors": [],
+			"LegendSource": "Foto: Bladh, Oskar"
+		},
+		{
+			"Id": "flygfoto1959",
+			"Title": "Flygfoto 1959",
+			"Text1": "Det här är Lantmäteriets ortofoto som täcker hela kommunen från 1959. Upplösning 0.5 meter.\n\nEtt ortografiskt foto, eller ortofoto, är ett flyg- eller satellitfoto som har korrigerats för att ta bort distorsioner från kameravinklar och terrängens lutning. Detta gör att fotot representerar en exakt och skalenlig avbild av markytan, liknande en karta, vilket gör det möjligt att mäta avstånd och detaljer noggrant. Ortofoton används inom områden som kartografi, stadsplanering och miljöövervakning för att ge en detaljerad och exakt vy av ett område.",
+			"Legend1": "flygfoto1959",
+			"Default": false,
+			"Filenames": "Nkpg/Norrkoping1959",
+			"LegendTitle": "",
+			"LegendColors": [],
+			"LegendSource": "Foto: AB Flygfotografi / Östergötlands museum"
+		},
+		{
+			"Id": "stadskarta1930",
+			"Title": "Stadskarta 1930",
+			"Text1": "Karta över Norrköpings tätort år 1930. Kartan är ritad av Norrköpings stadsingenjörskontor.\n\nMed anläggandet av Hamnbron som öppnades för trafik 1915 förändras stadsplanens utseende drastiskt i denna del av staden. Flera gamla kvarter som Lissabon, Paris, Väst- och Ostindien försvinner. En rad nya bostadsområden har tillkommit, bland annat Oxelbergen, Karlshov, Taborsberg, Pryssgården, Egna hem och området emellan Västra/Södra Promenaderna och Albrektsvägen.\n\nStadens befolkning uppgår nu till drygt 61.000 invånare.\n\nUpphovsman: Stadsingenjör John E. Petterson (1878 – 1949).",
+			"Legend1": "stadskarta1930",
+			"Default": false,
+			"Filenames": "Nkpg/1930_centrala_norrkoping",
+			"LegendTitle": "",
+			"LegendColors": [],
+			"LegendSource": "Källa: Norrköpings kommun"
+		},
+		{
+			"Id": "stadskarta1879",
+			"Title": "Stadskarta 1879",
+			"Text1": "Karta över Norrköpings tätort år 1879. Upprättad och utgiven genom Norrköpings stads byggnadsnämnd.\n\nGenom de regleringar och utvidgningar av stadsplanen som kommit till utförande 1863, 1873 och 1877 har nu hela det område som ligger inom stadens planerade promenadsystem utnyttjats.\n\nI staden bor nu drygt 27.000 personer.\n\nUpphovsman: Lantmätaren Alfred Rudolf Lundgren. (1852 - 1929)",
+			"Legend1": "stadskarta1879",
+			"Default": true,
+			"Filenames": "Finals/Lundgren1879",
+			"LegendTitle": "",
+			"LegendColors": [],
+			"LegendSource": "Källa: Norrköpings kommun"
 		}
 	]
 }
