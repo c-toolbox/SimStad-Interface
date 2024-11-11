@@ -33,6 +33,10 @@ build-job:
     - ls 
     - cd ..
     - ls 
+    - git clone git@gitlab.liu.se:simstad/exhibition.git
+    - cd exhibition/Scripts
+    - python convert_localization_excel.py
+    - ls
     #- npm install 
     #- npm run build
     - echo "Compile complete."
