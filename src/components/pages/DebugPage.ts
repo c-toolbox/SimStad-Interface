@@ -44,8 +44,8 @@ export class DebugPage extends Page {
 		});
 
 		x += w + s;
-		this.addButton(x, y, w, h, "Reload scenarios", Color.Cyan700, () =>
-			this.socket.sendScenariosRequest()
+		this.addButton(x, y, w, h, "Recache database", Color.Cyan700, () =>
+			this.socket.sendReCacheDatabase()
 		);
 
 		x -= w + s;

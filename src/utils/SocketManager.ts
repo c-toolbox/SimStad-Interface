@@ -52,11 +52,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.OmniError]: this.onOmniError,
 
 			[P.Response.Ping]: this.onPing,
+			[P.Response.Scenarios]: this.onScenarios,
 			[P.Response.ErrorResponse]: this.onErrorRepsonse,
 			[P.Response.ResetResponse]: this.onResetRepsonse,
-			[P.Response.Scenarios]: this.onScenarios,
 			[P.Response.ActivateTraffic]: this.onActivateTraffic,
 			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
+			[P.Response.Generic]: this.onGeneric,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
@@ -194,6 +195,11 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
+	onGeneric(data: P.GenericResponse) {
+		this.scenariosLoaded = true;
+		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+	}
+
 	/* Requests */
 
 	sendRequest(data: P.ValidRequests) {
@@ -291,6 +297,16 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		let data: P.ResetRequest = {
 			type: P.Request.Reset,
 			misc: "",
+		};
+		this.sendRequest(data);
+	}
+
+	sendReCacheDatabase() {
+		this.scenariosLoaded = false;
+
+		let data: P.GenericRequest = {
+			type: P.Request.Generic,
+			request: "ReCacheDatabase",
 		};
 		this.sendRequest(data);
 	}
