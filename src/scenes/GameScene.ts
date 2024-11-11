@@ -1,7 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
-import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Navigation } from "@/components/Navigation";
 
 import { SocketManager } from "@/utils/SocketManager";
@@ -30,7 +29,6 @@ export class GameScene extends BaseScene {
 	private scenarioPage: ScenarioPage;
 	private scenariosPage: ScenariosPage;
 	private layerPage: LayerPage;
-	private lightPage: LightPage;
 	private debugPage: DebugPage;
 	private navigation: Navigation;
 	private map: Map;
@@ -74,13 +72,11 @@ export class GameScene extends BaseScene {
 			this.socket
 		);
 		this.layerPage = new LayerPage(this, PageState.Layer, this.socket);
-		this.lightPage = new LightPage(this, PageState.Light, this.socket);
 		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
 		this.pages.push(this.homePage);
 		this.pages.push(this.scenarioPage);
 		this.pages.push(this.scenariosPage);
 		this.pages.push(this.layerPage);
-		this.pages.push(this.lightPage);
 		this.pages.push(this.debugPage);
 
 		this.pages.forEach((page) => {
