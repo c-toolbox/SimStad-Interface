@@ -27,6 +27,8 @@ build-job:
   stage: build
 
   script:
+    - apt-get update -qy && apt-get upgrade -qy    # This line used for updating OS repositories
+    - apt-get install -y git
     - echo "Compiling the code..."
     - echo $PATH
     - pwd
