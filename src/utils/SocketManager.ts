@@ -57,7 +57,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.ResetResponse]: this.onResetRepsonse,
 			[P.Response.ActivateTraffic]: this.onActivateTraffic,
 			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
-			[P.Response.Generic]: this.onGeneric,
+			[P.Response.Cache]: this.onCache,
+			[P.Response.CacheComplete]: this.onCacheComplete,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
@@ -195,9 +196,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onGeneric(data: P.GenericResponse) {
-		this.scenariosLoaded = true;
-		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+	onCache(data: P.CacheResponse) {
+		console.log("Caching progress", data);
+	}
+
+	onCacheComplete(data: P.CacheCompleteResponse) {
+		console.log("Caching complete", data);
 	}
 
 	/* Requests */
@@ -304,8 +308,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	sendReCacheDatabase() {
 		this.scenariosLoaded = false;
 
-		let data: P.GenericRequest = {
-			type: P.Request.Generic,
+		let data: P.CacheRequest = {
+			type: P.Request.Cache,
 			request: "ReCacheDatabase",
 		};
 		this.sendRequest(data);
@@ -472,6 +476,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		temp.setStroke("black", 4);
 		temp.x = this.scene.W - 10;
 		temp.y = 50 / 2;
+		this.add(temp);
 
 		this.debugTexts.forEach((text) => {
 			text.y += (30 * 1.4) / 2;

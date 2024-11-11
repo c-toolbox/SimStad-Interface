@@ -12,7 +12,8 @@ export enum Request {
 	Light = "LightRequest",
 	MapLight = "MapLightRequest",
 	Reset = "ResetRequest",
-	Generic = "GenericRequest",
+
+	Cache = "GenericRequest",
 }
 
 export enum Response {
@@ -29,7 +30,9 @@ export enum Response {
 	ErrorResponse = "ErrorResponse",
 	ActivateTraffic = "ActivateTrafficResponse",
 	DeactivateTraffic = "DeactivateTrafficResponse",
-	Generic = "ReCacheDatabaseResponse",
+
+	Cache = "CacheResponse",
+	CacheComplete = "ReCacheDatabaseResponse",
 }
 
 /* Omni*/
@@ -196,13 +199,17 @@ export interface ResetResponse {
 
 /* Database recaching */
 
-export interface GenericRequest {
-	type: Request.Generic;
-	request: string;
+export interface CacheRequest {
+	type: Request.Cache;
+	request: "ReCacheDatabase";
 }
 
-export interface GenericResponse {
-	type: Response.Generic;
+export interface CacheResponse {
+	type: Response.Cache;
+}
+
+export interface CacheCompleteResponse {
+	type: Response.CacheComplete;
 }
 
 /* All requests*/
@@ -218,4 +225,4 @@ export type ValidRequests =
 	| LightRequest
 	| MapLightRequest
 	| ResetRequest
-	| GenericRequest;
+	| CacheRequest;
