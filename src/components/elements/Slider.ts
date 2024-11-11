@@ -210,8 +210,7 @@ export class Slider extends Phaser.GameObjects.Container {
 
 	update(time: number, delta: number) {
 		// Approach target position gradually
-		this.button.x +=
-			(this.targetX - this.button.x) * (1 - Math.pow(0.5, 60 * delta));
+		this.button.x += (this.targetX - this.button.x) * 0.75;
 		this.button.setScale(1.0 - 0.15 * this.holdSmooth);
 		this.button.fillColor = interpolateColor(
 			0xffffff,

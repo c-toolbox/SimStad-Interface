@@ -399,7 +399,7 @@ def time_to_number(text):
     if not text:
         return None
     hours, minutes = list(map(int, text.split(":")))
-    return (60 * hours + minutes) / (60 * 24)
+    return round((60 * hours + minutes) / (60 * 24), 5)
 
 result = {}
 
@@ -465,20 +465,24 @@ for line in text.splitlines():
     result[date] = [
         time_to_number(astronomical_dawn),
         time_to_number(nautical_dawn),
-        time_to_number(twilight_dawn),
+        # time_to_number(twilight_dawn),
         time_to_number(civil_dawn),
-        time_to_number(blue_dawn),
+        # time_to_number(blue_dawn),
         time_to_number(sunrise),
         time_to_number(gold_dawn),
         time_to_number(zenit),
         time_to_number(gold_dusk),
         time_to_number(sunset),
-        time_to_number(blue_dusk),
+        # time_to_number(blue_dusk),
         time_to_number(civil_dusk),
-        time_to_number(twilight_dusk),
+        # time_to_number(twilight_dusk),
         time_to_number(nautical_dusk),
         time_to_number(astronomical_dusk),
     ]
+
+    for i in range(1, len(result[date])):
+        if result[date][i] is not None and result[date][i - 1] is not None and result[date][i] < result[date][i - 1]:
+            result[date][i] += 1
 
 print(json.dumps(result))
 

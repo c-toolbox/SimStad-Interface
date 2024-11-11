@@ -7,6 +7,7 @@ import { SocketManager } from "@/utils/SocketManager";
 import { Response } from "@/utils/protocol";
 import { CircleButton } from "./CircleButton";
 import { MapHint } from "./MapHint";
+import { MapControls } from "./MapControls";
 
 // Bottom right
 const MIN_X = 129411.4;
@@ -33,8 +34,9 @@ export class Map extends Phaser.GameObjects.Container {
 	private mapHint: MapHint;
 	private lamps: MapLight[];
 	private lampIds: string[];
-	private controlButtons: CircleButton[];
 	private fingerLamp: MapLight;
+
+	private mapControls: MapControls;
 
 	constructor(scene: BaseScene, socket: SocketManager) {
 		super(scene);
@@ -101,57 +103,6 @@ export class Map extends Phaser.GameObjects.Container {
 		this.scene.input.on("pointermove", this.onPointerMove, this);
 		this.scene.input.on("pointerup", this.onPointerUp, this);
 
-		/* Controls */
-
-		let controlsBg = new RoundRectangle(scene, {
-			x: layout.mapControls.centerX,
-			y: layout.mapControls.centerY,
-			width: layout.mapControls.width,
-			height: layout.mapControls.height,
-			radius: layout.radius,
-			color: Color.Slate900,
-		});
-		this.add(controlsBg);
-
-		/* Control buttons */
-
-		this.controlButtons = [];
-
-		const cil = layout.mapControlsInner;
-		const size = cil.height;
-		const xCoords = [cil.left + size / 2, cil.centerX, cil.right - size / 2];
-
-		for (let i = 0; i < 0; i++) {
-			let x = xCoords[i];
-			let y = cil.centerY;
-
-			let button = new CircleButton(
-				this.scene,
-				x,
-				y,
-				size,
-				"lightbulb",
-				Color.Slate700
-			);
-			// button.on("click", () => {});
-			this.add(button);
-			this.controlButtons.push(button);
-		}
-
-		// this.controlButtons[2].setTexture("marker");
-		// this.controlButtons[2].on("click", () => {
-		// 	const thingX = layout.map.centerX;
-		// 	const thingY = layout.map.centerY;
-
-		// 	const py = 1 - (thingX - layout.map.left) / layout.map.width;
-		// 	const px = 1 - (thingY - layout.map.top) / layout.map.height;
-		// 	const x = MIN_X + (MAX_X - MIN_X) * px;
-		// 	const y = MIN_Y + (MAX_Y - MIN_Y) * py;
-		// 	const color = ColorStr.Yellow500;
-
-		// 	this.socket.sendMapLight("special", x, y, 400, color, "add", true);
-		// });
-
 		/* Lamps */
 
 		this.lampIds = ["lamp_1", "lamp_2", "lamp_3"];
@@ -164,17 +115,24 @@ export class Map extends Phaser.GameObjects.Container {
 		this.fingerLamp = new MapLight(this.scene, 0, 0, "finger");
 		this.fingerLamp.setVisible(false);
 		this.add(this.fingerLamp);
+
+		this.mapControls = new MapControls(scene, socket);
+		this.add(this.mapControls);
 	}
 
 	update(time: number, delta: number) {
 		this.fingerLamp.update(time, delta);
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
-		this.controlButtons.forEach((button) => button.update(time, delta));
+		this.mapControls.update(time, delta);
 
 		this.layers.forEach((layer) => {
 			let dx = ((layer.active ? delta : -delta) / 1000) * 2;
 
-			if (["Flood", "Asfalt", "Byggnad", "Vegitation"].some(name => layer.texture.includes(name))) {
+			if (
+				["Flood", "Asfalt", "Byggnad", "Vegitation"].some((name) =>
+					layer.texture.includes(name)
+				)
+			) {
 				dx = 1;
 			}
 

@@ -1,115 +1,94 @@
 import { BaseScene } from "@/scenes/BaseScene";
+import { CircularSlider } from "./elements/CircularSlider";
 import _suntimes from "@/data/norrköping_suntimes.json";
 import { interpolateColor } from "@/utils/functions";
-import { Color, ColorStr } from "@/utils/colors";
+import { Color } from "@/utils/colors";
 const suntimes = _suntimes as { [date: string]: number[] };
 
-export class SunDial extends Phaser.GameObjects.Container {
-	public scene: BaseScene;
-	private graphics: Phaser.GameObjects.Graphics;
-	private labels: Phaser.GameObjects.Text[];
-	private innerRadius: number;
-	private outerRadius: number;
+export class SunDial extends CircularSlider {
+	private summerTime: boolean;
 
-	constructor(
-		scene: BaseScene,
-		x: number,
-		y: number,
-		innerWidth: number,
-		outerWidth: number
-	) {
-		super(scene, x, y);
+	constructor(scene: BaseScene, x: number, y: number, diameter: number) {
+		super(scene, x, y, diameter);
 		this.scene = scene;
+		this.summerTime = false;
 
-		this.innerRadius = innerWidth / 2;
-		this.outerRadius = outerWidth / 2;
-
-		this.graphics = scene.add.graphics();
-		this.add(this.graphics);
-
-		this.initLabels();
-
-		this.setDate(7, 1, 12);
+		this.setTicks(24, 6, 3, -0.5 * Math.PI);
+		this.setSymbols(["day_sun", "day_moon"], Math.PI, -0.5 * Math.PI);
 	}
 
-	update(time: number, delta: number) {}
+	update(time: number, delta: number): void {
+		super.update(time, delta);
 
-	initLabels() {
-		this.labels = [];
-		const texts = ["18:00", "00:00", "06:00", "12:00"];
-
-		for (let i = 0; i < texts.length; i++) {
-			let a = (i / texts.length) * 2 * Math.PI;
-			let r = this.innerRadius - (this.outerRadius - this.innerRadius) / 4;
-			let x = r * Math.cos(a);
-			let y = r * Math.sin(a);
-
-			let label = this.scene.addText({
-				x,
-				y,
-				size: 18,
-				fontFamily: "Lato-Bold",
-				color: ColorStr.White,
-				text: texts[i],
-				alpha: 0.5
-			});
-			label.setOrigin(0.5 + 0.5 * Math.cos(a), 0.5 + 0.5 * Math.sin(a));
-			this.add(label);
-			this.labels.push(label);
-		}
+		const targetAngle = this.summerTime ? 15 : 0;
+		this.arcGraphics.angle += (targetAngle - this.arcGraphics.angle) * 0.2;
 	}
 
-	setDate(month: number, day: number, hour: number) {
-		let summertime =
-			(month > 3 && month < 10) ||
+	setDate(month: number, day: number) {
+		this.summerTime =
 			(month == 3 && day >= 26) ||
+			(month > 3 && month < 10) ||
 			(month == 10 && day <= 28);
 
 		let date = `${day}/${month}`;
 		let [
 			astronomical_dawn,
 			nautical_dawn,
-			twilight_dawn,
+			// twilight_dawn,
 			civil_dawn,
-			blue_dawn,
+			// blue_dawn,
 			sunrise,
 			gold_dawn,
 			zenit,
 			gold_dusk,
 			sunset,
-			blue_dusk,
+			// blue_dusk,
 			civil_dusk,
-			twilight_dusk,
+			// twilight_dusk,
 			nautical_dusk,
 			astronomical_dusk,
 		] = suntimes[date];
 
+		gold_dawn = 0.25 * gold_dawn + 0.75 * zenit;
+		gold_dusk = 0.25 * gold_dusk + 0.75 * zenit;
+
 		let stops = [
-			[nautical_dusk - 1, 0x1e1b4b], // Dark blue
-			[astronomical_dusk - 1, 0x0f172a], // Dark slate
-
-			[astronomical_dawn, 0x0f172a], // Dark slate
-			[nautical_dawn, 0x1e1b4b], // Dark blue
-			[civil_dawn, 0x831843], // Dark pink
-			[sunrise, 0xea580c], // Orange
-			[gold_dawn, 0x60a5fa], // Light blue
-			[zenit, 0x60a5fa], // Light blue
-			[gold_dusk, 0x60a5fa], // Light blue
-			[sunset, 0xea580c], // Orange
-			[civil_dusk, 0x831843], // Dark pink
-			[nautical_dusk, 0x1e1b4b], // Dark blue
-			[astronomical_dusk, 0x0f172a], // Dark slate
-
-			[astronomical_dawn + 1, 0x0f172a], // Dark slate
-			[nautical_dawn + 1, 0x1e1b4b], // Dark blue
+			[astronomical_dawn, Color.Slate900], // Dark slate
+			[nautical_dawn, Color.Indigo950], // Dark blue
+			[civil_dawn, Color.Pink900], // Dark pink
+			[sunrise, Color.Orange600], // Orange
+			[gold_dawn, Color.Blue400], // Light blue
+			[zenit, Color.Blue200], // Light blue
+			[gold_dusk, Color.Blue400], // Light blue
+			[sunset, Color.Orange600], // Orange
+			[civil_dusk, Color.Pink900], // Dark pink
+			[nautical_dusk, Color.Indigo950], // Dark blue
+			[astronomical_dusk, Color.Slate900], // Dark slate
 		];
-		// stops = stops.map((stop) => {
-		// 	if (stop[0] == null) {
-		// 		stop[0] = stop[0] < 0.5 ? 0.0 : 1.0;
-		// 	}
-		// 	return stop;
-		// });
-		stops = stops.filter((stop) => stop !== null);
+		stops = stops.filter((stop) => stop[0] !== null);
+		for (let i = 1; i < stops.length; i++) {
+			if (stops[i][0] < stops[i - 1][0]) {
+				console.log("uh", stops[i][0], stops[i - 1][0]);
+			}
+		}
+
+		const colorsByBrightness = [
+			Color.Slate900,
+			Color.Indigo950,
+			Color.Pink900,
+			Color.Orange600,
+		];
+		let darkestIndex = colorsByBrightness.length - 1;
+		stops.forEach((stop) => {
+			const index = colorsByBrightness.indexOf(stop[1]);
+			if (index >= 0 && index < darkestIndex) {
+				darkestIndex = index;
+			}
+		});
+		darkestIndex = Math.max(0, darkestIndex - 1);
+		const defaultColor = colorsByBrightness[darkestIndex];
+		stops.unshift([0.0, defaultColor]);
+		stops.push([1.0, defaultColor]);
 
 		function getColor(t: number) {
 			for (let i = 0; i < stops.length - 1; i++) {
@@ -118,12 +97,12 @@ export class SunDial extends Phaser.GameObjects.Container {
 					return interpolateColor(stops[i][1], stops[i + 1][1], k);
 				}
 			}
-			return 0xff0000;
+			return defaultColor;
 		}
 
-		this.graphics.clear();
+		this.arcGraphics.clear();
 
-		const steps = 64;
+		const steps = 100;
 
 		for (let i = 0; i < steps; i++) {
 			let angle1 = (i / steps) * 2 * Math.PI + Math.PI / 2;
@@ -131,61 +110,12 @@ export class SunDial extends Phaser.GameObjects.Container {
 			let color1 = getColor(i / steps);
 			let color2 = getColor((i + 1) / steps);
 
-			if (summertime) {
+			if (this.summerTime) {
 				angle1 -= (1 / 24) * 2 * Math.PI;
 				angle2 -= (1 / 24) * 2 * Math.PI;
 			}
 
-			this.graphics.fillGradientStyle(color1, color2, color1, 0);
-			this.graphics.beginPath();
-			this.graphics.moveTo(
-				this.innerRadius * Math.cos(angle1),
-				this.innerRadius * Math.sin(angle1)
-			);
-			this.graphics.lineTo(
-				this.outerRadius * Math.cos(angle1),
-				this.outerRadius * Math.sin(angle1)
-			);
-			this.graphics.lineTo(
-				this.outerRadius * Math.cos(angle2),
-				this.outerRadius * Math.sin(angle2)
-			);
-			this.graphics.fillPath();
-
-			this.graphics.fillGradientStyle(color2, color1, color2, 0);
-			this.graphics.beginPath();
-			this.graphics.moveTo(
-				this.innerRadius * Math.cos(angle1),
-				this.innerRadius * Math.sin(angle1)
-			);
-			this.graphics.lineTo(
-				this.innerRadius * Math.cos(angle2),
-				this.innerRadius * Math.sin(angle2)
-			);
-			this.graphics.lineTo(
-				this.outerRadius * Math.cos(angle2),
-				this.outerRadius * Math.sin(angle2)
-			);
-			this.graphics.fillPath();
+			this.drawArcSegment(angle1, angle2, color1, color2);
 		}
-
-		let r = this.outerRadius - (this.outerRadius - this.innerRadius) / 2;
-		let a = (hour / 24) * 2 * Math.PI + Math.PI / 2;
-		if (summertime) a -= (1 / 24) * 2 * Math.PI;
-		let x = r * Math.cos(a);
-		let y = r * Math.sin(a);
-		this.graphics.fillStyle(Color.White);
-		this.graphics.fillCircle(x, y, 5);
-
-		// for (let i = 0; i < stops.length; i++) {
-		// 	let [time, color] = stops[i];
-		// 	let r = this.outerRadius + (this.outerRadius - this.innerRadius) / 4;
-		// 	let a = time * 2 * Math.PI + Math.PI / 2;
-		// 	if (summertime) a -= (1 / 24) * 2 * Math.PI;
-		// 	let x = r * Math.cos(a);
-		// 	let y = r * Math.sin(a);
-		// 	this.graphics.fillStyle(color);
-		// 	this.graphics.fillCircle(x, y, 15);
-		// }
 	}
 }
