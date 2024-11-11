@@ -135,7 +135,7 @@ export class MapControls extends Phaser.GameObjects.Container {
 		this.dateDial.setLabel(languageManager.getDate(date));
 		this.hourDial.setDate(this.month, this.day);
 
-		this.socket.sendLight(this.year, this.month, this.day, this.hour);
+		this.setLight(this.year, this.month, this.day, this.hour);
 	}
 
 	setHour(value: number) {
@@ -146,7 +146,18 @@ export class MapControls extends Phaser.GameObjects.Container {
 		let date = new Date(`2023-01-01 ${hours}:${minutes}`);
 		this.hourDial.setLabel(languageManager.getHour(date));
 
-		this.socket.sendLight(this.year, this.month, this.day, this.hour);
+		this.setLight(this.year, this.month, this.day, this.hour);
+	}
+
+	setLight(year: number, month: number, day: number, hour: number) {
+		if (this.socket.lightAvailable) {
+			this.socket.sendLight(year, month, day, hour);
+		}
+	}
+
+	resetLight() {
+		this.dateDial.value = 0.497;
+		this.hourDial.value = 0.501;
 	}
 
 	numberToDate(value: number) {

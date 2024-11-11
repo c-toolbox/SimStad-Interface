@@ -29,6 +29,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private serverTrafficEnabled: boolean;
 	private loggingEnabled: boolean;
 
+	private fadeTween: Phaser.Tweens.Tween;
+
 	public scene: BaseScene;
 	private debugTexts: Phaser.GameObjects.Text[];
 	private omniIcon: Phaser.GameObjects.Image;
@@ -295,7 +297,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	/* Time settings */
 
-	setHour(value: number) {
+	private setHour(value: number) {
 		let hour = (23 + 59 / 60) * value;
 		this.sendLight(2024, 7, 1, hour);
 	}
@@ -305,7 +307,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			callback();
 		});
 
-		this.scene.tweens.addCounter({
+		this.fadeTween = this.scene.tweens.addCounter({
 			from: 0,
 			to: 1,
 			duration: fadeDuration,
@@ -316,6 +318,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 				this.setHour((0.5 + 1.0 * ease) % 1);
 			},
 		});
+	}
+
+	get lightAvailable() {
+		return !(this.fadeTween && this.fadeTween.isPlaying());
 	}
 
 	/* Connection establishing */

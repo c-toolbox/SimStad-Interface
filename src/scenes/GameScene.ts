@@ -96,6 +96,10 @@ export class GameScene extends BaseScene {
 				this.setState(PageState.Scenario);
 				this.scenarioPage.setScenario(scenarioId);
 			});
+
+			page.on("resetLight", () => {
+				this.map.resetLightControls();
+			});
 		});
 
 		this.navigation = new Navigation(this);
@@ -142,6 +146,7 @@ export class GameScene extends BaseScene {
 
 		if (state == PageState.Home) {
 			if (smooth) {
+				this.map.resetLightControls();
 				this.socket.fadeLight(() => {
 					this.scenarioPage.activateBlocks("SimStad-default");
 					this.socket.sendReset();
@@ -177,6 +182,7 @@ export class GameScene extends BaseScene {
 						datasets: "Idle/Idle_Movie",
 					});
 				} else {
+					this.map.resetLightControls();
 					this.socket.fadeLight(() => {
 						this.socket.sendReset();
 						this.scenarioPage.activateDataset("Nkpg/Orto20230921");

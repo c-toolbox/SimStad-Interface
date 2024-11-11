@@ -283,4 +283,8 @@ export class Map extends Phaser.GameObjects.Container {
 		this.lamps = [];
 		this.mapHint.setVisible(false);
 	}
+
+	resetLightControls() {
+		this.mapControls.resetLight();
+	}
 }

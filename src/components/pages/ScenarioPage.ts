@@ -261,6 +261,7 @@ export class ScenarioPage extends Page {
 		if (activeSection) {
 			this.setSection(activeSection, false);
 
+			this.emit("resetLight");
 			this.socket.fadeLight(() => {
 				this.setSection(activeSection!);
 			});
@@ -312,6 +313,7 @@ export class ScenarioPage extends Page {
 			},
 		});
 
+		this.emit("resetLight");
 		this.socket.fadeLight(() => this.setSection(section));
 	}
 
