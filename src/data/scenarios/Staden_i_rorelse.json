@@ -12,23 +12,23 @@
 			"LegendTitle": "Typ av trafik",
 			"LegendColors": [
 				{
-					"color": "#ebc34c",
+					"color": "#bbeb77",
 					"text": "Expressbussar"
 				},
 				{
-					"color": "#bbeb77",
+					"color": "#e39189",
 					"text": "Landsbygdstrafik"
 				},
 				{
-					"color": "#e39189",
+					"color": "#2f9fea",
 					"text": "Spårväg"
 				},
 				{
-					"color": "#2f9fea",
+					"color": "#57e6c0",
 					"text": "Tåg"
 				},
 				{
-					"color": "#57e6c0",
+					"color": "#ebc34c",
 					"text": "Tätortstrafik"
 				},
 				{
@@ -75,47 +75,58 @@
 			"LegendColors": [
 				{
 					"color": "#ffffb2",
-					"text": "60 – 6,000"
+					"text": "60 – 6,000",
+					"type": "line"
 				},
 				{
 					"color": "#ffeb90",
-					"text": "6,000 – 12,000"
+					"text": "6,000 – 12,000",
+					"type": "line"
 				},
 				{
 					"color": "#fed66d",
-					"text": "12,000 – 17,000"
+					"text": "12,000 – 17,000",
+					"type": "line"
 				},
 				{
 					"color": "#febf56",
-					"text": "17,000 – 22,000"
+					"text": "17,000 – 22,000",
+					"type": "line"
 				},
 				{
 					"color": "#fda649",
-					"text": "22,000 – 28,000"
+					"text": "22,000 – 28,000",
+					"type": "line"
 				},
 				{
 					"color": "#fd8d3c",
-					"text": "28,000 – 34,000"
+					"text": "28,000 – 34,000",
+					"type": "line"
 				},
 				{
 					"color": "#f86c31",
-					"text": "10,000 – 14,000"
+					"text": "10,000 – 14,000",
+					"type": "line"
 				},
 				{
 					"color": "#f34b26",
-					"text": "14,000 – 18,000"
+					"text": "14,000 – 18,000",
+					"type": "line"
 				},
 				{
 					"color": "#e62f21",
-					"text": "18,000 – 22,000"
+					"text": "18,000 – 22,000",
+					"type": "line"
 				},
 				{
 					"color": "#d11824",
-					"text": "22,000 – 24,000"
+					"text": "22,000 – 24,000",
+					"type": "line"
 				},
 				{
 					"color": "#bd0026",
-					"text": "24,000 –"
+					"text": "24,000 –",
+					"type": "line"
 				}
 			]
 		}

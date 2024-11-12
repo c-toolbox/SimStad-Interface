@@ -12,36 +12,42 @@
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#6c3068",
-					"text": "Ostlänken"
+					"color": "#5f1f5b",
+					"text": "Ostlänken",
+					"type": "rectangle"
 				},
 				{
 					"color": "#794979",
-					"text": "Etableringsområde"
+					"text": "Etableringsområde",
+					"type": "rectangle"
 				},
 				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
+					"color": "#ffffff",
+					"text": "Vägsträcka som stängs av för allmän trafik*",
+					"type": "sign_no_vehicles"
 				},
 				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
+					"color": "#ffffff",
+					"text": "Vägsträcka med reducerad kapacitet*",
+					"type": "sign_road_narrows"
 				},
 				{
 					"color": "#fe6f33",
-					"text": "Huvudsakligt vägstråk för byggtrafik"
+					"text": "Huvudsakligt vägstråk för byggtrafik",
+					"type": "line"
 				},
 				{
 					"color": "#fbe414",
-					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+					"text": "Huvudsakligt omledningsstråk för allmän trafik",
+					"type": "line"
 				},
 				{
 					"color": "#23af75",
-					"text": "Möjlig större tillgänglighetsökande åtgärd"
+					"text": "Möjlig större tillgänglighetsökande åtgärd",
+					"type": "line"
 				}
-			]
+			],
+			"LegendSource": "*under stora delar av byggtiden"
 		},
 		{
 			"Id": "etableringsomraden",
@@ -53,34 +59,9 @@
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#6c3068",
-					"text": "Ostlänken"
-				},
-				{
 					"color": "#794979",
-					"text": "Etableringsområde"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
-				},
-				{
-					"color": "#fe6f33",
-					"text": "Huvudsakligt vägstråk för byggtrafik"
-				},
-				{
-					"color": "#fbe414",
-					"text": "Huvudsakligt omledningsstråk för allmän trafik"
-				},
-				{
-					"color": "#23af75",
-					"text": "Möjlig större tillgänglighetsökande åtgärd"
+					"text": "Etableringsområde",
+					"type": "rectangle"
 				}
 			]
 		},
@@ -94,34 +75,9 @@
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#6c3068",
-					"text": "Ostlänken"
-				},
-				{
-					"color": "#794979",
-					"text": "Etableringsområde"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
-				},
-				{
 					"color": "#fe6f33",
-					"text": "Huvudsakligt vägstråk för byggtrafik"
-				},
-				{
-					"color": "#fbe414",
-					"text": "Huvudsakligt omledningsstråk för allmän trafik"
-				},
-				{
-					"color": "#23af75",
-					"text": "Möjlig större tillgänglighetsökande åtgärd"
+					"text": "Huvudsakligt vägstråk för byggtrafik",
+					"type": "line"
 				}
 			]
 		},
@@ -135,34 +91,19 @@
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#6c3068",
-					"text": "Ostlänken"
-				},
-				{
-					"color": "#794979",
-					"text": "Etableringsområde"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
-				},
-				{
-					"color": "#fe6f33",
-					"text": "Huvudsakligt vägstråk för byggtrafik"
-				},
-				{
 					"color": "#fbe414",
-					"text": "Huvudsakligt omledningsstråk för allmän trafik"
+					"text": "Huvudsakligt omledningsstråk för allmän trafik",
+					"type": "line"
 				},
 				{
-					"color": "#23af75",
-					"text": "Möjlig större tillgänglighetsökande åtgärd"
+					"color": "#ffffff",
+					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden",
+					"type": "sign_no_vehicles"
+				},
+				{
+					"color": "#ffffff",
+					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden",
+					"type": "sign_road_narrows"
 				}
 			]
 		},
@@ -176,34 +117,9 @@
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#6c3068",
-					"text": "Ostlänken"
-				},
-				{
-					"color": "#794979",
-					"text": "Etableringsområde"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka som stängs av för allmän trafik under stora delar av byggtiden"
-				},
-				{
-					"color": "#ff0000",
-					"image": "123",
-					"text": "Vägsträcka med reducerad kapacitet under stora delar av byggtiden"
-				},
-				{
-					"color": "#fe6f33",
-					"text": "Huvudsakligt vägstråk för byggtrafik"
-				},
-				{
-					"color": "#fbe414",
-					"text": "Huvudsakligt omledningsstråk för allmän trafik"
-				},
-				{
 					"color": "#23af75",
-					"text": "Möjlig större tillgänglighetsökande åtgärd"
+					"text": "Möjlig större tillgänglighetsökande åtgärd",
+					"type": "line"
 				}
 			]
 		},
@@ -218,15 +134,18 @@
 			"LegendColors": [
 				{
 					"color": "#005f37",
-					"text": "Befintligt resecentrum"
+					"text": "Befintligt resecentrum",
+					"type": "circle"
 				},
 				{
 					"color": "#569f84",
-					"text": "400 meter radie från resecentrum"
+					"text": "400 meter radie från resecentrum",
+					"type": "rectangle"
 				},
 				{
 					"color": "#90d6bf",
-					"text": "800 meter radie från resecentrum"
+					"text": "800 meter radie från resecentrum",
+					"type": "rectangle"
 				}
 			]
 		}

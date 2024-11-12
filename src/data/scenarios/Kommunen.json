@@ -24,23 +24,28 @@
 			"LegendColors": [
 				{
 					"color": "#ff0000",
-					"text": "Detaljplan för stationsområde och spår"
+					"text": "Detaljplan för stationsområde och spår",
+					"type": "line"
 				},
 				{
 					"color": "#000000",
-					"text": "Detaljplan Johannisborgsförbindelsen"
+					"text": "Detaljplan Johannisborgsförbindelsen",
+					"type": "line"
 				},
 				{
 					"color": "#bebe7e",
-					"text": "Järnvägsplan, tillfälligt markanspråk"
+					"text": "Järnvägsplan, tillfälligt markanspråk",
+					"type": "rectangle"
 				},
 				{
 					"color": "#9167ae",
-					"text": "Järnvägsplan nytt markanspråk"
+					"text": "Järnvägsplan nytt markanspråk",
+					"type": "rectangle"
 				},
 				{
 					"color": "#979797",
-					"text": "Befintlig järnväg"
+					"text": "Befintlig järnväg",
+					"type": "rectangle"
 				}
 			],
 			"LegendSource": "Source: Municipality of Norrköping"
@@ -63,51 +68,62 @@
 			"Legend1": "kommun_torg",
 			"Default": false,
 			"Filenames": "Kommun/Torg_parker",
-			"LegendTitle": "Missing",
+			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#7030a0",
-					"text": "Befintliga parker och grönstråk"
+					"color": "#879f7d",
+					"text": "Befintliga parker och grönstråk",
+					"type": "rectangle"
 				},
 				{
-					"color": "#d2ce1c",
-					"text": "Nya parker för vistelse och aktivitet"
+					"color": "#53a64e",
+					"text": "Nya parker för vistelse och aktivitet",
+					"type": "rectangle"
 				},
 				{
-					"color": "#ff0000",
-					"text": "Nya park/grönytor intill & under järnvägsbron"
+					"color": "#75bd7b",
+					"text": "Nya park/grönytor intill & under järnvägsbron",
+					"type": "circle"
 				},
 				{
-					"color": "#ff0000",
-					"text": "Nya gator mer park-/grönsstråk"
+					"color": "#75bd7b",
+					"text": "Nya gator mer park- / grönsstråk",
+					"type": "rectangle"
 				},
 				{
-					"color": "#99dfb9",
-					"text": "Nya gator med träd eller annan grönska (större)"
+					"color": "#a1c18f",
+					"text": "Nya gator med träd eller annan grönska (större)",
+					"type": "rectangle"
 				},
 				{
-					"color": "#b797cf",
-					"text": "Nya gator med träd eller annan grönska (mindre)"
+					"color": "#dde3d7",
+					"text": "Nya gator med träd eller annan grönska (mindre)",
+					"type": "line"
 				},
 				{
-					"color": "#d2d2d2",
-					"text": "Nya torgytor/torggator"
+					"color": "#d19e65",
+					"text": "Nya torgytor/torggator",
+					"type": "line"
 				},
 				{
-					"color": "#d2d2d2",
-					"text": "Vattenspegel/Fontän"
+					"color": "#b9bcdf",
+					"text": "Vattenspegel / Fontän",
+					"type": "circle"
 				},
 				{
-					"color": "#d2d2d2",
-					"text": "Dagvattendam"
+					"color": "#838ec6",
+					"text": "Dagvattendam",
+					"type": "circle"
 				},
 				{
-					"color": "#d2d2d2",
-					"text": "Dagvatten-/Skyfallsstråk"
+					"color": "#686daf",
+					"text": "Dagvatten- / Skyfallsstråk",
+					"type": "dashed_line"
 				},
 				{
-					"color": "#d2d2d2",
-					"text": "Dagvattenkanal"
+					"color": "#686db1",
+					"text": "Dagvattenkanal",
+					"type": "line"
 				}
 			],
 			"LegendSource": "Source: Municipality of Norrköping"
