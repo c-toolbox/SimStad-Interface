@@ -32,12 +32,12 @@
 		},
 		{
 			"id": "kommunen",
-			"blocksVideo": "VisualCity-Wall_Motion",
+			"blocksVideo": "VisualCity-Wall_Eastlink",
 			"thumbnail": "station"
 		},
 		{
 			"id": "trafikverket",
-			"blocksVideo": "VisualCity-Wall_Motion",
+			"blocksVideo": "VisualCity-Wall_Eastlink",
 			"thumbnail": "cranes"
 		}
 	]

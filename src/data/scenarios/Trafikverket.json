@@ -134,7 +134,7 @@
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
-					"color": "#005f37",
+					"color": "#dc2626",
 					"text": "Befintligt resecentrum",
 					"type": "circle"
 				},
