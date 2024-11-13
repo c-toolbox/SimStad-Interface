@@ -1,39 +1,45 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import {
-	colorToGrayscale,
-	colorToNumber,
-	interpolateColor,
-	splitText,
-} from "@/utils/functions";
+import { colorToNumber, splitText } from "@/utils/functions";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { languageManager } from "@/utils/LanguageManager";
 
+interface Stop {
+	color: string;
+	text: string;
+	type?: string;
+}
+
 export class Legend extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
+	private rescale: number;
 
 	private background: RoundRectangle;
 	private graphics: Phaser.GameObjects.Graphics;
 	private title: Phaser.GameObjects.Text;
 	private labels: Phaser.GameObjects.Text[];
+	private symbols: Phaser.GameObjects.Image[];
 
 	constructor(
 		scene: BaseScene,
 		x: number,
 		y: number,
 		width: number,
-		height: number
+		height: number,
+		rescale = 1.0
 	) {
 		super(scene, x, y);
 		this.scene = scene;
 		this.width = width;
 		this.height = height;
+		this.rescale = rescale;
+		const padding = layout.padding * rescale * rescale;
 
 		this.background = new RoundRectangle(scene, {
 			width,
 			height,
-			radius: layout.radius,
+			radius: layout.radius * rescale,
 			color: Color.Slate900,
 		});
 		this.add(this.background);
@@ -42,9 +48,9 @@ export class Legend extends Phaser.GameObjects.Container {
 		this.add(this.graphics);
 
 		this.title = this.scene.addText({
-			x: -width / 2 + layout.padding / 2,
-			y: -height / 2 + layout.padding / 2,
-			size: 28,
+			x: -width / 2 + padding / 2,
+			y: -height / 2 + padding / 2,
+			size: 28 * rescale,
 			fontFamily: "Lato-Bold",
 			color: "white",
 		});
@@ -52,73 +58,59 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		let hr = this.scene.add.rectangle(
 			0,
-			this.title.y + this.title.displayHeight + 4,
-			width - layout.padding,
+			this.title.y + this.title.displayHeight + 8 * rescale,
+			width - padding,
 			2,
 			Color.White
 		);
 		this.add(hr);
 
 		this.labels = [];
-
-		const stops: { color: string; text: string }[] = [
-			{ color: ColorStr.Red500, text: "1" },
-			{ color: ColorStr.Orange500, text: "2" },
-			{ color: ColorStr.Yellow500, text: "3" },
-		];
-		this.setLegend("Title", stops);
+		this.symbols = [];
 	}
 
-	update(time: number, delta: number) {}
-
-	setLegend(title: string, stops: { color: string; text: string }[]) {
+	setLegend(title: string, stops: Stop[]) {
 		this.graphics.clear();
 		this.setTitle(title);
 
-		const legendTitleSize = 28;
-		const legendLabelSize = 28;
-		const padding = 80;
+		const padding = 80 * this.rescale;
 
 		this.labels.forEach((text) => text.destroy());
 		this.labels = [];
 
+		this.symbols.forEach((text) => text.destroy());
+		this.symbols = [];
+
 		const ty = this.title.y + this.title.displayHeight * 2.0;
 		const th = this.height / 2 - ty - padding / 2;
-		const gap = 24;
-		const border = 2;
 		const count = Math.max(stops.length, 10);
-		const height = (th - gap * (count - 1)) / count;
+		const hgap = 28 * this.rescale;
+		const vgap = (24 - 2 * (Math.max(stops.length, 10) - 10)) * this.rescale;
+		const height = (th - vgap * (count - 1)) / count;
 		const width = 2 * height;
 
-		stops.forEach(({ color, text }, index) => {
+		stops.forEach(({ color, type }, index) => {
 			let x = this.title.x;
-			let y = ty + (height + gap) * index + height / 2;
-			let c = colorToNumber(color);
-			let gc = 0xffffff - colorToGrayscale(c);
-			let bc = interpolateColor(c, gc, 0.3);
+			let y = ty + (height + vgap) * index + height / 2;
 
-			this.graphics.fillStyle(bc);
-			this.graphics.fillRect(x, y - height / 2, width, height);
-
-			this.graphics.fillStyle(colorToNumber(color));
-			this.graphics.fillRect(
-				x + border,
-				y - height / 2 + border,
-				width - 2 * border,
-				height - 2 * border
-			);
+			const icon = `symbol_${type ?? "rectangle"}`;
+			let symbol = this.scene.add.image(x + width / 2, y, icon);
+			symbol.setScale(height / symbol.height);
+			symbol.setTint(colorToNumber(color));
+			this.symbols.push(symbol);
+			this.add(symbol);
 
 			let label = this.scene.addText({
-				x: x + width + gap / 2,
+				x: x + width + vgap / 2,
 				y,
-				size: Math.min(1000 * height, legendLabelSize),
+				size: Math.min(1000 * height, 28 * this.rescale),
 			});
 			label.setOrigin(0, 0.5);
-			this.add(label);
 			this.labels.push(label);
+			this.add(label);
 
-			const maxWidth = this.width / 2 - gap / 2 - label.x;
-			if (languageManager.get(title + index, false)) {
+			const maxWidth = this.width / 2 - vgap / 2 - label.x;
+			if (languageManager.get(title + index)) {
 				languageManager.bind(label, title + index, () => {
 					if (label.displayWidth > maxWidth && label.text.includes(" ")) {
 						label.setText(splitText(label.text));
@@ -128,7 +120,7 @@ export class Legend extends Phaser.GameObjects.Container {
 						label.scaleY = label.scaleX;
 					}
 					if (label.text.includes("\n")) {
-						label.scaleX = Math.min(0.7, label.scaleX);
+						label.scaleX = Math.min(0.75, label.scaleX);
 						label.scaleY = label.scaleX;
 					}
 				});
@@ -137,7 +129,7 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		let newHeight =
 			ty +
-			(height + gap) * (stops.length - 1) +
+			(height + vgap) * (stops.length - 1) +
 			height / 2 +
 			this.height / 2 +
 			padding / 2;
@@ -146,15 +138,21 @@ export class Legend extends Phaser.GameObjects.Container {
 	}
 
 	setTitle(key: string) {
-		if (languageManager.get(key, false)) {
+		const padding = layout.padding * this.rescale * this.rescale;
+
+		if (languageManager.get(key)) {
 			languageManager.bind(this.title, key, () => {
 				this.title.setScale(1);
-				if (this.title.displayWidth > this.background.width - 40) {
-					this.title.displayWidth = this.background.width - 40;
+				if (this.title.displayWidth > this.width - padding) {
+					this.title.displayWidth = this.width - padding;
 				}
 			});
 		} else {
 			this.title.setText(key);
 		}
+	}
+
+	get bottom() {
+		return this.y + this.background.y + this.background.height / 2;
 	}
 }

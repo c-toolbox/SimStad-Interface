@@ -11,8 +11,6 @@ import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
 import { ONLINE } from "@/utils/constants";
 import { RoundRectangle } from "../elements/RoundRectangle";
-import { ScrollArea } from "../elements/ScrollArea";
-import { ScrollBar } from "../elements/ScrollBar";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
 
@@ -21,8 +19,6 @@ export class ScenarioPage extends Page {
 	private foreground: RoundRectangle;
 	private subtitle: Phaser.GameObjects.Text;
 	private title: Phaser.GameObjects.Text;
-	private scrollArea: ScrollArea;
-	private scrollBar: ScrollBar;
 	private bread: Phaser.GameObjects.Text[];
 	private legend: Legend;
 	private legendShadow: Phaser.GameObjects.Image;
@@ -81,29 +77,11 @@ export class ScenarioPage extends Page {
 
 		let ay = this.title.y + 1.3 * this.title.displayHeight;
 		let ah = layout.scenarioInner.height - (ay - layout.scenarioInner.top);
-		this.scrollArea = new ScrollArea(
-			scene,
-			layout.scenarioInfo.left,
-			ay,
-			layout.scenarioInfo.width,
-			ah,
-			0
-		);
-		this.add(this.scrollArea);
-
-		this.scrollBar = new ScrollBar(
-			this.scene,
-			layout.scenarioInfo.right + layout.separation / 2 - 3,
-			this.scrollArea.y + this.scrollArea.height / 2,
-			6,
-			this.scrollArea.height - 0 * 32
-		);
-		this.add(this.scrollBar);
 
 		this.bread = [];
 		for (let i = 0; i < 10; i++) {
 			let bread = scene.addText({
-				// x: layout.scenarioInfo.left,
+				x: layout.scenarioInfo.left,
 				size: 28,
 				color: "white",
 			});
@@ -112,8 +90,7 @@ export class ScenarioPage extends Page {
 			bread.setWordWrapWidth(layout.scenarioInfo.width);
 			bread.setShadow(0, 2, "#00000077", 4);
 			this.bread.push(bread);
-			// this.add(bread);
-			this.scrollArea.apply(bread);
+			this.add(bread);
 		}
 
 		/* Legend */
@@ -145,8 +122,9 @@ export class ScenarioPage extends Page {
 		this.add(this.legendImage);
 
 		this.legendSource = scene.addText({
-			size: 16,
+			size: 18,
 			color: ColorStr.White,
+			text: "Source",
 		});
 		this.legendSource.setOrigin(1.0, 0.0);
 		this.legendSource.setShadow(0, 2, "#00000077", 4);
@@ -199,7 +177,6 @@ export class ScenarioPage extends Page {
 		});
 		this.backButton.setText("back");
 		this.backButton.setHighlight(true);
-		// this.backButton.setColor(Color.Slate700);
 
 		/* Slider */
 
@@ -227,8 +204,6 @@ export class ScenarioPage extends Page {
 		this.tabButtons.forEach((button) => button.update(time, delta));
 		this.layerButtons.forEach((button) => button.update(time, delta));
 		this.layerSlider.update(time, delta);
-		this.scrollArea.update(time, delta);
-		this.scrollBar.set(this.scrollArea.getScroll());
 	}
 
 	setScenario(scenarioId: ScenarioId) {
@@ -290,9 +265,6 @@ export class ScenarioPage extends Page {
 			this.tabButtons[i].x = tx;
 			this.tabButtons[i].setWidth(tw);
 		}
-
-		// this.backButton.x = tl.left + 0.5 * tw;
-		// this.backButton.setWidth(tw);
 	}
 
 	fadeSection(section: Section) {
@@ -326,9 +298,6 @@ export class ScenarioPage extends Page {
 		if (this.layerButtons[0].visible) {
 			ah -= layout.scenarioControls.height + layout.separation;
 		}
-		this.scrollArea.setHeight(ah);
-		this.scrollBar.setHeight(ah);
-		this.scrollBar.y = this.scrollArea.y + this.scrollArea.height / 2;
 
 		const breadText = this.bread[9].text;
 		const paragraphs = breadText
@@ -337,7 +306,6 @@ export class ScenarioPage extends Page {
 			.filter((line) => !!line);
 
 		let ty = this.title.y + 1.3 * this.title.displayHeight;
-		ty -= this.scrollArea.y;
 
 		this.bread.forEach((text) => text.setVisible(false));
 		paragraphs.forEach((paragraph, index) => {
@@ -346,10 +314,16 @@ export class ScenarioPage extends Page {
 			bread.setText(paragraph);
 			bread.y = ty;
 
+			const rightBottom = this.legend.bottom;
+			if (!this.legendImage.visible && ty > rightBottom) {
+				bread.setWordWrapWidth(layout.scenarioInner.width);
+			} else {
+				bread.setWordWrapWidth(layout.scenarioInfo.width);
+			}
+
 			ty += bread.displayHeight + 0.75 * 28;
 		});
 
-		this.scrollArea.updateSize();
 	}
 
 	setSection(section: Section, sendDataset = true) {
@@ -379,16 +353,16 @@ export class ScenarioPage extends Page {
 		if (this.scene.textures.exists(section.legendImage)) {
 			this.legendShadow.setVisible(true);
 			this.legendImage.setVisible(true);
-			this.legendSource.setVisible(true);
-			this.setLegendImage(
-				section.legendImage,
-				`${section.scenarioId}_${section.key}_legendSource`
-			);
+			this.setLegendImage(section.legendImage);
 		} else {
 			this.legendShadow.setVisible(false);
 			this.legendImage.setVisible(false);
-			this.legendSource.setVisible(false);
 		}
+
+		this.setLegendSource(
+			`${section.scenarioId}_${section.key}_legend_source`,
+			this.scene.textures.exists(section.legendImage)
+		);
 
 		this.layerButtons.forEach((button) => button.setVisible(false));
 		if (section.layerButtons) {
@@ -462,7 +436,7 @@ export class ScenarioPage extends Page {
 		}
 	}
 
-	setLegendImage(key: string, textKey: string) {
+	setLegendImage(key: string) {
 		this.legendImage.setTexture(key);
 		this.legendImage.setScale(
 			Math.min(
@@ -475,12 +449,26 @@ export class ScenarioPage extends Page {
 		this.legendShadow.setTexture(key);
 		this.legendShadow.y = this.legendImage.y + 2;
 		this.legendShadow.setScale(this.legendImage.scaleX);
+	}
 
-		this.legendSource.x =
-			this.legendImage.x + this.legendImage.displayWidth / 2;
-		this.legendSource.y =
-			this.legendImage.y + this.legendImage.displayHeight + 8;
-		languageManager.bind(this.legendSource, textKey);
+	setLegendSource(key: string, hasImage: boolean) {
+		this.legendSource.setVisible(true);
+
+		if (hasImage) {
+			this.legendSource.x =
+				this.legendImage.x + this.legendImage.displayWidth / 2;
+			this.legendSource.y =
+				this.legendImage.y + this.legendImage.displayHeight + 8;
+			this.legendSource.setWordWrapWidth(this.legendImage.displayWidth);
+		} else {
+			this.legendSource.x = this.legend.x + this.legend.width / 2;
+			this.legendSource.y = this.legend.bottom + 8;
+			this.legendSource.setWordWrapWidth(this.legend.width);
+		}
+
+		languageManager.bind(this.legendSource, key);
+
+		const s = this.legendSource;
 	}
 
 	activateDataset(layerString: string) {

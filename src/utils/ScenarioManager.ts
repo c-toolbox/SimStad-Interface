@@ -14,6 +14,7 @@ interface ScenarioJson {
 		LegendColors: {
 			color: string;
 			text: string;
+			type?: string;
 		}[];
 		LegendSource?: string;
 		Buttons?: {
@@ -45,6 +46,7 @@ export interface Section {
 	legendColors: {
 		color: string;
 		text: string;
+		type?: string;
 	}[];
 }
 

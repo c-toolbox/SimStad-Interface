@@ -45,6 +45,13 @@ let images: Image[] = [
 	image("icons/season_winter.png", "season_winter"),
 	image("icons/day_sun.png", "day_sun"),
 	image("icons/day_moon.png", "day_moon"),
+
+	image("symbols/circle.png", "symbol_circle"),
+	image("symbols/dashed_line.png", "symbol_dashed_line"),
+	image("symbols/line.png", "symbol_line"),
+	image("symbols/rectangle.png", "symbol_rectangle"),
+	image("symbols/sign_road_narrows.png", "symbol_sign_road_narrows"),
+	image("symbols/sign_no_vehicles.png", "symbol_sign_no_vehicles"),
 ];
 
 /* Thumbnails (only shown in debug layers page) */
