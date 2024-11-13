@@ -34,7 +34,6 @@ export class Legend extends Phaser.GameObjects.Container {
 		this.width = width;
 		this.height = height;
 		this.rescale = rescale;
-		const padding = layout.padding * rescale * rescale;
 
 		this.background = new RoundRectangle(scene, {
 			width,
@@ -48,8 +47,8 @@ export class Legend extends Phaser.GameObjects.Container {
 		this.add(this.graphics);
 
 		this.title = this.scene.addText({
-			x: -width / 2 + padding / 2,
-			y: -height / 2 + padding / 2,
+			x: -width / 2 + this.padding / 2,
+			y: -height / 2 + this.padding / 2,
 			size: 28 * rescale,
 			fontFamily: "Lato-Bold",
 			color: "white",
@@ -59,7 +58,7 @@ export class Legend extends Phaser.GameObjects.Container {
 		let hr = this.scene.add.rectangle(
 			0,
 			this.title.y + this.title.displayHeight + 8 * rescale,
-			width - padding,
+			width - this.padding,
 			2,
 			Color.White
 		);
@@ -138,18 +137,20 @@ export class Legend extends Phaser.GameObjects.Container {
 	}
 
 	setTitle(key: string) {
-		const padding = layout.padding * this.rescale * this.rescale;
-
 		if (languageManager.get(key)) {
 			languageManager.bind(this.title, key, () => {
 				this.title.setScale(1);
-				if (this.title.displayWidth > this.width - padding) {
-					this.title.displayWidth = this.width - padding;
+				if (this.title.displayWidth > this.width - this.padding) {
+					this.title.displayWidth = this.width - this.padding;
 				}
 			});
 		} else {
 			this.title.setText(key);
 		}
+	}
+
+	get padding() {
+		return layout.padding * this.rescale * this.rescale;
 	}
 
 	get bottom() {

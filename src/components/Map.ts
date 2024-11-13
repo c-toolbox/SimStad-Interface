@@ -276,6 +276,8 @@ export class Map extends Phaser.GameObjects.Container {
 
 	reset() {
 		this.setLayers("");
+		this.resetLightControls();
+
 		this.lamps.forEach((lamp) => {
 			this.lampIds.push(lamp.name);
 			lamp.destroy();

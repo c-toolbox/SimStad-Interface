@@ -149,7 +149,6 @@ export class Slider extends Phaser.GameObjects.Container {
 	onDown(pointer: Phaser.Input.Pointer, localX: number) {
 		let x = localX - this.background.width / 2;
 		this.background.input!.dragStartX = x;
-		console.log("down", this.dragging);
 		this.onDrag(pointer, x, 0);
 		this.hold = true;
 	}

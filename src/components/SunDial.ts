@@ -66,11 +66,6 @@ export class SunDial extends CircularSlider {
 			[astronomical_dusk, Color.Slate900], // Dark slate
 		];
 		stops = stops.filter((stop) => stop[0] !== null);
-		for (let i = 1; i < stops.length; i++) {
-			if (stops[i][0] < stops[i - 1][0]) {
-				console.log("uh", stops[i][0], stops[i - 1][0]);
-			}
-		}
 
 		const colorsByBrightness = [
 			Color.Slate900,
