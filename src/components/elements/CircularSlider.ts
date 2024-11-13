@@ -16,6 +16,7 @@ export class CircularSlider extends Button {
 	protected prevValue: number;
 	protected knobAngle: number;
 
+	protected hitarea: Phaser.GameObjects.Ellipse;
 	protected background: Phaser.GameObjects.Arc;
 	protected arcGraphics: Phaser.GameObjects.Graphics;
 	protected ticksGraphics: Phaser.GameObjects.Graphics;
@@ -45,6 +46,9 @@ export class CircularSlider extends Button {
 		this.symbolSize = 0.25 * radius;
 
 		/* Graphics */
+
+		this.hitarea = scene.add.ellipse(0, 0, 2 * radius, 2 * radius, 0, 0.001);
+		this.add(this.hitarea);
 
 		this.background = scene.add.circle(0, 0, this.symbolRadius, Color.Slate800);
 		this.add(this.background);
@@ -79,15 +83,9 @@ export class CircularSlider extends Button {
 
 		/* Input */
 
-		// this.bindInteractive(this.background, true);
-		this.setInteractive({
-			hitArea: new Phaser.Geom.Circle(0, 0, radius),
-			hitAreaCallback: Phaser.Geom.Circle.Contains,
-			useHandCursor: true,
-			draggable: true,
-		});
-		this.on("pointerdown", this.onDrag, this);
-		this.on("drag", this.onDrag, this);
+		this.bindInteractive(this.hitarea, true);
+		this.hitarea.on("pointerdown", this.onDrag, this);
+		this.hitarea.on("drag", this.onDrag, this);
 	}
 
 	update(time: number, delta: number) {
