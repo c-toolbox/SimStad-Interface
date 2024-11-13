@@ -3,7 +3,7 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { Navigation } from "@/components/Navigation";
 import { Map } from "@/components/Map";
-import { ScenarioId } from "@/utils/ScenarioManager";
+import { ScenarioId, Section } from "@/utils/ScenarioManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
@@ -14,14 +14,15 @@ import { DebugPage } from "@/components/pages/DebugPage";
 
 import { SocketManager } from "@/utils/SocketManager";
 import { Response, ScenariosResponse } from "@/utils/protocol";
+import { BlocksManager } from "@/utils/BlocksManager";
 import { layoutManager } from "@/utils/LayoutManager";
-
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
 	private infoWindowOpen: boolean;
 	private blurTween: Phaser.Tweens.Tween;
 	private socket: SocketManager;
+	private blocks: BlocksManager;
 
 	private state: PageState;
 	private pages: Page[];
@@ -61,6 +62,8 @@ export class GameScene extends BaseScene {
 			});
 		});
 
+		this.blocks = new BlocksManager(this);
+
 		/* Layout */
 
 		this.pages = [];
@@ -99,6 +102,14 @@ export class GameScene extends BaseScene {
 
 			page.on("resetLight", () => {
 				this.map.resetLightControls();
+			});
+
+			page.on("blocksWall", (scenarioId: ScenarioId) => {
+				this.blocks.setWallVideo(scenarioId);
+			});
+
+			page.on("blocksLegend", (section: Section) => {
+				this.blocks.setLegend(section);
 			});
 		});
 
@@ -148,14 +159,14 @@ export class GameScene extends BaseScene {
 			if (smooth) {
 				this.map.resetLightControls();
 				this.socket.fadeLight(() => {
-					this.scenarioPage.activateBlocks("SimStad-default");
+					this.blocks.setDefaultLegend();
 					this.socket.sendReset();
 					this.scenarioPage.activateDataset("Nkpg/Orto20230921");
 					this.map.setLayers("Nkpg/Orto20230921");
 					this.socket.sendDeactivateTraffic();
 				});
 			} else {
-				this.scenarioPage.activateBlocks("SimStad-default");
+				this.blocks.setDefaultLegend();
 				this.socket.sendReset();
 				this.scenarioPage.activateDataset("Nkpg/Orto20230921");
 				this.map.setLayers("Nkpg/Orto20230921");

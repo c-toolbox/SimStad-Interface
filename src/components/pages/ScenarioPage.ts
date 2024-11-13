@@ -242,7 +242,7 @@ export class ScenarioPage extends Page {
 			});
 		}
 
-		this.activateBlocks(scenarioManager.getScenario(scenarioId).blocksVideo);
+		this.emit("blocksWall", scenarioId);
 
 		if (scenarioId == "rorelse") {
 			this.socket.sendActivateTraffic();
@@ -323,7 +323,6 @@ export class ScenarioPage extends Page {
 
 			ty += bread.displayHeight + 0.75 * 28;
 		});
-
 	}
 
 	setSection(section: Section, sendDataset = true) {
@@ -432,7 +431,7 @@ export class ScenarioPage extends Page {
 
 		if (sendDataset) {
 			this.activateDataset(section.defaultLayer);
-			this.activateBlocks("SimStad-" + section.legendImage);
+			this.emit("blocksLegend", section);
 		}
 	}
 
@@ -486,21 +485,5 @@ export class ScenarioPage extends Page {
 
 		this.socket.sendActivateDataset(layerString);
 		this.socket.sendDeactivateDataset(removedLayerString);
-	}
-
-	activateBlocks(legend: string) {
-		if (!ONLINE) return;
-
-		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
-			method: "POST",
-			body: JSON.stringify({
-				task: legend,
-			}),
-			headers: {
-				"Content-type": "application/json; charset=UTF-8",
-			},
-		})
-			.then((response) => response.json())
-			.then((json) => console.log("Blocks:", json));
 	}
 }
