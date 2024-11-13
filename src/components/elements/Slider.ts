@@ -5,25 +5,23 @@ import { interpolateColor } from "@/utils/functions";
 export class Slider extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
-	private _value: number;
-	private _prevValue: number;
-	private background: RoundRectangle;
-	private button: Phaser.GameObjects.Ellipse;
-	private notches: Phaser.GameObjects.Ellipse[];
-	private maxV: number;
-	private maxX: number;
-	private minV: number;
-	private minX: number;
-	private targetX: number;
-	private steps: number;
-	private thinHeight: number;
+	protected _value: number;
+	protected _prevValue: number;
+	protected background: RoundRectangle;
+	protected button: Phaser.GameObjects.Ellipse;
+	protected notches: Phaser.GameObjects.Ellipse[];
+	protected maxV: number;
+	protected maxX: number;
+	protected minV: number;
+	protected minX: number;
+	protected targetX: number;
+	protected steps: number;
+	protected thinHeight: number;
 
-	private dragging: boolean;
-	private offsetX: number;
-
-	private _hold: boolean;
+	public dragging: boolean;
+	protected _hold: boolean;
 	public holdSmooth: number;
-	private tween: Phaser.Tweens.Tween;
+	protected tween: Phaser.Tweens.Tween;
 
 	constructor(
 		scene: BaseScene,
@@ -91,7 +89,6 @@ export class Slider extends Phaser.GameObjects.Container {
 		this._prevValue = 0.5;
 
 		this.dragging = false;
-		this.offsetX = 0;
 
 		this._hold = false;
 		this.holdSmooth = 0;
@@ -109,7 +106,7 @@ export class Slider extends Phaser.GameObjects.Container {
 		this.notches.forEach((notch) => notch.destroy());
 		this.notches = [];
 
-		if (steps > 1) {
+		if (steps > 2) {
 			for (let i = 0; i < steps; i++) {
 				let x = -this.width / 2 + (i / (steps - 1)) * this.width;
 				let y = 0;
@@ -137,6 +134,7 @@ export class Slider extends Phaser.GameObjects.Container {
 
 		this._value = value;
 		this._prevValue = value;
+
 		this.emit("onChange", this._value);
 
 		let fac = (value - this.minV) / (this.maxV - this.minV);
@@ -148,21 +146,15 @@ export class Slider extends Phaser.GameObjects.Container {
 		return this._value;
 	}
 
-	onDown(
-		pointer: Phaser.Input.Pointer,
-		localX: number,
-		localY: number,
-		event: Phaser.Types.Input.EventData
-	) {
+	onDown(pointer: Phaser.Input.Pointer, localX: number) {
 		let x = localX - this.background.width / 2;
 		this.background.input!.dragStartX = x;
 		console.log("down", this.dragging);
 		this.onDrag(pointer, x, 0);
 		this.hold = true;
-		this.offsetX = x;
 	}
 
-	onUp() {
+	onUp(pointer: Phaser.Input.Pointer) {
 		this.hold = false;
 	}
 
@@ -175,10 +167,6 @@ export class Slider extends Phaser.GameObjects.Container {
 	}
 
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
-		// if (this.dragging) {
-		// 	dragX += this.offsetX;
-		// }
-
 		// Clamp x-coord
 		dragX = Phaser.Math.Clamp(dragX, this.minX, this.maxX);
 

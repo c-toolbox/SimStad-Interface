@@ -153,7 +153,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		// let qrBg = new RoundRectangle(scene, qx-qw/2, qy+qw/2, qw, qw, 4, 0xFFFFFF);
 		// this.box.add(qrBg);
 
-		this.visLogo = scene.add.image(0, 0, "vis_c_logo");
+		this.visLogo = scene.add.image(0, 0, "vis_c_logo_lines");
 		this.visLogo.setScale(qw / this.visLogo.width);
 		// this.visLogo.setOrigin(1, 0);
 		this.visLogo.setAlpha(1.0);

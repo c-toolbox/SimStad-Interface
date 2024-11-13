@@ -8,7 +8,9 @@ let images: Image[] = [
 	image("circle.png", "circle"),
 	image("nineslice.png", "nineslice"),
 
-	image("vis_c_logo.png", "vis_c_logo"),
+	image("vis_c_logo_color.png", "vis_c_logo_color"),
+	image("vis_c_logo_lines.png", "vis_c_logo_lines"),
+	image("vis_c_logo_white.png", "vis_c_logo_white"),
 	image("light.png", "light"),
 
 	image("icons/arrow-left.png", "arrow-left"),
