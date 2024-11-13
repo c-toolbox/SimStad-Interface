@@ -12,28 +12,34 @@
 			"LegendTitle": "Typ av trafik",
 			"LegendColors": [
 				{
-					"color": "#bbeb77",
-					"text": "Expressbussar"
+					"color": "#beff63",
+					"text": "Landsbygdstrafik",
+					"type": "line"
 				},
 				{
-					"color": "#e39189",
-					"text": "Landsbygdstrafik"
+					"color": "#f78075",
+					"text": "Spårväg",
+					"type": "line"
 				},
 				{
-					"color": "#2f9fea",
-					"text": "Spårväg"
+					"color": "#1aa3ff",
+					"text": "Tåg",
+					"type": "line"
 				},
 				{
-					"color": "#57e6c0",
-					"text": "Tåg"
+					"color": "#3effcc",
+					"text": "Tätortstrafik",
+					"type": "line"
 				},
 				{
-					"color": "#ebc34c",
-					"text": "Tätortstrafik"
+					"color": "#ffcd38",
+					"text": "Expressbussar",
+					"type": "line"
 				},
 				{
 					"color": "#ffb800",
-					"text": "Hållplatser"
+					"text": "Hållplatser",
+					"type": "circle"
 				}
 			]
 		},

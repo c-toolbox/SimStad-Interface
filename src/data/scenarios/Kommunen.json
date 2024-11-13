@@ -10,8 +10,7 @@
 			"Default": true,
 			"Filenames": "Kommun/Illustrationsplan",
 			"LegendTitle": "Missing",
-			"LegendColors": [],
-			"LegendSource": "Källa: Norrköpings kommun"
+			"LegendColors": []
 		},
 		{
 			"Id": "plangranser",
@@ -25,7 +24,7 @@
 				{
 					"color": "#ff0000",
 					"text": "Detaljplan för stationsområde och spår",
-					"type": "line"
+					"type": "dashed_line"
 				},
 				{
 					"color": "#000000",
@@ -47,8 +46,7 @@
 					"text": "Befintlig järnväg",
 					"type": "rectangle"
 				}
-			],
-			"LegendSource": "Source: Municipality of Norrköping"
+			]
 		},
 		{
 			"Id": "trafik",
@@ -58,8 +56,7 @@
 			"Default": false,
 			"Filenames": "Kommun/Trafik_stationsfunktioner",
 			"LegendTitle": "Missing",
-			"LegendColors": [],
-			"LegendSource": "Källa: Norrköpings kommun"
+			"LegendColors": []
 		},
 		{
 			"Id": "torg",
@@ -125,8 +122,7 @@
 					"text": "Dagvattenkanal",
 					"type": "line"
 				}
-			],
-			"LegendSource": "Source: Municipality of Norrköping"
+			]
 		}
 	]
 }
