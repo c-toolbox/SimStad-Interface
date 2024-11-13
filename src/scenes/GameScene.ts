@@ -14,7 +14,7 @@ import { DebugPage } from "@/components/pages/DebugPage";
 
 import { SocketManager } from "@/utils/SocketManager";
 import { Response, ScenariosResponse } from "@/utils/protocol";
-import { BlocksManager } from "@/utils/BlocksManager";
+import { blocksManager } from "@/utils/BlocksManager";
 import { layoutManager } from "@/utils/LayoutManager";
 
 export class GameScene extends BaseScene {
@@ -22,7 +22,6 @@ export class GameScene extends BaseScene {
 	private infoWindowOpen: boolean;
 	private blurTween: Phaser.Tweens.Tween;
 	private socket: SocketManager;
-	private blocks: BlocksManager;
 
 	private state: PageState;
 	private pages: Page[];
@@ -62,8 +61,6 @@ export class GameScene extends BaseScene {
 			});
 		});
 
-		this.blocks = new BlocksManager(this);
-
 		/* Layout */
 
 		this.pages = [];
@@ -102,14 +99,6 @@ export class GameScene extends BaseScene {
 
 			page.on("resetLight", () => {
 				this.map.resetLightControls();
-			});
-
-			page.on("blocksWall", (scenarioId: ScenarioId) => {
-				this.blocks.setWallVideo(scenarioId);
-			});
-
-			page.on("blocksLegend", (section: Section) => {
-				this.blocks.setLegend(section);
 			});
 		});
 
@@ -159,14 +148,14 @@ export class GameScene extends BaseScene {
 			if (smooth) {
 				this.map.resetLightControls();
 				this.socket.fadeLight(() => {
-					this.blocks.setDefaultLegend();
+					blocksManager.setDefaultLegend();
 					this.socket.sendReset();
 					this.scenarioPage.activateDataset("Nkpg/Orto20230921");
 					this.map.setLayers("Nkpg/Orto20230921");
 					this.socket.sendDeactivateTraffic();
 				});
 			} else {
-				this.blocks.setDefaultLegend();
+				blocksManager.setDefaultLegend();
 				this.socket.sendReset();
 				this.scenarioPage.activateDataset("Nkpg/Orto20230921");
 				this.map.setLayers("Nkpg/Orto20230921");

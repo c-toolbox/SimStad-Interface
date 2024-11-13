@@ -13,6 +13,7 @@ import { ONLINE } from "@/utils/constants";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
+import { blocksManager } from "@/utils/BlocksManager";
 
 export class ScenarioPage extends Page {
 	private background: RoundRectangle;
@@ -242,7 +243,7 @@ export class ScenarioPage extends Page {
 			});
 		}
 
-		this.emit("blocksWall", scenarioId);
+		blocksManager.setWallVideo(scenarioId);
 
 		if (scenarioId == "rorelse") {
 			this.socket.sendActivateTraffic();
@@ -431,7 +432,7 @@ export class ScenarioPage extends Page {
 
 		if (sendDataset) {
 			this.activateDataset(section.defaultLayer);
-			this.emit("blocksLegend", section);
+			blocksManager.setLegend(section);
 		}
 	}
 

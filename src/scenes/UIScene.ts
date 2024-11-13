@@ -13,6 +13,7 @@ import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
 import { AttractionView } from "@/components/attraction/AttractionView";
 import { getLocalStorage, setLocalStorage } from "@/utils/functions";
+import { blocksManager } from "@/utils/BlocksManager";
 
 export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
@@ -20,7 +21,6 @@ export class UIScene extends BaseScene {
 	private fader: Phaser.GameObjects.Rectangle;
 
 	private infoWindow: InfoWindow;
-	// private storyWindow: StoryWindow;
 	private toolButtons: ToolboxButton[];
 	private currentLanguage: LanguageKey;
 	private audioEnabled: boolean;
@@ -36,7 +36,7 @@ export class UIScene extends BaseScene {
 
 		this.currentLanguage = languageManager.getCurrentLanguage();
 		this.audioEnabled = true;
-		this.sendBlocksAudio();
+		blocksManager.sendBlocksAudio(this.audioEnabled);
 
 		this.allowInput = false;
 		setTimeout(() => {
@@ -263,27 +263,7 @@ export class UIScene extends BaseScene {
 			audioButton.setTint(0xffffff);
 		}
 
-		this.sendBlocksAudio();
-	}
-
-	sendBlocksAudio() {
-		if (!ONLINE) return;
-
-		const task = this.audioEnabled
-			? "VisualCity-Wall_PlayAudio"
-			: "VisualCity-Wall_PauseAudio";
-
-		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
-			method: "POST",
-			body: JSON.stringify({
-				task,
-			}),
-			headers: {
-				"Content-type": "application/json; charset=UTF-8",
-			},
-		})
-			.then((response) => response.json())
-			.then((json) => console.log("Blocks:", json));
+		blocksManager.sendBlocksAudio(this.audioEnabled);
 	}
 
 	wakeUp() {

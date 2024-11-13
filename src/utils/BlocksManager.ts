@@ -2,12 +2,11 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { ScenarioId, scenarioManager, Section } from "./ScenarioManager";
 import { ONLINE } from "./constants";
 
-export class BlocksManager extends Phaser.GameObjects.Container {
-	constructor(scene: BaseScene) {
-		super(scene, 0, 0);
-		this.scene = scene;
-		scene.add.existing(this);
-	}
+const BLOCKS_URL =
+	"https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start";
+
+class BlocksManager {
+	constructor() {}
 
 	setDefaultLegend() {
 		this.sendRequest("SimStad-default");
@@ -22,14 +21,20 @@ export class BlocksManager extends Phaser.GameObjects.Container {
 		this.sendRequest(key);
 	}
 
-	private sendRequest(legend: string) {
+	sendBlocksAudio(enabled: boolean) {
+		const task = enabled
+			? "VisualCity-Wall_PlayAudio"
+			: "VisualCity-Wall_PauseAudio";
+
+		this.sendRequest(task);
+	}
+
+	private sendRequest(task: string) {
 		if (!ONLINE) return;
 
-		fetch("https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start", {
+		fetch(BLOCKS_URL, {
 			method: "POST",
-			body: JSON.stringify({
-				task: legend,
-			}),
+			body: JSON.stringify({ task }),
 			headers: {
 				"Content-type": "application/json; charset=UTF-8",
 			},
@@ -38,3 +43,5 @@ export class BlocksManager extends Phaser.GameObjects.Container {
 			.then((json) => console.log("Blocks:", json));
 	}
 }
+
+export const blocksManager: BlocksManager = new BlocksManager();
