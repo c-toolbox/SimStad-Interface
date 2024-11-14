@@ -113,12 +113,9 @@ export class MapControls extends Phaser.GameObjects.Container {
 		let dummy = scene.add.text(0, 0, "");
 		dummy.setVisible(false);
 		languageManager.bind(dummy, "", () => {
-			this.setDate(this.dateDial.value);
-			this.setHour(this.hourDial.value);
+			this.setDate(this.dateDial.value, false);
+			this.setHour(this.hourDial.value, false);
 		});
-
-		this.dateDial.value = 0.497;
-		this.hourDial.value = 0.501;
 	}
 
 	update(time: number, delta: number) {
@@ -127,7 +124,7 @@ export class MapControls extends Phaser.GameObjects.Container {
 		this.hourDial.update(time, delta);
 	}
 
-	setDate(value: number) {
+	setDate(value: number, setLight = true) {
 		const date = this.numberToDate(value);
 		this.month = date.getMonth() + 1;
 		this.day = date.getDate();
@@ -135,10 +132,10 @@ export class MapControls extends Phaser.GameObjects.Container {
 		this.dateDial.setLabel(languageManager.getDate(date));
 		this.hourDial.setDate(this.month, this.day);
 
-		this.setLight(this.year, this.month, this.day, this.hour);
+		if (setLight) this.setLight(this.year, this.month, this.day, this.hour);
 	}
 
-	setHour(value: number) {
+	setHour(value: number, setLight = true) {
 		this.hour = (23 + 59 / 60) * value;
 
 		let hours = Math.floor(this.hour);
@@ -146,7 +143,7 @@ export class MapControls extends Phaser.GameObjects.Container {
 		let date = new Date(`2023-01-01 ${hours}:${minutes}`);
 		this.hourDial.setLabel(languageManager.getHour(date));
 
-		this.setLight(this.year, this.month, this.day, this.hour);
+		if (setLight) this.setLight(this.year, this.month, this.day, this.hour);
 	}
 
 	setLight(year: number, month: number, day: number, hour: number) {
@@ -156,8 +153,8 @@ export class MapControls extends Phaser.GameObjects.Container {
 	}
 
 	resetLight() {
-		this.dateDial.value = 0.497;
-		this.hourDial.value = 0.501;
+		this.dateDial.resetValue();
+		this.hourDial.resetValue();
 	}
 
 	numberToDate(value: number) {

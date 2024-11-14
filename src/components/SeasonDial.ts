@@ -7,6 +7,7 @@ export class SeasonDial extends CircularSlider {
 	constructor(scene: BaseScene, x: number, y: number, diameter: number) {
 		super(scene, x, y, diameter);
 
+		this.resetValue();
 		this.setTicks(48, 12, 4, (2 / 6) * Math.PI);
 		this.setSymbols(
 			["season_fall", "season_winter", "season_spring", "season_summer"],
@@ -15,6 +16,10 @@ export class SeasonDial extends CircularSlider {
 		);
 
 		this.drawSeasons();
+	}
+
+	resetValue() {
+		this._value = 0.497;
 	}
 
 	drawSeasons() {
@@ -56,12 +61,7 @@ export class SeasonDial extends CircularSlider {
 			let color1 = getColor(i / steps);
 			let color2 = getColor((i + 1) / steps);
 
-			this.drawArcSegment(
-				angle1 + Math.PI,
-				angle2 + Math.PI,
-				color1,
-				color2
-			);
+			this.drawArcSegment(angle1 + Math.PI, angle2 + Math.PI, color1, color2);
 		}
 	}
 }

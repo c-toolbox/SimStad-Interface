@@ -13,8 +13,13 @@ export class SunDial extends CircularSlider {
 		this.scene = scene;
 		this.summerTime = false;
 
+		this.resetValue();
 		this.setTicks(24, 6, 3, -0.5 * Math.PI);
 		this.setSymbols(["day_sun", "day_moon"], Math.PI, -0.5 * Math.PI);
+	}
+
+	resetValue() {
+		this._value = 0.501;
 	}
 
 	update(time: number, delta: number): void {
