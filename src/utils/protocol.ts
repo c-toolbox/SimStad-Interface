@@ -31,7 +31,7 @@ export enum Response {
 	ActivateTraffic = "ActivateTrafficResponse",
 	DeactivateTraffic = "DeactivateTrafficResponse",
 
-	Cache = "CacheResponse",
+	CacheProgress = "CacheResponse",
 	CacheComplete = "ReCacheDatabaseResponse",
 }
 
@@ -204,8 +204,8 @@ export interface CacheRequest {
 	request: "ReCacheDatabase";
 }
 
-export interface CacheResponse {
-	type: Response.Cache;
+export interface CacheProgressResponse {
+	type: Response.CacheProgress;
 }
 
 export interface CacheCompleteResponse {

@@ -7,24 +7,22 @@ import { PageState } from "./pages/Page";
 export class Navigation extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
-	private title: Phaser.GameObjects.Text;
 	private scenarioButton: CircleButton;
 	private layerButton: CircleButton;
 	private debugButton: CircleButton;
+	private loggingButton: CircleButton;
 
 	constructor(scene: BaseScene) {
 		super(scene, 0, 0);
 		this.scene = scene;
 		this.scene.add.existing(this);
 
-		let fs = 16; // Font size
 		let s = layout.navInner.width; // Button size
 		let x = layout.nav.centerX;
 		let y = layout.nav.bottom;
-		let g = 32;
 
 		y -= 0.5 * s;
-		let c = Color.Green800;
+		let c = Color.Green700;
 		this.scenarioButton = new CircleButton(scene, x, y, s, "book", c);
 		this.add(this.scenarioButton);
 
@@ -34,13 +32,19 @@ export class Navigation extends Phaser.GameObjects.Container {
 		this.add(this.layerButton);
 
 		y -= 1.75 * s;
-		c = Color.Slate700;
+		c = Color.Pink700;
 		this.debugButton = new CircleButton(scene, x, y, s, "gear-code", c);
 		this.add(this.debugButton);
+
+		y -= 1.75 * s;
+		c = Color.Orange800;
+		this.loggingButton = new CircleButton(scene, x, y, s, "envelope", c);
+		this.add(this.loggingButton);
 
 		this.scenarioButton.on("click", () => this.emit("state", PageState.Home));
 		this.layerButton.on("click", () => this.emit("state", PageState.Layer));
 		this.debugButton.on("click", () => this.emit("state", PageState.Debug));
+		this.loggingButton.on("click", () => this.emit("state", PageState.Logging));
 
 		this.setGuideMode(false);
 	}
@@ -49,12 +53,14 @@ export class Navigation extends Phaser.GameObjects.Container {
 		this.scenarioButton.update(time, delta);
 		this.layerButton.update(time, delta);
 		this.debugButton.update(time, delta);
+		this.loggingButton.update(time, delta);
 	}
 
 	setState(state: PageState): this {
 		this.scenarioButton.setHighlight(state == PageState.Home);
 		this.layerButton.setHighlight(state == PageState.Layer);
 		this.debugButton.setHighlight(state == PageState.Debug);
+		this.loggingButton.setHighlight(state == PageState.Logging);
 		return this;
 	}
 
@@ -62,5 +68,6 @@ export class Navigation extends Phaser.GameObjects.Container {
 		this.scenarioButton.setVisible(value);
 		this.layerButton.setVisible(value);
 		this.debugButton.setVisible(value);
+		this.loggingButton.setVisible(value);
 	}
 }

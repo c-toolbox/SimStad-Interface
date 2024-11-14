@@ -9,6 +9,7 @@ export enum PageState {
 	Layer = "Layer",
 	Light = "Light",
 	Debug = "Debug",
+	Logging = "Logging",
 }
 
 export class Page extends Phaser.GameObjects.Container {

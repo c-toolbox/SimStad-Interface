@@ -190,7 +190,7 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		this.updateSize();
 	}
 
-	updateSize() {
+	updateSize(resetScroll = true) {
 		// Calculate new height
 		this.contentHeight = this.height;
 
@@ -204,7 +204,7 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 			}
 		}
 
-		this.reset();
+		if (resetScroll) this.reset();
 	}
 
 	getScroll() {
@@ -222,6 +222,10 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		this.maskGraphics.clear();
 		this.maskGraphics.fillRect(0, 0, this.width, this.height);
 		this.updateSize();
+	}
+
+	setScrollY(y: number) {
+		this.targetY = y;
 	}
 
 	get centerX(): number {

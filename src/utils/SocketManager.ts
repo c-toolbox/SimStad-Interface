@@ -17,6 +17,18 @@ export enum ConnectionStatus {
 	Connected = "Connected",
 }
 
+export enum LogType {
+	Status = "Status",
+	OmniSend = "OmniSend",
+	OmniReceive = "OmniReceive",
+	UnrealSend = "UnrealSend",
+	UnrealReceive = "UnrealReceive",
+	SocketUnhandled = "SocketUnhandled",
+	BlocksSend = "BlocksSend",
+	BlocksReceive = "BlocksReceive",
+	Error = "Error",
+}
+
 export class SocketManager extends Phaser.GameObjects.Container {
 	private socket: WebSocket;
 	private handlers: { [type in P.Response]: (data: any) => void };
@@ -24,10 +36,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private unrealConnectionStatus: ConnectionStatus;
 	private pingTimeout: NodeJS.Timeout;
 	private pingAttempts: number;
+
 	private scenariosLoaded: boolean;
 	private localTrafficEnabled: boolean;
 	private serverTrafficEnabled: boolean;
-	private loggingEnabled: boolean;
 
 	private fadeTween: Phaser.Tweens.Tween;
 
@@ -57,17 +69,17 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.ResetResponse]: this.onResetRepsonse,
 			[P.Response.ActivateTraffic]: this.onActivateTraffic,
 			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
-			[P.Response.Cache]: this.onCache,
+			[P.Response.CacheProgress]: this.onCache,
 			[P.Response.CacheComplete]: this.onCacheComplete,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
 		this.unrealConnectionStatus = ConnectionStatus.Disconnected;
 		this.pingAttempts = 0;
+
 		this.scenariosLoaded = false;
 		this.localTrafficEnabled = false;
 		this.serverTrafficEnabled = false;
-		this.loggingEnabled = false;
 
 		this.debugTexts = [];
 
@@ -81,17 +93,17 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.socket = new WebSocket(URL);
 
 		this.socket.onopen = () => {
-			this.addDebug("WebSocket opened", ColorStr.White);
+			this.addLog("WebSocket: Open", LogType.Status);
 			this.setOmniConnectionStatus(ConnectionStatus.Connecting);
 		};
 
 		this.socket.onclose = () => {
-			this.addDebug("WebSocket closed", ColorStr.White);
+			this.addLog("WebSocket: Closed", LogType.Status);
 			this.setOmniConnectionStatus(ConnectionStatus.Disconnected);
 		};
 
 		this.socket.onerror = (event: Event) => {
-			this.addDebug("WebSocket error: " + event, ColorStr.Red600);
+			this.addLog("WebSocket: " + event, LogType.Error);
 		};
 
 		this.socket.onmessage = (event: MessageEvent) => {
@@ -99,15 +111,18 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		};
 	}
 
-	send(data: object) {
+	send(data: object, isOmni = false) {
 		if (!ONLINE) return;
 
 		if (this.isConnectedToSocket) {
 			this.socket.send(JSON.stringify(data));
-			this.addDebug(data, ColorStr.Blue600);
+
+			if (isOmni) this.addLog(data, LogType.OmniSend);
+			else this.addLog(data, LogType.UnrealSend);
 		} else {
 			console.warn("Cannot send. Socket is closed.");
-			this.addDebug(data, "dead");
+			this.addLog(data, LogType.Error);
+			this.announceOffline();
 		}
 	}
 
@@ -115,20 +130,23 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		if (data.type) {
 			const handler = this.handlers[data.type as P.Response];
 			if (handler) {
-				this.addDebug(data, ColorStr.Orange300);
+				if (data.type.startsWith("server_"))
+					this.addLog(data, LogType.OmniReceive);
+				else this.addLog(data, LogType.UnrealReceive);
+
 				handler.call(this, data);
 				this.emit(data.type, data);
 				return;
 			}
 		}
 
-		this.addDebug(data, ColorStr.Red600);
+		this.addLog(data, LogType.SocketUnhandled);
 	}
 
 	/* Response handlers */
 
 	onOmniConnect(data: P.OmniConnect) {
-		this.send({ token: CLIENT_TOKEN });
+		this.send({ token: CLIENT_TOKEN }, true);
 	}
 
 	onOmniDisconnect(data: P.OmniDisconnect) {
@@ -153,7 +171,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	onOmniError(data: P.OmniError) {
-		this.addDebug(data.message, ColorStr.Red600);
+		this.addLog(data.message, LogType.Error);
 	}
 
 	onPing(data: P.PingResponse) {
@@ -167,7 +185,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	onResetRepsonse(data: P.ResetResponse) {
-		console.log("Reset!");
+		this.addLog("Unhandled reset response", LogType.Error);
 	}
 
 	onErrorRepsonse(data: P.ErrorResponse) {
@@ -182,6 +200,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	onActivateTraffic(data: P.ActivateTrafficResponse) {
 		this.serverTrafficEnabled = true;
+		this.emit("serverTrafficEnabled", true);
 		if (!this.localTrafficEnabled) {
 			this.sendDeactivateTraffic();
 		}
@@ -190,24 +209,35 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	onDeactivateTraffic(data: P.DeactivateTrafficResponse) {
 		this.serverTrafficEnabled = false;
+		this.emit("serverTrafficEnabled", false);
 		if (this.localTrafficEnabled) {
 			this.sendActivateTraffic();
 		}
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onCache(data: P.CacheResponse) {
-		console.log("Caching progress", data);
+	onCache(data: P.CacheProgressResponse) {
+		this.emit("onCacheProgress");
 	}
 
 	onCacheComplete(data: P.CacheCompleteResponse) {
-		console.log("Caching complete", data);
+		this.emit("onCacheComplete");
 	}
 
 	/* Requests */
 
 	sendRequest(data: P.ValidRequests) {
 		this.send(data);
+	}
+
+	sendReset() {
+		let data: P.ResetRequest = {
+			type: P.Request.Reset,
+			misc: "",
+		};
+		this.sendRequest(data);
+
+		this.emit("movieEnabled", false);
 	}
 
 	sendPing() {
@@ -228,7 +258,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	sendActivateDataset(datasets: string) {
-		console.log(datasets);
 		let data: P.ActivateDatasetRequest = {
 			type: P.Request.ActivateDataset,
 			datasets,
@@ -297,12 +326,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendReset() {
-		let data: P.ResetRequest = {
-			type: P.Request.Reset,
-			misc: "",
-		};
-		this.sendRequest(data);
+	sendMovie() {
+		this.send({
+			type: "ActivateDatasetRequest",
+			datasets: "Idle/Idle_Movie",
+		});
+
+		this.emit("movieEnabled", true);
 	}
 
 	sendReCacheDatabase() {
@@ -371,19 +401,27 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	setOmniConnectionStatus(status: ConnectionStatus) {
 		if (this.omniConnectionStatus != status) {
 			this.omniConnectionStatus = status;
-			// this.addDebug(`Omni: ${status}`, ColorStr.Gray500);
+			this.addLog(`Omni: ${status}`, LogType.Status);
 			this.updateStatusIcons();
+
+			if (this.omniConnectionStatus == ConnectionStatus.Disconnected) {
+				this.announceOffline();
+			}
 		}
 	}
 
 	setUnrealConnectionStatus(status: ConnectionStatus) {
 		if (this.unrealConnectionStatus != status) {
 			this.unrealConnectionStatus = status;
-			// this.addDebug(`Unreal: ${status}`, ColorStr.Gray500);
+			this.addLog(`Unreal: ${status}`, LogType.Status);
 			this.updateStatusIcons();
 
 			if (this.unrealConnectionStatus == ConnectionStatus.Connected) {
 				this.emit("reconnect");
+			}
+
+			if (this.unrealConnectionStatus == ConnectionStatus.Disconnected) {
+				this.announceOffline();
 			}
 		}
 	}
@@ -448,54 +486,29 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		);
 	}
 
+	announceOffline() {
+		this.emit("serverTrafficEnabled", false);
+	}
+
 	get isConnectedToSocket() {
 		return this.socket && this.socket.readyState == WebSocket.OPEN;
 	}
 
-	/* Debug messages */
-
-	setLoggingEnabled(enabled: boolean) {
-		this.loggingEnabled = enabled;
+	get isConnectedToUnreal() {
+		return (
+			ONLINE &&
+			this.isConnectedToSocket &&
+			this.omniConnectionStatus == ConnectionStatus.Connected &&
+			this.unrealConnectionStatus == ConnectionStatus.Connected
+		);
 	}
 
-	addDebug(text: any, color: string) {
-		console.log(text);
-		if (!this.loggingEnabled) return;
+	/* Debug messages */
+
+	addLog(text: any, type: LogType) {
+		if (typeof text === "object" && text.token) text.token = "TOKEN";
 		if (typeof text !== "string") text = JSON.stringify(text);
-
-		if (text.length > 100) {
-			text = text.substring(0, 100) + "...";
-		}
-
-		let temp = this.scene.addText({
-			size: 28 / 2,
-			color,
-			text,
-		});
-		temp.setOrigin(1);
-		temp.setStroke("black", 4);
-		temp.x = this.scene.W - 10;
-		temp.y = 50 / 2;
-		this.add(temp);
-
-		this.debugTexts.forEach((text) => {
-			text.y += (30 * 1.4) / 2;
-		});
-		this.debugTexts.push(temp);
-
-		this.scene.tweens.addCounter({
-			from: 0,
-			to: 1,
-			ease: "Linear",
-			duration: 5000,
-			onUpdate: (tween, targets, key, current, previous, param) => {
-				let alpha = Math.min(8 - 8 * current, 2 - temp.y / 100);
-				temp.setAlpha(alpha);
-			},
-			onComplete: () => {
-				temp.destroy();
-				this.debugTexts.splice(this.debugTexts.indexOf(temp), 1);
-			},
-		});
+		this.emit("log", text, type);
+		console.log(text);
 	}
 }

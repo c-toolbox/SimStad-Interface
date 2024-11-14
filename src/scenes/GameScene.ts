@@ -11,6 +11,7 @@ import { ScenarioPage } from "@/components/pages/ScenarioPage";
 import { ScenariosPage } from "@/components/pages/ScenariosPage";
 import { LayerPage } from "@/components/pages/LayerPage";
 import { DebugPage } from "@/components/pages/DebugPage";
+import { LoggingPage } from "@/components/pages/LoggingPage";
 
 import { SocketManager } from "@/utils/SocketManager";
 import { Response, ScenariosResponse } from "@/utils/protocol";
@@ -30,6 +31,7 @@ export class GameScene extends BaseScene {
 	private scenariosPage: ScenariosPage;
 	private layerPage: LayerPage;
 	private debugPage: DebugPage;
+	private loggingPage: LoggingPage;
 	private navigation: Navigation;
 	private map: Map;
 
@@ -73,11 +75,13 @@ export class GameScene extends BaseScene {
 		);
 		this.layerPage = new LayerPage(this, PageState.Layer, this.socket);
 		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
+		this.loggingPage = new LoggingPage(this, PageState.Logging, this.socket);
 		this.pages.push(this.homePage);
 		this.pages.push(this.scenarioPage);
 		this.pages.push(this.scenariosPage);
 		this.pages.push(this.layerPage);
 		this.pages.push(this.debugPage);
+		this.pages.push(this.loggingPage);
 
 		this.pages.forEach((page) => {
 			page.on("state", (state: PageState) => {
@@ -111,7 +115,8 @@ export class GameScene extends BaseScene {
 		this.map.setDepth(1);
 		this.add.existing(this.map);
 
-		this.restart();
+		// this.restart();
+		this.setState(PageState.Logging);
 		// layoutManager.drawLayout(this);
 	}
 
@@ -177,10 +182,7 @@ export class GameScene extends BaseScene {
 				// this.foodWeb.toggleAttraction(state);
 
 				if (state) {
-					this.socket.send({
-						type: "ActivateDatasetRequest",
-						datasets: "Idle/Idle_Movie",
-					});
+					this.socket.sendMovie();
 				} else {
 					this.map.resetLightControls();
 					this.socket.fadeLight(() => {

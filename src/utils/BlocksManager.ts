@@ -1,11 +1,13 @@
-import { BaseScene } from "@/scenes/BaseScene";
 import { ScenarioId, scenarioManager, Section } from "./ScenarioManager";
+import { LogType } from "./SocketManager";
 import { ONLINE } from "./constants";
 
 const BLOCKS_URL =
 	"https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start";
 
 class BlocksManager {
+	private callbacks: ((message: string, type: LogType) => void)[] = [];
+
 	constructor() {}
 
 	setDefaultLegend() {
@@ -39,8 +41,19 @@ class BlocksManager {
 				"Content-type": "application/json; charset=UTF-8",
 			},
 		})
-			.then((response) => response.json())
-			.then((json) => console.log("Blocks:", json));
+			.then((response) => response.text())
+			.then((text) => this.announce(text, LogType.BlocksReceive));
+
+		this.announce(task, LogType.BlocksSend);
+	}
+
+	subscribe(callback: (message: string, type: LogType) => void) {
+		this.callbacks.push(callback);
+	}
+
+	announce(message: string, type: LogType) {
+		console.log("Blocks:", message);
+		this.callbacks.forEach((callback) => callback(message, type));
 	}
 }
 

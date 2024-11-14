@@ -20,6 +20,7 @@ let images: Image[] = [
 	image("icons/audio-mute.png", "audio-mute"),
 	image("icons/book.png", "book"),
 	image("icons/city.png", "city"),
+	image("icons/envelope.png", "envelope"),
 	image("icons/flag-en.png", "flag-en"),
 	image("icons/flag-se.png", "flag-se"),
 	image("icons/gear-code.png", "gear-code"),
