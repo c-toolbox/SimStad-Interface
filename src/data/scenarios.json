@@ -1,6 +1,16 @@
 {
 	"scenarios": [
 		{
+			"id": "kommunen",
+			"blocksVideo": "VisualCity-Wall_Eastlink",
+			"thumbnail": "station"
+		},
+		{
+			"id": "trafikverket",
+			"blocksVideo": "VisualCity-Wall_Eastlink",
+			"thumbnail": "cranes"
+		},
+		{
 			"id": "rorelse",
 			"blocksVideo": "VisualCity-Wall_Tram",
 			"thumbnail": "tram"
@@ -29,16 +39,6 @@
 			"id": "ai",
 			"blocksVideo": "VisualCity-Wall_360",
 			"thumbnail": "ai"
-		},
-		{
-			"id": "kommunen",
-			"blocksVideo": "VisualCity-Wall_Eastlink",
-			"thumbnail": "station"
-		},
-		{
-			"id": "trafikverket",
-			"blocksVideo": "VisualCity-Wall_Eastlink",
-			"thumbnail": "cranes"
 		}
 	]
 }
