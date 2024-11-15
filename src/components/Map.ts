@@ -88,6 +88,7 @@ export class Map extends Phaser.GameObjects.Container {
 			layout.map.centerX,
 			layout.map.bottom - 60
 		);
+		this.mapHint.setVisible(false);
 		this.add(this.mapHint);
 
 		this.width = this.map.displayHeight;
