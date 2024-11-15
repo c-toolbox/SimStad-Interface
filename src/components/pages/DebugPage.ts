@@ -13,8 +13,6 @@ export class DebugPage extends Page {
 
 	private trafficSlider: CheckSlider;
 	private reCacheButton: TextButton;
-	private riverSlider: CheckSlider;
-	private movieSlider: CheckSlider;
 	private layoutSlider: CheckSlider;
 	private loggingSlider: CheckSlider;
 
@@ -236,8 +234,6 @@ export class DebugPage extends Page {
 
 	reset() {
 		this.trafficSlider.value = 0;
-		this.riverSlider.value = 0;
-		this.movieSlider.value = 0;
 		this.layoutSlider.value = 0;
 		this.loggingSlider.value = 0;
 
