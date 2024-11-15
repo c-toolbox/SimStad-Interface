@@ -5,6 +5,7 @@ import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
+import { layerNames } from "@/assets/assets";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
@@ -17,6 +18,7 @@ export class DebugPage extends Page {
 	private loggingSlider: CheckSlider;
 
 	private recacheLoader: Phaser.GameObjects.Image;
+	private recacheCount: number;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -54,20 +56,26 @@ export class DebugPage extends Page {
 		this.reCacheButton = this.setButtonArea(
 			0,
 			"Recache database",
-			"Request Unreal to reload all raster images.\nThis action takes about 60 seconds.",
+			"Request Unreal to reload all raster images.\nThis action takes about 90 seconds.",
 			() => {
-				this.socket.sendReCacheDatabase();
+				if (this.socket.isConnectedToUnreal) {
+					this.recacheCount = 0;
+					this.socket.queueReCacheDatabase();
+					this.recacheLoader.setVisible(true);
+				}
 			}
 		);
-		this.reCacheButton.on("click", () => {
-			if (this.socket.isConnectedToUnreal) {
-				this.socket.sendReCacheDatabase();
-				this.recacheLoader.setVisible(true);
-			}
+		this.socket.on("onCacheProgress", () => {
+			this.recacheCount += 1;
+			this.reCacheButton.setText(
+				`Cached: ${this.recacheCount} / ${layerNames.length}`
+			);
 		});
-		this.socket.on("onCacheProgress", () => {});
 		this.socket.on("onCacheComplete", () => {
 			this.recacheLoader.setVisible(false);
+			this.reCacheButton.setText(
+				"Recache database"
+			);
 		});
 		this.recacheLoader = scene.add.image(
 			this.reCacheButton.x + this.reCacheButton.width / 2 + 60,
@@ -84,18 +92,18 @@ export class DebugPage extends Page {
 		this.trafficSlider = this.setCheckboxArea(
 			1,
 			"Live traffic",
-			"Enable live traffic data, streaming the location of busses and trams"
-		);
-		this.trafficSlider.on("click", (active: boolean) => {
-			if (this.socket.isConnectedToUnreal) {
-				this.trafficSlider.setIsLoading(true);
-				if (active) {
-					this.socket.sendActivateTraffic();
-				} else {
-					this.socket.sendDeactivateTraffic();
+			"Enable live traffic data, streaming the location of busses and trams",
+			(active: boolean) => {
+				if (this.socket.isConnectedToUnreal) {
+					this.trafficSlider.setIsLoading(true);
+					if (active) {
+						this.socket.sendActivateTraffic();
+					} else {
+						this.socket.sendDeactivateTraffic();
+					}
 				}
 			}
-		});
+		);
 		this.socket.on("serverTrafficEnabled", (enabled: boolean) => {
 			this.trafficSlider.setIsLoading(false);
 			this.trafficSlider.value = enabled ? 1 : 0;
@@ -106,26 +114,24 @@ export class DebugPage extends Page {
 		this.loggingSlider = this.setCheckboxArea(
 			2,
 			"View logs",
-			"Show logs of all websocket messages being sent and received"
+			"Show logs of all websocket messages being sent and received",
+			(active: boolean) => {
+				this.emit("logging", active);
+			}
 		);
-		this.loggingSlider.on("click", (active: boolean) => {
-			this.emit("logging", active);
-		});
 
 		/* UI Layout */
 
 		this.layoutSlider = this.setCheckboxArea(
 			3,
 			"Draw layout",
-			"Draw the layout of the scene"
+			"Draw the layout of the scene",
+			(active: boolean) => {
+				layout.drawLayout(scene);
+			}
 		);
-		this.layoutSlider.on("click", (active: boolean) => {
-			layout.drawLayout(scene);
-		});
 
 		/* Miscellaneous buttons */
-
-		// const rect = this.areas[4];
 
 		this.setButtonArea(4, "Reset", "", () => {
 			this.socket.sendReset();
@@ -238,7 +244,6 @@ export class DebugPage extends Page {
 		this.loggingSlider.value = 0;
 
 		this.emit("logging", false);
-		this.socket.sendDeactivateTraffic();
 		if (layout.debugActive) {
 			layout.drawLayout(this.scene);
 		}
@@ -311,12 +316,14 @@ export class DebugPage extends Page {
 	setCheckboxArea(
 		rectIndex: number,
 		titleText: string,
-		descText: string
+		descText: string,
+		callback: (active: boolean) => void
 	): CheckSlider {
 		const rect = this.areas[rectIndex];
 		const centerY = rect.centerY - 20;
 
 		const slider = new CheckSlider(this.scene, rect.left + 46, centerY, 50, 30);
+		slider.on("click", callback);
 		this.sliders.push(slider);
 		this.add(slider);
 

@@ -41,6 +41,9 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private localTrafficEnabled: boolean;
 	private serverTrafficEnabled: boolean;
 
+	private queuedRecacheRequest: boolean;
+	private isRecaching: boolean;
+
 	private fadeTween: Phaser.Tweens.Tween;
 
 	public scene: BaseScene;
@@ -80,6 +83,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.scenariosLoaded = false;
 		this.localTrafficEnabled = false;
 		this.serverTrafficEnabled = false;
+		this.queuedRecacheRequest = false;
+		this.isRecaching = false;
 
 		this.debugTexts = [];
 
@@ -185,7 +190,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	onResetRepsonse(data: P.ResetResponse) {
-		this.addLog("Unhandled reset response", LogType.Error);
+		// Unreal has finished resetting
+		if (this.queuedRecacheRequest && !this.isRecaching) {
+			this.sendReCacheDatabase();
+		}
 	}
 
 	onErrorRepsonse(data: P.ErrorResponse) {
@@ -217,10 +225,16 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	onCacheProgress(data: P.CacheProgressResponse) {
+		clearTimeout(this.pingTimeout);
+		this.pingAttempts = 0;
+		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+
+		this.isRecaching = true;
 		this.emit("onCacheProgress");
 	}
 
 	onCacheComplete(data: P.CacheCompleteResponse) {
+		this.isRecaching = false;
 		this.emit("onCacheComplete");
 	}
 
@@ -335,8 +349,15 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.emit("movieEnabled", true);
 	}
 
-	sendReCacheDatabase() {
+	queueReCacheDatabase() {
+		this.sendReset();
+		this.queuedRecacheRequest = true;
+		this.emit("onCacheProgress");
+	}
+
+	private sendReCacheDatabase() {
 		this.scenariosLoaded = false;
+		this.isRecaching = true;
 
 		let data: P.CacheRequest = {
 			type: P.Request.Cache,

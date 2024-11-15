@@ -19,6 +19,7 @@ export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
 	private idleTimer: number;
 	private fader: Phaser.GameObjects.Rectangle;
+	private lockdown: Phaser.GameObjects.Rectangle;
 
 	private infoWindow: InfoWindow;
 	private toolButtons: ToolboxButton[];
@@ -149,6 +150,26 @@ export class UIScene extends BaseScene {
 			},
 			this
 		);
+
+		/* Lockdown */
+
+		this.lockdown = this.add.rectangle(
+			this.CX,
+			this.CY,
+			this.W,
+			this.H,
+			0,
+			0.25
+		);
+		this.lockdown.setVisible(false);
+		this.lockdown.setInteractive().on("pointerdown", () => {});
+
+		this.scene.get("GameScene").events.on("onCacheProgress", () => {
+			this.lockdown.setVisible(true);
+		});
+		this.scene.get("GameScene").events.on("onCacheComplete", () => {
+			this.lockdown.setVisible(false);
+		});
 	}
 
 	update(time: number, delta: number): void {

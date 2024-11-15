@@ -61,6 +61,12 @@ export class GameScene extends BaseScene {
 				datasets: "RiverFlow",
 			});
 		});
+		this.socket.on("onCacheProgress", () => {
+			this.events.emit("onCacheProgress");
+		});
+		this.socket.on("onCacheComplete", () => {
+			this.events.emit("onCacheComplete");
+		});
 
 		/* Layout */
 
