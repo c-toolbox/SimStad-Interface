@@ -1,17 +1,23 @@
 import { ScenarioId, scenarioManager, Section } from "./ScenarioManager";
 import { LogType } from "./SocketManager";
 import { ONLINE } from "./constants";
+import scenarioConfig from "@/data/scenarios.json";
 
 const BLOCKS_URL =
 	"https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start";
 
 class BlocksManager {
 	private callbacks: ((message: string, type: LogType) => void)[] = [];
+	private isShowingLoopingVideo: boolean = false;
 
 	constructor() {}
 
 	setDefaultLegend() {
 		this.sendRequest("SimStad-default");
+
+		if (this.isShowingLoopingVideo) {
+			this.sendRequest(scenarioConfig.defaultBlocksVideo);
+		}
 	}
 
 	setLegend(section: Section) {
@@ -21,6 +27,8 @@ class BlocksManager {
 	setWallVideo(scenarioId: ScenarioId) {
 		const key = scenarioManager.getScenario(scenarioId).blocksVideo;
 		this.sendRequest(key);
+
+		this.isShowingLoopingVideo = key === "VisualCity-Wall_Eastlink";
 	}
 
 	sendBlocksAudio(enabled: boolean) {
