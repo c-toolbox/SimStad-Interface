@@ -5,14 +5,18 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
 import { Scenario, scenarioManager } from "@/utils/ScenarioManager";
 import { ScenarioButton } from "../ScenarioButton";
+import { languageManager } from "@/utils/LanguageManager";
 
 export class HomePage extends Page {
-	scenarioButtons: ScenarioButton[];
+	private title: Phaser.GameObjects.Text;
+	private areas: Phaser.Geom.Rectangle[];
+	private scenarioButtons: ScenarioButton[];
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
 		this.fadeDir *= -1;
+		this.areas = this.getAreas();
 
 		/* Background */
 
@@ -21,45 +25,51 @@ export class HomePage extends Page {
 
 		/* Text */
 
-		let title = scene.addText({
+		this.title = scene.addText({
 			x: layout.panelInner.left,
-			y: layout.panelInner.top,
+			y: layout.panelInner.top - 10,
 			size: 64,
 			color: "white",
 		});
-		this.add(title);
+		this.title.setShadow(0, 2, "#00000099", 8);
+		languageManager.bind(this.title, "home_title");
+		this.add(this.title);
 
 		let bread = scene.addText({
 			x: layout.panelInner.left,
-			y: layout.panelInner.top + 1.5 * title.displayHeight,
+			y: layout.panelInner.top + 66,
 			size: 28,
 			color: "white",
 		});
-		this.add(bread);
+		bread.setShadow(0, 2, "#00000099", 8);
 		bread.setWordWrapWidth(layout.panelInner.width);
+		languageManager.bind(bread, "home_bread");
+		this.add(bread);
+
+		let subtitle = scene.addText({
+			x: layout.panelInner.left,
+			y: this.areas[2].top - 64,
+			size: 28,
+			color: "white",
+		});
+		languageManager.bind(subtitle, "home_subtitle");
+		subtitle.setShadow(0, 2, "#00000099", 8);
+		subtitle.setWordWrapWidth(layout.panelInner.width);
+		this.add(subtitle);
 
 		/* Scenario buttons */
 
-		let M = 2;
-		let N = 4;
-		let bg = 48;
-		let bw = (layout.panelInner.width - bg * (M - 1)) / M;
-		let bh = (layout.panelInner.height - bg * (N - 1)) / N;
-		let left = layout.panelInner.centerX - (bw + bg) * ((M - 1) / 2);
-		let top = layout.panelInner.centerY - (bh + bg) * ((N - 1) / 2);
-
 		this.scenarioButtons = [];
 		scenarioManager.getScenarios().forEach((scenario: Scenario, i: number) => {
-			let x = left + (bw + bg) * (i % 2);
-			let y = top + (bh + bg) * Math.floor(i / 2);
+			let area = this.areas[i];
 			let text = scenario.id + "_title";
 
 			let button = new ScenarioButton(
 				this.scene,
-				x,
-				y,
-				bw,
-				bh,
+				area.centerX,
+				area.centerY,
+				area.width,
+				area.height,
 				text,
 				scenario.thumbnail
 			);
@@ -75,28 +85,65 @@ export class HomePage extends Page {
 			this.add(button);
 			this.scenarioButtons.push(button);
 		});
-
-		// let nineslice = scene.add.nineslice(
-		// 	layout.panel.centerX,
-		// 	layout.panel.centerY,
-		// 	"nineslice",
-		// 	0,
-		// 	256,
-		// 	256,
-		// 	256,
-		// 	256,
-		// 	256,
-		// 	256
-		// );
-		// nineslice.setScale(8 / 256);
-		// nineslice.setTint(Color.Slate700);
-		// nineslice.setSize((layout.panel.width - 16) / (8 / 256), (layout.panel.height - 16) / (8 / 256));
-		// this.add(nineslice);
 	}
 
 	update(time: number, delta: number) {
 		super.update(time, delta);
 
 		this.scenarioButtons.forEach((button) => button.update(time, delta));
+	}
+
+	getAreas() {
+		const areas: Phaser.Geom.Rectangle[] = [];
+		const panel = layout.panelInner;
+
+		const upperHeight = 0.3 * panel.height;
+		const lowerHeight = 0.4 * panel.height;
+		const gap = 48;
+
+		const upperRects = this.getGrid(
+			2,
+			1,
+			panel.left,
+			panel.bottom - lowerHeight - upperHeight - 2 * gap,
+			panel.width,
+			panel.height / 4,
+			gap
+		);
+		areas.push(...upperRects);
+
+		const lowerRects = this.getGrid(
+			3,
+			2,
+			panel.left,
+			panel.bottom - lowerHeight,
+			panel.width,
+			lowerHeight,
+			gap
+		);
+		areas.push(...lowerRects);
+
+		return areas;
+	}
+
+	getGrid(
+		M: number,
+		N: number,
+		left: number,
+		top: number,
+		width: number,
+		height: number,
+		gap: number
+	): Phaser.Geom.Rectangle[] {
+		let rectWidth = (width - gap * (M - 1)) / M;
+		let rectHeight = (height - gap * (N - 1)) / N;
+
+		let rects: Phaser.Geom.Rectangle[] = [];
+		for (let i = 0; i < M * N; i++) {
+			let x = left + (rectWidth + gap) * (i % M);
+			let y = top + (rectHeight + gap) * Math.floor(i / M);
+			rects.push(new Phaser.Geom.Rectangle(x, y, rectWidth, rectHeight));
+		}
+		return rects;
 	}
 }

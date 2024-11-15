@@ -7,8 +7,7 @@ import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
 
 export class ScenarioButton extends Button {
 	private border: RoundRectangle;
-	private background: Phaser.GameObjects.Image;
-	private titleBg: Phaser.GameObjects.Rectangle;
+	private image: Phaser.GameObjects.Image;
 	private title: Phaser.GameObjects.Text;
 
 	constructor(
@@ -24,49 +23,50 @@ export class ScenarioButton extends Button {
 		this.width = width;
 		this.height = height;
 
-		const p = 8;
+		const p = 12;
 		this.border = new RoundRectangle(scene, {
 			width: this.width + p,
 			height: this.height + p,
-			radius: 4,
-			color: Color.Slate300,
+			radius: p / 2,
+			color: Color.Slate800,
 		});
 		this.add(this.border);
 
-		this.background = scene.add.image(0, 0, textureKey);
-		this.background.setScale(width / this.background.width);
-		const cropW = width / this.background.scaleX;
-		const cropH = height / this.background.scaleY;
+		this.image = scene.add.image(0, 0, textureKey);
+		this.image.setScale(width / this.image.width);
+		const cropW = width / this.image.scaleX;
+		const cropH = height / this.image.scaleY;
 		const cropX = 0;
-		const cropY = (this.background.displayHeight - height + p) / 2;
-		this.background.setCrop(cropX, cropY, cropW, cropH);
-		this.add(this.background);
+		const cropY = (this.image.height - cropH) / 2;
+		this.image.setCrop(cropX, cropY, cropW, cropH);
+		this.add(this.image);
 
 		const titleHeight = width / 8;
-		this.titleBg = scene.add.rectangle(
+		let titleBg = scene.add.rectangle(
 			0,
 			height / 2 - titleHeight / 2,
 			width,
 			titleHeight,
 			Color.Black,
-			0.75
+			0.4
 		);
-		this.add(this.titleBg);
+		this.add(titleBg);
 
 		this.title = scene.addText({
 			y: height / 2 - titleHeight / 2,
-			size: 32,
+			size: 0.6 * titleHeight,
 			fontFamily: "Lato-Bold",
 			color: "white",
 			text: text,
 		});
-		this.title.setShadow(0, 2, "black", 4);
+		this.title.setStroke("black", 4);
+		this.title.setShadow(0, 2, "black", 8);
 		this.title.setOrigin(0.5);
 		this.setText(text);
 		this.add(this.title);
 
-		this.bindInteractive(this.background);
-		this.background.input!.hitArea.setTo(cropX, cropY, cropW, cropH);
+		this.bindInteractive(this.image);
+		this.image.input!.hitArea.setTo(cropX, cropY, cropW, cropH);
 	}
 
 	update(time: number, delta: number) {
@@ -77,8 +77,9 @@ export class ScenarioButton extends Button {
 		if (languageManager.get(key, false)) {
 			languageManager.bind(this.title, key, () => {
 				this.title.setScale(1);
-				if (this.title.displayWidth > this.background.displayWidth - 40) {
-					this.title.displayWidth = this.background.displayWidth - 40;
+				if (this.title.displayWidth > this.image.displayWidth - 40) {
+					this.title.displayWidth = this.image.displayWidth - 40;
+					this.title.scaleY = this.title.scaleX;
 				}
 			});
 		} else {
@@ -87,9 +88,9 @@ export class ScenarioButton extends Button {
 	}
 
 	disable() {
-		this.background.setPostPipeline(GrayScalePostFilter);
+		this.image.setPostPipeline(GrayScalePostFilter);
 		this.border.setColor(Color.Slate800);
-		this.background.setAlpha(0.5);
-		this.background.input!.enabled = false;
+		this.image.setAlpha(0.5);
+		this.image.input!.enabled = false;
 	}
 }
