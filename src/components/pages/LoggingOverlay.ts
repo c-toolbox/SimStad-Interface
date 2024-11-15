@@ -9,11 +9,10 @@ import { RoundRectangle } from "../elements/RoundRectangle";
 import { blocksManager } from "@/utils/BlocksManager";
 
 const LOG_LENGTH = 200;
-const FONT_SIZE = 24;
-const MARGIN = 32;
+const FONT_SIZE = 16;
+const MARGIN = 16;
 
-export class LoggingPage extends Page {
-	private title: Phaser.GameObjects.Text;
+export class LoggingOverlay extends Page {
 	private currentTime: Phaser.GameObjects.Text;
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
@@ -34,20 +33,9 @@ export class LoggingPage extends Page {
 
 		/* Layout */
 
-		const background = layout.addRect(scene, layout.panel, Color.Slate800);
-		this.add(background);
-
-		this.title = scene.addText({
-			x: layout.panelInner.left,
-			y: layout.panelInner.top,
-			size: 64,
-			text: "Message log",
-		});
-		this.add(this.title);
-
 		this.currentTime = scene.addText({
-			x: layout.panelInner.right,
-			y: this.title.getBottomCenter().y,
+			x: layout.map.right,
+			y: layout.map.top,
 			size: 32,
 		});
 		this.currentTime.setOrigin(1);
@@ -55,21 +43,18 @@ export class LoggingPage extends Page {
 
 		/* Scroll area */
 
-		const scrollTop = this.title.getBottomCenter().y + 20;
-
 		this.scrollArea = new ScrollArea(
 			scene,
-			layout.panelInner.left,
-			scrollTop,
-			layout.panelInner.width,
-			layout.panelInner.bottom - scrollTop,
-			0
+			layout.map.left,
+			layout.map.top,
+			layout.map.width,
+			layout.map.height
 		);
 		this.add(this.scrollArea);
 
 		this.scrollBar = new ScrollBar(
 			this.scene,
-			layout.panelInner.right + 20,
+			layout.map.right + 20,
 			this.scrollArea.y + this.scrollArea.height / 2,
 			10,
 			this.scrollArea.height - 32
@@ -81,12 +66,11 @@ export class LoggingPage extends Page {
 			y: this.scrollArea.centerY,
 			width: this.scrollArea.width,
 			height: this.scrollArea.height,
-			radius: layout.radius,
 			color: Color.Slate900,
+			radius: 0,
 		});
 		this.add(areaBackground);
 		this.sendToBack(areaBackground);
-		this.sendToBack(background);
 
 		/* Texts */
 
@@ -98,7 +82,6 @@ export class LoggingPage extends Page {
 				color: ColorStr.Slate400,
 			});
 			text.setOrigin(0, 1);
-			text.setStroke("black", 4);
 
 			this.scrollArea.apply(text);
 			this.timeTexts.push(text);
@@ -106,12 +89,11 @@ export class LoggingPage extends Page {
 
 		for (let i = 0; i < LOG_LENGTH; i++) {
 			const text = scene.addText({
-				x: 160,
+				x: 100,
 				size: FONT_SIZE,
 				fontFamily: "Lato-Bold",
 			});
 			text.setOrigin(0, 1);
-			text.setStroke("black", 4);
 
 			this.scrollArea.apply(text);
 			this.logTexts.push(text);

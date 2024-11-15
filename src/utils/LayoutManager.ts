@@ -7,7 +7,7 @@ class LayoutManager {
 	readonly screenHeight = 1080;
 
 	private graphics: Phaser.GameObjects.Graphics;
-	private debugActive: boolean;
+	public debugActive: boolean;
 
 	private _body: Phaser.Geom.Rectangle;
 	private _status: Phaser.Geom.Rectangle;
@@ -280,18 +280,18 @@ class LayoutManager {
 			[this.navInner, Color.Pink400, 0],
 			[this.panel, Color.Orange700, 0],
 			[this.panelInner, Color.Yellow500, 4],
-			[this.mapControls, Color.Orange700, 4],
+			[this.mapControls, Color.Orange700, 0],
 			[this.mapControlsUpper, Color.Green500, 4],
 			[this.mapControlsLower, Color.Green500, 4],
 			[this.map, Color.Orange700, 4],
-			// [this.status, Color.Purple600, 4],
-			// [this.toolbar, Color.Fuchsia600, 0],
-			// [this.scenarioTabs, Color.Orange700, 4],
-			// [this.scenario, Color.Orange700, 4],
-			// [this.scenarioInner, Color.Yellow500, 0],
-			// [this.scenarioControls, Color.Green500, 4],
-			// [this.scenarioLegend, Color.Green500, 4],
-			// [this.scenarioInfo, Color.Green500, 4],
+			[this.status, Color.Purple600, 4],
+			[this.toolbar, Color.Fuchsia600, 0],
+			[this.scenarioTabs, Color.Orange700, 4],
+			[this.scenario, Color.Orange700, 4],
+			[this.scenarioInner, Color.Yellow500, 0],
+			[this.scenarioControls, Color.Green500, 4],
+			[this.scenarioLegend, Color.Green500, 4],
+			[this.scenarioInfo, Color.Green500, 4],
 		];
 
 		rects.forEach(([rect, color, offset]) => {

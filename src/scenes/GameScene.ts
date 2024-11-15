@@ -3,7 +3,7 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { Navigation } from "@/components/Navigation";
 import { Map } from "@/components/Map";
-import { ScenarioId, Section } from "@/utils/ScenarioManager";
+import { ScenarioId } from "@/utils/ScenarioManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
@@ -11,12 +11,11 @@ import { ScenarioPage } from "@/components/pages/ScenarioPage";
 import { ScenariosPage } from "@/components/pages/ScenariosPage";
 import { LayerPage } from "@/components/pages/LayerPage";
 import { DebugPage } from "@/components/pages/DebugPage";
-import { LoggingPage } from "@/components/pages/LoggingPage";
+import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 
 import { SocketManager } from "@/utils/SocketManager";
 import { Response, ScenariosResponse } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
-import { layoutManager } from "@/utils/LayoutManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -31,7 +30,7 @@ export class GameScene extends BaseScene {
 	private scenariosPage: ScenariosPage;
 	private layerPage: LayerPage;
 	private debugPage: DebugPage;
-	private loggingPage: LoggingPage;
+	private loggingOverlay: LoggingOverlay;
 	private navigation: Navigation;
 	private map: Map;
 
@@ -75,13 +74,11 @@ export class GameScene extends BaseScene {
 		);
 		this.layerPage = new LayerPage(this, PageState.Layer, this.socket);
 		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
-		this.loggingPage = new LoggingPage(this, PageState.Logging, this.socket);
 		this.pages.push(this.homePage);
 		this.pages.push(this.scenarioPage);
 		this.pages.push(this.scenariosPage);
 		this.pages.push(this.layerPage);
 		this.pages.push(this.debugPage);
-		this.pages.push(this.loggingPage);
 
 		this.pages.forEach((page) => {
 			page.on("state", (state: PageState) => {
@@ -104,7 +101,19 @@ export class GameScene extends BaseScene {
 			page.on("resetLight", () => {
 				this.map.resetLightControls();
 			});
+
+			page.on("logging", (active: boolean) => {
+				this.loggingOverlay.setVisible(active);
+			});
 		});
+
+		this.loggingOverlay = new LoggingOverlay(
+			this,
+			PageState.Logging,
+			this.socket
+		);
+		this.loggingOverlay.setDepth(3);
+		this.loggingOverlay.setVisible(false);
 
 		this.navigation = new Navigation(this);
 		this.navigation.on("state", (state: PageState) => {
@@ -115,9 +124,7 @@ export class GameScene extends BaseScene {
 		this.map.setDepth(1);
 		this.add.existing(this.map);
 
-		// this.restart();
-		this.setState(PageState.Logging);
-		// layoutManager.drawLayout(this);
+		this.setState(PageState.Home);
 	}
 
 	update(time: number, delta: number) {
@@ -126,6 +133,8 @@ export class GameScene extends BaseScene {
 				page.update(time, delta);
 			}
 		});
+
+		this.loggingOverlay.update(time, delta);
 
 		this.map.update(time, delta);
 
@@ -136,6 +145,7 @@ export class GameScene extends BaseScene {
 
 	restart() {
 		this.map.reset();
+		this.debugPage.reset();
 		this.setState(PageState.Home);
 	}
 

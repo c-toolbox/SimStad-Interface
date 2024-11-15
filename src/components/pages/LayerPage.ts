@@ -72,8 +72,7 @@ export class LayerPage extends Page {
 			layout.panelInner.left,
 			scrollTop,
 			layout.panelInner.width,
-			scrollHeight,
-			0
+			scrollHeight
 		);
 		this.add(this.scrollArea);
 

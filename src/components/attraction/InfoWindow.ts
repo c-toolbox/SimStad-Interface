@@ -75,8 +75,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			-this.width / 2 + this.pad,
 			-this.height / 2 + this.pad,
 			0.85 * this.width - 2 * this.pad,
-			this.height - 2 * this.pad - this.fontSize - this.sep,
-			50 * SCALE
+			this.height - 2 * this.pad - this.fontSize - this.sep
 		);
 		this.box.add(this.scrollArea);
 

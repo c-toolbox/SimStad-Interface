@@ -69,7 +69,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.ResetResponse]: this.onResetRepsonse,
 			[P.Response.ActivateTraffic]: this.onActivateTraffic,
 			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
-			[P.Response.CacheProgress]: this.onCache,
+			[P.Response.CacheProgress]: this.onCacheProgress,
 			[P.Response.CacheComplete]: this.onCacheComplete,
 		};
 
@@ -216,7 +216,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onCache(data: P.CacheProgressResponse) {
+	onCacheProgress(data: P.CacheProgressResponse) {
 		this.emit("onCacheProgress");
 	}
 

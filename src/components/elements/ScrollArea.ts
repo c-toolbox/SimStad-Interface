@@ -12,7 +12,6 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 	private contentHeight: number;
 
 	private hold: boolean;
-	private fadePadding: number;
 	private targetY: number;
 	private speedY: number;
 
@@ -21,14 +20,12 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		x: number,
 		y: number,
 		width: number,
-		height: number,
-		fadePadding: number
+		height: number
 	) {
 		super(scene, x, y);
 		this.scene = scene;
 		this.width = width;
 		this.height = height;
-		this.fadePadding = fadePadding;
 		scene.add.existing(this);
 
 		this.hold = false;
@@ -117,14 +114,11 @@ export class ScrollArea extends Phaser.GameObjects.Container {
 		}
 
 		// Clamp at edges
-		if (this.targetY > 0 * this.fadePadding) {
-			this.targetY = 0 * this.fadePadding;
+		if (this.targetY > 0) {
+			this.targetY = 0;
 		}
-		if (
-			this.targetY <
-			-this.contentHeight + this.height + 0 * this.fadePadding
-		) {
-			this.targetY = -this.contentHeight + this.height + 0 * this.fadePadding;
+		if (this.targetY < -this.contentHeight + this.height) {
+			this.targetY = -this.contentHeight + this.height;
 		}
 
 		// Smooth approach
