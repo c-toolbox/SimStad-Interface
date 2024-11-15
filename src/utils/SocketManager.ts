@@ -230,11 +230,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 
 		this.isRecaching = true;
+		this.queuedRecacheRequest = false;
 		this.emit("onCacheProgress");
 	}
 
 	onCacheComplete(data: P.CacheCompleteResponse) {
 		this.isRecaching = false;
+		this.queuedRecacheRequest = false;
 		this.emit("onCacheComplete");
 	}
 

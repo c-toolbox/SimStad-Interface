@@ -68,7 +68,7 @@ export class DebugPage extends Page {
 		this.socket.on("onCacheProgress", () => {
 			this.recacheCount += 1;
 			this.reCacheButton.setText(
-				`Cached: ${this.recacheCount} / ${layerNames.length}`
+				`Loading... ${this.recacheCount} / ${layerNames.length}`
 			);
 		});
 		this.socket.on("onCacheComplete", () => {

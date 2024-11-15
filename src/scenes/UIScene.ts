@@ -19,7 +19,10 @@ export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
 	private idleTimer: number;
 	private fader: Phaser.GameObjects.Rectangle;
+
 	private lockdown: Phaser.GameObjects.Rectangle;
+	private lockdownText: Phaser.GameObjects.Text;
+	private lockdownTimer: NodeJS.Timeout;
 
 	private infoWindow: InfoWindow;
 	private toolButtons: ToolboxButton[];
@@ -153,22 +156,36 @@ export class UIScene extends BaseScene {
 
 		/* Lockdown */
 
-		this.lockdown = this.add.rectangle(
-			this.CX,
-			this.CY,
-			this.W,
-			this.H,
-			0,
-			0.25
-		);
-		this.lockdown.setVisible(false);
-		this.lockdown.setInteractive().on("pointerdown", () => {});
+		this.lockdown = this.add
+			.rectangle(this.CX, this.CY, this.W, this.H, 0, 0.5)
+			.setVisible(false)
+			.setInteractive()
+			.on("pointerdown", () => {});
+
+		this.lockdownText = this.addText({
+			x: this.W - 12,
+			y: this.H - 12,
+			size: 24,
+			color: "white",
+			fontFamily: "Lato-Bold",
+			text: "Loading...",
+		})
+			.setOrigin(1)
+			.setVisible(false);
 
 		this.scene.get("GameScene").events.on("onCacheProgress", () => {
 			this.lockdown.setVisible(true);
+			this.lockdownText.setVisible(true);
+
+			clearTimeout(this.lockdownTimer);
+			this.lockdownTimer = setTimeout(() => {
+				this.lockdown.setVisible(false);
+				this.lockdownText.setVisible(false);
+			}, 10000);
 		});
 		this.scene.get("GameScene").events.on("onCacheComplete", () => {
 			this.lockdown.setVisible(false);
+			this.lockdownText.setVisible(false);
 		});
 	}
 
