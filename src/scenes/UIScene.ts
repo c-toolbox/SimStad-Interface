@@ -1,13 +1,7 @@
 import { BaseScene } from "./BaseScene";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import {
-	VERSION,
-	IDLE_TIME,
-	IDLE_FADE,
-	SCALE,
-	ONLINE,
-} from "@/utils/constants";
+import { IDLE_TIME, IDLE_FADE } from "@/utils/constants";
 
 import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";

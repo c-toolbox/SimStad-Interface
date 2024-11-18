@@ -15,9 +15,9 @@ class BlocksManager {
 	setDefaultLegend() {
 		this.sendRequest("SimStad-default");
 
-		// if (this.isShowingLoopingVideo) {
-			// this.sendRequest(scenarioConfig.defaultBlocksVideo);
-		// }
+		if (this.isShowingLoopingVideo) {
+			this.sendRequest(scenarioConfig.defaultBlocksVideo);
+		}
 	}
 
 	setLegend(section: Section) {
@@ -25,10 +25,10 @@ class BlocksManager {
 	}
 
 	setWallVideo(scenarioId: ScenarioId) {
-		// const key = scenarioManager.getScenario(scenarioId).blocksVideo;
-		// this.sendRequest(key);
+		const key = scenarioManager.getScenario(scenarioId).blocksVideo;
+		this.sendRequest(key);
 
-		// this.isShowingLoopingVideo = key === "VisualCity-Wall_Eastlink";
+		this.isShowingLoopingVideo = key === "VisualCity-Wall_Eastlink";
 	}
 
 	sendBlocksAudio(enabled: boolean) {
