@@ -66,6 +66,7 @@ export class GameScene extends BaseScene {
 		});
 		this.socket.on("onCacheComplete", () => {
 			this.events.emit("onCacheComplete");
+			this.layerPage.loadFolders();
 		});
 
 		/* Layout */

@@ -62,6 +62,7 @@ export class DebugPage extends Page {
 					this.recacheCount = 0;
 					this.socket.queueReCacheDatabase();
 					this.recacheLoader.setVisible(true);
+					layerManager.reloadLayers();
 				}
 			}
 		);

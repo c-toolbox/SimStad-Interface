@@ -31,27 +31,7 @@ export class LayerPage extends Page {
 
 		/* Folders */
 
-		const folderLayout = layout.layerFolders;
-		const folders = layerManager.getFolders();
-		let n = folders.length + 1;
-		let s = 20;
-		let w = folderLayout.width;
-		let h = (folderLayout.height - s * (n - 1)) / n;
-		let x = folderLayout.right - w / 2;
-		let y = folderLayout.bottom - h / 2;
-		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
-			this.socket.sendReset();
-			this.resetLayers();
-			this.emit("map", "");
-		});
-
-		folders.forEach((folder, index) => {
-			let y = folderLayout.top + h / 2 + (h + s) * index;
-			const color = folder.isSequential ? Color.Slate700 : Color.Slate600;
-			this.addButton(x, y, w, h, folder.name, color, () => {
-				this.loadLayerFolder(folder.name);
-			});
-		});
+		this.loadFolders();
 
 		/* Scroll area */
 
@@ -93,7 +73,7 @@ export class LayerPage extends Page {
 		this.sendToBack(areaBackground);
 		this.sendToBack(background);
 
-		this.loadLayerFolder(folders[0].name);
+		this.loadLayerFolder(layerManager.getFolders()[0].name);
 
 		/* Active layer list */
 
@@ -121,6 +101,36 @@ export class LayerPage extends Page {
 	clearLayers() {
 		this.scrollArea.clear();
 		this.layerButtons = [];
+	}
+
+	loadFolders() {
+		this.buttons.forEach((button) => {
+			button.destroy();
+		});
+		this.buttons = [];
+
+		const folderLayout = layout.layerFolders;
+		const folders = layerManager.getFolders();
+		let n = folders.length + 1;
+		let s = 20;
+		let w = folderLayout.width;
+		let h = (folderLayout.height - s * (n - 1)) / n;
+		let x = folderLayout.right - w / 2;
+		let y = folderLayout.bottom - h / 2;
+
+		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
+			this.socket.sendReset();
+			this.resetLayers();
+			this.emit("map", "");
+		});
+
+		folders.forEach((folder, index) => {
+			let y = folderLayout.top + h / 2 + (h + s) * index;
+			const color = folder.isSequential ? Color.Slate700 : Color.Slate600;
+			this.addButton(x, y, w, h, folder.name, color, () => {
+				this.loadLayerFolder(folder.name);
+			});
+		});
 	}
 
 	loadLayerFolder(folder = "") {

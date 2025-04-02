@@ -16,41 +16,60 @@ interface Folder {
 }
 
 const driveLayers: string[] = [];
-if (!!window.NL_TOKEN) {
-	const drivePath = "./Datasets/";
-	try {
-		const driveFiles = await filesystem.readDirectory(drivePath);
-		for (const folder of driveFiles) {
-			if (folder.type === "DIRECTORY") {
-				const subFiles = await filesystem.readDirectory(
-					drivePath + folder.entry
-				);
-				const pngFiles = subFiles.filter((subFile) =>
-					subFile.entry.toLowerCase().endsWith(".png")
-				);
+loadLayersFromDrive((success: boolean) => {
+	layerManager.reloadLayers();
+});
 
-				pngFiles.forEach((pngFile) => {
-					const filename = pngFile.entry.split(".")[0];
-					driveLayers.push(`${folder.entry}/${filename}`);
-				});
-			}
-		}
-	} catch (error) {
-		console.error("Error reading drive layers:", error);
-	}
-} else {
-	// for (let path in import.meta.glob("../../Datasets/*/*")) {
-	// 	let file = path.replace("../../Datasets/", "");
-	// 	if (!file.toLowerCase().endsWith(".png")) continue;
-	// 	file = file.split(".")[0];
-	// 	driveLayers.push(file);
-	// }
+function loadLayersFromDrive(callback?: (success: boolean) => void) {
+	if (!window.NL_TOKEN) return;
+
+	driveLayers.length = 0;
+
+	const drivePath = "./Datasets/";
+	filesystem
+		.readDirectory(drivePath)
+		.then((driveFiles) => {
+			const folderPromises = driveFiles.map((folder) => {
+				if (folder.type === "DIRECTORY") {
+					return filesystem
+						.readDirectory(drivePath + folder.entry)
+						.then((subFiles) => {
+							const pngFiles = subFiles.filter((subFile) =>
+								subFile.entry.toLowerCase().endsWith(".png")
+							);
+
+							pngFiles.forEach((pngFile) => {
+								const filename = pngFile.entry.split(".")[0];
+								driveLayers.push(`${folder.entry}/${filename}`);
+							});
+						})
+						.catch((error) => {
+							console.error("Error reading drive subdirectory:", error);
+						});
+				}
+				return Promise.resolve();
+			});
+
+			Promise.all(folderPromises).then(() => {
+				if (callback) callback(true);
+			});
+		})
+		.catch((error) => {
+			console.error("Error reading drive:", error);
+			if (callback) callback(false);
+		});
 }
 
 class LayerManager {
-	private folders: Folder[] = [];
+	private folders: Folder[];
 
 	constructor() {
+		this.loadLayers();
+	}
+
+	loadLayers() {
+		this.folders = [];
+
 		const driveFolders: Record<string, string[]> = {};
 		driveLayers.forEach((file) => {
 			const folder = file.split("/")[0];
@@ -99,6 +118,12 @@ class LayerManager {
 				return b.layers.length - a.layers.length;
 			}
 			return a.isSequential ? 1 : -1;
+		});
+	}
+
+	reloadLayers() {
+		loadLayersFromDrive((success: boolean) => {
+			this.loadLayers();
 		});
 	}
 
