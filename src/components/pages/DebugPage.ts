@@ -5,7 +5,7 @@ import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
-import { layerNames } from "@/assets/assets";
+import { layerManager } from "@/utils/LayerManager";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
@@ -66,16 +66,15 @@ export class DebugPage extends Page {
 			}
 		);
 		this.socket.on("onCacheProgress", () => {
+			const layerCount = layerManager.getLayerCount();
 			this.recacheCount += 1;
 			this.reCacheButton.setText(
-				`Loading... ${this.recacheCount} / ${layerNames.length}`
+				`Loading... ${this.recacheCount} / ${layerCount}`
 			);
 		});
 		this.socket.on("onCacheComplete", () => {
 			this.recacheLoader.setVisible(false);
-			this.reCacheButton.setText(
-				"Recache database"
-			);
+			this.reCacheButton.setText("Recache database");
 		});
 		this.recacheLoader = scene.add.image(
 			this.reCacheButton.x + this.reCacheButton.width / 2 + 60,

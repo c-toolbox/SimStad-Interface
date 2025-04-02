@@ -1,19 +1,14 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Button } from "@/components/elements/Button";
-import { RoundRectangle } from "@/components/elements/RoundRectangle";
-import { Color, ColorStr } from "@/utils/colors";
-import { layoutManager as layout } from "@/utils/LayoutManager";
-import { interpolateColor } from "@/utils/functions";
+import { RoundRectangle } from "./elements/RoundRectangle";
+import { Color } from "@/utils/colors";
 
 export class LayerButton extends Button {
-	private border: RoundRectangle;
-	// private background: RoundRectangle;
-	private background: Phaser.GameObjects.Image;
-	private image: Phaser.GameObjects.Image;
-	private title: Phaser.GameObjects.Text;
-
-	private orderBg: Phaser.GameObjects.Ellipse;
-	private orderText: Phaser.GameObjects.Text;
+	protected border: RoundRectangle;
+	protected background: Phaser.GameObjects.Image;
+	protected image: Phaser.GameObjects.Image;
+	protected title: Phaser.GameObjects.Text;
+	protected titleBackground: Phaser.GameObjects.Rectangle;
 
 	public layer: string;
 	public selected: boolean;
@@ -32,26 +27,22 @@ export class LayerButton extends Button {
 		this.layer = layer;
 		this.selected = false;
 
+		/* Border highlight */
+
 		this.border = new RoundRectangle(scene, {
 			width: this.width + 8,
 			height: this.height + 8,
 			radius: 4,
-			color: Color.White,
+			color: Color.Slate800,
 		});
 		this.add(this.border);
+		this.sendToBack(this.border);
 
-		// this.background = new RoundRectangle(scene, {
-		// 	width: this.width,
-		// 	height: this.height,
-		// 	radius: 0,
-		// 	color: Color.Gray900,
-		// });
 		this.background = scene.add.image(0, 0, "blank");
 		this.background.setScale(this.width / this.background.width);
 		this.add(this.background);
 
-		let texture = this.scene.textures.exists(layer) ? layer : "city";
-		this.image = this.scene.add.image(0, 0, texture);
+		this.image = this.scene.add.image(0, 0, "city");
 		this.add(this.image);
 		this.image.setScale(this.width / this.image.width);
 
@@ -59,7 +50,7 @@ export class LayerButton extends Button {
 
 		let th = 40;
 
-		let titleBg = scene.add.rectangle(
+		this.titleBackground = scene.add.rectangle(
 			0,
 			this.height / 2 - th / 2,
 			this.width,
@@ -67,7 +58,7 @@ export class LayerButton extends Button {
 			Color.Black,
 			0.5
 		);
-		this.add(titleBg);
+		this.add(this.titleBackground);
 
 		this.title = scene.addText({
 			y: this.height / 2 - th / 2,
@@ -83,37 +74,6 @@ export class LayerButton extends Button {
 			this.title.scaleY = this.title.scaleX;
 		}
 
-		this.orderBg = scene.add.ellipse(
-			0,
-			0,
-			this.width / 2,
-			this.height / 2,
-			Color.Black,
-			0.75
-		);
-		this.add(this.orderBg);
-
-		this.orderText = scene.addText({
-			size: this.height / 4,
-			fontFamily: "Lato-Bold",
-			color: ColorStr.White,
-			text: "0",
-		});
-		this.orderText.setOrigin(0.5);
-		this.add(this.orderText);
-
-		if (texture.includes("Missing")) {
-			let ms = 0.2 * this.width;
-			let mx = width / 2 - 0.6 * ms;
-			let my = -height / 2 + 0.6 * ms;
-			let circle = scene.add.ellipse(mx, my, ms, ms, 0, 0.75);
-			this.add(circle);
-			let missing = scene.add.image(mx, my, "x");
-			missing.setTint(Color.Red500);
-			missing.setScale(0.6 * ms / missing.width);
-			this.add(missing);
-		}
-
 		/* Interactions */
 
 		this.bindInteractive(this.background);
@@ -125,28 +85,49 @@ export class LayerButton extends Button {
 		this.background.on("dragend", (...args: any) =>
 			this.emit("dragend", ...args)
 		);
-
-		this.setSelected(false);
 	}
 
 	update(time: number, delta: number) {
 		this.setScale(1 - 0.1 * this.holdSmooth);
 	}
 
+	addErrorIcon() {
+		let ms = 0.2 * this.width;
+		let mx = this.width / 2 - 0.6 * ms;
+		let my = -this.height / 2 + 0.6 * ms;
+		let circle = this.scene.add.ellipse(mx, my, ms, ms, 0, 0.75);
+		this.add(circle);
+		let missing = this.scene.add.image(mx, my, "x");
+		missing.setTint(Color.Red500);
+		missing.setScale((0.6 * ms) / missing.width);
+		this.add(missing);
+	}
+
+	setTexture(key: string, showBackground: boolean) {
+		const exists = this.scene.textures.exists(key);
+
+		if (exists) {
+			this.image.setTexture(key);
+			this.image.setScale(this.width / this.image.width);
+		} else {
+			this.image.setTexture("city");
+			this.image.setScale(this.width / this.image.width);
+		}
+
+		if (exists && showBackground) {
+			this.background.setTexture("blank");
+			this.background.setTint(Color.White);
+		} else {
+			this.background.setTexture("square");
+			this.background.setTint(Color.Slate800);
+		}
+	}
+
 	setDraggable() {
 		this.bindInteractive(this.background, true);
 	}
 
-	setSelected(value: boolean) {
-		this.selected = value;
-		// this.image.setAlpha(value ? 1.0 : 0.75);
-		this.border.setVisible(value);
+	setOrder(order: number) {}
 
-		this.orderBg.setVisible(value);
-		this.orderText.setVisible(value);
-	}
-
-	setOrder(order: number) {
-		this.orderText.setText(order.toString());
-	}
+	setSelected(value: boolean) {}
 }

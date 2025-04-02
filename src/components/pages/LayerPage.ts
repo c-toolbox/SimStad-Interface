@@ -1,17 +1,16 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { ConnectionStatus as CS, SocketManager } from "@/utils/SocketManager";
+import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 
 import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { TextButton } from "@/components/TextButton";
-import { LayerButton } from "@/components/LayerButton";
+import { LayerImageButton } from "../LayerImageButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
-
-import { languageManager } from "@/utils/LanguageManager";
-import { layerNames } from "@/assets/assets";
+import { layerManager } from "@/utils/LayerManager";
+import { LayerButton } from "../LayerButton";
+import { LayerList } from "../LayerList";
 
 export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
@@ -19,6 +18,7 @@ export class LayerPage extends Page {
 	private layerButtons: LayerButton[];
 
 	private activeLayers: string[];
+	private layerList: LayerList;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -29,25 +29,16 @@ export class LayerPage extends Page {
 		let background = layout.addRect(scene, layout.panel, Color.Slate800);
 		this.add(background);
 
-		let title = scene.addText({
-			x: layout.panelInner.left,
-			y: layout.panelInner.top,
-			size: 64,
-			color: "white",
-			text: "Datalayers",
-		});
-		this.add(title);
-		languageManager.bind(title, "page_layer");
+		/* Folders */
 
-		/* Button */
-
-		let folders = [...new Set(layerNames.map((layer) => layer.split("/")[0]))];
+		const folderLayout = layout.layerFolders;
+		const folders = layerManager.getFolders();
 		let n = folders.length + 1;
 		let s = 20;
-		let w = (layout.panelInner.width - s * (n - 1)) / n;
-		let h = 64;
-		let x = layout.panelInner.right - w / 2;
-		let y = layout.panelInner.bottom - h / 2;
+		let w = folderLayout.width;
+		let h = (folderLayout.height - s * (n - 1)) / n;
+		let x = folderLayout.right - w / 2;
+		let y = folderLayout.bottom - h / 2;
 		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
 			this.socket.sendReset();
 			this.resetLayers();
@@ -55,30 +46,32 @@ export class LayerPage extends Page {
 		});
 
 		folders.forEach((folder, index) => {
-			let x = layout.panelInner.left + w / 2 + (w + s) * index;
-			this.addButton(x, y, w, h, folder, Color.Cyan800, () => {
-				this.loadLayers(folder);
+			let y = folderLayout.top + h / 2 + (h + s) * index;
+			const color = folder.isSequential ? Color.Slate700 : Color.Slate600;
+			this.addButton(x, y, w, h, folder.name, color, () => {
+				this.loadLayerFolder(folder.name);
 			});
 		});
 
 		/* Scroll area */
 
-		let scrollTop = title.y + title.displayHeight + s;
-		let scrollBottom = layout.panelInner.bottom - 2 * (h - s);
+		const gridLayout = layout.layerGrid;
+		let scrollTop = gridLayout.top;
+		let scrollBottom = gridLayout.bottom;
 		let scrollHeight = scrollBottom - scrollTop;
 
 		this.scrollArea = new ScrollArea(
 			scene,
-			layout.panelInner.left,
+			gridLayout.left,
 			scrollTop,
-			layout.panelInner.width,
+			gridLayout.width,
 			scrollHeight
 		);
 		this.add(this.scrollArea);
 
 		this.scrollBar = new ScrollBar(
 			this.scene,
-			layout.panelInner.right + 20,
+			gridLayout.right + 20,
 			this.scrollArea.y + this.scrollArea.height / 2,
 			10,
 			this.scrollArea.height - 32
@@ -100,12 +93,23 @@ export class LayerPage extends Page {
 		this.sendToBack(areaBackground);
 		this.sendToBack(background);
 
-		this.loadLayers("Nkpg");
+		this.loadLayerFolder(folders[0].name);
+
+		/* Active layer list */
+
+		this.layerList = new LayerList(scene, 0, 0);
+		this.add(this.layerList);
+
+		this.layerList.on("updateOrder", (layers: string[]) => {
+			this.activeLayers = layers;
+			this.sendActiveDataset();
+		});
 	}
 
 	update(time: number, delta: number) {
 		super.update(time, delta);
 
+		this.layerList.update(time, delta);
 		this.scrollArea.update(time, delta);
 		this.scrollBar.set(this.scrollArea.getScroll());
 
@@ -119,61 +123,50 @@ export class LayerPage extends Page {
 		this.layerButtons = [];
 	}
 
-	loadLayers(filter = "") {
+	loadLayerFolder(folder = "") {
 		this.clearLayers();
+		const areas = this.getGrid();
 
+		// Folder buttons
 		this.buttons.forEach((button) => {
-			button.setHighlight(button.getText() == filter);
+			button.setHighlight(button.getText() == folder);
 		});
 
-		let m = 6;
-		let s = 20;
-		let w = (this.scrollArea.width - (m + 1) * s) / m;
-		let h = w;
-		let x = w / 2 + s;
-		let y = s + h / 2;
-
-		let shownLayers = layerNames.filter((layer) => layer.includes(filter));
-
-		shownLayers.forEach((layer: string) => {
-			let button = new LayerButton(this.scene, x, y, w, h, layer);
-			button.setDraggable();
-			this.add(button);
-			this.layerButtons.push(button);
-			this.scrollArea.apply(button);
-
-			let activeIndex = this.activeLayers.indexOf(layer);
-			if (activeIndex != -1) {
-				button.setSelected(true);
-				button.setOrder(activeIndex + 1);
-			}
-
-			button.on("click", () => {
-				if (!button.selected && this.activeLayers.length >= 10) {
-					return;
-				}
-
-				button.setSelected(!button.selected);
-
-				if (button.selected) {
-					this.activeLayers.push(button.layer);
-				} else {
-					const index = this.activeLayers.indexOf(button.layer);
-					this.activeLayers.splice(index, 1);
-				}
-				// if (button.selected) this.socket.sendActivateDataset("Nkpg/" + layer);
-				// else this.socket.sendDeactivateDataset("Nkpg/" + layer);
-				this.sendActiveDataset();
-			});
-
-			x += w + s;
-			if (x + w / 2 > this.scrollArea.width) {
-				x = w / 2 + s;
-				y += h + s;
-			}
+		layerManager.getLayers(folder).forEach((layer: string) => {
+			this.addLayerButton(layer, areas.next().value);
 		});
+	}
 
-		this.buttons.forEach((button) => this.bringToTop(button));
+	addLayerButton(layer: string, { x, y, w, h }: GridArea) {
+		let button = new LayerImageButton(this.scene, x, y, w, h, layer);
+		button.setDraggable();
+		this.add(button);
+		this.layerButtons.push(button);
+		this.scrollArea.apply(button);
+
+		let activeIndex = this.activeLayers.indexOf(layer);
+		if (activeIndex != -1) {
+			button.setSelected(true);
+			button.setOrder(activeIndex + 1);
+		}
+
+		button.on("click", () => this.onLayerButtonClick(button));
+	}
+
+	onLayerButtonClick(button: LayerButton) {
+		if (!button.selected && this.activeLayers.length >= 10) {
+			return;
+		}
+
+		button.setSelected(!button.selected);
+
+		if (button.selected) {
+			this.activeLayers.push(button.layer);
+		} else {
+			const index = this.activeLayers.indexOf(button.layer);
+			this.activeLayers.splice(index, 1);
+		}
+		this.sendActiveDataset();
 	}
 
 	sendActiveDataset() {
@@ -193,6 +186,50 @@ export class LayerPage extends Page {
 
 	resetLayers() {
 		this.activeLayers = [];
+		this.layerList.setLayers(this.activeLayers);
 		this.layerButtons.forEach((buttons) => buttons.setSelected(false));
 	}
+
+	setLayers(layerString: string) {
+		this.activeLayers = layerString.split(",").filter((layer) => !!layer);
+		this.layerList.setLayers(this.activeLayers);
+
+		this.layerButtons.forEach((button) => {
+			const index = this.activeLayers.indexOf(button.layer);
+			if (index !== -1) {
+				button.setSelected(true);
+				button.setOrder(index + 1);
+			} else {
+				button.setSelected(false);
+				button.setOrder(0);
+			}
+		});
+	}
+
+	*getGrid(): Generator<GridArea> {
+		let N = 4;
+		let margin = 30;
+		let sep = 20;
+		let w = (this.scrollArea.width - 2 * margin - (N - 1) * sep) / N;
+		let h = w;
+		let x = w / 2 + margin;
+		let y = margin + h / 2;
+
+		while (true) {
+			yield { x, y, w, h };
+
+			x += w + sep;
+			if (x + w / 2 > this.scrollArea.width) {
+				x = w / 2 + margin;
+				y += h + sep;
+			}
+		}
+	}
+}
+
+interface GridArea {
+	x: number;
+	y: number;
+	w: number;
+	h: number;
 }

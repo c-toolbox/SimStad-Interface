@@ -56,7 +56,7 @@ export class Button extends Phaser.GameObjects.Container {
 					ease: "Cubic.Out",
 					duration: 100,
 				});
-			} else {
+			} else if (this.scene) {
 				this.tween = this.scene.tweens.add({
 					targets: this,
 					holdSmooth: { from: 1.0, to: 0.0 },
@@ -111,9 +111,10 @@ export class Button extends Phaser.GameObjects.Container {
 
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
 		// this.hold = false;
-		// if (Math.abs(dragY) > 8) {
-		// 	this.hold = false;
-		// }
+		if (Math.hypot(dragX, dragY) > 8) {
+			// this.hold = false;
+			this.blocked = true;
+		}
 	}
 
 	onDragEnd(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {}

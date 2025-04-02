@@ -163,21 +163,12 @@ export class Map extends Phaser.GameObjects.Container {
 			this.removeLayer(texture);
 		});
 
-		if (addedTextures.length > 0) {
-			textures.forEach((texture) => {
-				let layer = this.layers.find((layer) => layer.texture == texture);
-				if (layer) {
-					this.layerContainer.bringToTop(layer.image);
-				}
-			});
-		}
-
-		// removedTextures.forEach((texture) => {
-		// 	let layer = this.layers.find((layer) => layer.texture == texture);
-		// 	if (layer) {
-		// 		this.layerContainer.bringToTop(layer.image);
-		// 	}
-		// });
+		textures.forEach((texture) => {
+			let layer = this.layers.find((layer) => layer.texture == texture);
+			if (layer) {
+				this.layerContainer.bringToTop(layer.image);
+			}
+		});
 
 		this.bringToTop(this.fingerLamp);
 	}

@@ -20,6 +20,8 @@ class LayoutManager {
 	private _navInner: Phaser.Geom.Rectangle;
 	private _panel: Phaser.Geom.Rectangle;
 	private _panelInner: Phaser.Geom.Rectangle;
+	private _layerFolders: Phaser.Geom.Rectangle;
+	private _layerGrid: Phaser.Geom.Rectangle;
 	private _scenarioTabs: Phaser.Geom.Rectangle;
 	private _scenario: Phaser.Geom.Rectangle;
 	private _scenarioInner: Phaser.Geom.Rectangle;
@@ -112,9 +114,7 @@ class LayoutManager {
 
 		const w = this.mapControls.width;
 		const h =
-			this.mapControls.height -
-			this.mapControlsUpper.height -
-			this.padding / 2;
+			this.mapControls.height - this.mapControlsUpper.height - this.padding / 2;
 		const x = this.mapControls.left;
 		const y = this.mapControls.bottom - h;
 
@@ -183,6 +183,30 @@ class LayoutManager {
 
 		this._panelInner = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._panelInner;
+	}
+
+	get layerFolders(): Phaser.Geom.Rectangle {
+		if (this._layerFolders) return this._layerFolders;
+
+		const x = this.panel.left + this.padding;
+		const y = this.panel.top + this.padding;
+		const w = 4 * this.margin;
+		const h = this.panel.height - 2 * this.padding;
+
+		this._layerFolders = new Phaser.Geom.Rectangle(x, y, w, h);
+		return this._layerFolders;
+	}
+
+	get layerGrid(): Phaser.Geom.Rectangle {
+		if (this._layerGrid) return this._layerGrid;
+
+		const x = this.layerFolders.right + this.padding;
+		const y = this.panel.top + this.padding;
+		const w = this.panel.right - x - this.padding;
+		const h = this.panel.height - 2 * this.padding;
+
+		this._layerGrid = new Phaser.Geom.Rectangle(x, y, w, h);
+		return this._layerGrid;
 	}
 
 	get scenarioTabs(): Phaser.Geom.Rectangle {
@@ -280,6 +304,8 @@ class LayoutManager {
 			[this.navInner, Color.Pink400, 0],
 			[this.panel, Color.Orange700, 0],
 			[this.panelInner, Color.Yellow500, 4],
+			[this.layerFolders, Color.Pink500, 4],
+			[this.layerGrid, Color.Pink500, 4],
 			[this.mapControls, Color.Orange700, 0],
 			[this.mapControlsUpper, Color.Green500, 4],
 			[this.mapControlsLower, Color.Green500, 4],

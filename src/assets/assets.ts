@@ -6,7 +6,8 @@ let images: Image[] = [
 	image("streets.png", "streets"),
 	image("blank.png", "blank"),
 	image("circle.png", "circle"),
-	image("nineslice.png", "nineslice"),
+	image("square.png", "square"),
+	image("border.png", "border"),
 
 	image("vis_c_logo_color.png", "vis_c_logo_color"),
 	image("vis_c_logo_lines.png", "vis_c_logo_lines"),
@@ -28,12 +29,11 @@ for (let path in import.meta.glob("./images/thumbnails/*/*.png")) {
 }
 
 /* Minimaps (shown to the right) */
-export const layerNames: string[] = [];
+export const localLayers: string[] = [];
 for (let path in import.meta.glob("./images/minimaps/*/*.png")) {
 	let file = path.replace("./images/", "").replace(".png", "");
 	images.push(image(`${file}.png`, file));
-
-	layerNames.push(file.replace("minimaps/", ""));
+	localLayers.push(file.replace("minimaps/", ""));
 }
 
 /* Chapters (images for the home page) */

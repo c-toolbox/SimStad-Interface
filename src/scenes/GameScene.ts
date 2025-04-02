@@ -97,6 +97,7 @@ export class GameScene extends BaseScene {
 
 			page.on("map", (layers: string) => {
 				this.map.setLayers(layers);
+				this.layerPage.setLayers(layers);
 			});
 
 			page.on("scenario", (scenarioId: ScenarioId) => {
