@@ -33,7 +33,7 @@ export default () => {
 			neuInject(),
 			buildWinApp(),
 			// buildMacApp(),
-			// buildLinuxApp(),
+			buildLinuxApp(),
 			// zip({
 			// 	inDir: './dist/web',
 			// 	outDir: './dist',

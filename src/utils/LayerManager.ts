@@ -18,27 +18,33 @@ interface Folder {
 const driveLayers: string[] = [];
 if (!!window.NL_TOKEN) {
 	const drivePath = "./Datasets/";
-	const driveFiles = await filesystem.readDirectory(drivePath);
-	for (const folder of driveFiles) {
-		if (folder.type === "DIRECTORY") {
-			const subFiles = await filesystem.readDirectory(drivePath + folder.entry);
-			const pngFiles = subFiles.filter((subFile) =>
-				subFile.entry.toLowerCase().endsWith(".png")
-			);
+	try {
+		const driveFiles = await filesystem.readDirectory(drivePath);
+		for (const folder of driveFiles) {
+			if (folder.type === "DIRECTORY") {
+				const subFiles = await filesystem.readDirectory(
+					drivePath + folder.entry
+				);
+				const pngFiles = subFiles.filter((subFile) =>
+					subFile.entry.toLowerCase().endsWith(".png")
+				);
 
-			pngFiles.forEach((pngFile) => {
-				const filename = pngFile.entry.split(".")[0];
-				driveLayers.push(`${folder.entry}/${filename}`);
-			});
+				pngFiles.forEach((pngFile) => {
+					const filename = pngFile.entry.split(".")[0];
+					driveLayers.push(`${folder.entry}/${filename}`);
+				});
+			}
 		}
+	} catch (error) {
+		console.error("Error reading drive layers:", error);
 	}
 } else {
-	for (let path in import.meta.glob("../../Datasets/*/*")) {
-		let file = path.replace("../../Datasets/", "");
-		if (!file.toLowerCase().endsWith(".png")) continue;
-		file = file.split(".")[0];
-		driveLayers.push(file);
-	}
+	// for (let path in import.meta.glob("../../Datasets/*/*")) {
+	// 	let file = path.replace("../../Datasets/", "");
+	// 	if (!file.toLowerCase().endsWith(".png")) continue;
+	// 	file = file.split(".")[0];
+	// 	driveLayers.push(file);
+	// }
 }
 
 class LayerManager {

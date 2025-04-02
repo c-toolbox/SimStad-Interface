@@ -20,6 +20,10 @@ let images: Image[] = [
 	image("symbols/rectangle.png", "symbol_rectangle"),
 	image("symbols/sign_road_narrows.png", "symbol_sign_road_narrows"),
 	image("symbols/sign_no_vehicles.png", "symbol_sign_no_vehicles"),
+
+	image("minimaps/Color/white.png", "minimaps/Color/white"),
+	image("minimaps/Nkpg/Hillshade.png", "minimaps/Nkpg/Hillshade"),
+	image("minimaps/Nkpg/Orto20230921.png", "minimaps/Nkpg/Orto20230921"),
 ];
 
 /* Thumbnails (only shown in debug layers page) */
