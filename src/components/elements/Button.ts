@@ -111,7 +111,7 @@ export class Button extends Phaser.GameObjects.Container {
 
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
 		// this.hold = false;
-		if (Math.hypot(dragX, dragY) > 8) {
+		if (Math.abs(dragX) > 32 || Math.abs(dragY) > 16) {
 			// this.hold = false;
 			this.blocked = true;
 		}
