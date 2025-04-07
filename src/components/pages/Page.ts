@@ -59,11 +59,8 @@ export class Page extends Phaser.GameObjects.Container {
 		let start = value ? 0.0 : 1.0;
 		let stop = value ? 1.0 : 0.0;
 
-		if (this.alpha != start) return this;
-
-		if (this.fadeTween) {
-			this.fadeTween.stop();
-		}
+		if (this.fadeTween) this.fadeTween.stop();
+		if (this.alpha == stop) return this;
 
 		this.fadeTween = this.scene.add.tween({
 			targets: this,

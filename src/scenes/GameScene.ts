@@ -223,9 +223,11 @@ export class GameScene extends BaseScene {
 
 		this.scene.get("UIScene").events.on(
 			"guide",
-			(value: boolean) => {
-				this.navigation.setGuideMode(value);
-				if (!value) {
+			(isGuideMode: boolean) => {
+				this.navigation.setGuideMode(isGuideMode);
+				if (isGuideMode) {
+					this.setState(PageState.Layer);
+				} else {
 					this.restart();
 				}
 			},
