@@ -60,7 +60,8 @@ export class DebugPage extends Page {
 			() => {
 				if (this.socket.isConnectedToUnreal) {
 					this.recacheCount = 0;
-					this.socket.queueReCacheDatabase();
+					// this.socket.queueReCacheDatabase();
+					this.socket.sendReCacheDatabase();
 					this.recacheLoader.setVisible(true);
 					layerManager.reloadLayers();
 				}

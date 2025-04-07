@@ -41,7 +41,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private localTrafficEnabled: boolean;
 	private serverTrafficEnabled: boolean;
 
-	private queuedRecacheRequest: boolean;
+	// private queuedRecacheRequest: boolean;
 	private isRecaching: boolean;
 
 	private fadeTween: Phaser.Tweens.Tween;
@@ -83,7 +83,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.scenariosLoaded = false;
 		this.localTrafficEnabled = false;
 		this.serverTrafficEnabled = false;
-		this.queuedRecacheRequest = false;
+		// this.queuedRecacheRequest = false;
 		this.isRecaching = false;
 
 		this.debugTexts = [];
@@ -190,10 +190,14 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	onResetRepsonse(data: P.ResetResponse) {
+		// this.addLog(
+		// 	`Received reset! queuedRecacheRequest: ${this.queuedRecacheRequest} && isRecaching: ${this.isRecaching}`,
+		// 	LogType.Status
+		// );
 		// Unreal has finished resetting
-		if (this.queuedRecacheRequest && !this.isRecaching) {
-			this.sendReCacheDatabase();
-		}
+		// if (this.queuedRecacheRequest && !this.isRecaching) {
+		// 	this.sendReCacheDatabase();
+		// }
 	}
 
 	onErrorRepsonse(data: P.ErrorResponse) {
@@ -230,13 +234,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 
 		this.isRecaching = true;
-		this.queuedRecacheRequest = false;
+		// this.queuedRecacheRequest = false;
 		this.emit("onCacheProgress");
 	}
 
 	onCacheComplete(data: P.CacheCompleteResponse) {
 		this.isRecaching = false;
-		this.queuedRecacheRequest = false;
+		// this.queuedRecacheRequest = false;
 		this.emit("onCacheComplete");
 	}
 
@@ -351,13 +355,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.emit("movieEnabled", true);
 	}
 
-	queueReCacheDatabase() {
-		this.sendReset();
-		this.queuedRecacheRequest = true;
-		this.emit("onCacheProgress");
-	}
+	// queueReCacheDatabase() {
+	// 	this.sendReset();
+	// 	this.queuedRecacheRequest = true;
+	// 	this.emit("onCacheProgress");
+	// }
 
-	private sendReCacheDatabase() {
+	sendReCacheDatabase() {
 		this.scenariosLoaded = false;
 		this.isRecaching = true;
 
