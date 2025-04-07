@@ -8,7 +8,7 @@ import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
 import { LayerImageButton } from "../LayerImageButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
-import { layerManager } from "@/utils/LayerManager";
+import { Layer, layerManager } from "@/utils/LayerManager";
 import { LayerButton } from "../LayerButton";
 import { LayerList } from "../LayerList";
 
@@ -142,22 +142,26 @@ export class LayerPage extends Page {
 			button.setHighlight(button.getText() == folder);
 		});
 
-		layerManager.getLayers(folder).forEach((layer: string) => {
+		layerManager.getLayers(folder).forEach((layer: Layer) => {
 			this.addLayerButton(layer, areas.next().value);
 		});
 	}
 
-	addLayerButton(layer: string, { x, y, w, h }: GridArea) {
-		let button = new LayerImageButton(this.scene, x, y, w, h, layer);
+	addLayerButton(layer: Layer, { x, y, w, h }: GridArea) {
+		let button = new LayerImageButton(this.scene, x, y, w, h, layer.name);
 		button.setDraggable();
 		this.add(button);
 		this.layerButtons.push(button);
 		this.scrollArea.apply(button);
 
-		let activeIndex = this.activeLayers.indexOf(layer);
+		let activeIndex = this.activeLayers.indexOf(layer.name);
 		if (activeIndex != -1) {
 			button.setSelected(true);
 			button.setOrder(activeIndex + 1);
+		}
+
+		if (!layer.isInDrive) {
+			button.addErrorIcon();
 		}
 
 		button.on("click", () => this.onLayerButtonClick(button));

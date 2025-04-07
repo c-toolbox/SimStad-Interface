@@ -1,13 +1,13 @@
 import { localLayers } from "@/assets/assets";
 import { filesystem } from "@neutralinojs/lib";
 
-interface Layer {
+export interface Layer {
 	name: string;
 	isInDrive: boolean;
 	isInLocal: boolean;
 }
 
-interface Folder {
+export interface Folder {
 	name: string;
 	layers: Layer[];
 	isSequential: boolean;
@@ -115,9 +115,14 @@ class LayerManager {
 
 		this.folders.sort((a, b) => {
 			if (a.isSequential === b.isSequential) {
+				// return a.name.localeCompare(b.name);
 				return b.layers.length - a.layers.length;
 			}
 			return a.isSequential ? 1 : -1;
+		});
+
+		this.folders.forEach((folder) => {
+			folder.layers.sort((a, b) => a.name.localeCompare(b.name));
 		});
 	}
 
@@ -131,11 +136,11 @@ class LayerManager {
 		return this.folders;
 	}
 
-	getLayers(folder: string): string[] {
+	getLayers(folder: string): Layer[] {
 		const folderObj = this.folders.find((f) => f.name === folder);
 		if (!folderObj) return [];
 
-		return folderObj.layers.map((layer) => layer.name);
+		return folderObj.layers;
 	}
 
 	getAllLayers() {

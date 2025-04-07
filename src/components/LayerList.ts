@@ -56,14 +56,7 @@ export class LayerList extends Phaser.GameObjects.Container {
 
 				let { x, y } = this.snapPositions[i];
 				if (isNew) {
-					this.scene.tweens.add({
-						targets: layer,
-						aliveSmooth: 1,
-						duration: 500,
-						ease: (v: number) => {
-							return Phaser.Math.Easing.Elastic.Out(v, 1.5, 0.5);
-						},
-					});
+					layer.playBounce();
 					x += 10;
 				}
 				layer.setSnapPosition(x, y, isNew);

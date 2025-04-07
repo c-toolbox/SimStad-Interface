@@ -10,15 +10,15 @@ export class LayerListImage extends Button {
 
 	private snapX: number;
 	private snapY: number;
-	private alive: number;
-	private aliveSmooth: number;
+	private animSpawn: number;
+	private animFade: number;
 
 	constructor(scene: BaseScene, size: number) {
 		super(scene, 0, 0);
 		this.snapX = 0;
 		this.snapY = 0;
-		this.alive = 1;
-		this.aliveSmooth = 0;
+		this.animSpawn = 0;
+		this.animFade = 0;
 
 		this.image = this.scene.add.image(0, 0, "Nkpg/Hillshade");
 		this.image.setScale(size / this.image.width);
@@ -58,11 +58,15 @@ export class LayerListImage extends Button {
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void {
 		super.onDrag(pointer, dragX, dragY);
 
+		const wasWithinBounds = this.isWithinBounds;
+
 		this.x = pointer.x;
-		this.y = pointer.y;
+		this.y = (pointer.y + this.snapY) / 2;
 		this.emit("drag");
 
-		this.alive = this.isWithinBounds ? 1 : 0.5;
+		if (this.isWithinBounds !== wasWithinBounds) {
+			this.playFade(this.isWithinBounds);
+		}
 	}
 
 	onDragEnd(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void {
@@ -88,14 +92,35 @@ export class LayerListImage extends Button {
 	update(time: number, delta: number) {
 		if (!this.visible) return;
 
-		this.aliveSmooth = Phaser.Math.Linear(this.aliveSmooth, this.alive, 0.2);
-		this.setScale(this.aliveSmooth + 0.2 * this.holdSmooth);
-		this.setAlpha(this.aliveSmooth);
+		this.setAlpha(1.0 - 0.5 * this.animFade);
+		this.setScale(this.animSpawn * this.alpha + 0.2 * this.holdSmooth);
 
 		if (!this.hold) {
 			this.x = Phaser.Math.Linear(this.x, this.snapX, 0.2);
 			this.y = Phaser.Math.Linear(this.y, this.snapY, 0.2);
 		}
+	}
+
+	playBounce() {
+		this.animSpawn = 0;
+		this.animFade = 0;
+
+		this.scene.tweens.add({
+			targets: this,
+			animSpawn: 1,
+			duration: 500,
+			ease: (v: number) => {
+				return Phaser.Math.Easing.Elastic.Out(v, 1.5, 0.5);
+			},
+		});
+	}
+
+	playFade(isWithinBounds: boolean) {
+		this.scene.tweens.add({
+			targets: this,
+			animFade: isWithinBounds ? 0 : 1,
+			duration: 200,
+		});
 	}
 
 	get isWithinBounds() {

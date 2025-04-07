@@ -24,7 +24,7 @@ export class LayerFolderButton extends LayerButton {
 
 		picks.reverse().forEach((pick, i) => {
 			const layer = layersInFolder[pick];
-			const image = scene.add.image(0, 0, layer);
+			const image = scene.add.image(0, 0, layer.name);
 			image.setScale(width / image.width);
 			this.add(image);
 
@@ -47,7 +47,7 @@ export class LayerFolderButton extends LayerButton {
 		this.bringToTop(this.title);
 
 		const isSequenceFolder = layersInFolder.every((layer) => {
-			return layer.split("/")[1].startsWith(folder);
+			return layer.name.split("/")[1].startsWith(folder);
 		});
 		this.image.setTint(isSequenceFolder ? Color.Red900 : Color.Slate900);
 	}

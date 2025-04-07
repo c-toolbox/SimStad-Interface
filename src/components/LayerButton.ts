@@ -95,11 +95,11 @@ export class LayerButton extends Button {
 		let ms = 0.2 * this.width;
 		let mx = this.width / 2 - 0.6 * ms;
 		let my = -this.height / 2 + 0.6 * ms;
-		let circle = this.scene.add.ellipse(mx, my, ms, ms, 0, 0.75);
+		let circle = this.scene.add.ellipse(mx, my, ms, ms, 0xffffff, 0.9);
 		this.add(circle);
-		let missing = this.scene.add.image(mx, my, "x");
-		missing.setTint(Color.Red500);
-		missing.setScale((0.6 * ms) / missing.width);
+		let missing = this.scene.add.image(mx, my, "cloud-slash");
+		missing.setTint(Color.Red700);
+		missing.setScale((0.8 * ms) / missing.width);
 		this.add(missing);
 	}
 
