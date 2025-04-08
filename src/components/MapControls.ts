@@ -155,6 +155,8 @@ export class MapControls extends Phaser.GameObjects.Container {
 	resetLight() {
 		this.dateDial.resetValue();
 		this.hourDial.resetValue();
+		this.setDate(this.dateDial.value);
+		this.setHour(this.hourDial.value);
 	}
 
 	numberToDate(value: number) {
