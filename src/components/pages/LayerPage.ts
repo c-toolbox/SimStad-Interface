@@ -163,6 +163,9 @@ export class LayerPage extends Page {
 		if (!layer.isInDrive) {
 			button.addErrorIcon();
 		}
+		// if (layer.useCount > 0) {
+		// 	button.addUseCount(layer.useCount);
+		// }
 
 		button.on("click", () => this.onLayerButtonClick(button));
 	}

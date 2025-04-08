@@ -103,6 +103,24 @@ export class LayerButton extends Button {
 		this.add(missing);
 	}
 
+	addUseCount(count: number) {
+		let ms = 0.15 * this.width;
+		let mx = -this.width / 2 + 0.6 * ms;
+		let my = -this.height / 2 + 0.6 * ms;
+		let circle = this.scene.add.ellipse(mx, my, ms, ms, 0xffffff, 0.9);
+		this.add(circle);
+		let text = this.scene.addText({
+			x: mx,
+			y: my,
+			size: 0.65 * ms,
+			fontFamily: "Lato-Bold",
+			text: count.toString(),
+			color: "black",
+		});
+		text.setOrigin(0.5);
+		this.add(text);
+	}
+
 	setTexture(key: string, showBackground: boolean) {
 		const exists = this.scene.textures.exists(key);
 

@@ -39,8 +39,6 @@ class LanguageManager {
 		swedishLocales = Object.assign({}, swedishLocales);
 		englishLocales = Object.assign({}, englishLocales);
 
-		scenarioManager.fetchLanguageData(swedishLocales, englishLocales);
-
 		this.languageData.clear();
 		this.languageData.set(LanguageKey.Swedish, swedishLocales);
 		this.languageData.set(LanguageKey.English, englishLocales);

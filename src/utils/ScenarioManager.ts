@@ -95,117 +95,6 @@ export class ScenarioManager {
 		});
 	}
 
-	// Called by LanguageManager. Extracts raw scenario data and localization.
-	fetchLanguageData(
-		swedishLocales: { [key: string]: string },
-		englishLocales: { [key: string]: string }
-	) {
-		/*
-		// Iterate over all scenarios
-		Object.values(ScenarioKey).forEach((scenarioKey: ScenarioKey) => {
-			// Add scenario titles to locales
-			swedishLocales[scenarioKey + "title"] = scenariosSv[scenarioKey].Title;
-			englishLocales[scenarioKey + "title"] = scenariosEn[scenarioKey].Title;
-
-			// Fetch section lists
-			const sectionsSv = scenariosSv[scenarioKey].Sections;
-			const sectionsEn = scenariosEn[scenarioKey].Sections;
-			if (sectionsSv.length != sectionsEn.length) {
-				console.error("Swedish and english scenario sections not matching");
-			}
-
-			this.sections[scenarioKey] = [];
-
-			// Add swedish section texts to locales
-			for (let i = 0; i < sectionsSv.length; i++) {
-				const sectionSv = sectionsSv[i];
-				const sectionEn = sectionsEn[i];
-
-				if (sectionSv.Buttons?.length != sectionEn.Buttons?.length) {
-					console.error("Swedish and english buttons mismatch: " + scenarioKey);
-				}
-				if (
-					sectionSv.Slider?.Labels.length != sectionEn.Slider?.Labels.length
-				) {
-					console.error("Swedish and english slider mismatch: " + scenarioKey);
-				}
-				if (sectionSv.LegendColors.length != sectionEn.LegendColors.length) {
-					console.error("Swedish and english legend mismatch: " + scenarioKey);
-				}
-				if (sectionSv.Filenames != sectionEn.Filenames) {
-					console.error(
-						`Swedish and english filenames mismatch in '${scenarioKey}'\n- ${sectionSv.Filenames}\n- ${sectionEn.Filenames}`
-					);
-				}
-
-				// Make safe string
-				let sectionKey = scenarioKey + safeString(sectionSv.Title);
-				// let sectionKey = scenarioKey + safeString(sectionSv.Id);
-
-				// Setup custom section object
-				let section: Section = {
-					key: sectionKey,
-					scenario: scenarioKey,
-					legend: sectionSv.Legend1,
-					default: sectionSv.Default,
-					legendColors: sectionSv.LegendColors,
-					defaultLayer: sectionSv.Filenames,
-				};
-				if (sectionSv.Buttons) {
-					section.layerButtons = sectionSv.Buttons.map(
-						(button) => button.Layers
-					);
-				}
-				if (sectionSv.Slider) {
-					section.layerSlider = {
-						layers: sectionSv.Slider.Layers,
-						labels: sectionSv.Slider.Labels.length,
-					};
-				}
-				this.sections[scenarioKey].push(section);
-
-				// Add section text to localization
-				swedishLocales[sectionKey + "title"] = sectionSv.Title;
-				englishLocales[sectionKey + "title"] = sectionEn.Title;
-				swedishLocales[sectionKey + "bread"] = sectionSv.Text1;
-				englishLocales[sectionKey + "bread"] = sectionEn.Text1;
-				swedishLocales[sectionKey + "legend"] = sectionSv.LegendTitle;
-				englishLocales[sectionKey + "legend"] = sectionEn.LegendTitle;
-				sectionSv.LegendColors?.forEach(({ text }, index) => {
-					swedishLocales[sectionKey + "legend" + index] = text;
-				});
-				sectionEn.LegendColors?.forEach(({ text }, index) => {
-					englishLocales[sectionKey + "legend" + index] = text;
-				});
-				sectionSv.Buttons?.forEach((button, index) => {
-					swedishLocales[sectionKey + "button" + index] = button.Title;
-				});
-				sectionEn.Buttons?.forEach((button, index) => {
-					englishLocales[sectionKey + "button" + index] = button.Title;
-				});
-				sectionSv.Slider?.Labels.forEach((label, index) => {
-					swedishLocales[sectionKey + "sliderLabel" + index] = label;
-				});
-				sectionEn.Slider?.Labels.forEach((label, index) => {
-					englishLocales[sectionKey + "sliderLabel" + index] = label;
-				});
-				if (sectionSv.Slider) {
-					swedishLocales[sectionKey + "sliderTitle"] = sectionSv.Slider.Title;
-				}
-				if (sectionEn.Slider) {
-					englishLocales[sectionKey + "sliderTitle"] = sectionEn.Slider.Title;
-				}
-				if (sectionSv.LegendSource) {
-					swedishLocales[sectionKey + "legendSource"] = sectionSv.LegendSource;
-				}
-				if (sectionEn.LegendSource) {
-					englishLocales[sectionKey + "legendSource"] = sectionEn.LegendSource;
-				}
-			}
-		});
-		*/
-	}
-
 	getScenarios(): Scenario[] {
 		return this.scenarios;
 	}
@@ -234,6 +123,32 @@ export class ScenarioManager {
 		if (scenario) {
 			return scenario.sections.find((section) => section.key == sectionId);
 		}
+	}
+
+	getLayerUseCount(layer: string): number {
+		let count = 0;
+		this.scenarios.forEach((scenario) => {
+			scenario.sections.forEach((section) => {
+				if (
+					!section.layerSlider &&
+					section.layerButtons?.length == 0 &&
+					section.defaultLayer.split(",").includes(layer)
+				) {
+					count++;
+				}
+				section.layerSlider?.layers.forEach((sliderLayer) => {
+					if (sliderLayer.split(",").includes(layer)) {
+						count++;
+					}
+				});
+				section.layerButtons?.forEach((buttonLayer) => {
+					if (buttonLayer.split(",").includes(layer)) {
+						count++;
+					}
+				});
+			});
+		});
+		return count;
 	}
 }
 

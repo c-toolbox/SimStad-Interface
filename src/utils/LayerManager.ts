@@ -1,10 +1,12 @@
 import { localLayers } from "@/assets/assets";
 import { filesystem } from "@neutralinojs/lib";
+import { scenarioManager } from "./ScenarioManager";
 
 export interface Layer {
 	name: string;
 	isInDrive: boolean;
 	isInLocal: boolean;
+	useCount: number;
 }
 
 export interface Folder {
@@ -99,6 +101,7 @@ class LayerManager {
 					name: layer,
 					isInDrive: driveLayerSet.has(layer),
 					isInLocal: localLayerSet.has(layer),
+					useCount: scenarioManager.getLayerUseCount(layer),
 				})),
 				isSequential: false,
 				isInDrive: !!driveFolders[folder],
