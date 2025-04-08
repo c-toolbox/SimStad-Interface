@@ -14,7 +14,7 @@ export class DebugPage extends Page {
 
 	private trafficSlider: CheckSlider;
 	private reCacheButton: TextButton;
-	private layoutSlider: CheckSlider;
+	private advLayerSlider: CheckSlider;
 	private loggingSlider: CheckSlider;
 
 	private recacheLoader: Phaser.GameObjects.Image;
@@ -123,7 +123,7 @@ export class DebugPage extends Page {
 
 		/* UI Layout */
 
-		this.layoutSlider = this.setCheckboxArea(
+		this.advLayerSlider = this.setCheckboxArea(
 			3,
 			"Show layer info",
 			"Display layer usage count and drive status in layer page",
@@ -250,7 +250,7 @@ export class DebugPage extends Page {
 
 	reset() {
 		this.trafficSlider.value = 0;
-		this.layoutSlider.value = 0;
+		this.advLayerSlider.value = 0;
 		this.loggingSlider.value = 0;
 
 		this.emit("logging", false);

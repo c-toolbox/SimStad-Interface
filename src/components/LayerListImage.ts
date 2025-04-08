@@ -119,7 +119,7 @@ export class LayerListImage extends Button {
 		this.scene.tweens.add({
 			targets: this,
 			animFade: isWithinBounds ? 0 : 1,
-			duration: 200,
+			duration: 50,
 		});
 	}
 

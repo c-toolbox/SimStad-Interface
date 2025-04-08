@@ -100,6 +100,10 @@ export class LayerPage extends Page {
 		});
 	}
 
+	reset() {
+		this.showLayerInfo = false;
+	}
+
 	clearLayers() {
 		this.scrollArea.clear();
 		this.layerButtons = [];
