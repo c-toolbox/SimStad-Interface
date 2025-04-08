@@ -113,6 +113,10 @@ export class GameScene extends BaseScene {
 			page.on("logging", (active: boolean) => {
 				this.loggingOverlay.setVisible(active);
 			});
+
+			page.on("showLayerInfo", (active: boolean) => {
+				this.layerPage.setShowLayerInfo(active);
+			});
 		});
 
 		this.loggingOverlay = new LoggingOverlay(

@@ -95,30 +95,41 @@ export class LayerButton extends Button {
 		let ms = 0.2 * this.width;
 		let mx = this.width / 2 - 0.6 * ms;
 		let my = -this.height / 2 + 0.6 * ms;
-		let circle = this.scene.add.ellipse(mx, my, ms, ms, 0xffffff, 0.9);
-		this.add(circle);
+		let background = this.scene.add.ellipse(mx, my, ms, ms, Color.Red700, 0.9);
+		this.add(background);
+
 		let missing = this.scene.add.image(mx, my, "cloud-slash");
-		missing.setTint(Color.Red700);
-		missing.setScale((0.8 * ms) / missing.width);
+		missing.setScale((0.7 * ms) / missing.width);
 		this.add(missing);
 	}
 
 	addUseCount(count: number) {
 		let ms = 0.15 * this.width;
-		let mx = -this.width / 2 + 0.6 * ms;
-		let my = -this.height / 2 + 0.6 * ms;
-		let circle = this.scene.add.ellipse(mx, my, ms, ms, 0xffffff, 0.9);
-		this.add(circle);
+		let mx = 0;
+		let my = -this.height / 2 + 0.8 * ms;
+
 		let text = this.scene.addText({
 			x: mx,
 			y: my,
 			size: 0.65 * ms,
-			fontFamily: "Lato-Bold",
-			text: count.toString(),
-			color: "black",
+			fontFamily: "Lato-Regular",
+			text: count > 1 ? `used (${count})` : count > 0 ? "used" : "unused",
+			color: "white",
 		});
 		text.setOrigin(0.5);
 		this.add(text);
+
+		let color = count > 0 ? Color.Green700 : Color.Red700;
+		let background = new RoundRectangle(this.scene, {
+			x: mx,
+			y: my,
+			width: text.displayWidth + ms / 2,
+			height: ms,
+			color,
+			radius: ms / 2,
+		});
+		this.add(background);
+		this.moveDown(background);
 	}
 
 	setTexture(key: string, showBackground: boolean) {

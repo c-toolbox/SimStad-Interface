@@ -18,7 +18,7 @@ export class DebugPage extends Page {
 	private loggingSlider: CheckSlider;
 
 	private recacheLoader: Phaser.GameObjects.Image;
-	private recacheCount: number;
+	private recacheCount: number = 0;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -125,12 +125,21 @@ export class DebugPage extends Page {
 
 		this.layoutSlider = this.setCheckboxArea(
 			3,
-			"Draw layout",
-			"Draw the layout of the scene",
+			"Show layer info",
+			"Display layer usage count and drive status in layer page",
 			(active: boolean) => {
-				layout.drawLayout(scene);
+				this.emit("showLayerInfo", active);
 			}
 		);
+
+		// this.layoutSlider = this.setCheckboxArea(
+		// 	3,
+		// 	"Draw layout",
+		// 	"Draw the layout of the scene",
+		// 	(active: boolean) => {
+		// 		layout.drawLayout(scene);
+		// 	}
+		// );
 
 		/* Miscellaneous buttons */
 

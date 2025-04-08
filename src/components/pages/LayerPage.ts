@@ -16,6 +16,7 @@ export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
 	private layerButtons: LayerButton[];
+	private showLayerInfo: boolean;
 
 	private activeLayers: string[];
 	private layerList: LayerList;
@@ -25,6 +26,7 @@ export class LayerPage extends Page {
 
 		this.layerButtons = [];
 		this.activeLayers = [];
+		this.showLayerInfo = false;
 
 		let background = layout.addRect(scene, layout.panel, Color.Slate800);
 		this.add(background);
@@ -143,7 +145,9 @@ export class LayerPage extends Page {
 		});
 
 		layerManager.getLayers(folder).forEach((layer: Layer) => {
-			this.addLayerButton(layer, areas.next().value);
+			if (layer.isInDrive || this.showLayerInfo) {
+				this.addLayerButton(layer, areas.next().value);
+			}
 		});
 	}
 
@@ -163,9 +167,9 @@ export class LayerPage extends Page {
 		if (!layer.isInDrive) {
 			button.addErrorIcon();
 		}
-		// if (layer.useCount > 0) {
-		// 	button.addUseCount(layer.useCount);
-		// }
+		if (this.showLayerInfo) {
+			button.addUseCount(layer.useCount);
+		}
 
 		button.on("click", () => this.onLayerButtonClick(button));
 	}
@@ -241,6 +245,11 @@ export class LayerPage extends Page {
 				y += h + sep;
 			}
 		}
+	}
+
+	setShowLayerInfo(show: boolean) {
+		this.showLayerInfo = show;
+		this.loadLayerFolder(layerManager.getFolders()[0].name);
 	}
 }
 

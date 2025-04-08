@@ -6,7 +6,7 @@ import { LayerListImage } from "./LayerListImage";
 export class LayerList extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
-	private snapPositions: Phaser.Types.Math.Vector2Like[];
+	private snapPositions: { x: number; y: number }[];
 	private layers: LayerListImage[];
 
 	constructor(scene: BaseScene, x: number, y: number) {
