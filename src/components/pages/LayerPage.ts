@@ -101,7 +101,9 @@ export class LayerPage extends Page {
 	}
 
 	reset() {
-		this.showLayerInfo = false;
+		if (this.showLayerInfo) {
+			this.setShowLayerInfo(false);
+		}
 	}
 
 	clearLayers() {

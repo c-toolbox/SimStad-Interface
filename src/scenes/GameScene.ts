@@ -157,6 +157,7 @@ export class GameScene extends BaseScene {
 
 	restart() {
 		this.map.reset();
+		this.layerPage.reset();
 		this.debugPage.reset();
 		this.setState(PageState.Home);
 	}
