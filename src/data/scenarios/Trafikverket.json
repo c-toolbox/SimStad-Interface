@@ -8,7 +8,7 @@
 			"Text1": "Kartan visar översiktligt etableringsområden och huvudsakliga vägar som påverkas då Ostlänken och Norrköpings nya centralstation byggs. Klicka på flikarna för mer information om det som visas på kartan.",
 			"Legend1": "trafikverket_oversikt",
 			"Default": true,
-			"Filenames": "Trafikverket/oversikt",
+			"Filenames": "Ostlanken/oversikt",
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
@@ -55,7 +55,7 @@
 			"Text1": "När Ostlänken och Norrköpings nya centralstation byggs kommer ett etableringsområde för produktionen att anläggas i södra Butängen. Etableringsområdet inrymmer bland annat betongfabrik för produktion av betong till stationens broar, byggkranar och personalbodar samt möjliggör uppställning av fordon/maskiner samt lagring av material. Området stängslas in i sin helhet och transporter till och från området sker genom utpekade in- och utfarter.",
 			"Legend1": "trafikverket_etableringsomraden",
 			"Default": false,
-			"Filenames": "Trafikverket/Etableringsomrade",
+			"Filenames": "Ostlanken/Etableringsomrade",
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
@@ -71,7 +71,7 @@
 			"Text1": "Etableringsområdet i Södra Butängen kommer att alstra stora mängder byggtrafik. Huvudsakliga vägstråk som kommer att nyttjas av byggtrafiken är Finspångsvägen, Riksvägen, Norra Promenaden, Ståthögavägen, Sjötullsgatan samt Stockholmsvägen.",
 			"Legend1": "trafikverket_byggtrafik",
 			"Default": false,
-			"Filenames": "Trafikverket/Byggtrafik",
+			"Filenames": "Ostlanken/Byggtrafik",
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
@@ -87,7 +87,7 @@
 			"Text1": "Under stora delar av byggtiden kommer det allmänna trafiknätet att påverkas. Det kan bland annat handla om att gator stängs av i sin helhet och att gator får reducerad kapacitet. De gator som huvudsakligen påverkas är Stockholmsvägen, Ingelstagatan och Ståthögavägen. Huvudsakliga omledningsstråk för allmän trafik kommer att vara Riksvägen, Stockholmsvägen och Norra Promenaden.",
 			"Legend1": "trafikverket_paverkan",
 			"Default": false,
-			"Filenames": "Trafikverket/Paverkan_pa_allm",
+			"Filenames": "Ostlanken/Paverkan_pa_allm",
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
@@ -114,7 +114,7 @@
 			"Text1": "Det pågår ett arbete med analysera trafikpåverkan och att finna åtgärder för att hantera störningarna på den allmänna trafiken. Det kan exempelvis handla om ändringar i linjedragningar och tidtabeller för kollektivtrafiken samt åtgärder som förbättrar framkomligheten i det allmänna vägnätet. Några åtgärder som diskuteras är en ny bro för allmän trafik mellan Fredriksdalsgatan och Stockholmsvägen samt att bygga Johannisborgsförbindelsen före eller i samband med att den nya stationsanläggningen byggs.",
 			"Legend1": "trafikverket_atgarder",
 			"Default": false,
-			"Filenames": "Trafikverket/M_Atgarder",
+			"Filenames": "Ostlanken/M_Atgarder",
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
@@ -130,7 +130,7 @@
 			"Text1": "Norrköpings kommun och Trafikverket arbetar gemensamt för att säkerställa tillgänglighet till och från befintligt resecentrum samt viktiga resenärsfunktioner under byggtiden. Bland annat studeras möjligheten att ersätta pendlarparkeringar som behöver rivas då Ostlänken byggs. Ersättningsytor behöver ha rimliga gångavstånd till resecentrum. I kartan illustreras avstånden 400 meter och 800 meter. Det bedöms motsvara ca 5-10 minuters gångväg.",
 			"Legend1": "trafikverket_tillganglighet",
 			"Default": false,
-			"Filenames": "Trafikverket/Tillgang",
+			"Filenames": "Ostlanken/Tillgang",
 			"LegendTitle": "Teckenförklaring",
 			"LegendColors": [
 				{
