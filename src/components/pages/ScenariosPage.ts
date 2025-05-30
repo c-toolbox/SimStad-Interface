@@ -9,8 +9,6 @@ import { ScrollBar } from "@/components/elements/ScrollBar";
 import { TextButton } from "@/components/TextButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
-import { ScenariosResponse } from "@/utils/protocol";
-// import * as scenariosData from "@/assets/data/unused/scenarios.json";
 
 export class ScenariosPage extends Page {
 	private scrollArea: ScrollArea;
@@ -61,7 +59,6 @@ export class ScenariosPage extends Page {
 			if (this.errorIcon.visible) {
 				this.socket.reconnectToUnreal();
 			}
-			this.socket.sendScenariosRequest();
 		});
 		this.addButton(x - 2 * w - 2 * s, y, w, h, "Fake", Color.Yellow800, () => {
 			this.clearScenarios();
@@ -131,81 +128,6 @@ export class ScenariosPage extends Page {
 		this.scenariosButtons = [];
 		this.loadingIcon.setVisible(true);
 		this.errorIcon.setVisible(false);
-	}
-
-	loadScenarios(scenarioData: ScenariosResponse) {
-		let i = 0;
-
-		let s = 20;
-		let x = s;
-		let y = 1.5 * s;
-		let h = 64;
-		let w = (this.scrollArea.width - 4 * s) / 3;
-
-		scenarioData.scenarios.forEach((scenario: any) => {
-			let label = this.scene.addText({
-				x: this.scrollArea.width / 2,
-				y: y,
-				size: 30,
-				text: scenario.title,
-			});
-			label.setOrigin(0.5);
-			this.scrollArea.apply(label);
-
-			let sx = s;
-			let sy = y;
-			let sw = this.scrollArea.width / 2 - 2 * s - label.displayWidth / 2;
-			let sh = 1;
-			let hrLeft = this.scene.add.rectangle(sx, sy, sw, sh, Color.White);
-			hrLeft.setOrigin(0, 0.5);
-			this.scrollArea.apply(hrLeft);
-
-			sx = this.scrollArea.width - s;
-			let hrRight = this.scene.add.rectangle(sx, sy, sw, sh, Color.White);
-			hrRight.setOrigin(1.0, 0.5);
-			this.scrollArea.apply(hrRight);
-
-			y += 70;
-
-			let bx = w / 2 + s;
-
-			scenario.sections.forEach((section: any) => {
-				section.sectionObject.forEach((object: any) => {
-					let noData = object.filenames == "No-Data";
-					let text = object.title.replace(/\n+/g, "");
-					let color = noData ? Color.Slate800 : Color.Green700;
-					let button = new TextButton(this.scene, bx, y, w, h, text, color);
-					button.setDraggable();
-					this.add(button);
-					this.scenariosButtons.push(button);
-					this.scrollArea.apply(button);
-
-					button.on(
-						"click",
-						() => {
-							this.socket.sendActivateDataset(object.filenames);
-
-							this.scenariosButtons.forEach((button) =>
-								button.setHighlight(false)
-							);
-							button.setHighlight(true);
-						},
-						this
-					);
-
-					bx += w + s;
-					if (bx + w / 2 > this.scrollArea.width) {
-						bx = w / 2 + s;
-						y += h + s;
-					}
-				});
-			});
-
-			y += 110;
-		});
-
-		this.loadingIcon.setVisible(false);
-		this.buttons.forEach((button) => this.bringToTop(button));
 	}
 
 	updateConnection(omniStatus: CS, unrealStatus: CS) {

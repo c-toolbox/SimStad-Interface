@@ -37,7 +37,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private pingTimeout: NodeJS.Timeout;
 	private pingAttempts: number;
 
-	private scenariosLoaded: boolean;
 	private localTrafficEnabled: boolean;
 	private serverTrafficEnabled: boolean;
 
@@ -67,11 +66,9 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.OmniError]: this.onOmniError,
 
 			[P.Response.Ping]: this.onPing,
-			[P.Response.Scenarios]: this.onScenarios,
-			[P.Response.ErrorResponse]: this.onErrorRepsonse,
-			[P.Response.ResetResponse]: this.onResetRepsonse,
-			[P.Response.ActivateTraffic]: this.onActivateTraffic,
-			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
+			[P.Response.Layer]: this.onLayerRepsonse,
+			[P.Response.Reset]: this.onResetRepsonse,
+			[P.Response.LiveTraffic]: this.onLiveTraffic,
 			[P.Response.CacheProgress]: this.onCacheProgress,
 			[P.Response.CacheComplete]: this.onCacheComplete,
 		};
@@ -80,7 +77,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.unrealConnectionStatus = ConnectionStatus.Disconnected;
 		this.pingAttempts = 0;
 
-		this.scenariosLoaded = false;
 		this.localTrafficEnabled = false;
 		this.serverTrafficEnabled = false;
 		// this.queuedRecacheRequest = false;
@@ -183,10 +179,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		clearTimeout(this.pingTimeout);
 		this.pingAttempts = 0;
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
-
-		if (!this.scenariosLoaded) {
-			this.sendScenariosRequest();
-		}
 	}
 
 	onResetRepsonse(data: P.ResetResponse) {
@@ -200,30 +192,15 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		// }
 	}
 
-	onErrorRepsonse(data: P.ErrorResponse) {
-		console.error(data);
-		// if (data.error_type == "ScenarioRequestError") {}
-	}
-
-	onScenarios(data: P.ScenariosResponse) {
-		this.scenariosLoaded = true;
+	onLayerRepsonse(data: P.LayerResponse) {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onActivateTraffic(data: P.ActivateTrafficResponse) {
-		this.serverTrafficEnabled = true;
-		this.emit("serverTrafficEnabled", true);
-		if (!this.localTrafficEnabled) {
-			this.sendDeactivateTraffic();
-		}
-		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
-	}
-
-	onDeactivateTraffic(data: P.DeactivateTrafficResponse) {
-		this.serverTrafficEnabled = false;
-		this.emit("serverTrafficEnabled", false);
-		if (this.localTrafficEnabled) {
-			this.sendActivateTraffic();
+	onLiveTraffic(data: P.LiveTrafficResponse) {
+		this.serverTrafficEnabled = data.active;
+		this.emit("serverTrafficEnabled", data.active);
+		if (data.active != this.localTrafficEnabled) {
+			this.sendLiveTraffic(this.localTrafficEnabled);
 		}
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
@@ -267,50 +244,23 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendScenariosRequest() {
-		this.scenariosLoaded = false;
-
-		let data: P.ScenariosRequest = {
-			type: P.Request.Scenarios,
-			language: languageManager.getCurrentLanguage(),
+	sendLayers(layers: P.LayerRequestData[]) {
+		let data: P.LayerRequest = {
+			type: P.Request.Layer,
+			layers: layers,
 		};
 		this.sendRequest(data);
 	}
 
-	sendActivateDataset(datasets: string) {
-		let data: P.ActivateDatasetRequest = {
-			type: P.Request.ActivateDataset,
-			datasets,
-		};
-		this.sendRequest(data);
-	}
-
-	sendDeactivateDataset(datasets: string) {
-		let data: P.DeactivateDatasetRequest = {
-			type: P.Request.DeactivateDataset,
-			datasets,
-		};
-		this.sendRequest(data);
-	}
-
-	sendActivateTraffic() {
+	sendLiveTraffic(active: boolean) {
 		if (!this.localTrafficEnabled) {
-			let data: P.ActivateTrafficRequest = {
-				type: P.Request.ActivateTraffic,
+			let data: P.LiveTrafficRequest = {
+				type: P.Request.LiveTraffic,
+				active,
 			};
 			this.sendRequest(data);
 		}
-		this.localTrafficEnabled = true;
-	}
-
-	sendDeactivateTraffic() {
-		if (this.localTrafficEnabled) {
-			let data: P.DeactivateTrafficRequest = {
-				type: P.Request.DeactivateTraffic,
-			};
-			this.sendRequest(data);
-		}
-		this.localTrafficEnabled = false;
+		this.localTrafficEnabled = active;
 	}
 
 	sendLight(year: number, month: number, day: number, hour: number) {
@@ -346,15 +296,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendMovie() {
-		this.send({
-			type: "ActivateDatasetRequest",
-			datasets: "Idle/Idle_Movie",
-		});
-
-		this.emit("movieEnabled", true);
-	}
-
 	// queueReCacheDatabase() {
 	// 	this.sendReset();
 	// 	this.queuedRecacheRequest = true;
@@ -362,7 +303,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	// }
 
 	sendReCacheDatabase() {
-		this.scenariosLoaded = false;
 		this.isRecaching = true;
 
 		let data: P.CacheRequest = {

@@ -108,7 +108,7 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.lampIds = ["lamp_1", "lamp_2", "lamp_3"];
 		this.lamps = [];
-		this.socket.on(Response.ResetResponse, () => {
+		this.socket.on(Response.Reset, () => {
 			this.lamps.forEach((lamp) => lamp.destroy());
 			this.lamps = [];
 		});

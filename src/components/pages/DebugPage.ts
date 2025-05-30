@@ -97,11 +97,7 @@ export class DebugPage extends Page {
 			(active: boolean) => {
 				if (this.socket.isConnectedToUnreal) {
 					this.trafficSlider.setIsLoading(true);
-					if (active) {
-						this.socket.sendActivateTraffic();
-					} else {
-						this.socket.sendDeactivateTraffic();
-					}
+					this.socket.sendLiveTraffic(active);
 				}
 			}
 		);

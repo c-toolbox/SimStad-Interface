@@ -14,7 +14,7 @@ import { DebugPage } from "@/components/pages/DebugPage";
 import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 
 import { SocketManager } from "@/utils/SocketManager";
-import { Response, ScenariosResponse } from "@/utils/protocol";
+import { Response } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
 
 export class GameScene extends BaseScene {
@@ -50,16 +50,9 @@ export class GameScene extends BaseScene {
 		this.socket.setDepth(1000);
 		this.socket.connect();
 
-		this.socket.on(Response.Scenarios, (data: ScenariosResponse) => {
-			this.scenariosPage.loadScenarios(data);
-		});
 		this.socket.on("reconnect", () => {
 			this.socket.sendReset();
 			this.restart();
-			this.socket.send({
-				type: "DeactivateDatasetRequest",
-				datasets: "RiverFlow",
-			});
 		});
 		this.socket.on("onCacheProgress", () => {
 			this.events.emit("onCacheProgress");
@@ -175,21 +168,19 @@ export class GameScene extends BaseScene {
 		if (state == PageState.Home) {
 			if (smooth) {
 				this.map.resetLightControls();
-				this.socket.fadeLight(() => {
-					blocksManager.setDefaultLegend();
-					this.socket.sendReset();
-					this.scenarioPage.activateDataset("Nkpg/Orto20230921");
-					this.map.setLayers("Nkpg/Orto20230921");
-					this.socket.sendDeactivateTraffic();
-				});
+				this.socket.fadeLight(() => this.onHomeReset());
 			} else {
-				blocksManager.setDefaultLegend();
-				this.socket.sendReset();
-				this.scenarioPage.activateDataset("Nkpg/Orto20230921");
-				this.map.setLayers("Nkpg/Orto20230921");
-				this.socket.sendDeactivateTraffic();
+				this.onHomeReset();
 			}
 		}
+	}
+
+	onHomeReset() {
+		blocksManager.setDefaultLegend();
+		this.socket.sendReset();
+		this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+		this.map.setLayers("Nkpg/Orto20230921");
+		this.socket.sendLiveTraffic(false);
 	}
 
 	/* Blur */
@@ -198,14 +189,19 @@ export class GameScene extends BaseScene {
 		// Listen for events from the UI scene
 		this.scene.get("UIScene").events.on(
 			"attraction",
-			(state: boolean) => {
-				this.attractionOpen = state;
+			(isAttractionMode: boolean) => {
+				this.attractionOpen = isAttractionMode;
 
 				this.updateBlur();
 				// this.foodWeb.toggleAttraction(state);
 
-				if (state) {
-					this.socket.sendMovie();
+				if (isAttractionMode) {
+					this.socket.sendLayers([
+						{
+							type: "movie",
+							name: "Movie/IdleMovie",
+						},
+					]);
 				} else {
 					this.map.resetLightControls();
 					this.socket.fadeLight(() => {

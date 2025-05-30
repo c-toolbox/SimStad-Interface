@@ -9,11 +9,11 @@ import { ScenarioId, Section, scenarioManager } from "@/utils/ScenarioManager";
 import { TextButton } from "../TextButton";
 import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
-import { ONLINE } from "@/utils/constants";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
 import { blocksManager } from "@/utils/BlocksManager";
+import { LayerRequestData } from "@/utils/protocol";
 
 export class ScenarioPage extends Page {
 	private background: RoundRectangle;
@@ -245,11 +245,7 @@ export class ScenarioPage extends Page {
 
 		blocksManager.setWallVideo(scenarioId);
 
-		if (scenarioId == "rorelse") {
-			this.socket.sendActivateTraffic();
-		} else {
-			this.socket.sendDeactivateTraffic();
-		}
+		this.socket.sendLiveTraffic(scenarioId == "rorelse");
 	}
 
 	updateTabs(count: number) {
@@ -482,9 +478,15 @@ export class ScenarioPage extends Page {
 		this.currentLayerString = layerString;
 
 		let removedLayers = oldLayers.filter((layer) => !newLayers.includes(layer));
-		let removedLayerString = removedLayers.join(",");
 
-		this.socket.sendActivateDataset(layerString);
-		this.socket.sendDeactivateDataset(removedLayerString);
+		const layerData: LayerRequestData[] = [];
+		newLayers.forEach((layer) => {
+			layerData.push({
+				type: "image",
+				name: layer,
+			});
+		});
+
+		this.socket.sendLayers(layerData);
 	}
 }

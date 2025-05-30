@@ -11,6 +11,7 @@ import { RoundRectangle } from "../elements/RoundRectangle";
 import { Layer, layerManager } from "@/utils/LayerManager";
 import { LayerButton } from "../LayerButton";
 import { LayerList } from "../LayerList";
+import { LayerRequestData } from "@/utils/protocol";
 
 export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
@@ -207,8 +208,16 @@ export class LayerPage extends Page {
 		let layerString = this.activeLayers.join(",");
 		this.emit("map", layerString);
 
-		this.socket.sendReset();
-		this.socket.sendActivateDataset(layerString);
+		const layerData: LayerRequestData[] = [];
+		this.activeLayers.forEach((layer) => {
+			layerData.push({
+				type: "image",
+				name: layer,
+			});
+		});
+
+		// this.socket.sendReset();
+		this.socket.sendLayers(layerData);
 	}
 
 	resetLayers() {

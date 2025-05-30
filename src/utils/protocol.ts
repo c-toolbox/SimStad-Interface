@@ -4,11 +4,8 @@ export enum Request {
 	OmniToken = "token",
 
 	Ping = "PingRequest",
-	Scenarios = "ScenariosRequest",
-	ActivateDataset = "ActivateDatasetRequest",
-	DeactivateDataset = "DeactivateDatasetRequest",
-	ActivateTraffic = "ActivateTrafficRequest",
-	DeactivateTraffic = "DeactivateTrafficRequest",
+	Layer = "LayerRequest",
+	LiveTraffic = "LiveTrafficRequest",
 	Light = "LightRequest",
 	MapLight = "MapLightRequest",
 	Reset = "ResetRequest",
@@ -25,11 +22,9 @@ export enum Response {
 	OmniError = "server_error",
 
 	Ping = "PingResponse",
-	Scenarios = "ScenariosResponse",
-	ResetResponse = "ResetResponse",
-	ErrorResponse = "ErrorResponse",
-	ActivateTraffic = "ActivateTrafficResponse",
-	DeactivateTraffic = "DeactivateTrafficResponse",
+	Layer = "LayerResponse",
+	Reset = "ResetResponse",
+	LiveTraffic = "LiveTrafficResponse",
 
 	CacheProgress = "CacheResponse",
 	CacheComplete = "ReCacheDatabaseResponse",
@@ -90,77 +85,43 @@ export interface PingResponse {
 	type: Response.Ping;
 }
 
-/* Error Repsonse */
+/* Data layer activation */
 
-export interface ErrorResponse {
-	type: Response.ErrorResponse;
-	error_type: String;
-	message: String;
+export interface LayerRequestData {
+	type: "image" | "flow" | "movie" | "color" | "base64";
+	name: string;
+	opacity?: number;
+	lit?: boolean;
+	flow?: {
+		texture: string;
+	};
+	movie?: {
+		speed: number;
+	};
 }
 
-/* All scenarios */
-export interface ScenariosRequest {
-	type: Request.Scenarios;
-	language: String;
+export interface LayerRequest {
+	type: Request.Layer;
+	layers: LayerRequestData[];
 }
 
-export interface ScenariosResponse {
-	type: Response.Scenarios;
-	scenarios: ScenarioData[];
-}
-
-export interface ScenarioData {
-	title: string;
-	sections: {
-		label1: string;
-		sectionObject: {
-			title: string;
-			comment: string;
-			text1: string;
-			text2: string;
-			legend1: string;
-			legend2: string;
-			filenames: string;
-			default: string;
-			isIdle: string;
-			filenameArray: string;
-			sectionType: string;
-			lat_Lon: {
-				x: number;
-				y: number;
-			};
-		}[];
-	}[];
-}
-
-/* Dataset activation */
-
-export interface ActivateDatasetRequest {
-	type: Request.ActivateDataset;
-	datasets: string;
-}
-
-export interface DeactivateDatasetRequest {
-	type: Request.DeactivateDataset;
-	datasets: string;
+export interface LayerResponse {
+	type: Response.Layer;
+	name: string;
+	error?: string;
 }
 
 /* Traffic activation */
 
-export interface ActivateTrafficRequest {
-	type: Request.ActivateTraffic;
+export interface LiveTrafficRequest {
+	type: Request.LiveTraffic;
+	active: boolean;
 }
 
-export interface ActivateTrafficResponse {
-	type: Response.ActivateTraffic;
-}
-
-export interface DeactivateTrafficRequest {
-	type: Request.DeactivateTraffic;
-}
-
-export interface DeactivateTrafficResponse {
-	type: Response.DeactivateTraffic;
+export interface LiveTrafficResponse {
+	type: Response.LiveTraffic;
+	active: boolean;
+	error?: string;
 }
 
 /* Time of day */
@@ -194,7 +155,7 @@ export interface ResetRequest {
 }
 
 export interface ResetResponse {
-	type: Response.ResetResponse;
+	type: Response.Reset;
 }
 
 /* Database recaching */
@@ -217,11 +178,8 @@ export interface CacheCompleteResponse {
 export type ValidRequests =
 	| OmniToken
 	| PingRequest
-	| ScenariosRequest
-	| ActivateDatasetRequest
-	| DeactivateDatasetRequest
-	| ActivateTrafficRequest
-	| DeactivateTrafficRequest
+	| LayerRequest
+	| LiveTrafficRequest
 	| LightRequest
 	| MapLightRequest
 	| ResetRequest
