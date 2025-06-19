@@ -13,12 +13,11 @@ export class DebugPage extends Page {
 	private sliders: CheckSlider[];
 
 	private trafficSlider: CheckSlider;
-	private reCacheButton: TextButton;
+	private recacheButton: TextButton;
 	private advLayerSlider: CheckSlider;
 	private loggingSlider: CheckSlider;
 
 	private recacheLoader: Phaser.GameObjects.Image;
-	private recacheCount: number = 0;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -53,34 +52,29 @@ export class DebugPage extends Page {
 
 		/* Recache database */
 
-		this.reCacheButton = this.setButtonArea(
+		this.recacheButton = this.setButtonArea(
 			0,
 			"Recache database",
 			"Request Unreal to reload all raster images.\nThis action takes about 90 seconds.",
 			() => {
 				if (this.socket.isConnectedToUnreal) {
-					this.recacheCount = 0;
-					// this.socket.queueReCacheDatabase();
-					this.socket.sendReCacheDatabase();
+					this.socket.sendRecacheRequest();
 					this.recacheLoader.setVisible(true);
 					layerManager.reloadLayers();
 				}
 			}
 		);
-		this.socket.on("onCacheProgress", () => {
-			const layerCount = layerManager.getLayerCount();
-			this.recacheCount += 1;
-			this.reCacheButton.setText(
-				`Loading... ${this.recacheCount} / ${layerCount}`
-			);
+		this.socket.on("onRecacheProgress", (count: number, max: number) => {
+			const percent = `${Math.round((count / max) * 100)}%`;
+			this.recacheButton.setText(`Loading... ${percent}`);
 		});
-		this.socket.on("onCacheComplete", () => {
+		this.socket.on("onRecacheComplete", () => {
 			this.recacheLoader.setVisible(false);
-			this.reCacheButton.setText("Recache database");
+			this.recacheButton.setText("Recache database");
 		});
 		this.recacheLoader = scene.add.image(
-			this.reCacheButton.x + this.reCacheButton.width / 2 + 60,
-			this.reCacheButton.y,
+			this.recacheButton.x + this.recacheButton.width / 2 + 60,
+			this.recacheButton.y,
 			"vis_c_logo_white"
 		);
 		this.recacheLoader.setVisible(false);
@@ -147,93 +141,124 @@ export class DebugPage extends Page {
 			this.socket.sendPing();
 		});
 
-		this.setButtonArea(6, "RiverFlow", "", () => {
+		this.setButtonArea(6, "Idle movie", "", () => {
 			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "RiverFlow",
+				type: "LayerRequest",
+				layers: [
+					{
+						type: "movie",
+						name: "Movies/3DPRINT_ANIMATION_V003",
+						lit: true,
+					},
+				],
 			});
 		});
 
-		this.setButtonArea(7, "IdleMovie", "", () => {
+		this.setButtonArea(7, "Motala Ström", "", () => {
 			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "Idle/Idle_Movie",
+				type: "LayerRequest",
+				layers: [
+					{
+						type: "image",
+						name: "Nkpg/Orto20230921",
+					},
+					{
+						type: "flow",
+						name: "Flow/strommen_flow_new",
+						flow: {
+							texture: "Flow/Water",
+							scale: 200,
+							speed: 0.05,
+						},
+					},
+				],
 			});
 		});
 
-		this.setButtonArea(8, "Light add", "", () => {
+		this.setButtonArea(8, "Add 5 Lights", "", () => {
 			this.socket.send({
-				type: "MapLightRequest",
-				name: "something",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				height: 200.0,
-				color: "#ffffff",
-				typeofmessage: "add",
-				enable: true,
+				type: "LayerRequest",
+				layers: [
+					{
+						type: "image",
+						name: "Color/Black",
+						lit: false,
+						crop: {
+							min_u: 0.5,
+							max_u: 1.0,
+							min_v: 0.5,
+							max_v: 1.0,
+						},
+					},
+					{
+						type: "image",
+						name: "Color/Black",
+						lit: true,
+						crop: {
+							min_u: 0.0,
+							max_u: 0.5,
+							min_v: 0.0,
+							max_v: 0.5,
+						},
+					},
+				],
+			});
+			scene.addEvent(500*0, () => {this.socket.send({"type":"MapLightRequest","name":"aaaaa","northing":134091,"easting":6498517,"height":100,"color":"#ff0000","typeofmessage":"add","enable":true})});
+			scene.addEvent(500*1, () => {this.socket.send({"type":"MapLightRequest","name":"aaaaa","northing":134091,"easting":6498517,"height":100,"color":"#ff0000","typeofmessage":"update","enable":true})});
+			scene.addEvent(500*2, () => {this.socket.send({"type":"MapLightRequest","name":"bbbbb","northing":133695,"easting":6498517,"height":100,"color":"#ffff00","typeofmessage":"add","enable":true})});
+			scene.addEvent(500*3, () => {this.socket.send({"type":"MapLightRequest","name":"bbbbb","northing":133695,"easting":6498517,"height":100,"color":"#ffff00","typeofmessage":"update","enable":true})});
+			scene.addEvent(500*4, () => {this.socket.send({"type":"MapLightRequest","name":"ccccc","northing":133237,"easting":6498517,"height":100,"color":"#00ff00","typeofmessage":"add","enable":true})});
+			scene.addEvent(500*5, () => {this.socket.send({"type":"MapLightRequest","name":"ccccc","northing":133237,"easting":6498517,"height":100,"color":"#00ff00","typeofmessage":"update","enable":true})});
+			scene.addEvent(500*6, () => {this.socket.send({"type":"MapLightRequest","name":"ddddd","northing":132841,"easting":6498517,"height":100,"color":"#00ffff","typeofmessage":"add","enable":true})});
+			scene.addEvent(500*7, () => {this.socket.send({"type":"MapLightRequest","name":"ddddd","northing":132841,"easting":6498517,"height":100,"color":"#00ffff","typeofmessage":"update","enable":true})});
+			scene.addEvent(500*8, () => {this.socket.send({"type":"MapLightRequest","name":"eeeee","northing":132296,"easting":6498517,"height":100,"color":"#0000ff","typeofmessage":"add","enable":true})});
+			scene.addEvent(500*9, () => {this.socket.send({"type":"MapLightRequest","name":"eeeee","northing":132296,"easting":6498517,"height":100,"color":"#0000ff","typeofmessage":"update","enable":true})});
+		});
+
+		this.setButtonArea(9, "Delete 5 Lights", "", () => {
+			scene.addEvent(500*4, () => {this.socket.send({"type":"MapLightRequest","name":"aaaaa","northing":134091,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
+			scene.addEvent(500*3, () => {this.socket.send({"type":"MapLightRequest","name":"bbbbb","northing":133695,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
+			scene.addEvent(500*2, () => {this.socket.send({"type":"MapLightRequest","name":"ccccc","northing":133237,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
+			scene.addEvent(500*1, () => {this.socket.send({"type":"MapLightRequest","name":"ddddd","northing":132841,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
+			scene.addEvent(500*0, () => {this.socket.send({"type":"MapLightRequest","name":"eeeee","northing":132296,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
+		});
+
+		this.setButtonArea(10, "", "", () => {});
+
+		this.setButtonArea(11, "", "", () => {});
+
+		this.setButtonArea(12, "", "", () => {});
+
+		this.setButtonArea(13, "Recache /Flow", "", () => {
+			this.socket.send({
+				type: "RecacheRequest",
+				path: "/Datasets/Flow",
 			});
 		});
 
-		this.setButtonArea(9, "Light delete", "", () => {
+		this.setButtonArea(14, "Flow 5x5", "", () => {
 			this.socket.send({
-				type: "MapLightRequest",
-				name: "something",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				height: 200.0,
-				color: "#ffffff",
-				typeofmessage: "delete",
-				enable: true,
+				type: "LayerRequest",
+				layers: [
+					{
+						type: "image",
+						name: "Flow/test5x5",
+					},
+					{
+						type: "flow",
+						name: "Flow/test5x5",
+						opacity: 0.5,
+						flow: {
+							texture: "Flow/Water",
+							scale: 1000,
+							speed: 0.5,
+						},
+					},
+				],
 			});
 		});
 
-		this.setButtonArea(10, "Marker on", "", () => {
-			this.socket.send({
-				type: "MapMarkerRequest",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				typeofmessage: "On", // On/Off/3sec/5sec/..
-				enable: true,
-			});
-		});
-
-		this.setButtonArea(11, "Marker off", "", () => {
-			this.socket.send({
-				type: "MapMarkerRequest",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				typeofmessage: "Off",
-				enable: true,
-			});
-		});
-
-		this.setButtonArea(12, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
-
-		this.setButtonArea(13, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
-
-		this.setButtonArea(14, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
-
-		this.setButtonArea(15, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
+		this.setButtonArea(15, "", "", () => {});
 	}
 
 	update(time: number, delta: number) {

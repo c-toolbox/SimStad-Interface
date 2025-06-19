@@ -54,11 +54,11 @@ export class GameScene extends BaseScene {
 			this.socket.sendReset();
 			this.restart();
 		});
-		this.socket.on("onCacheProgress", () => {
-			this.events.emit("onCacheProgress");
+		this.socket.on("onRecacheProgress", (count: number, max: number) => {
+			this.events.emit("onRecacheProgress", count, max);
 		});
-		this.socket.on("onCacheComplete", () => {
-			this.events.emit("onCacheComplete");
+		this.socket.on("onRecacheComplete", () => {
+			this.events.emit("onRecacheComplete");
 			this.layerPage.loadFolders();
 		});
 
@@ -199,7 +199,7 @@ export class GameScene extends BaseScene {
 					this.socket.sendLayers([
 						{
 							type: "movie",
-							name: "Movie/IdleMovie",
+							name: "Movies/3DPRINT_ANIMATION_V003",
 						},
 					]);
 				} else {

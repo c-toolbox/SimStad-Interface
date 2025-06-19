@@ -9,8 +9,7 @@ export enum Request {
 	Light = "LightRequest",
 	MapLight = "MapLightRequest",
 	Reset = "ResetRequest",
-
-	Cache = "GenericRequest",
+	Recache = "RecacheRequest",
 }
 
 export enum Response {
@@ -25,9 +24,7 @@ export enum Response {
 	Layer = "LayerResponse",
 	Reset = "ResetResponse",
 	LiveTraffic = "LiveTrafficResponse",
-
-	CacheProgress = "CacheResponse",
-	CacheComplete = "ReCacheDatabaseResponse",
+	Recache = "RecacheResponse",
 }
 
 /* Omni*/
@@ -160,17 +157,15 @@ export interface ResetResponse {
 
 /* Database recaching */
 
-export interface CacheRequest {
-	type: Request.Cache;
-	request: "ReCacheDatabase";
+export interface RecacheRequest {
+	type: Request.Recache;
+	path: string;
 }
 
-export interface CacheProgressResponse {
-	type: Response.CacheProgress;
-}
-
-export interface CacheCompleteResponse {
-	type: Response.CacheComplete;
+export interface RecacheResponse {
+	type: Response.Recache;
+	index: number;
+	max: number;
 }
 
 /* All requests*/
@@ -183,4 +178,4 @@ export type ValidRequests =
 	| LightRequest
 	| MapLightRequest
 	| ResetRequest
-	| CacheRequest;
+	| RecacheRequest;

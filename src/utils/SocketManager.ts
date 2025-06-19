@@ -5,8 +5,8 @@ import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
 import { ONLINE } from "./constants";
 
-//const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
-const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
+const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
+// const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
 const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
 
 const PING_TIMEOUT = 3000;
@@ -40,7 +40,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private localTrafficEnabled: boolean;
 	private serverTrafficEnabled: boolean;
 
-	// private queuedRecacheRequest: boolean;
 	private isRecaching: boolean;
 
 	private fadeTween: Phaser.Tweens.Tween;
@@ -69,8 +68,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.Layer]: this.onLayerRepsonse,
 			[P.Response.Reset]: this.onResetRepsonse,
 			[P.Response.LiveTraffic]: this.onLiveTraffic,
-			[P.Response.CacheProgress]: this.onCacheProgress,
-			[P.Response.CacheComplete]: this.onCacheComplete,
+			[P.Response.Recache]: this.onRecache,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
@@ -79,7 +77,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 		this.localTrafficEnabled = false;
 		this.serverTrafficEnabled = false;
-		// this.queuedRecacheRequest = false;
 		this.isRecaching = false;
 
 		this.debugTexts = [];
@@ -181,16 +178,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onResetRepsonse(data: P.ResetResponse) {
-		// this.addLog(
-		// 	`Received reset! queuedRecacheRequest: ${this.queuedRecacheRequest} && isRecaching: ${this.isRecaching}`,
-		// 	LogType.Status
-		// );
-		// Unreal has finished resetting
-		// if (this.queuedRecacheRequest && !this.isRecaching) {
-		// 	this.sendReCacheDatabase();
-		// }
-	}
+	onResetRepsonse(data: P.ResetResponse) {}
 
 	onLayerRepsonse(data: P.LayerResponse) {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
@@ -205,20 +193,18 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onCacheProgress(data: P.CacheProgressResponse) {
+	onRecache(data: P.RecacheResponse) {
 		clearTimeout(this.pingTimeout);
 		this.pingAttempts = 0;
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 
-		this.isRecaching = true;
-		// this.queuedRecacheRequest = false;
-		this.emit("onCacheProgress");
-	}
-
-	onCacheComplete(data: P.CacheCompleteResponse) {
-		this.isRecaching = false;
-		// this.queuedRecacheRequest = false;
-		this.emit("onCacheComplete");
+		if (data.index + 1 < data.max) {
+			this.isRecaching = true;
+			this.emit("onRecacheProgress", data.index + 1, data.max);
+		} else {
+			this.isRecaching = false;
+			this.emit("onRecacheComplete");
+		}
 	}
 
 	/* Requests */
@@ -296,18 +282,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	// queueReCacheDatabase() {
-	// 	this.sendReset();
-	// 	this.queuedRecacheRequest = true;
-	// 	this.emit("onCacheProgress");
-	// }
-
-	sendReCacheDatabase() {
+	sendRecacheRequest(path: string = "Datasets/") {
 		this.isRecaching = true;
 
-		let data: P.CacheRequest = {
-			type: P.Request.Cache,
-			request: "ReCacheDatabase",
+		let data: P.RecacheRequest = {
+			type: P.Request.Recache,
+			path,
 		};
 		this.sendRequest(data);
 	}

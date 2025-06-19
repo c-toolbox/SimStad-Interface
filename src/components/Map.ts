@@ -10,12 +10,17 @@ import { MapHint } from "./MapHint";
 import { MapControls } from "./MapControls";
 
 // Bottom right
-const MIN_X = 129411.4;
-const MIN_Y = 6495015.262;
-
+// const MIN_X = 129411.4;
+// const MIN_Y = 6495015.262;
 // Top left
-const MAX_X = 134211.4;
-const MAX_Y = 6498915.262;
+// const MAX_X = 134211.4;
+// const MAX_Y = 6498915.262;
+
+// From instructions in the drive
+const MIN_X = 129316.815;
+const MAX_X = 134436.815;
+const MIN_Y = 6495084.439;
+const MAX_Y = 6498924.439;
 
 interface MapLayer {
 	active: boolean;

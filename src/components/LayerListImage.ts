@@ -8,6 +8,7 @@ export class LayerListImage extends Button {
 	private text: Phaser.GameObjects.Text;
 	private image: Phaser.GameObjects.Image;
 
+	private size: number;
 	private snapX: number;
 	private snapY: number;
 	private animSpawn: number;
@@ -15,6 +16,7 @@ export class LayerListImage extends Button {
 
 	constructor(scene: BaseScene, size: number) {
 		super(scene, 0, 0);
+		this.size = size;
 		this.snapX = 0;
 		this.snapY = 0;
 		this.animSpawn = 0;
@@ -53,6 +55,7 @@ export class LayerListImage extends Button {
 		} else {
 			this.image.setTexture("city");
 		}
+		this.image.setScale(this.size / this.image.width);
 	}
 
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void {

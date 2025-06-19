@@ -76,7 +76,10 @@ export class LayerPage extends Page {
 		this.sendToBack(areaBackground);
 		this.sendToBack(background);
 
-		this.loadLayerFolder(layerManager.getFolders()[0].name);
+		const folders = layerManager.getFolders();
+		if (folders.length > 0) {
+			this.loadLayerFolder(folders[0].name);
+		}
 
 		/* Active layer list */
 
