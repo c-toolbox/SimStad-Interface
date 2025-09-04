@@ -2,14 +2,14 @@
 	"defaultBlocksVideo": "VisualCity-Wall_360",
 	"scenarios": [
 		{
+			"id": "kontrast",
+			"blocksVideo": "VisualCity-Wall_360",
+			"thumbnail": "kontrast"
+		},
+		{
 			"id": "kommunen",
 			"blocksVideo": "VisualCity-Wall_Eastlink",
 			"thumbnail": "station"
-		},
-		{
-			"id": "trafikverket",
-			"blocksVideo": "VisualCity-Wall_Eastlink",
-			"thumbnail": "cranes"
 		},
 		{
 			"id": "rorelse",

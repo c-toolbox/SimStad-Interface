@@ -64,6 +64,12 @@ export class HomePage extends Page {
 			let area = this.areas[i];
 			let text = scenario.id + "_title";
 
+			if (!area) {
+				return console.error(
+					`HomePage.getAreas has run out of areas. You are attempting to display too many scenarios.`
+				);
+			}
+
 			let button = new ScenarioButton(
 				this.scene,
 				area.centerX,

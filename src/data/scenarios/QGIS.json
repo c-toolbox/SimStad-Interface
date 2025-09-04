@@ -1,0 +1,122 @@
+{
+	"Id": "qgis",
+	"Title": "QGIS",
+	"Sections": [
+		{
+			"Id": "ai",
+			"Title": "Kartläggning av Norrköping med AI",
+			"Text1": "Detta bidrag presenterar marktäckningsdata för Norrköping stad, genererade helt genom AI-baserad analys. Klassificeringen är baserad på högupplösta bilder och utförs med hjälp av den mest avancerade semantiska segmenteringsmodellen som utvecklats på mitt företag, Dubblett. Resultatet erbjuder en detaljerad och datadriven översikt över stadslandskapet, som illustrerar hur moderna AI-tekniker kan stödja korrekt och skalbar geospatial kartläggning.",
+			"Legend1": "dubblett",
+			"Default": true,
+			"Filenames": "QGIS/Kettisen Alla",
+			"LegendTitle": "Förklaring",
+			"LegendColors": [],
+			"Buttons": [
+				{
+					"Title": "Alla",
+					"Layers": "Nkpg/Orto20230921,QGIS/Kettisen Alla"
+				},
+				{
+					"Title": "Asfalt",
+					"Layers": "Nkpg/Orto20230921,QGIS/Kettisen Vagar"
+				},
+				{
+					"Title": "Vatten",
+					"Layers": "Nkpg/Orto20230921,QGIS/Kettisen Vatten"
+				},
+				{
+					"Title": "Hus",
+					"Layers": "Nkpg/Orto20230921,QGIS/Kettisen Hus"
+				},
+				{
+					"Title": "Gräs",
+					"Layers": "Nkpg/Orto20230921,QGIS/Kettisen Grasmatta"
+				},
+				{
+					"Title": "Träd",
+					"Layers": "Nkpg/Orto20230921,QGIS/Kettisen Träd"
+				}
+			]
+		},
+		{
+			"Id": "shadows",
+			"Title": "Aggregerade skuggor",
+			"Text1": "Kartan visualiserar de aggregerade skuggmönstren i Norrköping på två kontrasterande datum: 2 juni och 20 december. Dessa mönster är härledda från detaljerade ytmodeller av staden och fångar hur byggnader och terräng påverkar solljus och skuggning under hela året. Visualiseringen belyser säsongsskillnader i dagsljusexponering och dynamiken i urban skuggning.",
+			"Legend1": "shadows",
+			"Default": false,
+			"Filenames": "QGIS/Aggregate Dec20",
+			"LegendTitle": "",
+			"LegendColors": [],
+			"LegendSource": "",
+			"Buttons": [
+				{
+					"Title": "Dec 20",
+					"Layers": "QGIS/Aggregate Dec20"
+				},
+				{
+					"Title": "June 2",
+					"Layers": "QGIS/Aggregate Dec20"
+				},
+				{
+					"Title": "Dec 20 Test",
+					"Layers": "QGIS/Aggregate Dec20"
+				},
+				{
+					"Title": "June 2 Test",
+					"Layers": "QGIS/Aggregate June2"
+				}
+			]
+		},
+		{
+			"Id": "cars",
+			"Title": "Bilägande jämfört med parkering",
+			"Text1": "Kartan visar en värmekarta som indikerar var hushåll med högst bilägandegrad finns, samt var bilar faktiskt parkeras i det fysiska utrymmet. Kartan skapades genom en kombination av AI-baserad fordonsklassificering och statistisk analys av befolkningsdata.",
+			"Legend1": "cars",
+			"Default": false,
+			"Filenames": "QGIS/Car owners VS Parked cars",
+			"LegendTitle": "",
+			"LegendColors": []
+		},
+		{
+			"Id": "delft",
+			"Title": "Norrköping i Delfts färger",
+			"Text1": "Detta är en stiliserad fantasikarta över Norrköping, renderad i den distinkta blåvita färgpaletten som traditionellt förknippas med staden Delft. Kartan blandar fantasifull kartografi med konstnärlig inspiration från Delftware-keramik och erbjuder en lekfull nytolkning av Norrköpings urbana form genom en holländsk estetisk lins.",
+			"Legend1": "delft",
+			"Default": false,
+			"Filenames": "QGIS/MDekker Geolanda DefltColor",
+			"LegendTitle": "",
+			"LegendColors": []
+		},
+		{
+			"Id": "age",
+			"Title": "Åldersfördelning",
+			"Text1": "Denna visualisering presenterar de dominerande åldersgrupperna och den övergripande fördelningen av åldersklasser inom varje stadsdel, baserat på NYKO3-klassificeringen. Varje distrikt representeras av ett cirkeldiagram som belyser demografiska strukturer och potentiella åldersrelaterade trender i stadslandskapet.",
+			"Legend1": "age",
+			"Default": false,
+			"Filenames": "QGIS/Rasmus Evehag",
+			"LegendTitle": "Förklaring",
+			"LegendColors": [
+				{
+					"color": "#fde725",
+					"text": "0 – 17 år"
+				},
+				{
+					"color": "#5dc963",
+					"text": "18 – 29 år"
+				},
+				{
+					"color": "#21908c",
+					"text": "30 – 49 år"
+				},
+				{
+					"color": "#3b528b",
+					"text": "50 – 65 år"
+				},
+				{
+					"color": "#440154",
+					"text": "65+ år"
+				}
+			]
+		}
+	]
+}

@@ -152,7 +152,7 @@ export class ScenarioPage extends Page {
 
 		/* Tabs */
 
-		const tn = 6;
+		const tn = 13;
 		const tl = layout.scenarioTabs;
 		const ty = tl.centerY;
 		const th = tl.height;
@@ -462,7 +462,11 @@ export class ScenarioPage extends Page {
 			this.legendSource.setWordWrapWidth(this.legend.width);
 		}
 
-		languageManager.bind(this.legendSource, key);
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.legendSource, key);
+		} else {
+			this.legendSource.setText("");
+		}
 
 		const s = this.legendSource;
 	}

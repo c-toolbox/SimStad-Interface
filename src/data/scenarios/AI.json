@@ -52,7 +52,8 @@
 					"color": "#ff0000",
 					"text": "Träningsområde"
 				}
-			]
+			],
+			"LegendSource": "Källa: Dubblett"
 		},
 		{
 			"Id": "vegetation",
@@ -99,7 +100,8 @@
 					"color": "#ff0000",
 					"text": "Träningsområde"
 				}
-			]
+			],
+			"LegendSource": "Källa: Dubblett"
 		},
 		{
 			"Id": "asfalt",
@@ -147,7 +149,8 @@
 					"color": "#ff0000",
 					"text": "Träningsområde"
 				}
-			]
+			],
+			"LegendSource": "Källa: Dubblett"
 		}
 	]
 }

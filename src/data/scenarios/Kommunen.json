@@ -123,6 +123,53 @@
 					"type": "line"
 				}
 			]
+		},
+		{
+			"Id": "oversikt",
+			"Title": "Översikt",
+			"Text1": "Kartan visar översiktligt etableringsområden och huvudsakliga vägar som påverkas då Ostlänken och Norrköpings nya centralstation byggs. Klicka på flikarna för mer information om det som visas på kartan.",
+			"Legend1": "trafikverket_oversikt",
+			"Default": true,
+			"Filenames": "Ostlanken/oversikt",
+			"LegendTitle": "Teckenförklaring",
+			"LegendColors": [
+				{
+					"color": "#5f1f5b",
+					"text": "Ostlänken",
+					"type": "rectangle"
+				},
+				{
+					"color": "#794979",
+					"text": "Etableringsområde",
+					"type": "rectangle"
+				},
+				{
+					"color": "#ffffff",
+					"text": "Vägsträcka som stängs av för allmän trafik*",
+					"type": "sign_no_vehicles"
+				},
+				{
+					"color": "#ffffff",
+					"text": "Vägsträcka med reducerad kapacitet*",
+					"type": "sign_road_narrows"
+				},
+				{
+					"color": "#fe6f33",
+					"text": "Huvudsakligt vägstråk för byggtrafik",
+					"type": "line"
+				},
+				{
+					"color": "#fbe414",
+					"text": "Huvudsakligt omlednings- stråk för allmän trafik",
+					"type": "line"
+				},
+				{
+					"color": "#23af75",
+					"text": "Möjlig större tillgänglighets- sökande åtgärd",
+					"type": "line"
+				}
+			],
+			"LegendSource": "*under stora delar av byggtiden"
 		}
 	]
 }

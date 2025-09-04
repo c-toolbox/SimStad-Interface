@@ -75,6 +75,12 @@ export class ScenarioManager {
 	loadScenario(scenarioData: ScenarioJson) {
 		const { Id, Sections } = scenarioData;
 		const scenario = this.getScenario(Id);
+		if (!scenario) {
+			return console.error(
+				`Scenario '${scenarioData.Id}' not found in scenarios.json`
+			);
+		}
+
 		scenario.sections = Sections.map((section) => {
 			return {
 				key: section.Id,
@@ -161,7 +167,9 @@ import scenarioStaden_i_rorelse from "@/data/scenarios/Staden_i_rorelse.json";
 import scenarioStaden_och_klimatet from "@/data/scenarios/Staden_och_klimatet.json";
 import scenarioStadens_sammansattning from "@/data/scenarios/Stadens_sammansattning.json";
 import scenarioStadens_utveckling from "@/data/scenarios/Stadens_utveckling.json";
-import scenarioTrafikverket from "@/data/scenarios/Trafikverket.json";
+// import scenarioTrafikverket from "@/data/scenarios/Trafikverket.json";
+import scenarioKontrast from "@/data/scenarios/kontrast.json";
+// import scenarioQgis from "@/data/scenarios/QGIS.json";
 
 // Load all scenario json files
 // for (const path in import.meta.glob("../data/scenarios/*")) {
@@ -177,4 +185,6 @@ scenarioManager.loadScenario(scenarioStaden_i_rorelse);
 scenarioManager.loadScenario(scenarioStaden_och_klimatet);
 scenarioManager.loadScenario(scenarioStadens_sammansattning);
 scenarioManager.loadScenario(scenarioStadens_utveckling);
-scenarioManager.loadScenario(scenarioTrafikverket);
+// scenarioManager.loadScenario(scenarioTrafikverket);
+scenarioManager.loadScenario(scenarioKontrast);
+// scenarioManager.loadScenario(scenarioQgis);
