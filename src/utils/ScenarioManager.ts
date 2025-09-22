@@ -164,12 +164,13 @@ import scenarioAI from "@/data/scenarios/AI.json";
 import scenarioBilder_fran_ovan from "@/data/scenarios/Bilder_fran_ovan.json";
 import scenarioKommunen from "@/data/scenarios/Kommunen.json";
 import scenarioStaden_i_rorelse from "@/data/scenarios/Staden_i_rorelse.json";
-import scenarioStaden_och_klimatet from "@/data/scenarios/Staden_och_klimatet.json";
+// import scenarioStaden_och_klimatet from "@/data/scenarios/Staden_och_klimatet.json";
 import scenarioStadens_sammansattning from "@/data/scenarios/Stadens_sammansattning.json";
 import scenarioStadens_utveckling from "@/data/scenarios/Stadens_utveckling.json";
 // import scenarioTrafikverket from "@/data/scenarios/Trafikverket.json";
 import scenarioKontrast from "@/data/scenarios/kontrast.json";
 // import scenarioQgis from "@/data/scenarios/QGIS.json";
+import scenarioBeredskap from "@/data/scenarios/beredskap.json";
 
 // Load all scenario json files
 // for (const path in import.meta.glob("../data/scenarios/*")) {
@@ -182,9 +183,10 @@ scenarioManager.loadScenario(scenarioAI);
 scenarioManager.loadScenario(scenarioBilder_fran_ovan);
 scenarioManager.loadScenario(scenarioKommunen);
 scenarioManager.loadScenario(scenarioStaden_i_rorelse);
-scenarioManager.loadScenario(scenarioStaden_och_klimatet);
+// scenarioManager.loadScenario(scenarioStaden_och_klimatet);
 scenarioManager.loadScenario(scenarioStadens_sammansattning);
 scenarioManager.loadScenario(scenarioStadens_utveckling);
 // scenarioManager.loadScenario(scenarioTrafikverket);
 scenarioManager.loadScenario(scenarioKontrast);
 // scenarioManager.loadScenario(scenarioQgis);
+scenarioManager.loadScenario(scenarioBeredskap);

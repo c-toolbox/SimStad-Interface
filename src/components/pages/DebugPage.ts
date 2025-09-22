@@ -229,10 +229,10 @@ export class DebugPage extends Page {
 
 		this.setButtonArea(12, "", "", () => {});
 
-		this.setButtonArea(13, "Recache /Flow", "", () => {
+		this.setButtonArea(13, "Recache /Beredskap", "", () => {
 			this.socket.send({
 				type: "RecacheRequest",
-				path: "/Datasets/Flow",
+				path: "/Datasets/Beredskap",
 			});
 		});
 

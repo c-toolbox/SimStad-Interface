@@ -1,6 +1,6 @@
 {
 	"Id": "kommunen",
-	"Title": "Stadsutveckling",
+	"Title": "Ostlänken",
 	"Sections": [
 		{
 			"Id": "stadsutveckling",
@@ -126,7 +126,7 @@
 		},
 		{
 			"Id": "oversikt",
-			"Title": "Översikt",
+			"Title": "Trafik under byggtid",
 			"Text1": "Kartan visar översiktligt etableringsområden och huvudsakliga vägar som påverkas då Ostlänken och Norrköpings nya centralstation byggs. Klicka på flikarna för mer information om det som visas på kartan.",
 			"Legend1": "trafikverket_oversikt",
 			"Default": true,

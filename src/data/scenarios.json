@@ -2,6 +2,11 @@
 	"defaultBlocksVideo": "VisualCity-Wall_360",
 	"scenarios": [
 		{
+			"id": "beredskap",
+			"blocksVideo": "VisualCity-Wall_Rain",
+			"thumbnail": "beredskap"
+		},
+		{
 			"id": "kontrast",
 			"blocksVideo": "VisualCity-Wall_360",
 			"thumbnail": "kontrast"
@@ -15,11 +20,6 @@
 			"id": "rorelse",
 			"blocksVideo": "VisualCity-Wall_Tram",
 			"thumbnail": "tram"
-		},
-		{
-			"id": "klimatet",
-			"blocksVideo": "VisualCity-Wall_Rain",
-			"thumbnail": "umbrella"
 		},
 		{
 			"id": "sammansattning",
