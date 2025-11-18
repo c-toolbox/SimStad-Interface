@@ -4,12 +4,8 @@ import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { ScrollArea } from "@/components/elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { SCALE, VERSION } from "@/utils/constants";
-import {
-	interpolateColor,
-	colorToString,
-	colorToNumber,
-} from "@/utils/functions";
+import { VERSION } from "@/utils/constants";
+import { colorToString } from "@/utils/functions";
 
 export class InfoWindow extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
@@ -47,10 +43,10 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 
 		this.width = 0.7 * scene.W;
 		this.height = 0.8 * scene.H;
-		this.fontSize = 12 * 1.6 * SCALE;
+		this.fontSize = 12 * 1.6;
 		this.sep = this.fontSize;
 		this.pad = 3 * this.fontSize;
-		this.shadowSize = 4 * SCALE;
+		this.shadowSize = 4;
 
 		let outside = scene.add.rectangle(0, 0, scene.W, scene.H, 0x000000, 0.6);
 		this.add(outside);
@@ -63,7 +59,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			y: 0,
 			width: this.width,
 			height: this.height,
-			radius: 10 * SCALE,
+			radius: 10,
 			color: backgroundColor,
 			alpha: 0.6,
 		});
@@ -83,7 +79,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			this.scene,
 			-this.width / 2 + this.pad / 2,
 			-this.fontSize,
-			6 * SCALE,
+			6,
 			this.scrollArea.height
 		);
 		this.box.add(this.scrollBar);
@@ -192,7 +188,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 					duration: 1000,
 					ease: "Back.InOut",
 					onUpdate: (tween) => {
-						this.visButton.setAngle(tween.getValue());
+						this.visButton.setAngle(tween.getValue()!);
 						this.visClicks = 0;
 					},
 				});
@@ -317,7 +313,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			-delta / duration,
 			delta / duration
 		);
-		this.box.y = Phaser.Math.Easing.Cubic.In(1 - this.alpha) * 20 * SCALE;
+		this.box.y = Phaser.Math.Easing.Cubic.In(1 - this.alpha) * 20;
 		this.setVisible(this.alpha > 0);
 		this.scrollArea.update(time, delta);
 		this.scrollBar.set(this.scrollArea.getScroll());
