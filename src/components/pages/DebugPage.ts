@@ -232,30 +232,25 @@ export class DebugPage extends Page {
 		this.setButtonArea(13, "Recache /Beredskap", "", () => {
 			this.socket.send({
 				type: "RecacheRequest",
-				path: "/Datasets/Beredskap",
+				path: "/Datasets/Tellden",
 			});
 		});
 
-		this.setButtonArea(14, "Flow 5x5", "", () => {
-			this.socket.send({
-				type: "LayerRequest",
-				layers: [
-					{
-						type: "image",
-						name: "Flow/test5x5",
-					},
-					{
-						type: "flow",
-						name: "Flow/test5x5",
-						opacity: 0.5,
-						flow: {
-							texture: "Flow/Water",
-							scale: 1000,
-							speed: 0.5,
+		this.setButtonArea(14, "Circle crop", "", () => {
+			this.socket.sendLayers([
+				{
+					type: "image",
+					name: "Nkpg/Buller_V2",
+					crop: {
+						type: "circle",
+						circle: {
+							u: Math.random(),
+							v: Math.random(),
+							radius: 0.5,
 						},
 					},
-				],
-			});
+				},
+			]);
 		});
 
 		this.setButtonArea(15, "", "", () => {});

@@ -84,21 +84,74 @@ export interface PingResponse {
 
 /* Data layer activation */
 
-export interface LayerRequestData {
-	type: "image" | "flow" | "movie" | "color" | "base64";
+interface LayerSliceCrop {
+	type: "slice";
+	slice: {
+		min_u: number;
+		max_u: number;
+		min_v: number;
+		max_v: number;
+	};
+}
+
+interface LayerCircleCrop {
+	type: "circle";
+	circle: {
+		u: number;
+		v: number;
+		radius: number;
+	};
+}
+
+type LayerCrop = LayerSliceCrop | LayerCircleCrop;
+
+interface LayerBaseData {
 	name: string;
 	opacity?: number;
 	lit?: boolean;
-	flow?: {
+	crop?: LayerCrop;
+}
+
+interface LayerImageData extends LayerBaseData {
+	type: "image";
+}
+
+interface LayerFlowData extends LayerBaseData {
+	type: "flow";
+	flow: {
 		texture: string;
+		scale?: number;
+		speed?: number;
 	};
+}
+
+interface LayerMovieData extends LayerBaseData {
+	type: "movie";
 	movie?: {
 		speed: number;
 	};
 }
 
+interface LayerColorData extends LayerBaseData {
+	type: "color";
+	color: string;
+}
+
+interface LayerBase64Data extends LayerBaseData {
+	type: "base64";
+	base64: string;
+}
+
+export type LayerRequestData =
+	| LayerImageData
+	| LayerFlowData
+	| LayerMovieData
+	| LayerColorData
+	| LayerBase64Data;
+
 export interface LayerRequest {
 	type: Request.Layer;
+	flush: boolean;
 	layers: LayerRequestData[];
 }
 

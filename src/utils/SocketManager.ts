@@ -231,9 +231,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendLayers(layers: P.LayerRequestData[]) {
+	sendLayers(layers: P.LayerRequestData[], flush = true) {
 		let data: P.LayerRequest = {
 			type: P.Request.Layer,
+			flush,
 			layers: layers,
 		};
 		this.sendRequest(data);

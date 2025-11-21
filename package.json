@@ -5,8 +5,8 @@
 	"license": "MIT",
 	"scripts": {
 		"start": "vite-node automation/dev.ts",
-		"dev": "vite-node automation/dev.ts",
-		"dev-neu": "vite-node automation/neu-dev.ts",
+		"dev-web": "vite-node automation/web-dev.ts",
+		"dev": "vite-node automation/neu-dev.ts",
 		"build": "rimraf dist && vite build",
 		"postinstall": "vite-node automation/setup.ts"
 	},
@@ -23,8 +23,8 @@
 		"sharp": "^0.32.6",
 		"terser": "^5.24.0",
 		"typescript": "^5.2.2",
-		"vite": "^5.0.0",
-		"vite-node": "^0.34.6",
+		"vite": "^7.1.10",
+		"vite-node": "^3.2.4",
 		"vite-plugin-checker": "^0.6.2",
 		"vite-plugin-image-optimizer": "^1.1.7",
 		"vite-plugin-zip-pack": "^1.0.6",
