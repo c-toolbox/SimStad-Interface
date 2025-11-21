@@ -12,6 +12,7 @@ const BuildWinApp = async () => {
 	mkdirSync('./dist/win');
 	mkdirSync(out_dir);
 	copyFileSync(`${build_path}/resources.neu`, `${out_dir}/resources.neu`);
+	copyFileSync(`./config.json`, `${out_dir}/config.json`);
 
 	const data = readFileSync(`${build_path}/${game_dir}-win_x64.exe`);
 	const exe = NtExecutable.from(data);

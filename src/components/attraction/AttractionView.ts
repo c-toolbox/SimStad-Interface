@@ -42,7 +42,6 @@ export class AttractionView extends Phaser.GameObjects.Container {
 		const titleY = -120;
 
 		this.mapImage = this.scene.add.image(0, titleY + 100, "streets");
-		this.mapImage.setOrigin(0.5, 0.5);
 		this.mapImage.setTint(0xb89581);
 		this.mapImage.setScale((1.0 * this.scene.H) / this.mapImage.height);
 		this.mapImage.setBlendMode(Phaser.BlendModes.ADD);

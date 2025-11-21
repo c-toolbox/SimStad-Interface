@@ -3,6 +3,12 @@
 	"title": "DigitalTwinCity Interface",
 	"description": "Interface for DigitalTwinCity",
 	"neutralino": {
-		"allow": ["app.exit", "window.center", "filesystem.readDirectory"]
+		"allow": [
+			"app.exit",
+			"window.center",
+			"filesystem.readDirectory",
+			"filesystem.readFile",
+			"filesystem.readBinaryFile"
+		]
 	}
 }

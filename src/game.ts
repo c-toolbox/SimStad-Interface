@@ -16,4 +16,21 @@ const config: Phaser.Types.Core.GameConfig = {
 	scene: [PreloadScene, GameScene, LegendScene, UIScene],
 };
 
-const game = new Phaser.Game(config);
+import { filesystem } from "@neutralinojs/lib";
+import { setRuntimeConfig } from "@/utils/RuntimeConfig";
+
+async function loadConfig() {
+	try {
+		const data = await filesystem.readFile("config.json");
+		const config = JSON.parse(data);
+		setRuntimeConfig(config);
+	} catch (e) {
+		console.error("Could not load config.json", e);
+	}
+}
+
+(async () => {
+	await loadConfig();
+
+	const game = new Phaser.Game(config);
+})();

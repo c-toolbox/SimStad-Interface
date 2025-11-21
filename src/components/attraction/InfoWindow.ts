@@ -4,7 +4,7 @@ import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { ScrollArea } from "@/components/elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { VERSION } from "@/utils/constants";
+import { version as versionJson } from "@/version.json";
 import { colorToString } from "@/utils/functions";
 
 export class InfoWindow extends Phaser.GameObjects.Container {
@@ -240,7 +240,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			y: cy - 1.4 * this.fontSize,
 			size: this.fontSize,
 			color: textColor,
-			text: VERSION,
+			text: versionJson.split(".")[0],
 		}); // light
 		version.setOrigin(1, 1);
 		version.setPadding(this.shadowSize);

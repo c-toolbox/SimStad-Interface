@@ -1,13 +1,8 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { Color, ColorStr } from "./colors";
+import { Color } from "./colors";
 import * as P from "./protocol";
-import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
-import { ONLINE } from "./constants";
-
-const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
-// const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
-const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
+import { config } from "@/utils/RuntimeConfig";
 
 const PING_TIMEOUT = 3000;
 
@@ -86,9 +81,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	connect(): void {
-		if (!ONLINE) return;
+		if (!config.ONLINE) return;
+		if (!config.OMNI_URL) {
+			return console.error("Missing `SOCKET_URL` in config.json");
+		}
 
-		this.socket = new WebSocket(URL);
+		this.socket = new WebSocket(config.OMNI_URL);
 
 		this.socket.onopen = () => {
 			this.addLog("WebSocket: Open", LogType.Status);
@@ -110,7 +108,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	send(data: object, isOmni = false) {
-		if (!ONLINE) return;
+		if (!config.ONLINE) return;
 
 		if (this.isConnectedToSocket) {
 			this.socket.send(JSON.stringify(data));
@@ -144,7 +142,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	/* Response handlers */
 
 	onOmniConnect(data: P.OmniConnect) {
-		this.send({ token: CLIENT_TOKEN }, true);
+		if (!config.OMNI_TOKEN) {
+			return console.error("Missing `TOKEN` in config.json");
+		}
+		this.send({ token: config.OMNI_TOKEN }, true);
 	}
 
 	onOmniDisconnect(data: P.OmniDisconnect) {
@@ -443,7 +444,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	get isConnectedToUnreal() {
 		return (
-			ONLINE &&
+			config.ONLINE &&
 			this.isConnectedToSocket &&
 			this.omniConnectionStatus == ConnectionStatus.Connected &&
 			this.unrealConnectionStatus == ConnectionStatus.Connected
@@ -456,6 +457,18 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		if (typeof text === "object" && text.token) text.token = "TOKEN";
 		if (typeof text !== "string") text = JSON.stringify(text);
 		this.emit("log", text, type);
-		console.log(text);
+
+		const logFunc = {
+			Status: console.log,
+			OmniSend: console.log,
+			OmniReceive: console.log,
+			UnrealSend: console.log,
+			UnrealReceive: console.log,
+			SocketUnhandled: console.error,
+			BlocksSend: console.log,
+			BlocksReceive: console.log,
+			Error: console.error,
+		}[type];
+		logFunc(`Socket ${type}: ${text}`);
 	}
 }

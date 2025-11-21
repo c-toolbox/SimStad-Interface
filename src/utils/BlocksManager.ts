@@ -1,10 +1,7 @@
 import { ScenarioId, scenarioManager, Section } from "./ScenarioManager";
 import { LogType } from "./SocketManager";
-import { ONLINE } from "./constants";
+import { config } from "@/utils/RuntimeConfig";
 import scenarioConfig from "@/data/scenarios.json";
-
-const BLOCKS_URL =
-	"https://blocks.c.itn.liu.se:443/rest/script/invoke/WebTask/start";
 
 class BlocksManager {
 	private callbacks: ((message: string, type: LogType) => void)[] = [];
@@ -40,9 +37,12 @@ class BlocksManager {
 	}
 
 	private sendRequest(task: string) {
-		if (!ONLINE) return;
+		if (!config.ONLINE) return;
+		if (!config.BLOCKS_URL) {
+			return console.warn("Missing `BLOCKS_URL` in config.json");
+		}
 
-		fetch(BLOCKS_URL, {
+		fetch(config.BLOCKS_URL, {
 			method: "POST",
 			body: JSON.stringify({ task }),
 			headers: {

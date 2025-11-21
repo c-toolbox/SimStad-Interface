@@ -1,7 +1,6 @@
 import { localLayers } from "@/assets/assets";
 import { filesystem } from "@neutralinojs/lib";
 import { scenarioManager } from "./ScenarioManager";
-import { ONLINE } from "./constants";
 
 export interface Layer {
 	name: string;
@@ -100,7 +99,7 @@ class LayerManager {
 				name: folder,
 				layers: Array.from(allLayers).map((layer) => ({
 					name: layer,
-					isInDrive: driveLayerSet.has(layer) || !ONLINE,
+					isInDrive: driveLayerSet.has(layer),
 					isInLocal: localLayerSet.has(layer),
 					useCount: scenarioManager.getLayerUseCount(layer),
 				})),

@@ -14,6 +14,7 @@ const BuildWinApp = () => {
 	copyFileSync(`${build_path}/${game_dir}-linux_arm64`, `${out_dir}/${title_dashed}-arm64`);
 	copyFileSync(`${build_path}/${game_dir}-linux_armhf`, `${out_dir}/${title_dashed}-armhf`);
 	copyFileSync(`${build_path}/resources.neu`, `${out_dir}/resources.neu`);
+	copyFileSync(`./config.json`, `${out_dir}/config.json`);
 };
 
 export default function buildWinApp() {

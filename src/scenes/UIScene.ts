@@ -1,7 +1,7 @@
 import { BaseScene } from "./BaseScene";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import { IDLE_TIME, IDLE_FADE } from "@/utils/constants";
+import { config } from "@/utils/RuntimeConfig";
 
 import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
@@ -184,17 +184,17 @@ export class UIScene extends BaseScene {
 				this.currentLanguage != LanguageKey.Swedish ||
 				!this.audioEnabled
 			) {
-				if (this.idleTimer > IDLE_TIME) {
+				if (this.idleTimer > config.IDLE_TIME) {
 					this.fader.setVisible(true);
 					this.fader.setAlpha(
-						Math.pow((this.idleTimer - IDLE_TIME) / IDLE_FADE, 0.7)
+						Math.pow((this.idleTimer - config.IDLE_TIME) / config.IDLE_FADE, 0.7)
 					);
 
-					if (this.idleTimer > IDLE_TIME + IDLE_FADE / 3) {
+					if (this.idleTimer > config.IDLE_TIME + config.IDLE_FADE / 3) {
 						this.fader.input!.enabled = true;
 					}
 
-					if (this.idleTimer > IDLE_TIME + IDLE_FADE) {
+					if (this.idleTimer > config.IDLE_TIME + config.IDLE_FADE) {
 						this.onRestartButton(false);
 						this.idleTimer = -2;
 					}
