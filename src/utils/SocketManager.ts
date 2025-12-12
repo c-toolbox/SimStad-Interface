@@ -58,7 +58,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 			[P.Response.Ping]: this.onPing,
 			[P.Response.Layer]: this.onLayerRepsonse,
-			[P.Response.MapMarker]: this.onMapMarker,
+			[P.Response.Marker]: this.onMarker,
 			[P.Response.Reset]: this.onResetRepsonse,
 			[P.Response.Recache]: this.onRecache,
 		};
@@ -180,7 +180,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onMapMarker(data: P.LayerResponse) {
+	onMarker(data: P.LayerResponse) {
 		// this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
@@ -241,7 +241,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendSetMapMarker(
+	sendSetMarker(
 		id: string,
 		u: number,
 		v: number,
@@ -251,8 +251,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		opacity: number = 1,
 		density: number = 100
 	) {
-		let data: P.SetMapMarkerRequest = {
-			type: P.Request.SetMapMarker,
+		let data: P.SetMarkerRequest = {
+			type: P.Request.SetMarker,
 			id,
 			u,
 			v,
@@ -265,9 +265,9 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendRemoveMapMarker(id: string) {
-		let data: P.RemoveMapMarkerRequest = {
-			type: P.Request.RemoveMapMarker,
+	sendRemoveMarker(id: string) {
+		let data: P.RemoveMarkerRequest = {
+			type: P.Request.RemoveMarker,
 			id,
 		};
 		this.sendRequest(data);

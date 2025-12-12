@@ -494,13 +494,13 @@ export class ScenarioPage extends Page {
 		});
 
 		if (this.liveTrafficEnabled) {
-			layerData.push({
-				type: "ndi",
-				name: "LiveTraffic",
-				ndi: {
-					stream: "TrafficOverlayNDI",
-				},
-			});
+			// layerData.push({
+			// 	type: "ndi",
+			// 	name: "LiveTraffic",
+			// 	ndi: {
+			// 		stream: "TrafficOverlayNDI",
+			// 	},
+			// });
 		}
 
 		this.socket.sendLayers(layerData);

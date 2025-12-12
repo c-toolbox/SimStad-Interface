@@ -6,8 +6,8 @@ export enum Request {
 	Ping = "PingRequest",
 	Layer = "LayerRequest",
 	Light = "LightRequest",
-	SetMapMarker = "SetMapMarkerRequest",
-	RemoveMapMarker = "RemoveMapMarkerRequest",
+	SetMarker = "SetMapMarkerRequest",
+	RemoveMarker = "RemoveMapMarkerRequest",
 	Reset = "ResetRequest",
 	Recache = "RecacheRequest",
 }
@@ -22,7 +22,7 @@ export enum Response {
 
 	Ping = "PingResponse",
 	Layer = "LayerResponse",
-	MapMarker = "MapMarkerResponse",
+	Marker = "MapMarkerResponse",
 	Reset = "ResetResponse",
 	Recache = "RecacheResponse",
 }
@@ -182,8 +182,8 @@ export interface LightRequest {
 
 /* Spotlight */
 
-export interface SetMapMarkerRequest {
-	type: Request.SetMapMarker;
+export interface SetMarkerRequest {
+	type: Request.SetMarker;
 	id: string;
 	u: number;
 	v: number;
@@ -194,8 +194,8 @@ export interface SetMapMarkerRequest {
 	density?: number;
 }
 
-export interface RemoveMapMarkerRequest {
-	type: Request.RemoveMapMarker;
+export interface RemoveMarkerRequest {
+	type: Request.RemoveMarker;
 	id: string;
 }
 
@@ -230,7 +230,7 @@ export type ValidRequests =
 	| PingRequest
 	| LayerRequest
 	| LightRequest
-	| SetMapMarkerRequest
-	| RemoveMapMarkerRequest
+	| SetMarkerRequest
+	| RemoveMarkerRequest
 	| ResetRequest
 	| RecacheRequest;

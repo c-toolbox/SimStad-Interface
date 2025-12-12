@@ -272,15 +272,15 @@ export class Map extends Phaser.GameObjects.Container {
 	}
 
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
-		const px = (lamp.goalX - layout.map.left) / layout.map.width;
-		const py = (lamp.goalY - layout.map.top) / layout.map.height;
+		const px = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
+		const py = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
 		// const x = MIN_X + (MAX_X - MIN_X) * px;
 		// const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 
 		if (method != "delete") {
-			this.socket.sendSetMapMarker(lamp.name, px, 1 - py, 0.015, lamp.color, 10);
+			this.socket.sendSetMarker(lamp.name, px, py, 0.012, lamp.color, 100, 1, 1);
 		} else {
-			this.socket.sendRemoveMapMarker(lamp.name);
+			this.socket.sendRemoveMarker(lamp.name);
 		}
 	}
 
