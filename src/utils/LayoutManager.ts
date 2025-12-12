@@ -129,11 +129,15 @@ class LayoutManager {
 		const h = this.body.height - this.mapControls.height - this.separation;
 		const x = this.body.right - w;
 		const y = this.body.top;
+		// const w = this.body.width;
+		// const h = this.body.height;
+		// const x = this.body.centerX;
+		// const y = this.body.centerY;
 
 		this._map = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._map;
 	}
-
+		
 	get nav(): Phaser.Geom.Rectangle {
 		if (this._nav) return this._nav;
 

@@ -91,7 +91,7 @@ export class DebugPage extends Page {
 			(active: boolean) => {
 				if (this.socket.isConnectedToUnreal) {
 					this.trafficSlider.setIsLoading(true);
-					this.socket.sendLiveTraffic(active);
+					// this.socket.sendLiveTraffic(active);
 				}
 			}
 		);
@@ -141,14 +141,13 @@ export class DebugPage extends Page {
 			this.socket.sendPing();
 		});
 
-		this.setButtonArea(6, "Idle movie", "", () => {
+		this.setButtonArea(6, "Play movie", "", () => {
 			this.socket.send({
 				type: "LayerRequest",
 				layers: [
 					{
 						type: "movie",
 						name: "Movies/3DPRINT_ANIMATION_V003",
-						lit: true,
 					},
 				],
 			});
@@ -175,59 +174,74 @@ export class DebugPage extends Page {
 			});
 		});
 
-		this.setButtonArea(8, "Add 5 Lights", "", () => {
-			this.socket.send({
-				type: "LayerRequest",
-				layers: [
+		this.setButtonArea(8, "Send crap", "", () => {
+			this.socket.send({ type: "HAHAHA" });
+		});
+
+		this.setButtonArea(9, "", "", () => {});
+
+		this.setButtonArea(10, "Layer Image", "", () => {
+			this.socket.sendLayers(
+				[
 					{
 						type: "image",
-						name: "Color/Black",
-						lit: false,
+						name: "Finals/Kollektivtrafik",
+					},
+				],
+				true
+			);
+		});
+
+		this.setButtonArea(11, "Layer Color", "", () => {
+			this.socket.sendLayers(
+				[
+					{
+						type: "image",
+						emission: 0,
+						name: "Nkpg/Orto20230921",
+					},
+					{
+						type: "color",
+						name: "MyColor",
+						color: "ff0000",
+						emission: 0,
 						crop: {
-							min_u: 0.5,
-							max_u: 1.0,
-							min_v: 0.5,
-							max_v: 1.0,
+							type: "circle",
+							circle: {
+								u: 0.25,
+								v: 0.5,
+							},
 						},
 					},
 					{
-						type: "image",
-						name: "Color/Black",
-						lit: true,
+						type: "color",
+						name: "MyColor2",
+						color: "ff0000",
+						emission: 1,
 						crop: {
-							min_u: 0.0,
-							max_u: 0.5,
-							min_v: 0.0,
-							max_v: 0.5,
+							type: "circle",
+							circle: {
+								u: 0.75,
+								v: 0.5,
+							},
 						},
 					},
 				],
-			});
-			scene.addEvent(500*0, () => {this.socket.send({"type":"MapLightRequest","name":"aaaaa","northing":134091,"easting":6498517,"height":100,"color":"#ff0000","typeofmessage":"add","enable":true})});
-			scene.addEvent(500*1, () => {this.socket.send({"type":"MapLightRequest","name":"aaaaa","northing":134091,"easting":6498517,"height":100,"color":"#ff0000","typeofmessage":"update","enable":true})});
-			scene.addEvent(500*2, () => {this.socket.send({"type":"MapLightRequest","name":"bbbbb","northing":133695,"easting":6498517,"height":100,"color":"#ffff00","typeofmessage":"add","enable":true})});
-			scene.addEvent(500*3, () => {this.socket.send({"type":"MapLightRequest","name":"bbbbb","northing":133695,"easting":6498517,"height":100,"color":"#ffff00","typeofmessage":"update","enable":true})});
-			scene.addEvent(500*4, () => {this.socket.send({"type":"MapLightRequest","name":"ccccc","northing":133237,"easting":6498517,"height":100,"color":"#00ff00","typeofmessage":"add","enable":true})});
-			scene.addEvent(500*5, () => {this.socket.send({"type":"MapLightRequest","name":"ccccc","northing":133237,"easting":6498517,"height":100,"color":"#00ff00","typeofmessage":"update","enable":true})});
-			scene.addEvent(500*6, () => {this.socket.send({"type":"MapLightRequest","name":"ddddd","northing":132841,"easting":6498517,"height":100,"color":"#00ffff","typeofmessage":"add","enable":true})});
-			scene.addEvent(500*7, () => {this.socket.send({"type":"MapLightRequest","name":"ddddd","northing":132841,"easting":6498517,"height":100,"color":"#00ffff","typeofmessage":"update","enable":true})});
-			scene.addEvent(500*8, () => {this.socket.send({"type":"MapLightRequest","name":"eeeee","northing":132296,"easting":6498517,"height":100,"color":"#0000ff","typeofmessage":"add","enable":true})});
-			scene.addEvent(500*9, () => {this.socket.send({"type":"MapLightRequest","name":"eeeee","northing":132296,"easting":6498517,"height":100,"color":"#0000ff","typeofmessage":"update","enable":true})});
+				true
+			);
 		});
 
-		this.setButtonArea(9, "Delete 5 Lights", "", () => {
-			scene.addEvent(500*4, () => {this.socket.send({"type":"MapLightRequest","name":"aaaaa","northing":134091,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
-			scene.addEvent(500*3, () => {this.socket.send({"type":"MapLightRequest","name":"bbbbb","northing":133695,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
-			scene.addEvent(500*2, () => {this.socket.send({"type":"MapLightRequest","name":"ccccc","northing":133237,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
-			scene.addEvent(500*1, () => {this.socket.send({"type":"MapLightRequest","name":"ddddd","northing":132841,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
-			scene.addEvent(500*0, () => {this.socket.send({"type":"MapLightRequest","name":"eeeee","northing":132296,"easting":6498517,"height":100,"color":"#ffffff","typeofmessage":"delete","enable":false})});
+		this.setButtonArea(12, "Layer Movie", "", () => {
+			this.socket.sendLayers(
+				[
+					{
+						type: "image",
+						name: "Finals/Kollektivtrafik",
+					},
+				],
+				true
+			);
 		});
-
-		this.setButtonArea(10, "", "", () => {});
-
-		this.setButtonArea(11, "", "", () => {});
-
-		this.setButtonArea(12, "", "", () => {});
 
 		this.setButtonArea(13, "Recache /Beredskap", "", () => {
 			this.socket.send({
@@ -253,7 +267,36 @@ export class DebugPage extends Page {
 			]);
 		});
 
-		this.setButtonArea(15, "", "", () => {});
+		this.setButtonArea(15, "NDI", "", () => {
+			this.socket.sendLayers([
+				{
+					type: "image",
+					name: "Finals/kollektivtrafik",
+				},
+				// {
+				// 	type: "image",
+				// 	name: "Color/Black",
+				// 	opacity: 0.5,
+				// },
+				{
+					type: "ndi",
+					name: "TrafficOverlayNDI",
+					opacity: 0.1,
+					emission: 1,
+					ndi: {
+						stream: "TrafficOverlayNDI",
+					},
+					crop: {
+						type: "circle",
+						circle: {
+							u: Math.random(),
+							v: Math.random(),
+							radius: 0.5,
+						},
+					},
+				},
+			]);
+		});
 	}
 
 	update(time: number, delta: number) {

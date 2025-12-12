@@ -20,6 +20,10 @@ import { filesystem } from "@neutralinojs/lib";
 import { setRuntimeConfig } from "@/utils/RuntimeConfig";
 
 async function loadConfig() {
+	if (!window.NL_TOKEN) {
+		return console.warn("Running in browser - skipping config.json");
+	}
+
 	try {
 		const data = await filesystem.readFile("config.json");
 		const config = JSON.parse(data);
