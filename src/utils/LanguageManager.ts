@@ -1,6 +1,4 @@
-import swedishLocales from "@/assets/locales/sv_SE.json";
-import englishLocales from "@/assets/locales/en_GB.json";
-import { scenarioManager } from "./ScenarioManager";
+import { contentManager } from "./ContentManager";
 
 export enum LanguageKey {
 	English = "en-GB",
@@ -26,7 +24,11 @@ class LanguageManager {
 		this.languageData = new Map();
 		this.currentLanguage = LanguageKey.Swedish;
 		this.boundObjects = new Map();
+	}
 
+	loadLocalizations() {
+		const swedishLocales = contentManager.getSwedishLocales();
+		const englishLocales = contentManager.getEnglishLocales();
 		this.setupLanguageData(swedishLocales, englishLocales);
 		this.checkLanguageData();
 	}

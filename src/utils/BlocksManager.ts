@@ -1,31 +1,30 @@
-import { ScenarioId, scenarioManager, Section } from "./ScenarioManager";
+import { contentManager } from "./ContentManager";
+import { LegendKey } from "./interfaces";
 import { LogType } from "./SocketManager";
 import { config } from "@/utils/RuntimeConfig";
-import scenarioConfig from "@/data/scenarios.json";
 
 class BlocksManager {
 	private callbacks: ((message: string, type: LogType) => void)[] = [];
-	private isShowingLoopingVideo: boolean = false;
+	// private isShowingLoopingVideo: boolean = false;
 
 	constructor() {}
 
 	setDefaultLegend() {
 		this.sendRequest("SimStad-default");
 
-		if (this.isShowingLoopingVideo) {
-			this.sendRequest(scenarioConfig.defaultBlocksVideo);
+		const defaultVideo = contentManager.getDefaultBlocksVideo();
+		if (defaultVideo /*&& this.isShowingLoopingVideo*/) {
+			this.sendRequest(defaultVideo);
 		}
 	}
 
-	setLegend(section: Section) {
-		this.sendRequest("SimStad-" + section.legendImage);
+	setLegend(legendKey: LegendKey) {
+		this.sendRequest("SimStad-" + legendKey);
 	}
 
-	setWallVideo(scenarioId: ScenarioId) {
-		const key = scenarioManager.getScenario(scenarioId).blocksVideo;
-		this.sendRequest(key);
-
-		this.isShowingLoopingVideo = key === "VisualCity-Wall_Eastlink";
+	setWallVideo(blocksVideoKey: string) {
+		this.sendRequest(blocksVideoKey);
+		// this.isShowingLoopingVideo = key === "VisualCity-Wall_Eastlink";
 	}
 
 	sendBlocksAudio(enabled: boolean) {

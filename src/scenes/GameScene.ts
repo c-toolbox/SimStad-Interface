@@ -3,7 +3,6 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { Navigation } from "@/components/Navigation";
 import { Map } from "@/components/Map";
-import { ScenarioId } from "@/utils/ScenarioManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
@@ -16,6 +15,7 @@ import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 import { SocketManager } from "@/utils/SocketManager";
 import { Response } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
+import { CollectionKey } from "@/utils/interfaces";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -94,9 +94,9 @@ export class GameScene extends BaseScene {
 				this.layerPage.setLayers(layers);
 			});
 
-			page.on("scenario", (scenarioId: ScenarioId) => {
+			page.on("collection", (key: CollectionKey) => {
 				this.setState(PageState.Scenario);
-				this.scenarioPage.setScenario(scenarioId);
+				this.scenarioPage.setCollection(key);
 			});
 
 			page.on("resetLight", () => {
@@ -176,6 +176,8 @@ export class GameScene extends BaseScene {
 	}
 
 	onHomeReset() {
+		// if (!this.socket.isConnectedToSocket) return;
+
 		blocksManager.setDefaultLegend();
 		this.socket.sendReset();
 		this.scenarioPage.activateDataset("Nkpg/Orto20230921");

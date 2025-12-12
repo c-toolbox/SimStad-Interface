@@ -1,6 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { LayerButton } from "./LayerButton";
-import { layerManager } from "@/utils/LayerManager";
+import { contentManager } from "@/utils/ContentManager";
 import { Color } from "@/utils/colors";
 
 export class LayerFolderButton extends LayerButton {
@@ -14,7 +14,7 @@ export class LayerFolderButton extends LayerButton {
 	) {
 		super(scene, x, y, width, height, folder);
 
-		let layersInFolder = layerManager.getLayers(folder);
+		let layersInFolder = contentManager.getLayers(folder);
 
 		const N = Math.min(layersInFolder.length, 6);
 

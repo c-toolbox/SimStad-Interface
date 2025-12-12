@@ -4,6 +4,7 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { languageManager } from "@/utils/LanguageManager";
+import { LegendEntry, LegendKey } from "@/utils/interfaces";
 
 interface Stop {
 	color: string;
@@ -68,9 +69,9 @@ export class Legend extends Phaser.GameObjects.Container {
 		this.symbols = [];
 	}
 
-	setLegend(title: string, stops: Stop[]) {
+	setLegend(legendKey: LegendKey, entries: LegendEntry[]) {
 		this.graphics.clear();
-		this.setTitle(title);
+		this.setTitle(`legend_${legendKey}_title`);
 
 		const padding = 80 * this.rescale;
 
@@ -82,22 +83,22 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		const ty = this.title.y + this.title.displayHeight * 2.0;
 		const th = this.height / 2 - ty - padding / 2;
-		const count = Math.max(stops.length, 10);
+		const count = Math.max(entries.length, 10);
 		const hgap = 28 * this.rescale;
-		const vgap = (24 - 2 * (Math.max(stops.length, 10) - 10)) * this.rescale;
+		const vgap = (24 - 2 * (Math.max(entries.length, 10) - 10)) * this.rescale;
 		const height = (th - vgap * (count - 1)) / count;
 		const width = 2 * height;
 
-		stops.forEach(({ color, type }, index) => {
+		entries.forEach(({ color, symbol, order }) => {
 			let x = this.title.x;
-			let y = ty + (height + vgap) * index + height / 2;
+			let y = ty + (height + vgap) * order + height / 2;
 
-			const icon = `symbol_${type ?? "rectangle"}`;
-			let symbol = this.scene.add.image(x + width / 2, y, icon);
-			symbol.setScale(height / symbol.height);
-			symbol.setTint(colorToNumber(color));
-			this.symbols.push(symbol);
-			this.add(symbol);
+			const icon = `symbol_${symbol ?? "rectangle"}`;
+			let symbolImage = this.scene.add.image(x + width / 2, y, icon);
+			symbolImage.setScale(height / symbolImage.height);
+			symbolImage.setTint(colorToNumber(color));
+			this.symbols.push(symbolImage);
+			this.add(symbolImage);
 
 			let label = this.scene.addText({
 				x: x + width + vgap / 2,
@@ -109,8 +110,9 @@ export class Legend extends Phaser.GameObjects.Container {
 			this.add(label);
 
 			const maxWidth = this.width / 2 - vgap / 2 - label.x;
-			if (languageManager.get(title + index)) {
-				languageManager.bind(label, title + index, () => {
+			const textKey = `legend_${legendKey}_${order}_text`;
+			if (languageManager.get(textKey)) {
+				languageManager.bind(label, textKey, () => {
 					if (label.displayWidth > maxWidth && label.text.includes(" ")) {
 						label.setText(splitText(label.text));
 					}
@@ -128,7 +130,7 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		let newHeight =
 			ty +
-			(height + vgap) * (stops.length - 1) +
+			(height + vgap) * (entries.length - 1) +
 			height / 2 +
 			this.height / 2 +
 			padding / 2;

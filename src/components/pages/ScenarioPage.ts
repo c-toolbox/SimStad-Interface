@@ -5,7 +5,6 @@ import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { Legend } from "@/components/Legend";
-import { ScenarioId, Section, scenarioManager } from "@/utils/ScenarioManager";
 import { TextButton } from "../TextButton";
 import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
@@ -14,6 +13,8 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
 import { blocksManager } from "@/utils/BlocksManager";
 import { LayerRequestData } from "@/utils/protocol";
+import { CollectionKey, Scenario } from "@/utils/interfaces";
+import { contentManager } from "@/utils/ContentManager";
 
 export class ScenarioPage extends Page {
 	private background: RoundRectangle;
@@ -30,7 +31,7 @@ export class ScenarioPage extends Page {
 	private layerButtons: TextButton[];
 	private layerSlider: LayerSlider;
 
-	private currentSection: Section;
+	private currentScenario: Scenario;
 	private currentLayerString: string;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
@@ -207,45 +208,47 @@ export class ScenarioPage extends Page {
 		this.layerSlider.update(time, delta);
 	}
 
-	setScenario(scenarioId: ScenarioId) {
-		const sections = scenarioManager.getScenario(scenarioId).sections;
+	setCollection(collectionKey: CollectionKey) {
+		const collection = contentManager.getCollection(collectionKey);
+		const scenarioKeys = contentManager.getCollection(collectionKey).scenarios;
 
-		if (sections.length > this.tabButtons.length) {
-			throw "More sections than tabs";
+		if (scenarioKeys.length > this.tabButtons.length) {
+			throw "More scenarios than tabs";
 		}
 
-		this.updateTabs(sections.length);
+		this.updateTabs(scenarioKeys.length);
 		this.tabButtons.forEach((tab) => tab.setVisible(false));
-		sections.forEach((section, index) => {
-			let textKey = `${scenarioId}_${section.key}_tab`;
+		scenarioKeys.forEach((key, index) => {
+			const scenario = contentManager.getScenario(key);
+			let textKey = `${collectionKey}_${scenario.key}_tab`;
 			if (!languageManager.get(textKey, false)) {
-				textKey = `${scenarioId}_${section.key}_title`;
+				textKey = `${collectionKey}_${scenario.key}_title`;
 			}
 
 			this.tabButtons[index].setVisible(true);
 			this.tabButtons[index].setText(textKey);
 			this.tabButtons[index].removeListener("click");
 			this.tabButtons[index].on("click", () => {
-				if (this.currentSection != section) {
-					this.fadeSection(section);
+				if (this.currentScenario != scenario) {
+					this.fadeScenario(scenario);
 				}
 			});
-			this.tabButtons[index].setData("section", section.key);
+			this.tabButtons[index].setData("section", scenario.key);
 		});
 
-		let activeSection = sections.find((section) => section.default);
-		if (activeSection) {
-			this.setSection(activeSection, false);
+		let activeScenario = contentManager.getScenario(scenarioKeys[0]);
+		if (activeScenario) {
+			this.setScenario(activeScenario, false);
 
 			this.emit("resetLight");
 			this.socket.fadeLight(() => {
-				this.setSection(activeSection!);
+				this.setScenario(activeScenario!);
 			});
 		}
 
-		blocksManager.setWallVideo(scenarioId);
+		blocksManager.setWallVideo(collection.blocks_video);
 
-		this.socket.sendLiveTraffic(scenarioId == "rorelse");
+		this.socket.sendLiveTraffic(collectionKey == "rorelse");
 	}
 
 	updateTabs(count: number) {
@@ -264,7 +267,7 @@ export class ScenarioPage extends Page {
 		}
 	}
 
-	fadeSection(section: Section) {
+	fadeScenario(scenario: Scenario) {
 		if (this.foreground.alpha > 0) return;
 
 		this.scene.add.tween({
@@ -283,7 +286,7 @@ export class ScenarioPage extends Page {
 		});
 
 		this.emit("resetLight");
-		this.socket.fadeLight(() => this.setSection(section));
+		this.socket.fadeLight(() => this.setScenario(scenario));
 	}
 
 	realignText() {
@@ -322,113 +325,112 @@ export class ScenarioPage extends Page {
 		});
 	}
 
-	setSection(section: Section, sendDataset = true) {
-		this.currentSection = section;
+	setScenario(scenario: Scenario, sendDataset = true) {
+		this.currentScenario = scenario;
 
 		this.tabButtons.forEach((button) => {
-			button.setHighlight(button.getData("section") == section.key);
+			button.setHighlight(button.getData("section") == scenario.key);
 		});
 
-		if (
-			section.layerButtons &&
-			section.layerButtons.length > this.layerButtons.length
-		) {
-			throw "More layers than buttons";
-		}
+		// if (
+		// 	scenario.layerButtons &&
+		// 	scenario.layerButtons.length > this.layerButtons.length
+		// ) {
+		// 	throw "More layers than buttons";
+		// }
 
-		if (section.legendColors.length > 0) {
+		if (scenario.legend) {
+			const legend = contentManager.getLegend(scenario.legend);
 			this.legend.setVisible(true);
-			this.legend.setLegend(
-				`${section.scenarioId}_${section.key}_legend`,
-				section.legendColors
-			);
+			this.legend.setLegend(legend.key, legend.entries);
 		} else {
 			this.legend.setVisible(false);
 		}
 
-		if (this.scene.textures.exists(section.legendImage)) {
+		const legendSourceKey = `scenario_${scenario.key}_legend_image_source`;
+		if (
+			!!scenario.legend_image &&
+			this.scene.textures.exists(scenario.legend_image)
+		) {
 			this.legendShadow.setVisible(true);
 			this.legendImage.setVisible(true);
-			this.setLegendImage(section.legendImage);
+			this.setLegendImage(scenario.legend_image!);
+			this.setLegendSource(legendSourceKey, true);
 		} else {
 			this.legendShadow.setVisible(false);
 			this.legendImage.setVisible(false);
+			this.setLegendSource(legendSourceKey, false);
 		}
-
-		this.setLegendSource(
-			`${section.scenarioId}_${section.key}_legend_source`,
-			this.scene.textures.exists(section.legendImage)
-		);
 
 		this.layerButtons.forEach((button) => button.setVisible(false));
-		if (section.layerButtons) {
-			section.layerButtons.forEach((layerString: string, index: number) => {
-				let button = this.layerButtons[index];
-				const layers = section.layerButtons![index];
+		// if (scenario.layerButtons) {
+		// 	scenario.layerButtons.forEach((layerString: string, index: number) => {
+		// 		let button = this.layerButtons[index];
+		// 		const layers = scenario.layerButtons![index];
 
-				button.setVisible(true);
-				button.setText(`${section.scenarioId}_${section.key}_button${index}`);
-				button.setData("layers", layers);
-				button.removeListener("click");
-				button.on("click", () => {
-					this.activateDataset(layers);
-				});
-			});
-		}
+		// 		button.setVisible(true);
+		// 		button.setText(
+		// 			`${scenario.collectionOldId}_${scenario.key}_button${index}`
+		// 		);
+		// 		button.setData("layers", layers);
+		// 		button.removeListener("click");
+		// 		button.on("click", () => {
+		// 			this.activateDataset(layers);
+		// 		});
+		// 	});
+		// }
 
 		this.layerSlider.setVisible(false);
-		if (section.layerSlider) {
-			this.layerSlider.setVisible(true);
-			this.layerSlider.value = 0;
-			this.layerSlider.setSteps(section.layerSlider.layers.length);
-			this.layerSlider.setTitle(
-				`${section.scenarioId}_${section.key}_sliderTitle`
-			);
-			let labels = [];
-			for (let i = 0; i < section.layerSlider.labels; i++) {
-				labels.push(`${section.scenarioId}_${section.key}_sliderLabel${i}`);
-			}
-			this.layerSlider.setLabels(labels);
+		// if (scenario.layerSlider) {
+		// 	this.layerSlider.setVisible(true);
+		// 	this.layerSlider.value = 0;
+		// 	this.layerSlider.setSteps(scenario.layerSlider.layers.length);
+		// 	this.layerSlider.setTitle(
+		// 		`${scenario.collectionOldId}_${scenario.key}_sliderTitle`
+		// 	);
+		// 	let labels = [];
+		// 	for (let i = 0; i < scenario.layerSlider.labels; i++) {
+		// 		labels.push(
+		// 			`${scenario.collectionOldId}_${scenario.key}_sliderLabel${i}`
+		// 		);
+		// 	}
+		// 	this.layerSlider.setLabels(labels);
 
-			this.layerSlider.removeListener("onChange");
-			this.layerSlider.on("onChange", (value: number) => {
-				let layers = section.layerSlider?.layers;
-				if (layers) {
-					let index = Math.round(value / (1 / (layers.length - 1)));
-					this.layerSlider.setLabel(index.toString());
-					this.activateDataset(layers[index]);
-				}
-			});
-		}
+		// 	this.layerSlider.removeListener("onChange");
+		// 	this.layerSlider.on("onChange", (value: number) => {
+		// 		let layers = scenario.layerSlider?.layers;
+		// 		if (layers) {
+		// 			let index = Math.round(value / (1 / (layers.length - 1)));
+		// 			this.layerSlider.setLabel(index.toString());
+		// 			this.activateDataset(layers[index]);
+		// 		}
+		// 	});
+		// }
 
-		languageManager.bind(this.subtitle, `${section.scenarioId}_title`);
-		languageManager.bind(
-			this.title,
-			`${section.scenarioId}_${section.key}_title`,
-			() => {
-				this.title.setScale(1);
-				if (this.title.width > layout.scenarioInfo.width) {
-					this.title.displayWidth = layout.scenarioInfo.width;
-					if (this.title.scaleX < 0.9) {
-						this.title.setText(splitText(this.title.text));
-						this.title.setScale(0.9);
-					} else {
-						this.title.scaleY = this.title.scaleX;
-					}
+		languageManager.bind(this.subtitle, `collection_${collection.key}_name`);
+		languageManager.bind(this.title, `scenario_${scenario.key}_title`, () => {
+			this.title.setScale(1);
+			if (this.title.width > layout.scenarioInfo.width) {
+				this.title.displayWidth = layout.scenarioInfo.width;
+				if (this.title.scaleX < 0.9) {
+					this.title.setText(splitText(this.title.text));
+					this.title.setScale(0.9);
+				} else {
+					this.title.scaleY = this.title.scaleX;
 				}
 			}
-		);
+		});
 		languageManager.bind(
 			this.bread[9],
-			`${section.scenarioId}_${section.key}_bread`,
+			`scenario_${scenario.key}_description`,
 			() => {
 				this.realignText();
 			}
 		);
 
 		if (sendDataset) {
-			this.activateDataset(section.defaultLayer);
-			blocksManager.setLegend(section);
+			this.activateDataset(scenario.defaultLayer);
+			blocksManager.setLegend(scenario.legend);
 		}
 	}
 

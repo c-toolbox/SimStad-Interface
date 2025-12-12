@@ -5,7 +5,7 @@ import { Color } from "@/utils/colors";
 import { languageManager } from "@/utils/LanguageManager";
 import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
 
-export class ScenarioButton extends Button {
+export class CollectionButton extends Button {
 	private border: RoundRectangle;
 	private image: Phaser.GameObjects.Image;
 	private title: Phaser.GameObjects.Text;

@@ -8,7 +8,7 @@ import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
 import { LayerImageButton } from "../LayerImageButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
-import { Layer, layerManager } from "@/utils/LayerManager";
+import { Layer, contentManager } from "@/utils/ContentManager";
 import { LayerButton } from "../LayerButton";
 import { LayerList } from "../LayerList";
 import { LayerRequestData } from "@/utils/protocol";
@@ -76,7 +76,7 @@ export class LayerPage extends Page {
 		this.sendToBack(areaBackground);
 		this.sendToBack(background);
 
-		const folders = layerManager.getFolders();
+		const folders = contentManager.getFolders();
 		if (folders.length > 0) {
 			this.loadLayerFolder(folders[0].name);
 		}
@@ -122,7 +122,7 @@ export class LayerPage extends Page {
 		this.buttons = [];
 
 		const folderLayout = layout.layerFolders;
-		const folders = layerManager.getFolders();
+		const folders = contentManager.getFolders();
 		let n = folders.length + 1;
 		let s = 20;
 		let w = folderLayout.width;
@@ -154,7 +154,7 @@ export class LayerPage extends Page {
 			button.setHighlight(button.getText() == folder);
 		});
 
-		layerManager.getLayers(folder).forEach((layer: Layer) => {
+		contentManager.getLayers(folder).forEach((layer: Layer) => {
 			if (layer.isInDrive || this.showLayerInfo) {
 				this.addLayerButton(layer, areas.next().value);
 			}
@@ -267,7 +267,7 @@ export class LayerPage extends Page {
 
 	setShowLayerInfo(show: boolean) {
 		this.showLayerInfo = show;
-		this.loadLayerFolder(layerManager.getFolders()[0].name);
+		this.loadLayerFolder(contentManager.getFolders()[0].name);
 	}
 }
 

@@ -5,7 +5,7 @@ import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
-import { layerManager } from "@/utils/LayerManager";
+import { contentManager } from "@/utils/ContentManager";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
@@ -60,7 +60,7 @@ export class DebugPage extends Page {
 				if (this.socket.isConnectedToUnreal) {
 					this.socket.sendRecacheRequest();
 					this.recacheLoader.setVisible(true);
-					layerManager.reloadLayers();
+					contentManager.reloadLayers();
 				}
 			}
 		);
