@@ -18,13 +18,13 @@ export interface Audio {
 }
 
 const imageGlob = import.meta.glob("./images/**/*", { as: "url", eager: true });
-export const image = (path: string, key: string): Image => {
+export const image = (key: string, path: string): Image => {
 	return { key, path: imageGlob[`./images/${path}`] };
 };
 
 export const spritesheet = (
-	path: string,
 	key: string,
+	path: string,
 	width: number,
 	height: number
 ): SpriteSheet => {
@@ -36,8 +36,8 @@ const musicGlob = import.meta.glob("./music/**/*.mp3", {
 	eager: true,
 });
 export const music = (
-	path: string,
 	key: string,
+	path: string,
 	volume?: number,
 	rate?: number
 ): Audio => {
@@ -49,8 +49,8 @@ const audioGlob = import.meta.glob("./sounds/**/*.mp3", {
 	eager: true,
 });
 export const sound = (
-	path: string,
 	key: string,
+	path: string,
 	volume?: number,
 	rate?: number
 ): Audio => {
@@ -61,10 +61,10 @@ const fontGlob = import.meta.glob("./fonts/**/*.ttf", {
 	as: "url",
 	eager: true,
 });
-export const loadFont = async (path: string, name: string) => {
-	const face = new FontFace(name, `url(${fontGlob[`./fonts/${path}.ttf`]})`, {
+export const loadFont = async (key: string, path: string, weight: number) => {
+	const face = new FontFace(key, `url(${fontGlob[`./fonts/${path}`]})`, {
 		style: "normal",
-		weight: "500",
+		weight: `${weight}`,
 	});
 	await face.load();
 	document.fonts.add(face);

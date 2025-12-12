@@ -82,11 +82,11 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	connect(): void {
 		if (!config.ONLINE) return;
-		if (!config.OMNI_URL) {
+		if (!config.OMNI_URL)
 			return console.error("Missing `SOCKET_URL` in config.json");
-		}
 
-		this.socket = new WebSocket(config.OMNI_URL);
+		const SOCKET_URL = config.OMNI_URL.replace("http", "ws") + "/ws";
+		this.socket = new WebSocket(SOCKET_URL);
 
 		this.socket.onopen = () => {
 			this.addLog("WebSocket: Open", LogType.Status);

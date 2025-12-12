@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import { PreloadScene } from "@/scenes/PreloadScene";
 import { GameScene } from "@/scenes/GameScene";
-import { LegendScene } from "@/scenes/LegendScene";
 import { UIScene } from "./scenes/UIScene";
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -13,11 +12,18 @@ const config: Phaser.Types.Core.GameConfig = {
 	scale: {
 		mode: Phaser.Scale.FIT,
 	},
-	scene: [PreloadScene, GameScene, LegendScene, UIScene],
+	scene: [PreloadScene, GameScene, UIScene],
 };
 
-import { filesystem } from "@neutralinojs/lib";
+import { filesystem, os } from "@neutralinojs/lib";
 import { setRuntimeConfig } from "@/utils/RuntimeConfig";
+import {
+	loadMediaAssets,
+	scanMediaFolder,
+	// setMediaFolder,
+} from "./assets/mediaLoader";
+import { config as runtimeConfig } from "./utils/RuntimeConfig";
+import { contentManager } from "./utils/ContentManager";
 
 async function loadConfig() {
 	try {
@@ -29,8 +35,21 @@ async function loadConfig() {
 	}
 }
 
+const loadingTextElement: HTMLElement =
+	document.getElementById("loading-text")!;
+
 (async () => {
+	loadingTextElement.innerHTML = "Loading config.json...";
 	await loadConfig();
 
+	loadingTextElement.innerHTML = "Fetching json from Omni...";
+	await contentManager.reloadLayers();
+
+	loadingTextElement.innerHTML = "Scanning media folder...";
+	await scanMediaFolder();
+	loadingTextElement.innerHTML = "Reading image binaries...";
+	await loadMediaAssets();
+
+	loadingTextElement.innerHTML = "Booting...";
 	const game = new Phaser.Game(config);
 })();
