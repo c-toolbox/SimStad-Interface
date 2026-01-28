@@ -5,9 +5,9 @@ export enum Request {
 
 	Ping = "PingRequest",
 	Layer = "LayerRequest",
-	LiveTraffic = "LiveTrafficRequest",
 	Light = "LightRequest",
-	MapLight = "MapLightRequest",
+	SetMarker = "SetMapMarkerRequest",
+	RemoveMarker = "RemoveMapMarkerRequest",
 	Reset = "ResetRequest",
 	Recache = "RecacheRequest",
 }
@@ -22,8 +22,8 @@ export enum Response {
 
 	Ping = "PingResponse",
 	Layer = "LayerResponse",
+	Marker = "MapMarkerResponse",
 	Reset = "ResetResponse",
-	LiveTraffic = "LiveTrafficResponse",
 	Recache = "RecacheResponse",
 }
 
@@ -87,19 +87,19 @@ export interface PingResponse {
 interface LayerSliceCrop {
 	type: "slice";
 	slice: {
-		min_u: number;
-		max_u: number;
-		min_v: number;
-		max_v: number;
+		min_u?: number;
+		max_u?: number;
+		min_v?: number;
+		max_v?: number;
 	};
 }
 
 interface LayerCircleCrop {
 	type: "circle";
 	circle: {
-		u: number;
-		v: number;
-		radius: number;
+		u?: number;
+		v?: number;
+		radius?: number;
 	};
 }
 
@@ -108,7 +108,7 @@ type LayerCrop = LayerSliceCrop | LayerCircleCrop;
 interface LayerBaseData {
 	name: string;
 	opacity?: number;
-	lit?: boolean;
+	emission?: number;
 	crop?: LayerCrop;
 }
 
@@ -142,11 +142,20 @@ interface LayerBase64Data extends LayerBaseData {
 	base64: string;
 }
 
+interface LayerNDIData extends LayerBaseData {
+	type: "ndi";
+	ndi: {
+		machine?: string;
+		stream: string;
+	};
+}
+
 export type LayerRequestData =
 	| LayerImageData
 	| LayerFlowData
 	| LayerMovieData
 	| LayerColorData
+	| LayerNDIData
 	| LayerBase64Data;
 
 export interface LayerRequest {
@@ -158,19 +167,6 @@ export interface LayerRequest {
 export interface LayerResponse {
 	type: Response.Layer;
 	name: string;
-	error?: string;
-}
-
-/* Traffic activation */
-
-export interface LiveTrafficRequest {
-	type: Request.LiveTraffic;
-	active: boolean;
-}
-
-export interface LiveTrafficResponse {
-	type: Response.LiveTraffic;
-	active: boolean;
 	error?: string;
 }
 
@@ -186,15 +182,21 @@ export interface LightRequest {
 
 /* Spotlight */
 
-export interface MapLightRequest {
-	type: Request.MapLight;
-	name: string;
-	northing: number;
-	easting: number;
-	height: number;
-	color: string;
-	typeofmessage: "add" | "update" | "delete";
-	enable: boolean;
+export interface SetMarkerRequest {
+	type: Request.SetMarker;
+	id: string;
+	u: number;
+	v: number;
+	radius: number;
+	color?: string;
+	emission?: number;
+	opacity?: number;
+	density?: number;
+}
+
+export interface RemoveMarkerRequest {
+	type: Request.RemoveMarker;
+	id: string;
 }
 
 /* Reset */
@@ -227,8 +229,8 @@ export type ValidRequests =
 	| OmniToken
 	| PingRequest
 	| LayerRequest
-	| LiveTrafficRequest
 	| LightRequest
-	| MapLightRequest
+	| SetMarkerRequest
+	| RemoveMarkerRequest
 	| ResetRequest
 	| RecacheRequest;

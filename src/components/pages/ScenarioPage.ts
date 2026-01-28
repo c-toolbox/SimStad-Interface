@@ -33,11 +33,13 @@ export class ScenarioPage extends Page {
 
 	private currentScenario: Scenario;
 	private currentLayerString: string;
+	public liveTrafficEnabled: boolean;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
 
 		this.currentLayerString = "";
+		this.liveTrafficEnabled = false;
 
 		this.background = new RoundRectangle(scene, {
 			rect: layout.scenario,
@@ -248,7 +250,7 @@ export class ScenarioPage extends Page {
 
 		blocksManager.setWallVideo(collection.blocks_video);
 
-		this.socket.sendLiveTraffic(collectionKey == "rorelse");
+		this.liveTrafficEnabled = collectionKey == "rorelse";
 	}
 
 	updateTabs(count: number) {
@@ -492,6 +494,16 @@ export class ScenarioPage extends Page {
 				name: layer,
 			});
 		});
+
+		if (this.liveTrafficEnabled) {
+			layerData.push({
+				type: "ndi",
+				name: "LiveTraffic",
+				ndi: {
+					stream: "TrafficOverlayNDI",
+				},
+			});
+		}
 
 		this.socket.sendLayers(layerData);
 	}

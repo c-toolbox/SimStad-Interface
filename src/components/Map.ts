@@ -108,6 +108,17 @@ export class Map extends Phaser.GameObjects.Container {
 		this.scene.input.on("pointermove", this.onPointerMove, this);
 		this.scene.input.on("pointerup", this.onPointerUp, this);
 
+		// const fullscreen = new CircleButton(
+		// 	scene,
+		// 	layout.map.right,
+		// 	layout.map.top,
+		// 	64,
+		// 	"maximize",
+		// 	0x000000
+		// );
+		// fullscreen.setHighlight(false);
+		// this.add(fullscreen);
+
 		/* Lamps */
 
 		this.lampIds = ["lamp_1", "lamp_2", "lamp_3"];
@@ -202,26 +213,26 @@ export class Map extends Phaser.GameObjects.Container {
 		}
 	}
 
-	onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
-		let lampName = this.lampIds.shift();
-		if (lampName) {
-			let lamp = new MapLight(this.scene, pointer.x, pointer.y, lampName);
-			this.add(lamp);
-			this.lamps.push(lamp);
+	// onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
+	// 	let lampName = this.lampIds.shift();
+	// 	if (lampName) {
+	// 		let lamp = new MapLight(this.scene, pointer.x, pointer.y, lampName);
+	// 		this.add(lamp);
+	// 		this.lamps.push(lamp);
 
-			this.updateLamp(lamp, "add");
-			lamp.on("update", () => {
-				this.updateLamp(lamp, "update");
-			});
-			lamp.on("delete", () => {
-				this.lamps.splice(this.lamps.indexOf(lamp), 1);
-				this.updateLamp(lamp, "delete");
-				this.lampIds.push(lamp.name);
-				lamp.destroy();
-			});
-			lamp.on("click", lamp.changeColor);
-		}
-	}
+	// 		this.updateLamp(lamp, "add");
+	// 		lamp.on("update", () => {
+	// 			this.updateLamp(lamp, "update");
+	// 		});
+	// 		lamp.on("delete", () => {
+	// 			this.lamps.splice(this.lamps.indexOf(lamp), 1);
+	// 			this.updateLamp(lamp, "delete");
+	// 			this.lampIds.push(lamp.name);
+	// 			lamp.destroy();
+	// 		});
+	// 		lamp.on("click", lamp.changeColor);
+	// 	}
+	// }
 
 	onPointerDown(pointer: Phaser.Input.Pointer) {
 		if (pointer.identifier != 0) return;
@@ -262,12 +273,15 @@ export class Map extends Phaser.GameObjects.Container {
 
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
 		const px = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
-		const py = (lamp.goalY - layout.map.top) / layout.map.height;
-		const x = MIN_X + (MAX_X - MIN_X) * px;
-		const y = MIN_Y + (MAX_Y - MIN_Y) * py;
-		const color = lamp.color;
+		const py = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
+		// const x = MIN_X + (MAX_X - MIN_X) * px;
+		// const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 
-		this.socket.sendMapLight(lamp.name, x, y, lamp.height, color, method, true);
+		if (method != "delete") {
+			this.socket.sendSetMarker(lamp.name, px, py, 0.012, lamp.color, 100, 1, 1);
+		} else {
+			this.socket.sendRemoveMarker(lamp.name);
+		}
 	}
 
 	reset() {

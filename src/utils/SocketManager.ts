@@ -32,9 +32,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private pingTimeout: NodeJS.Timeout;
 	private pingAttempts: number;
 
-	private localTrafficEnabled: boolean;
-	private serverTrafficEnabled: boolean;
-
 	private isRecaching: boolean;
 
 	private fadeTween: Phaser.Tweens.Tween;
@@ -61,8 +58,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 			[P.Response.Ping]: this.onPing,
 			[P.Response.Layer]: this.onLayerRepsonse,
+			[P.Response.Marker]: this.onMarker,
 			[P.Response.Reset]: this.onResetRepsonse,
-			[P.Response.LiveTraffic]: this.onLiveTraffic,
 			[P.Response.Recache]: this.onRecache,
 		};
 
@@ -70,8 +67,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.unrealConnectionStatus = ConnectionStatus.Disconnected;
 		this.pingAttempts = 0;
 
-		this.localTrafficEnabled = false;
-		this.serverTrafficEnabled = false;
 		this.isRecaching = false;
 
 		this.debugTexts = [];
@@ -185,13 +180,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onLiveTraffic(data: P.LiveTrafficResponse) {
-		this.serverTrafficEnabled = data.active;
-		this.emit("serverTrafficEnabled", data.active);
-		if (data.active != this.localTrafficEnabled) {
-			this.sendLiveTraffic(this.localTrafficEnabled);
-		}
-		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+	onMarker(data: P.LayerResponse) {
+		// this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
 	onRecache(data: P.RecacheResponse) {
@@ -240,17 +230,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendLiveTraffic(active: boolean) {
-		if (!this.localTrafficEnabled) {
-			let data: P.LiveTrafficRequest = {
-				type: P.Request.LiveTraffic,
-				active,
-			};
-			this.sendRequest(data);
-		}
-		this.localTrafficEnabled = active;
-	}
-
 	sendLight(year: number, month: number, day: number, hour: number) {
 		let data: P.LightRequest = {
 			type: P.Request.Light,
@@ -262,24 +241,34 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendMapLight(
-		name: string,
-		northing: number,
-		easting: number,
-		height: number,
-		color: string,
-		typeofmessage: "add" | "update" | "delete",
-		enable: boolean
+	sendSetMarker(
+		id: string,
+		u: number,
+		v: number,
+		radius: number,
+		color: string = "#ffffff",
+		emission: number = 0,
+		opacity: number = 1,
+		density: number = 100
 	) {
-		let data: P.MapLightRequest = {
-			type: P.Request.MapLight,
-			name,
-			northing,
-			easting,
-			height,
+		let data: P.SetMarkerRequest = {
+			type: P.Request.SetMarker,
+			id,
+			u,
+			v,
+			radius,
 			color,
-			typeofmessage,
-			enable,
+			emission,
+			opacity,
+			density,
+		};
+		this.sendRequest(data);
+	}
+
+	sendRemoveMarker(id: string) {
+		let data: P.RemoveMarkerRequest = {
+			type: P.Request.RemoveMarker,
+			id,
 		};
 		this.sendRequest(data);
 	}
@@ -436,7 +425,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	announceOffline() {
-		this.emit("serverTrafficEnabled", false);
+		// this.emit("serverTrafficEnabled", false);
 	}
 
 	get isConnectedToSocket() {

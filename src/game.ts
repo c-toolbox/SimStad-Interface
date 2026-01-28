@@ -26,6 +26,10 @@ import { config as runtimeConfig } from "./utils/RuntimeConfig";
 import { contentManager } from "./utils/ContentManager";
 
 async function loadConfig() {
+	if (!window.NL_TOKEN) {
+		return console.warn("Running in browser - skipping config.json");
+	}
+
 	try {
 		const data = await filesystem.readFile("config.json");
 		const config = JSON.parse(data);

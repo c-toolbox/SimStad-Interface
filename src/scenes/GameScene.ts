@@ -180,9 +180,21 @@ export class GameScene extends BaseScene {
 
 		blocksManager.setDefaultLegend();
 		this.socket.sendReset();
+		this.scenarioPage.liveTrafficEnabled = false; // Also hack
 		this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+		this.socket.sendLayers([
+			{ type: "image", name: "Nkpg/Orto20230921" },
+			{
+				type: "flow",
+				name: "Flow/strommen_flow_new",
+				flow: {
+					texture: "Flow/Water",
+					scale: 200,
+					speed: 0.05,
+				},
+			},
+		]);
 		this.map.setLayers("Nkpg/Orto20230921");
-		this.socket.sendLiveTraffic(false);
 	}
 
 	/* Blur */
@@ -207,8 +219,7 @@ export class GameScene extends BaseScene {
 				} else {
 					this.map.resetLightControls();
 					this.socket.fadeLight(() => {
-						this.socket.sendReset();
-						this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+						this.onHomeReset();
 					});
 				}
 			},
