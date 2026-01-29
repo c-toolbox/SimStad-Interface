@@ -2,7 +2,7 @@ import { config } from "@/utils/RuntimeConfig";
 import { filesystem } from "@neutralinojs/lib";
 
 export const mediaAssets: { [key: string]: { key: string; path: string }[] } = {
-	// minimaps: [],
+	minimaps: [],
 	thumbnails: [],
 	collections: [],
 	legends: [],
@@ -45,18 +45,14 @@ export async function scanMediaFolder(): Promise<boolean> {
 					.filter((f) => f.type === "FILE")
 					.forEach((image) => {
 						mediaAssets[folder.entry].push({
-							// key: folder.entry + "/" + image.entry.split(".")[0],
-							key: image.entry.split(".")[0],
+							// key: "/media/" + folder.entry + "/" + image.entry,
+							key: folder.entry + "_" + image.entry.split(".")[0],
+							// key: image.entry.split(".")[0],
 							path: `${config.MEDIA_PATH}\\${folder.entry}\\${image.entry}`,
 							// path: `http://localhost:5050/${folder.entry}/${image.entry}`,
 							// path: `${config.MEDIA_URL}/${folder.entry}/${image.entry}`,
 						});
 					});
-				console.log(
-					"Adding to mediaAssets",
-					mediaAssets[folder.entry].length,
-					"images"
-				);
 			})
 		);
 

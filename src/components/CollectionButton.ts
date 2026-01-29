@@ -4,6 +4,7 @@ import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color } from "@/utils/colors";
 import { languageManager } from "@/utils/LanguageManager";
 import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
+import { Collection } from "@/utils/interfaces";
 
 export class CollectionButton extends Button {
 	private border: RoundRectangle;
@@ -16,8 +17,7 @@ export class CollectionButton extends Button {
 		y: number,
 		width: number,
 		height: number,
-		text: string,
-		textureKey: string
+		collection: Collection
 	) {
 		super(scene, x, y);
 		this.width = width;
@@ -32,7 +32,7 @@ export class CollectionButton extends Button {
 		});
 		this.add(this.border);
 
-		this.image = scene.add.image(0, 0, textureKey);
+		this.image = scene.add.image(0, 0, collection.image);
 		this.image.setScale(width / this.image.width);
 		const cropW = width / this.image.scaleX;
 		const cropH = height / this.image.scaleY;
@@ -57,12 +57,12 @@ export class CollectionButton extends Button {
 			size: 0.6 * titleHeight,
 			fontFamily: "Lato-Bold",
 			color: "white",
-			text: text,
+			text: collection.name,
 		});
 		this.title.setStroke("black", 4);
 		this.title.setShadow(0, 2, "black", 8);
 		this.title.setOrigin(0.5);
-		this.setText(text);
+		this.setText(collection.name);
 		this.add(this.title);
 
 		this.bindInteractive(this.image);

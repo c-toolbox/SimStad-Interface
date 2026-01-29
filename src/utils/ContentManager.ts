@@ -3,6 +3,7 @@ import {
 	City,
 	Collection,
 	CollectionKey,
+	Layer,
 	Legend,
 	LegendEntry,
 	LegendKey,
@@ -13,33 +14,18 @@ import {
 	Tag,
 } from "./interfaces";
 
-export interface Layer {
-	name: string;
-	isInDrive: boolean;
-	isInLocal: boolean;
-	useCount: number;
-}
-
-export interface Folder {
-	name: string;
-	layers: Layer[];
-	isSequential: boolean;
-	isInDrive: boolean;
-	isInLocal: boolean;
-}
-
 class ContentManager {
 	private localization: {
 		sv: { [key: string]: string };
 		en: { [key: string]: string };
 	};
 	private city: City | null;
-	private collections: Collection[] = [];
-	private scenarios: Scenario[] = [];
-	private rasters: Raster[] = [];
-	private legends: Legend[] = [];
-	private symbols: Symbol[] = [];
-	private tags: Tag[] = [];
+	private collections: Collection[];
+	private scenarios: Scenario[];
+	private rasters: Raster[];
+	private legends: Legend[];
+	private symbols: Symbol[];
+	private tags: Tag[];
 
 	constructor() {
 		this.localization = { sv: {}, en: {} };
@@ -72,32 +58,90 @@ class ContentManager {
 
 	private async fetchCity(): Promise<void> {
 		const data = await this.fetch(`get_city/${config.CITY_ID}/`);
-		if (data) this.city = data as City;
+		if (data) {
+			this.city = data as City;
+			this.city.name = `city_${this.city.key}_name`;
+		}
 	}
 
 	private async fetchCollections(): Promise<void> {
 		const data = await this.fetch("get_collections/");
-		if (data) this.collections = data as Collection[];
+		if (data) {
+			this.collections = data as Collection[];
+			this.collections.forEach((collection) => {
+				collection.name = `collection_${collection.key}_name`;
+				collection.image = this.stripImagePath(collection.image);
+			});
+		}
 	}
 
 	private async fetchScenarios(): Promise<void> {
 		const data = await this.fetch("get_scenarios/");
-		if (data) this.scenarios = data as Scenario[];
+		if (data) {
+			this.scenarios = data as Scenario[];
+			this.scenarios.forEach((scenario) => {
+				scenario.name = `scenario_${scenario.key}_name`;
+				if (scenario.short_name)
+					scenario.short_name = `scenario_${scenario.key}_short_name`;
+				scenario.description = `scenario_${scenario.key}_description`;
+				if (scenario.sequence_title)
+					scenario.sequence_title = `scenario_${scenario.key}_sequence_title`;
+				scenario.sequence_labels.forEach((label) => {
+					label.text = `scenario_${scenario.key}_sequence_label_${label.order}`;
+				});
+				scenario.legend_image = scenario.legend_image
+					? this.stripImagePath(scenario.legend_image)
+					: null;
+				scenario.legend_image_source = `scenario_${scenario.key}_legend_image_source`;
+			});
+		}
 	}
 
 	private async fetchRasters(): Promise<void> {
 		const data = await this.fetch("get_rasters/");
-		if (data) this.rasters = data as Raster[];
+		if (data) {
+			this.rasters = data as Raster[];
+			this.rasters.forEach((raster) => {
+				raster.name = `raster_${raster.key}_name`;
+				raster.image = raster.image ? this.stripImagePath(raster.image) : null;
+				raster.video = raster.video ? this.stripImagePath(raster.video) : null;
+				raster.minimap = this.stripImagePath(raster.minimap);
+				raster.thumbnail = this.stripImagePath(raster.thumbnail);
+			});
+		}
+	}
+
+	private async fetchLegends(): Promise<void> {
+		const data = await this.fetch("get_legends/");
+		if (data) {
+			this.legends = data as Legend[];
+			this.legends.forEach((legend) => {
+				legend.title = `legend_${legend.key}_title`;
+				legend.entries.forEach((entry) => {
+					entry.text = `legend_${legend.key}_${entry.order}_text`;
+				});
+			});
+		}
 	}
 
 	private async fetchSymbols(): Promise<void> {
 		const data = await this.fetch("get_symbols/");
-		if (data) this.symbols = data as Symbol[];
+		if (data) {
+			this.symbols = data as Symbol[];
+			this.symbols.forEach((symbol) => {
+				symbol.image = this.stripImagePath(symbol.image);
+			});
+		}
 	}
 
 	private async fetchTags(): Promise<void> {
 		const data = await this.fetch("get_tags/");
-		if (data) this.tags = data as Tag[];
+		if (data) {
+			this.tags = data as Tag[];
+			this.tags.forEach((tag) => {
+				tag.name = `tag_${tag.key}`;
+			});
+		}
 	}
 
 	private async fetchAll() {
@@ -106,6 +150,7 @@ class ContentManager {
 		await this.fetchCollections();
 		await this.fetchScenarios();
 		await this.fetchRasters();
+		await this.fetchLegends();
 		await this.fetchSymbols();
 		await this.fetchTags();
 	}
@@ -128,6 +173,16 @@ class ContentManager {
 		if (this.city) {
 			return this.city.default_blocks_video;
 		}
+	}
+
+	getCity(): City {
+		if (this.city) return this.city;
+		throw new Error("City data not found");
+	}
+
+	getFeaturedCollections(): Collection[] {
+		const city = this.getCity();
+		return city.featured_collections.map((key) => this.getCollection(key));
 	}
 
 	getCollections(): Collection[] {
@@ -156,30 +211,52 @@ class ContentManager {
 		return legend!;
 	}
 
-	/* Old */
-
-	getFolders(): Folder[] {
-		return this.tags.map((tag) => ({
-			name: tag.key,
-			layers: this.getLayers(tag.name),
-			isSequential: false,
-			isInDrive: true,
-			isInLocal: true,
-		}));
+	getTags(): Tag[] {
+		return this.tags;
 	}
 
-	getLayers(tagKey: string): Layer[] {
-		const tagObj = this.tags.find((tag) => tag.key === tagKey);
-		if (!tagObj) return [];
+	getRastersByTag(tag: Tag): Raster[] {
+		return this.rasters.filter((raster) => raster.tags.includes(tag.key));
+	}
 
-		return this.rasters
-			.filter((raster) => raster.tags.includes(tagKey))
-			.map((raster) => ({
-				name: raster.key,
-				isInDrive: true,
-				isInLocal: true,
-				useCount: 0,
-			}));
+	getLegendSymbol(symbolKey: string): Symbol {
+		const symbol = this.symbols.find((s) => s.key == symbolKey);
+		if (!symbol) throw new Error(`Symbol "${symbolKey}" not found`);
+		return symbol!;
+	}
+
+	/* Methods */
+
+	rasterToLayer(raster: Raster): Layer {
+		if (raster.media_type == "image")
+			return {
+				type: "image",
+				raster: raster.key,
+			};
+		else
+			return {
+				type: "movie",
+				raster: raster.key,
+				movie: {
+					speed: 1,
+				},
+			};
+	}
+
+	layerToRaster(layer: Layer): Raster | undefined {
+		switch (layer.type) {
+			case "image":
+			case "flow":
+			case "movie":
+				return this.rasters.find((raster) => raster.key == layer.raster);
+		}
+	}
+
+	stripImagePath(path: string): string {
+		return decodeURIComponent(path)
+			.replace(/^\/media\//, "")
+			.replace(/\.[^/.]+$/, "")
+			.replace(/\//g, "_");
 	}
 }
 

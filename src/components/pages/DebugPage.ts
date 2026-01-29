@@ -133,9 +133,9 @@ export class DebugPage extends Page {
 
 		/* Miscellaneous buttons */
 
-		this.setButtonArea(4, "Reset", "", () => {
-			this.socket.sendReset();
-		});
+		// this.setButtonArea(4, "Reset", "", () => {
+		// 	this.socket.sendReset();
+		// });
 
 		this.setButtonArea(5, "Ping", "", () => {
 			this.socket.sendPing();
@@ -180,68 +180,68 @@ export class DebugPage extends Page {
 
 		this.setButtonArea(9, "", "", () => {});
 
-		this.setButtonArea(10, "Layer Image", "", () => {
-			this.socket.sendLayers(
-				[
-					{
-						type: "image",
-						name: "Finals/Kollektivtrafik",
-					},
-				],
-				true
-			);
-		});
+		// this.setButtonArea(10, "Layer Image", "", () => {
+		// 	this.socket.sendLayers(
+		// 		[
+		// 			{
+		// 				type: "image",
+		// 				name: "Finals/Kollektivtrafik",
+		// 			},
+		// 		],
+		// 		true
+		// 	);
+		// });
 
-		this.setButtonArea(11, "Layer Color", "", () => {
-			this.socket.sendLayers(
-				[
-					{
-						type: "image",
-						emission: 0,
-						name: "Nkpg/Orto20230921",
-					},
-					{
-						type: "color",
-						name: "MyColor",
-						color: "ff0000",
-						emission: 0,
-						crop: {
-							type: "circle",
-							circle: {
-								u: 0.25,
-								v: 0.5,
-							},
-						},
-					},
-					{
-						type: "color",
-						name: "MyColor2",
-						color: "ff0000",
-						emission: 1,
-						crop: {
-							type: "circle",
-							circle: {
-								u: 0.75,
-								v: 0.5,
-							},
-						},
-					},
-				],
-				true
-			);
-		});
+		// this.setButtonArea(11, "Layer Color", "", () => {
+		// 	this.socket.sendLayers(
+		// 		[
+		// 			{
+		// 				type: "image",
+		// 				emission: 0,
+		// 				name: "Nkpg/Orto20230921",
+		// 			},
+		// 			{
+		// 				type: "color",
+		// 				name: "MyColor",
+		// 				color: "ff0000",
+		// 				emission: 0,
+		// 				crop: {
+		// 					type: "circle",
+		// 					circle: {
+		// 						u: 0.25,
+		// 						v: 0.5,
+		// 					},
+		// 				},
+		// 			},
+		// 			{
+		// 				type: "color",
+		// 				name: "MyColor2",
+		// 				color: "ff0000",
+		// 				emission: 1,
+		// 				crop: {
+		// 					type: "circle",
+		// 					circle: {
+		// 						u: 0.75,
+		// 						v: 0.5,
+		// 					},
+		// 				},
+		// 			},
+		// 		],
+		// 		true
+		// 	);
+		// });
 
-		this.setButtonArea(12, "Layer Movie", "", () => {
-			this.socket.sendLayers(
-				[
-					{
-						type: "image",
-						name: "Finals/Kollektivtrafik",
-					},
-				],
-				true
-			);
-		});
+		// this.setButtonArea(12, "Layer Movie", "", () => {
+		// 	this.socket.sendLayers(
+		// 		[
+		// 			{
+		// 				type: "image",
+		// 				name: "Finals/Kollektivtrafik",
+		// 			},
+		// 		],
+		// 		true
+		// 	);
+		// });
 
 		this.setButtonArea(13, "Recache /Beredskap", "", () => {
 			this.socket.send({
@@ -250,53 +250,53 @@ export class DebugPage extends Page {
 			});
 		});
 
-		this.setButtonArea(14, "Circle crop", "", () => {
-			this.socket.sendLayers([
-				{
-					type: "image",
-					name: "Nkpg/Buller_V2",
-					crop: {
-						type: "circle",
-						circle: {
-							u: Math.random(),
-							v: Math.random(),
-							radius: 0.5,
-						},
-					},
-				},
-			]);
-		});
+		// this.setButtonArea(14, "Circle crop", "", () => {
+		// 	this.socket.sendLayers([
+		// 		{
+		// 			type: "image",
+		// 			name: "Nkpg/Buller_V2",
+		// 			crop: {
+		// 				type: "circle",
+		// 				circle: {
+		// 					u: Math.random(),
+		// 					v: Math.random(),
+		// 					radius: 0.5,
+		// 				},
+		// 			},
+		// 		},
+		// 	]);
+		// });
 
-		this.setButtonArea(15, "NDI", "", () => {
-			this.socket.sendLayers([
-				{
-					type: "image",
-					name: "Finals/kollektivtrafik",
-				},
-				// {
-				// 	type: "image",
-				// 	name: "Color/Black",
-				// 	opacity: 0.5,
-				// },
-				{
-					type: "ndi",
-					name: "TrafficOverlayNDI",
-					opacity: 0.1,
-					emission: 1,
-					ndi: {
-						stream: "TrafficOverlayNDI",
-					},
-					crop: {
-						type: "circle",
-						circle: {
-							u: Math.random(),
-							v: Math.random(),
-							radius: 0.5,
-						},
-					},
-				},
-			]);
-		});
+		// this.setButtonArea(15, "NDI", "", () => {
+		// 	this.socket.sendLayers([
+		// 		{
+		// 			type: "image",
+		// 			name: "Finals/kollektivtrafik",
+		// 		},
+		// 		// {
+		// 		// 	type: "image",
+		// 		// 	name: "Color/Black",
+		// 		// 	opacity: 0.5,
+		// 		// },
+		// 		{
+		// 			type: "ndi",
+		// 			name: "TrafficOverlayNDI",
+		// 			opacity: 0.1,
+		// 			emission: 1,
+		// 			ndi: {
+		// 				stream: "TrafficOverlayNDI",
+		// 			},
+		// 			crop: {
+		// 				type: "circle",
+		// 				circle: {
+		// 					u: Math.random(),
+		// 					v: Math.random(),
+		// 					radius: 0.5,
+		// 				},
+		// 			},
+		// 		},
+		// 	]);
+		// });
 	}
 
 	update(time: number, delta: number) {

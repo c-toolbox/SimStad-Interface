@@ -2,15 +2,18 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { Color } from "@/utils/colors";
+import { Raster } from "@/utils/interfaces";
+import { contentManager } from "@/utils/ContentManager";
+import { languageManager } from "@/utils/LanguageManager";
 
-export class LayerButton extends Button {
+export class RasterButton extends Button {
 	protected border: RoundRectangle;
 	protected background: Phaser.GameObjects.Image;
 	protected image: Phaser.GameObjects.Image;
 	protected title: Phaser.GameObjects.Text;
 	protected titleBackground: Phaser.GameObjects.Rectangle;
 
-	public layer: string;
+	public raster: Raster;
 	public selected: boolean;
 
 	constructor(
@@ -19,12 +22,12 @@ export class LayerButton extends Button {
 		y: number,
 		width: number,
 		height: number,
-		layer: string
+		raster: Raster,
 	) {
 		super(scene, x, y);
 		this.width = width;
 		this.height = height;
-		this.layer = layer;
+		this.raster = raster;
 		this.selected = false;
 
 		/* Border highlight */
@@ -33,7 +36,7 @@ export class LayerButton extends Button {
 			width: this.width + 8,
 			height: this.height + 8,
 			radius: 4,
-			color: Color.Slate800,
+			color: Color.Slate900,
 		});
 		this.add(this.border);
 		this.sendToBack(this.border);
@@ -56,7 +59,7 @@ export class LayerButton extends Button {
 			this.width,
 			th,
 			Color.Black,
-			0.5
+			0.5,
 		);
 		this.add(this.titleBackground);
 
@@ -64,7 +67,7 @@ export class LayerButton extends Button {
 			y: this.height / 2 - th / 2,
 			size: 0.6 * th,
 			fontFamily: "Lato-Bold",
-			text: layer.split("/").pop(),
+			text: languageManager.get(raster.name),
 		});
 		this.title.setOrigin(0.5);
 		this.add(this.title);
@@ -79,11 +82,11 @@ export class LayerButton extends Button {
 		this.bindInteractive(this.background);
 		this.background.on("wheel", (...args: any) => this.emit("wheel", ...args));
 		this.background.on("dragstart", (...args: any) =>
-			this.emit("dragstart", ...args)
+			this.emit("dragstart", ...args),
 		);
 		this.background.on("drag", (...args: any) => this.emit("drag", ...args));
 		this.background.on("dragend", (...args: any) =>
-			this.emit("dragend", ...args)
+			this.emit("dragend", ...args),
 		);
 	}
 
@@ -91,46 +94,46 @@ export class LayerButton extends Button {
 		this.setScale(1 - 0.1 * this.holdSmooth);
 	}
 
-	addErrorIcon() {
-		let ms = 0.2 * this.width;
-		let mx = this.width / 2 - 0.6 * ms;
-		let my = -this.height / 2 + 0.6 * ms;
-		let background = this.scene.add.ellipse(mx, my, ms, ms, Color.Red700, 0.9);
-		this.add(background);
+	// addErrorIcon() {
+	// 	let ms = 0.2 * this.width;
+	// 	let mx = this.width / 2 - 0.6 * ms;
+	// 	let my = -this.height / 2 + 0.6 * ms;
+	// 	let background = this.scene.add.ellipse(mx, my, ms, ms, Color.Red700, 0.9);
+	// 	this.add(background);
 
-		let missing = this.scene.add.image(mx, my, "cloud-slash");
-		missing.setScale((0.7 * ms) / missing.width);
-		this.add(missing);
-	}
+	// 	let missing = this.scene.add.image(mx, my, "cloud-slash");
+	// 	missing.setScale((0.7 * ms) / missing.width);
+	// 	this.add(missing);
+	// }
 
-	addUseCount(count: number) {
-		let ms = 0.15 * this.width;
-		let mx = 0;
-		let my = -this.height / 2 + 0.8 * ms;
+	// addUseCount(count: number) {
+	// 	let ms = 0.15 * this.width;
+	// 	let mx = 0;
+	// 	let my = -this.height / 2 + 0.8 * ms;
 
-		let text = this.scene.addText({
-			x: mx,
-			y: my,
-			size: 0.65 * ms,
-			fontFamily: "Lato-Regular",
-			text: count > 1 ? `used (${count})` : count > 0 ? "used" : "unused",
-			color: "white",
-		});
-		text.setOrigin(0.5);
-		this.add(text);
+	// 	let text = this.scene.addText({
+	// 		x: mx,
+	// 		y: my,
+	// 		size: 0.65 * ms,
+	// 		fontFamily: "Lato-Regular",
+	// 		text: count > 1 ? `used (${count})` : count > 0 ? "used" : "unused",
+	// 		color: "white",
+	// 	});
+	// 	text.setOrigin(0.5);
+	// 	this.add(text);
 
-		let color = count > 0 ? Color.Green700 : Color.Red700;
-		let background = new RoundRectangle(this.scene, {
-			x: mx,
-			y: my,
-			width: text.displayWidth + ms / 2,
-			height: ms,
-			color,
-			radius: ms / 2,
-		});
-		this.add(background);
-		this.moveDown(background);
-	}
+	// 	let color = count > 0 ? Color.Green700 : Color.Red700;
+	// 	let background = new RoundRectangle(this.scene, {
+	// 		x: mx,
+	// 		y: my,
+	// 		width: text.displayWidth + ms / 2,
+	// 		height: ms,
+	// 		color,
+	// 		radius: ms / 2,
+	// 	});
+	// 	this.add(background);
+	// 	this.moveDown(background);
+	// }
 
 	setTexture(key: string, showBackground: boolean) {
 		const exists = this.scene.textures.exists(key);

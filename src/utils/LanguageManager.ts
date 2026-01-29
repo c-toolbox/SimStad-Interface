@@ -94,7 +94,7 @@ class LanguageManager {
 			if (text.includes("\\")) {
 				console.warn(text);
 			}
-			text = text.replace(/\\\\/g, "\\");
+			text = text.replace(/\\n/g, "\n");
 		}
 		return text;
 	}

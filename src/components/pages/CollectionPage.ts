@@ -10,7 +10,7 @@ import { TextButton } from "@/components/TextButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { LoadingIcon } from "@/components/LoadingIcon";
 
-export class ScenariosPage extends Page {
+export class CollectionPage extends Page {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
 	private loadingIcon: LoadingIcon;
@@ -50,10 +50,10 @@ export class ScenariosPage extends Page {
 		let h = 64;
 		let x = layout.panelInner.right - w / 2;
 		let y = layout.panelInner.bottom - h / 2;
-		this.addButton(x, y, w, h, "Reset", Color.Rose800, () => {
-			this.socket.sendReset();
-			this.scenariosButtons.forEach((button) => button.setHighlight(false));
-		});
+		// this.addButton(x, y, w, h, "Reset", Color.Rose800, () => {
+		// 	this.socket.sendReset();
+		// 	this.scenariosButtons.forEach((button) => button.setHighlight(false));
+		// });
 		this.addButton(x - w - s, y, w, h, "Refresh", Color.Green800, () => {
 			this.clearScenarios();
 			if (this.errorIcon.visible) {
@@ -74,7 +74,7 @@ export class ScenariosPage extends Page {
 			layout.panelInner.left,
 			scrollTop,
 			layout.panelInner.width,
-			scrollHeight
+			scrollHeight,
 		);
 		this.add(this.scrollArea);
 
@@ -83,7 +83,7 @@ export class ScenariosPage extends Page {
 			layout.panelInner.right + 20,
 			this.scrollArea.y + this.scrollArea.height / 2,
 			10,
-			this.scrollArea.height - 32
+			this.scrollArea.height - 32,
 		);
 		this.add(this.scrollBar);
 

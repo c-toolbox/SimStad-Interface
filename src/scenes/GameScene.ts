@@ -7,15 +7,14 @@ import { Map } from "@/components/Map";
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
 import { ScenarioPage } from "@/components/pages/ScenarioPage";
-import { ScenariosPage } from "@/components/pages/ScenariosPage";
+import { CollectionPage } from "@/components/pages/CollectionPage";
 import { LayerPage } from "@/components/pages/LayerPage";
 import { DebugPage } from "@/components/pages/DebugPage";
 import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 
 import { SocketManager } from "@/utils/SocketManager";
-import { Response } from "@/utils/protocol";
-import { blocksManager } from "@/utils/BlocksManager";
-import { CollectionKey } from "@/utils/interfaces";
+import { CollectionKey, Layer } from "@/utils/interfaces";
+import { LayerRequestData } from "@/utils/protocol";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -27,12 +26,15 @@ export class GameScene extends BaseScene {
 	private pages: Page[];
 	private homePage: HomePage;
 	private scenarioPage: ScenarioPage;
-	private scenariosPage: ScenariosPage;
+	private scenariosPage: CollectionPage;
 	private layerPage: LayerPage;
 	private debugPage: DebugPage;
 	private loggingOverlay: LoggingOverlay;
 	private navigation: Navigation;
 	private map: Map;
+
+	// Currently active layers
+	private layers: Layer[];
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -43,6 +45,8 @@ export class GameScene extends BaseScene {
 		this.cameras.main.setBackgroundColor(Color.Slate950);
 		this.initBlur();
 
+		this.layers = [];
+
 		// this.input.dragDistanceThreshold = 16;
 		this.input.addPointer(1);
 
@@ -51,7 +55,7 @@ export class GameScene extends BaseScene {
 		this.socket.connect();
 
 		this.socket.on("reconnect", () => {
-			this.socket.sendReset();
+			// this.socket.sendReset();
 			this.restart();
 		});
 		this.socket.on("onRecacheProgress", (count: number, max: number) => {
@@ -67,10 +71,10 @@ export class GameScene extends BaseScene {
 		this.pages = [];
 		this.homePage = new HomePage(this, PageState.Home, this.socket);
 		this.scenarioPage = new ScenarioPage(this, PageState.Scenario, this.socket);
-		this.scenariosPage = new ScenariosPage(
+		this.scenariosPage = new CollectionPage(
 			this,
 			PageState.Scenarios,
-			this.socket
+			this.socket,
 		);
 		this.layerPage = new LayerPage(this, PageState.Layer, this.socket);
 		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
@@ -89,10 +93,7 @@ export class GameScene extends BaseScene {
 				this.socket.send(data);
 			});
 
-			page.on("map", (layers: string) => {
-				this.map.setLayers(layers);
-				this.layerPage.setLayers(layers);
-			});
+			page.on("setLayers", this.setLayers, this);
 
 			page.on("collection", (key: CollectionKey) => {
 				this.setState(PageState.Scenario);
@@ -115,7 +116,7 @@ export class GameScene extends BaseScene {
 		this.loggingOverlay = new LoggingOverlay(
 			this,
 			PageState.Logging,
-			this.socket
+			this.socket,
 		);
 		this.loggingOverlay.setDepth(3);
 		this.loggingOverlay.setVisible(false);
@@ -175,26 +176,107 @@ export class GameScene extends BaseScene {
 		}
 	}
 
+	onResetButton() {
+		// this.socket.sendReset();
+		// this.restart();
+	}
+
 	onHomeReset() {
 		// if (!this.socket.isConnectedToSocket) return;
 
-		blocksManager.setDefaultLegend();
-		this.socket.sendReset();
-		this.scenarioPage.liveTrafficEnabled = false; // Also hack
-		this.scenarioPage.activateDataset("Nkpg/Orto20230921");
-		this.socket.sendLayers([
-			{ type: "image", name: "Nkpg/Orto20230921" },
+		// blocksManager.setDefaultLegend();
+		// this.socket.sendReset();
+		// this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+
+		this.setLayers([
+			{ type: "image", raster: "Orto20230921" },
 			{
 				type: "flow",
-				name: "Flow/strommen_flow_new",
+				raster: "StrommenFlowNew",
 				flow: {
-					texture: "Flow/Water",
+					texture: "Water",
 					scale: 200,
 					speed: 0.05,
 				},
 			},
 		]);
-		this.map.setLayers("Nkpg/Orto20230921");
+	}
+
+	onAttractionReset() {
+		this.setLayers([
+			{
+				type: "movie",
+				raster: "IdleMovie",
+				movie: {
+					speed: 1,
+				},
+			},
+		]);
+	}
+
+	setLayers(layers: Layer[]) {
+		this.layers = layers;
+
+		this.layerPage.setLayers(layers);
+
+		this.map.setLayers(layers);
+
+		// this.socket.sendReset();
+		// this.emit("map", "");
+
+		const layerRequestData = this.convertLayersToProtocol(layers);
+		this.socket.sendLayers(layerRequestData);
+	}
+
+	convertLayersToProtocol(layers: Layer[]): LayerRequestData[] {
+		return layers.map((layer, index) => {
+			const common = {
+				opacity: layer.opacity,
+				emission: layer.emission,
+				crop: layer.crop,
+			};
+
+			switch (layer.type) {
+				case "image":
+					return {
+						type: "image",
+						name: `${layer.raster}_${index}`,
+						...common,
+					};
+
+				case "flow":
+					return {
+						type: "flow",
+						name: `${layer.raster}_${index}`,
+						flow: layer.flow,
+						...common,
+					};
+
+				case "movie":
+					return {
+						type: "movie",
+						name: `${layer.raster}_${index}`,
+						movie: layer.movie,
+						...common,
+					};
+
+				case "color":
+					return {
+						type: "color",
+						name: `${layer.color}_${index}`,
+						color: layer.color,
+						...common,
+					};
+
+				case "ndi":
+					return {
+						type: "ndi",
+						name: `${layer.ndi.stream}_${index}`,
+						ndi: layer.ndi,
+						...common,
+					};
+			}
+		});
 	}
 
 	/* Blur */
@@ -210,12 +292,7 @@ export class GameScene extends BaseScene {
 				// this.foodWeb.toggleAttraction(state);
 
 				if (isAttractionMode) {
-					this.socket.sendLayers([
-						{
-							type: "movie",
-							name: "Movies/3DPRINT_ANIMATION_V003",
-						},
-					]);
+					this.onAttractionReset();
 				} else {
 					this.map.resetLightControls();
 					this.socket.fadeLight(() => {
@@ -223,7 +300,7 @@ export class GameScene extends BaseScene {
 					});
 				}
 			},
-			this
+			this,
 		);
 
 		this.scene.get("UIScene").events.on(
@@ -232,7 +309,7 @@ export class GameScene extends BaseScene {
 				this.infoWindowOpen = state;
 				this.updateBlur();
 			},
-			this
+			this,
 		);
 
 		this.scene.get("UIScene").events.on(
@@ -245,22 +322,15 @@ export class GameScene extends BaseScene {
 					this.restart();
 				}
 			},
-			this
+			this,
 		);
 
-		this.scene.get("UIScene").events.on(
-			"restart",
-			() => {
-				this.socket.sendReset();
-				this.restart();
-			},
-			this
-		);
+		this.scene.get("UIScene").events.on("restart", this.onResetButton, this);
 	}
 
 	updateBlur(): void {
 		let filter = this.cameras.main.getPostPipeline(
-			BlurPostFilter
+			BlurPostFilter,
 		) as BlurPostFilter;
 		let isActive = this.cameras.main.hasPostPipeline;
 		let shouldBeActive = this.attractionOpen || this.infoWindowOpen;
@@ -269,7 +339,7 @@ export class GameScene extends BaseScene {
 			if (!isActive) {
 				this.cameras.main.setPostPipeline(BlurPostFilter);
 				filter = this.cameras.main.getPostPipeline(
-					BlurPostFilter
+					BlurPostFilter,
 				) as BlurPostFilter;
 			}
 

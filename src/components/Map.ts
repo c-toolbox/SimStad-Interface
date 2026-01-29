@@ -1,32 +1,69 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { layoutManager as layout, layoutManager } from "@/utils/LayoutManager";
-import { Color, ColorStr } from "@/utils/colors";
+import { layoutManager as layout } from "@/utils/LayoutManager";
+import { Color } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { MapLight } from "./MapLight";
 import { SocketManager } from "@/utils/SocketManager";
 import { Response } from "@/utils/protocol";
-import { CircleButton } from "./CircleButton";
 import { MapHint } from "./MapHint";
 import { MapControls } from "./MapControls";
+import { Layer } from "@/utils/interfaces";
+import { colorToNumber } from "@/utils/functions";
+import { contentManager } from "@/utils/ContentManager";
 
-// Bottom right
-// const MIN_X = 129411.4;
-// const MIN_Y = 6495015.262;
-// Top left
-// const MAX_X = 134211.4;
-// const MAX_Y = 6498915.262;
+class MapLayer extends Phaser.GameObjects.Image {
+	public scene: BaseScene;
+	public layer: Layer;
 
-// From instructions in the drive
-const MIN_X = 129316.815;
-const MAX_X = 134436.815;
-const MIN_Y = 6495084.439;
-const MAX_Y = 6498924.439;
+	constructor(scene: BaseScene, layer: Layer) {
+		super(scene, layout.map.centerX, layout.map.centerY, "blank");
+		this.scene = scene;
 
-interface MapLayer {
-	active: boolean;
-	fade: number;
-	texture: string;
-	image: Phaser.GameObjects.Image;
+		this.setLayer(layer);
+	}
+
+	setLayer(layer: Layer) {
+		this.layer = layer;
+
+		this.setTint(0xffffff);
+		this.setAlpha(layer.opacity ?? 1);
+
+		switch (layer.type) {
+			case "flow":
+			case "movie":
+				this.setAlpha(0);
+			case "image":
+				const raster = contentManager.layerToRaster(layer);
+				if (raster) this.setTexture(raster.minimap);
+				else console.error(`Raster not found: '${raster}'`);
+				break;
+
+			case "color":
+				this.setTexture("square");
+				this.setTint(colorToNumber(layer.color));
+				break;
+
+			case "ndi":
+				this.setAlpha(0);
+				this.setTexture("blank");
+				break;
+
+			default:
+				throw Error(`Unknown layer type: '${layer}'`);
+		}
+
+		const scaleX = layout.map.width / this.width;
+		const scaleY = layout.map.height / this.height;
+		this.setScale(scaleX, scaleY);
+	}
+
+	setTexture(key: string): this {
+		if (this.scene.textures.exists(key)) {
+			return super.setTexture(key);
+		}
+		console.error(`Texture not found: '${key}'`);
+		return super.setTexture("blank");
+	}
 }
 
 export class Map extends Phaser.GameObjects.Container {
@@ -34,8 +71,8 @@ export class Map extends Phaser.GameObjects.Container {
 	public socket: SocketManager;
 
 	private map: Phaser.GameObjects.Image;
-	private layerContainer: Phaser.GameObjects.Container;
-	private layers: MapLayer[];
+	private mapLayerContainer: Phaser.GameObjects.Container;
+	private mapLayers: MapLayer[];
 	private mapHint: MapHint;
 	private lamps: MapLight[];
 	private lampIds: string[];
@@ -58,40 +95,22 @@ export class Map extends Phaser.GameObjects.Container {
 		});
 		this.add(background);
 
-		this.map = scene.add.image(
-			layout.map.centerX,
-			layout.map.centerY,
-			"minimaps/Nkpg/Hillshade"
-		);
+		this.map = scene.add.image(layout.map.centerX, layout.map.centerY, "white");
 		// this.map.angle = -90;
-		this.map.setScale(layout.map.width / this.map.width);
+		const mapScaleX = layout.map.width / this.map.width;
+		const mapScaleY = layout.map.height / this.map.height;
+		this.map.setScale(mapScaleX, mapScaleY);
 		this.add(this.map);
 
-		this.layerContainer = scene.add.container();
-		this.add(this.layerContainer);
+		this.mapLayerContainer = scene.add.container();
+		this.add(this.mapLayerContainer);
 
-		this.layers = [];
-		for (let i = 0; i < 10; i++) {
-			let layer = scene.add.image(
-				layout.map.centerX,
-				layout.map.centerY,
-				"minimaps/Color/white"
-			);
-			this.layerContainer.add(layer);
-			layer.setVisible(false);
-			layer.setScale(layout.map.width / layer.width);
-			this.layers.push({
-				active: false,
-				fade: 0.0,
-				texture: "",
-				image: layer,
-			});
-		}
+		this.mapLayers = [];
 
 		this.mapHint = new MapHint(
 			scene,
 			layout.map.centerX,
-			layout.map.bottom - 60
+			layout.map.bottom - 60,
 		);
 		this.add(this.mapHint);
 
@@ -141,77 +160,66 @@ export class Map extends Phaser.GameObjects.Container {
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
 		this.mapControls.update(time, delta);
 
-		this.layers.forEach((layer) => {
-			let dx = ((layer.active ? delta : -delta) / 1000) * 2;
+		// this.mapLayers.forEach((layer) => {
+		// 	let dx = ((layer.active ? delta : -delta) / 1000) * 2;
 
-			if (
-				["Flood", "Asfalt", "Byggnad", "Vegitation"].some((name) =>
-					layer.texture.includes(name)
-				)
-			) {
-				dx = 1;
-			}
+		// 	if (
+		// 		["Flood", "Asfalt", "Byggnad", "Vegitation"].some((name) =>
+		// 			layer.texture.includes(name),
+		// 		)
+		// 	) {
+		// 		dx = 1;
+		// 	}
 
-			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
-			layer.image.setVisible(layer.fade > 0);
-			let ease = Phaser.Math.Easing.Sine.Out;
-			layer.image.setAlpha(ease(layer.fade));
-		});
+		// 	layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
+		// 	layer.image.setVisible(layer.fade > 0);
+		// 	let ease = Phaser.Math.Easing.Sine.Out;
+		// 	layer.image.setAlpha(ease(layer.fade));
+		// });
 	}
 
-	setLayers(layerString: string) {
-		let textures = layerString.split(",");
-		textures = textures.filter((layer) => !!layer);
-		textures = textures.map((layer) => "minimaps/" + layer);
+	setLayers(layers: Layer[]) {
+		this.mapLayers.forEach((mapLayer) => mapLayer.destroy());
+		this.mapLayers = [];
 
-		let removedTextures = this.layers
-			.filter((layer) => layer.active && !textures.includes(layer.texture))
-			.map((layer) => layer.texture);
-		let addedTextures = textures.filter(
-			(texture) => !this.layers.find((layer) => layer.texture == texture)
-		);
+		// let removedTextures = this.mapLayers
+		// 	.filter((layer) => layer.active && !textures.includes(layer.texture))
+		// 	.map((layer) => layer.texture);
+		// let addedTextures = textures.filter(
+		// 	(texture) => !this.mapLayers.find((layer) => layer.texture == texture),
+		// );
 
-		addedTextures.forEach((texture) => {
-			this.addLayer(texture);
-		});
-		removedTextures.forEach((texture) => {
-			this.removeLayer(texture);
-		});
+		// addedTextures.forEach((texture) => {
+		// 	this.addLayer(texture);
+		// });
+		// removedTextures.forEach((texture) => {
+		// 	this.removeLayer(texture);
+		// });
 
-		textures.forEach((texture) => {
-			let layer = this.layers.find((layer) => layer.texture == texture);
-			if (layer) {
-				this.layerContainer.bringToTop(layer.image);
-			}
+		// layers.forEach((a) => {
+		// 	let layer = this.mapLayers.find((layer) => layer.texture == texture);
+		// 	if (layer) {
+		// 		this.mapLayerContainer.bringToTop(layer.image);
+		// 	}
+		// });
+
+		layers.forEach((layer) => {
+			const mapLayer = new MapLayer(this.scene, layer);
+			this.mapLayerContainer.add(mapLayer);
+			this.mapLayers.push(mapLayer);
+			this.bringToTop(mapLayer);
 		});
 
 		this.bringToTop(this.fingerLamp);
 	}
 
-	addLayer(texture: string) {
-		let layer = this.layers.find((layer) => !layer.active && layer.fade == 0);
-		if (!layer) {
-			layer = this.layers.find((layer) => !layer.active);
-		}
-		if (layer) {
-			layer.active = true;
-			layer.texture = texture;
-			layer.image.setTexture(texture);
-			this.layerContainer.bringToTop(layer.image);
-
-			if (!this.scene.textures.exists(texture)) {
-				console.error("Missing texture:", texture);
-			}
-		}
-	}
-
-	removeLayer(texture: string) {
-		let layer = this.layers.find((layer) => layer.texture == texture);
-		if (layer) {
-			layer.active = false;
-			layer.texture = "";
-		}
-	}
+	// removeLayer(layer: Layer) {
+	// let layer = this.mapLayers.find((layer) => layer.texture == texture);
+	// if (layer) {
+	// 	layer.active = false;
+	// 	layer.texture = "";
+	// }
+	// }
 
 	// onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
 	// 	let lampName = this.lampIds.shift();
@@ -278,14 +286,23 @@ export class Map extends Phaser.GameObjects.Container {
 		// const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 
 		if (method != "delete") {
-			this.socket.sendSetMarker(lamp.name, px, py, 0.012, lamp.color, 100, 1, 1);
+			this.socket.sendSetMarker(
+				lamp.name,
+				px,
+				py,
+				0.012,
+				lamp.color,
+				100,
+				1,
+				1,
+			);
 		} else {
 			this.socket.sendRemoveMarker(lamp.name);
 		}
 	}
 
 	reset() {
-		this.setLayers("");
+		// this.setLayers("");
 		this.resetLightControls();
 
 		this.lamps.forEach((lamp) => {

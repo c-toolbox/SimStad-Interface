@@ -18,13 +18,6 @@ let images: Image[] = [
 	image("vis_c_logo_white", "vis_c_logo_white.png"),
 	image("light", "light.png"),
 
-	image("symbol_circle", "symbols/circle.png"),
-	image("symbol_dashed_line", "symbols/dashed_line.png"),
-	image("symbol_line", "symbols/line.png"),
-	image("symbol_rectangle", "symbols/rectangle.png"),
-	image("symbol_sign_road_narrows", "symbols/sign_road_narrows.png"),
-	image("symbol_sign_no_vehicles", "symbols/sign_no_vehicles.png"),
-
 	image("arrow-left", "icons/arrow-left.png"),
 	image("audio-loud", "icons/audio-loud.png"),
 	image("audio-mute", "icons/audio-mute.png"),
@@ -54,34 +47,6 @@ let images: Image[] = [
 	// image("minimaps/Nkpg/Hillshade.png", "minimaps/Nkpg/Hillshade"),
 	// image("minimaps/Nkpg/Orto20230921.png", "minimaps/Nkpg/Orto20230921"),
 ];
-
-/* Thumbnails (only shown in debug layers page) */
-// for (let path in import.meta.glob("./images/thumbnails/*/*.png")) {
-// 	let file = path.replace("./images/thumbnails/", "").replace(".png", "");
-// 	images.push(image(`thumbnails/${file}.png`, file));
-// }
-
-/* Minimaps (shown to the right) */
-// export const localLayers: string[] = [];
-// for (let path in import.meta.glob("./images/minimaps/*/*.png")) {
-// 	let file = path.replace("./images/", "").replace(".png", "");
-// 	// images.push(image(`${file}.png`, file));
-// 	localLayers.push(file.replace("minimaps/", ""));
-// }
-
-/* Chapters (images for the home page) */
-// for (const path in import.meta.glob("./images/chapters/*")) {
-// 	const file = path.replace("./images/chapters/", "");
-// 	const key = file.replace(/\..+$/, "");
-// 	images.push(image(key, `chapters/${file}`));
-// }
-
-/* Legends (used in LegendScene) */
-// for (const path in import.meta.glob("./images/legends/*")) {
-// 	const file = path.replace("./images/legends/", "");
-// 	const key = file.replace(/\..+$/, "");
-// 	images.push(image(key, `legends/${file}`));
-// }
 
 /* Fonts */
 

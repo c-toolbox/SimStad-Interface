@@ -61,16 +61,13 @@ export class HomePage extends Page {
 		/* Scenario buttons */
 
 		this.collectionButtons = [];
-		console.log("HOME", contentManager.getCollections());
 		contentManager
-			.getCollections()
+			.getFeaturedCollections()
 			.forEach((collection: Collection, i: number) => {
 				let area = this.areas[i];
-				console.log("COLLECTION", collection.key, collection);
-
 				if (!area) {
 					return console.error(
-						`HomePage.getAreas has run out of areas. You are attempting to display too many scenarios.`
+						`HomePage.getAreas has run out of areas. You are attempting to display too many scenarios.`,
 					);
 				}
 
@@ -80,8 +77,7 @@ export class HomePage extends Page {
 					area.centerY,
 					area.width,
 					area.height,
-					`collection_${collection.key}_name`,
-					collection.image
+					collection,
 				);
 				button.on(
 					"click",
@@ -90,7 +86,7 @@ export class HomePage extends Page {
 							this.emit("collection", collection.key);
 						}
 					},
-					this
+					this,
 				);
 				this.add(button);
 				this.collectionButtons.push(button);
@@ -118,7 +114,7 @@ export class HomePage extends Page {
 			panel.bottom - lowerHeight - upperHeight - 2 * gap,
 			panel.width,
 			panel.height / 4,
-			gap
+			gap,
 		);
 		areas.push(...upperRects);
 
@@ -129,7 +125,7 @@ export class HomePage extends Page {
 			panel.bottom - lowerHeight,
 			panel.width,
 			lowerHeight,
-			gap
+			gap,
 		);
 		areas.push(...lowerRects);
 
@@ -143,7 +139,7 @@ export class HomePage extends Page {
 		top: number,
 		width: number,
 		height: number,
-		gap: number
+		gap: number,
 	): Phaser.Geom.Rectangle[] {
 		let rectWidth = (width - gap * (M - 1)) / M;
 		let rectHeight = (height - gap * (N - 1)) / N;

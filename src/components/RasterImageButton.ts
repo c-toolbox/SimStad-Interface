@@ -1,8 +1,9 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { LayerButton } from "./LayerButton";
+import { RasterButton } from "./RasterButton";
 import { Color } from "@/utils/colors";
+import { Raster } from "@/utils/interfaces";
 
-export class LayerImageButton extends LayerButton {
+export class RasterImageButton extends RasterButton {
 	private orderBg: Phaser.GameObjects.Image;
 	private orderText: Phaser.GameObjects.Text;
 
@@ -12,11 +13,11 @@ export class LayerImageButton extends LayerButton {
 		y: number,
 		width: number,
 		height: number,
-		layer: string
+		raster: Raster,
 	) {
-		super(scene, x, y, width, height, layer);
+		super(scene, x, y, width, height, raster);
 
-		this.setTexture(layer, true);
+		this.setTexture(raster.thumbnail, true);
 
 		/* Order number */
 
@@ -44,7 +45,7 @@ export class LayerImageButton extends LayerButton {
 	setSelected(value: boolean) {
 		this.selected = value;
 		// this.border.setVisible(value);
-		this.border.setColor(this.selected ? Color.White : Color.Slate800);
+		this.border.setColor(this.selected ? Color.White : Color.Slate900);
 
 		this.orderBg.setVisible(value);
 		this.orderText.setVisible(value);
