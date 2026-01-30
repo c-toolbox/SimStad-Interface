@@ -1,6 +1,5 @@
 import { BaseScene } from "./BaseScene";
 import { images } from "@/assets/assets";
-import { runtimeTextures } from "@/assets/mediaLoader";
 import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
@@ -50,18 +49,6 @@ export class PreloadScene extends BaseScene {
 		for (let image of images) {
 			this.load.image(image.key, image.path);
 		}
-
-		for (let tex of runtimeTextures) {
-			this.load.image(tex.key, tex.path);
-		}
-
-		// Listen to when a file is done loading so we can release blob URLs
-		this.load.on("filecomplete", (key: string) => {
-			const tex = runtimeTextures.find((t) => t.key === key);
-			if (tex) {
-				URL.revokeObjectURL(tex.path);
-			}
-		});
 	}
 
 	create() {

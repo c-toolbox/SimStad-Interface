@@ -1,17 +1,21 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "./elements/RoundRectangle";
+import { LazyImage } from "./elements/LazyImage";
 import { Color } from "@/utils/colors";
 import { Raster } from "@/utils/interfaces";
-import { contentManager } from "@/utils/ContentManager";
 import { languageManager } from "@/utils/LanguageManager";
 
 export class RasterButton extends Button {
 	protected border: RoundRectangle;
 	protected background: Phaser.GameObjects.Image;
-	protected image: Phaser.GameObjects.Image;
+	protected image: LazyImage;
 	protected title: Phaser.GameObjects.Text;
 	protected titleBackground: Phaser.GameObjects.Rectangle;
+	private loader: Phaser.GameObjects.Image;
+	private orderBg: Phaser.GameObjects.Image;
+	private orderText: Phaser.GameObjects.Text;
+	private isLoading: boolean;
 
 	public raster: Raster;
 	public selected: boolean;
@@ -29,6 +33,7 @@ export class RasterButton extends Button {
 		this.height = height;
 		this.raster = raster;
 		this.selected = false;
+		this.isLoading = false;
 
 		/* Border highlight */
 
@@ -45,9 +50,17 @@ export class RasterButton extends Button {
 		this.background.setScale(this.width / this.background.width);
 		this.add(this.background);
 
-		this.image = this.scene.add.image(0, 0, "city");
-		this.add(this.image);
+		this.image = new LazyImage(scene, 0, 0);
 		this.image.setScale(this.width / this.image.width);
+		this.add(this.image);
+
+		/* Loader spinner */
+
+		this.loader = scene.add.image(0, 0, "vis_c_logo_white");
+		this.loader.setTint(0xffffff);
+		this.loader.setAlpha(0.5);
+		this.loader.setScale((0.4 * width) / this.loader.width);
+		this.add(this.loader);
 
 		/* Title */
 
@@ -77,6 +90,24 @@ export class RasterButton extends Button {
 			this.title.scaleY = this.title.scaleX;
 		}
 
+		/* Order number */
+
+		this.orderBg = scene.add.image(0, 0, "border");
+		this.orderBg.setScale((this.width / this.orderBg.width) * 1.02);
+		this.add(this.orderBg);
+
+		const size = this.width * 0.17;
+		this.orderText = scene.addText({
+			x: -this.width * 0.42,
+			y: -this.width * 0.42,
+			size: size,
+			fontFamily: "Lato-Bold",
+			color: "black",
+			text: "0",
+		});
+		this.orderText.setOrigin(0.5);
+		this.add(this.orderText);
+
 		/* Interactions */
 
 		this.bindInteractive(this.background);
@@ -88,70 +119,28 @@ export class RasterButton extends Button {
 		this.background.on("dragend", (...args: any) =>
 			this.emit("dragend", ...args),
 		);
+
+		/* Setup thumbnail loading */
+
+		this.isLoading = true;
+		this.image.on("loaded", (loaded: boolean) => {
+			this.isLoading = !loaded;
+		});
+		this.image.setTexture(raster.thumbnail);
+
+		/* Init */
+
+		this.setSelected(false);
 	}
 
 	update(time: number, delta: number) {
 		this.setScale(1 - 0.1 * this.holdSmooth);
-	}
 
-	// addErrorIcon() {
-	// 	let ms = 0.2 * this.width;
-	// 	let mx = this.width / 2 - 0.6 * ms;
-	// 	let my = -this.height / 2 + 0.6 * ms;
-	// 	let background = this.scene.add.ellipse(mx, my, ms, ms, Color.Red700, 0.9);
-	// 	this.add(background);
-
-	// 	let missing = this.scene.add.image(mx, my, "cloud-slash");
-	// 	missing.setScale((0.7 * ms) / missing.width);
-	// 	this.add(missing);
-	// }
-
-	// addUseCount(count: number) {
-	// 	let ms = 0.15 * this.width;
-	// 	let mx = 0;
-	// 	let my = -this.height / 2 + 0.8 * ms;
-
-	// 	let text = this.scene.addText({
-	// 		x: mx,
-	// 		y: my,
-	// 		size: 0.65 * ms,
-	// 		fontFamily: "Lato-Regular",
-	// 		text: count > 1 ? `used (${count})` : count > 0 ? "used" : "unused",
-	// 		color: "white",
-	// 	});
-	// 	text.setOrigin(0.5);
-	// 	this.add(text);
-
-	// 	let color = count > 0 ? Color.Green700 : Color.Red700;
-	// 	let background = new RoundRectangle(this.scene, {
-	// 		x: mx,
-	// 		y: my,
-	// 		width: text.displayWidth + ms / 2,
-	// 		height: ms,
-	// 		color,
-	// 		radius: ms / 2,
-	// 	});
-	// 	this.add(background);
-	// 	this.moveDown(background);
-	// }
-
-	setTexture(key: string, showBackground: boolean) {
-		const exists = this.scene.textures.exists(key);
-
-		if (exists) {
-			this.image.setTexture(key);
-			this.image.setScale(this.width / this.image.width);
+		if (this.isLoading) {
+			this.loader.angle = time / 2;
+			this.loader.visible = true;
 		} else {
-			this.image.setTexture("city");
-			this.image.setScale(this.width / this.image.width);
-		}
-
-		if (exists && showBackground) {
-			this.background.setTexture("blank");
-			this.background.setTint(Color.White);
-		} else {
-			this.background.setTexture("square");
-			this.background.setTint(Color.Slate800);
+			this.loader.visible = false;
 		}
 	}
 
@@ -159,7 +148,14 @@ export class RasterButton extends Button {
 		this.bindInteractive(this.background, true);
 	}
 
-	setOrder(order: number) {}
+	setSelected(value: boolean) {
+		this.selected = value;
+		this.orderBg.setVisible(value);
+		this.orderText.setVisible(value);
+		this.border.setColor(this.selected ? Color.White : Color.Slate900);
+	}
 
-	setSelected(value: boolean) {}
+	setOrder(order: number) {
+		this.orderText.setText(order.toString());
+	}
 }

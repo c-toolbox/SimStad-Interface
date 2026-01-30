@@ -1,11 +1,11 @@
 import { config } from "./RuntimeConfig";
+import { BaseScene } from "@/scenes/BaseScene";
 import {
 	City,
 	Collection,
 	CollectionKey,
 	Layer,
 	Legend,
-	LegendEntry,
 	LegendKey,
 	Raster,
 	Scenario,
@@ -13,6 +13,34 @@ import {
 	Symbol,
 	Tag,
 } from "./interfaces";
+import { filesystem } from "@neutralinojs/lib";
+
+type SubscriptionCallback = (isLoaded: boolean) => void;
+
+/**
+ * Media folders that support lazy loading.
+ * These are used as prefixes for texture keys.
+ */
+const LAZY_LOAD_FOLDERS = {
+	THUMBNAILS: "thumbnails",
+	MINIMAPS: "minimaps",
+	COLLECTIONS: "collections",
+	LEGENDS: "legends",
+	LEGEND_SYMBOLS: "legendsymbols",
+	RASTERS: "rasters",
+	VIDEOS: "videos",
+};
+
+/**
+ * Raster-related folders that are updated together.
+ * When refreshRasters is called, only these folders are refreshed.
+ */
+const RASTER_REFRESH_FOLDERS = [
+	LAZY_LOAD_FOLDERS.THUMBNAILS,
+	LAZY_LOAD_FOLDERS.MINIMAPS,
+	LAZY_LOAD_FOLDERS.RASTERS,
+	LAZY_LOAD_FOLDERS.VIDEOS,
+];
 
 class ContentManager {
 	private localization: {
@@ -26,6 +54,13 @@ class ContentManager {
 	private legends: Legend[];
 	private symbols: Symbol[];
 	private tags: Tag[];
+	private loadQueue: Array<{
+		scene: BaseScene;
+		textureKey: string;
+		resolve: (value: boolean) => void;
+	}>;
+	private isLoading: boolean;
+	private textureSubscriptions: Map<string, Array<SubscriptionCallback>>;
 
 	constructor() {
 		this.localization = { sv: {}, en: {} };
@@ -36,6 +71,9 @@ class ContentManager {
 		this.legends = [];
 		this.symbols = [];
 		this.tags = [];
+		this.loadQueue = [];
+		this.isLoading = false;
+		this.textureSubscriptions = new Map();
 	}
 
 	/* Omni */
@@ -258,6 +296,209 @@ class ContentManager {
 			.replace(/\.[^/.]+$/, "")
 			.replace(/\//g, "_");
 	}
+
+	/**
+	 * Extracts the folder and filename from a texture key.
+	 * Texture keys are formatted as "{folder}_{filename}" from mediaLoader.
+	 * Returns { folder, filename } or null if the key format is invalid.
+	 */
+	private extractFolderAndFilename(
+		textureKey: string,
+	): { folder: string; filename: string } | null {
+		const parts = textureKey.split("_");
+		if (parts.length < 2) {
+			console.warn(`Invalid texture key format: ${textureKey}`);
+			return null;
+		}
+
+		const folder = parts[0];
+		const filename = parts.slice(1).join("_"); // Handle filenames with underscores
+
+		return { folder, filename };
+	}
+
+	/**
+	 * Loads a media asset image asynchronously on-demand.
+	 * Takes a texture key (e.g., "thumbnails_Buller") and loads the corresponding file.
+	 * Images are loaded sequentially to avoid blocking the main thread.
+	 * Returns true if the load was queued/triggered, false if the texture already exists.
+	 */
+	async requestTexture(scene: BaseScene, textureKey: string): Promise<boolean> {
+		// Check if texture already exists
+		if (scene.textures.exists(textureKey)) {
+			return false;
+		}
+
+		return new Promise((resolve) => {
+			// Add to load queue
+			this.loadQueue.push({ scene, textureKey, resolve });
+
+			// Process queue if not already loading
+			if (!this.isLoading) {
+				this.processLoadQueue();
+			}
+		});
+	}
+
+	/**
+	 * Processes the load queue sequentially, loading one image at a time.
+	 */
+	private async processLoadQueue(): Promise<void> {
+		if (this.isLoading || this.loadQueue.length === 0) {
+			return;
+		}
+
+		this.isLoading = true;
+		const { scene, textureKey, resolve } = this.loadQueue.shift()!;
+
+		// Skip if texture already exists
+		if (scene.textures.exists(textureKey)) {
+			resolve(false);
+			this.isLoading = false;
+			this.processLoadQueue();
+			return;
+		}
+
+		const folderAndFile = this.extractFolderAndFilename(textureKey);
+		if (!folderAndFile) {
+			resolve(false);
+			this.isLoading = false;
+			this.processLoadQueue();
+			return;
+		}
+
+		const { folder, filename } = folderAndFile;
+		const filePath = `${config.MEDIA_PATH}\\${folder}\\${filename}.png`;
+
+		try {
+			// Read the binary file
+			const data = await filesystem.readBinaryFile(filePath);
+			const blob = new Blob([data], { type: "image/png" });
+			const objectUrl = URL.createObjectURL(blob);
+
+			// Add the image to the loader
+			scene.load.image(textureKey, objectUrl);
+
+			// Start the loader and handle completion
+			scene.load.once("complete", () => {
+				// Revoke the object URL after loading
+				URL.revokeObjectURL(objectUrl);
+
+				// Notify all subscribers that this texture is loaded
+				this.notifyTextureSubscribers(textureKey, true);
+
+				resolve(true);
+
+				// Move to next item in queue
+				this.isLoading = false;
+				this.processLoadQueue();
+			});
+
+			scene.load.start();
+		} catch (error) {
+			console.error(
+				`Failed to load media asset ${textureKey} from ${filePath}:`,
+				error,
+			);
+			resolve(false);
+
+			// Continue with next item in queue
+			this.isLoading = false;
+			this.processLoadQueue();
+		}
+	}
+
+	/**
+	 * Subscribe a callback to be called when a texture is loaded.
+	 * The callback will be invoked when the texture becomes available.
+	 * @param textureKey The texture key to subscribe to
+	 * @param callback Function to call when texture is loaded
+	 * @returns An unsubscribe function
+	 */
+	subscribeToTexture(
+		textureKey: string,
+		callback: SubscriptionCallback,
+	): () => void {
+		if (!this.textureSubscriptions.has(textureKey)) {
+			this.textureSubscriptions.set(textureKey, []);
+		}
+
+		this.textureSubscriptions.get(textureKey)!.push(callback);
+
+		console.log("ContentManager subscribe:", textureKey);
+
+		// Return unsubscribe function
+		return () => {
+			const callbacks = this.textureSubscriptions.get(textureKey);
+			if (callbacks) {
+				const index = callbacks.indexOf(callback);
+				if (index !== -1) {
+					callbacks.splice(index, 1);
+				}
+			}
+			console.log("ContentManager unsubscribe:", textureKey);
+		};
+	}
+
+	/**
+	 * Notify all subscribers that a texture has been loaded.
+	 * Called internally when a texture finishes loading.
+	 */
+	private notifyTextureSubscribers(
+		textureKey: string,
+		isLoaded: boolean,
+	): void {
+		const callbacks = this.textureSubscriptions.get(textureKey);
+		if (callbacks) {
+			callbacks.forEach((callback) => callback(isLoaded));
+		}
+	}
+
+	/**
+	 * Refresh all rasters from the server and reload their textures.
+	 * Only refreshes textures from raster-related folders: thumbnails, minimaps, rasters, and videos.
+	 * Does not refresh collections, legends, or legendsymbols as they are not updated regularly.
+	 */
+	async refreshRasters(scene: BaseScene): Promise<void> {
+		// Clear existing rasters
+		this.rasters = [];
+
+		// Notify all subscribers of raster-related textures to reset to placeholder
+		const subscribedTextures = Array.from(this.textureSubscriptions.keys());
+		for (const textureKey of subscribedTextures) {
+			if (this.isRasterRelatedTexture(textureKey)) {
+				this.notifyTextureSubscribers(textureKey, false);
+			}
+		}
+
+		// Remove all raster-related textures from the scene
+		for (const textureKey of subscribedTextures) {
+			if (this.isRasterRelatedTexture(textureKey)) {
+				if (scene.textures.exists(textureKey)) {
+					scene.textures.remove(textureKey);
+				}
+			}
+		}
+
+		// Fetch fresh raster data from server
+		await this.fetchRasters();
+
+		// Load all raster-related textures that have subscribers
+		for (const textureKey of subscribedTextures) {
+			if (this.isRasterRelatedTexture(textureKey)) {
+				await this.requestTexture(scene, textureKey);
+			}
+		}
+	}
+
+	/**
+	 * Check if a texture key belongs to a raster-related folder.
+	 */
+	private isRasterRelatedTexture(textureKey: string): boolean {
+		return RASTER_REFRESH_FOLDERS.some((folder) =>
+			textureKey.startsWith(folder + "_"),
+		);
+	}
 }
 
-export const contentManager: ContentManager = new ContentManager();
+export const contentManager = new ContentManager();

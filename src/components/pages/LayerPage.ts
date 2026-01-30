@@ -6,7 +6,6 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 
 import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { RasterImageButton } from "../RasterImageButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { contentManager } from "@/utils/ContentManager";
 import { RasterButton } from "../RasterButton";
@@ -106,7 +105,7 @@ export class LayerPage extends Page {
 
 		const folderLayout = layout.layerFolders;
 		const tags = contentManager.getTags();
-		let n = tags.length + 1;
+		let n = tags.length + 2;
 		let s = 20;
 		let w = folderLayout.width;
 		let h = (folderLayout.height - s * (n - 1)) / n;
@@ -115,6 +114,11 @@ export class LayerPage extends Page {
 
 		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
 			this.emit("setLayers", []);
+		});
+
+		y -= h + s;
+		this.addButton(x, y, w, h, "Refresh", Color.Blue600, () => {
+			contentManager.refreshRasters(this.scene as BaseScene);
 		});
 
 		tags.forEach((tag, index) => {
@@ -141,7 +145,7 @@ export class LayerPage extends Page {
 	}
 
 	addRasterButton(raster: Raster, { x, y, w, h }: GridArea) {
-		let button = new RasterImageButton(this.scene, x, y, w, h, raster);
+		let button = new RasterButton(this.scene, x, y, w, h, raster);
 		button.setDraggable();
 		this.add(button);
 		this.layerButtons.push(button);
