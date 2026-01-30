@@ -3,6 +3,7 @@ import { colorToNumber, splitText } from "@/utils/functions";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
+import { LazyImage } from "./elements/LazyImage";
 import { languageManager } from "@/utils/LanguageManager";
 import { Legend as LegendData } from "@/utils/interfaces";
 import { contentManager } from "@/utils/ContentManager";
@@ -21,7 +22,7 @@ export class Legend extends Phaser.GameObjects.Container {
 	private graphics: Phaser.GameObjects.Graphics;
 	private title: Phaser.GameObjects.Text;
 	private labels: Phaser.GameObjects.Text[];
-	private symbols: Phaser.GameObjects.Image[];
+	private symbols: LazyImage[];
 
 	constructor(
 		scene: BaseScene,
@@ -96,8 +97,11 @@ export class Legend extends Phaser.GameObjects.Container {
 			let y = ty + (height + vgap) * (order - 1) + height / 2;
 
 			const icon = contentManager.getLegendSymbol(symbolKey).image;
-			let symbolImage = this.scene.add.image(x + width / 2, y, icon);
-			symbolImage.setScale(height / symbolImage.height);
+			let symbolImage = new LazyImage(this.scene, x + width / 2, y);
+			symbolImage.on("loaded", () => {
+				symbolImage.setScale(height / symbolImage.height);
+			});
+			symbolImage.setTexture(icon);
 			symbolImage.setTint(colorToNumber(color));
 			this.symbols.push(symbolImage);
 			this.add(symbolImage);

@@ -5,6 +5,7 @@ import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { Legend } from "@/components/Legend";
+import { LazyImage } from "@/components/elements/LazyImage";
 import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
@@ -22,7 +23,8 @@ export class ScenarioPage extends Page {
 	private bread: Phaser.GameObjects.Text[];
 	private legend: Legend;
 	private legendShadow: Phaser.GameObjects.Image;
-	private legendImage: Phaser.GameObjects.Image;
+	private legendImage: LazyImage;
+	private legendLoader: Phaser.GameObjects.Image;
 	private legendSource: Phaser.GameObjects.Text;
 	private backButton: TabButton;
 	private tabButtons: TabButton[];
@@ -110,13 +112,33 @@ export class ScenarioPage extends Page {
 		this.legendShadow.setPostPipeline(BlurPostFilter);
 		this.add(this.legendShadow);
 
-		this.legendImage = scene.add.image(
+		this.legendImage = new LazyImage(
+			scene,
 			layout.scenarioLegend.centerX,
 			layout.scenarioLegend.centerY,
-			"legend_default",
 		);
 		this.legendImage.setOrigin(0.5, 0.0);
 		this.add(this.legendImage);
+
+		/* Loader spinner */
+		this.legendLoader = scene.add.image(
+			layout.scenarioLegend.centerX,
+			layout.scenarioLegend.centerY,
+			"vis_c_logo_white",
+		);
+		this.legendLoader.setTint(0xffffff);
+		this.legendLoader.setAlpha(0.5);
+		this.legendLoader.setScale(0.15);
+		this.legendLoader.setVisible(false);
+		this.add(this.legendLoader);
+
+		/* Listen for legend image load events */
+		this.legendImage.on("loaded", (loaded: boolean) => {
+			this.legendLoader.setVisible(!loaded);
+			if (loaded && this.legendImage.width > 0) {
+				this.updateLegendImageScale();
+			}
+		});
 
 		this.legendSource = scene.addText({
 			size: 18,
@@ -201,6 +223,11 @@ export class ScenarioPage extends Page {
 		this.tabButtons.forEach((button) => button.update(time, delta));
 		// this.layerButtons.forEach((button) => button.update(time, delta));
 		this.layerSlider.update(time, delta);
+
+		/* Update loader spinner */
+		if (this.legendLoader.visible) {
+			this.legendLoader.angle = time / 2;
+		}
 	}
 
 	setCollection(collectionKey: CollectionKey) {
@@ -341,17 +368,16 @@ export class ScenarioPage extends Page {
 		}
 
 		let hasImage = false;
-		if (
-			scenario.legend_image &&
-			this.scene.textures.exists(scenario.legend_image)
-		) {
+		if (scenario.legend_image) {
 			this.legendShadow.setVisible(true);
 			this.legendImage.setVisible(true);
+			this.legendLoader.setVisible(true);
 			this.setLegendImage(scenario.legend_image);
 			hasImage = true;
 		} else {
 			this.legendShadow.setVisible(false);
 			this.legendImage.setVisible(false);
+			this.legendLoader.setVisible(false);
 		}
 
 		if (scenario.legend_image_source) {
@@ -432,15 +458,17 @@ export class ScenarioPage extends Page {
 
 	setLegendImage(key: string) {
 		this.legendImage.setTexture(key);
-		this.legendImage.setScale(
-			Math.min(
-				layout.scenarioLegend.width / this.legendImage.width,
-				layout.scenarioLegend.height / this.legendImage.height,
-			),
+	}
+
+	private updateLegendImageScale() {
+		const scale = Math.min(
+			layout.scenarioLegend.width / this.legendImage.width,
+			layout.scenarioLegend.height / this.legendImage.height,
 		);
+		this.legendImage.setScale(scale);
 		this.legendImage.y = this.title.y;
 
-		this.legendShadow.setTexture(key);
+		this.legendShadow.setTexture(this.legendImage.texture.key);
 		this.legendShadow.y = this.legendImage.y + 2;
 		this.legendShadow.setScale(this.legendImage.scaleX);
 	}

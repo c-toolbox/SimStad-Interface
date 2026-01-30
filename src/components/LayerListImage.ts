@@ -2,6 +2,7 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
 import { layoutManager } from "@/utils/LayoutManager";
 import { Button } from "./elements/Button";
+import { LazyImage } from "./elements/LazyImage";
 import { Layer } from "@/utils/interfaces";
 import { contentManager } from "@/utils/ContentManager";
 import { colorToNumber } from "@/utils/functions";
@@ -12,7 +13,7 @@ export class LayerListImage extends Button {
 
 	private border: Phaser.GameObjects.Image;
 	private text: Phaser.GameObjects.Text;
-	private image: Phaser.GameObjects.Image;
+	private image: LazyImage;
 
 	private size: number;
 	private snapX: number;
@@ -31,7 +32,7 @@ export class LayerListImage extends Button {
 		this.animSpawn = 0;
 		this.animFade = 0;
 
-		this.image = this.scene.add.image(0, 0, "blank");
+		this.image = new LazyImage(scene, 0, 0);
 		this.image.setScale(size / this.image.width);
 		this.add(this.image);
 
