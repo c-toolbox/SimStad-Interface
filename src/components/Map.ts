@@ -8,63 +8,7 @@ import { Response } from "@/utils/protocol";
 import { MapHint } from "./MapHint";
 import { MapControls } from "./MapControls";
 import { Layer } from "@/utils/interfaces";
-import { colorToNumber } from "@/utils/functions";
-import { contentManager } from "@/utils/ContentManager";
-
-class MapLayer extends Phaser.GameObjects.Image {
-	public scene: BaseScene;
-	public layer: Layer;
-
-	constructor(scene: BaseScene, layer: Layer) {
-		super(scene, layout.map.centerX, layout.map.centerY, "blank");
-		this.scene = scene;
-
-		this.setLayer(layer);
-	}
-
-	setLayer(layer: Layer) {
-		this.layer = layer;
-
-		this.setTint(0xffffff);
-		this.setAlpha(layer.opacity ?? 1);
-
-		switch (layer.type) {
-			case "flow":
-			case "movie":
-				this.setAlpha(0);
-			case "image":
-				const raster = contentManager.layerToRaster(layer);
-				if (raster) this.setTexture(raster.minimap);
-				else console.error(`Raster not found: '${raster}'`);
-				break;
-
-			case "color":
-				this.setTexture("square");
-				this.setTint(colorToNumber(layer.color));
-				break;
-
-			case "ndi":
-				this.setAlpha(0);
-				this.setTexture("blank");
-				break;
-
-			default:
-				throw Error(`Unknown layer type: '${layer}'`);
-		}
-
-		const scaleX = layout.map.width / this.width;
-		const scaleY = layout.map.height / this.height;
-		this.setScale(scaleX, scaleY);
-	}
-
-	setTexture(key: string): this {
-		if (this.scene.textures.exists(key)) {
-			return super.setTexture(key);
-		}
-		console.error(`Texture not found: '${key}'`);
-		return super.setTexture("blank");
-	}
-}
+import { MapLayer } from "./MapLayer";
 
 export class Map extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
@@ -77,13 +21,15 @@ export class Map extends Phaser.GameObjects.Container {
 	private lamps: MapLight[];
 	private lampIds: string[];
 	private fingerLamp: MapLight;
-
 	private mapControls: MapControls;
+	private loader: Phaser.GameObjects.Image;
+	private loadingLayers: Set<MapLayer>;
 
 	constructor(scene: BaseScene, socket: SocketManager) {
 		super(scene);
 		this.scene = scene;
 		this.socket = socket;
+		this.loadingLayers = new Set();
 
 		let background = new RoundRectangle(scene, {
 			x: layout.map.centerX,
@@ -127,6 +73,18 @@ export class Map extends Phaser.GameObjects.Container {
 		this.scene.input.on("pointermove", this.onPointerMove, this);
 		this.scene.input.on("pointerup", this.onPointerUp, this);
 
+		/* Loader spinner */
+		this.loader = scene.add.image(
+			layout.map.centerX,
+			layout.map.centerY,
+			"vis_c_logo_white",
+		);
+		this.loader.setTint(0xffffff);
+		this.loader.setAlpha(0.5);
+		this.loader.setScale(0.15);
+		this.loader.setVisible(false);
+		this.add(this.loader);
+
 		// const fullscreen = new CircleButton(
 		// 	scene,
 		// 	layout.map.right,
@@ -160,6 +118,14 @@ export class Map extends Phaser.GameObjects.Container {
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
 		this.mapControls.update(time, delta);
 
+		/* Update loader spinner */
+		if (this.loadingLayers.size > 0) {
+			this.loader.angle = time / 2;
+			this.loader.setVisible(true);
+		} else {
+			this.loader.setVisible(false);
+		}
+
 		// this.mapLayers.forEach((layer) => {
 		// 	let dx = ((layer.active ? delta : -delta) / 1000) * 2;
 
@@ -181,6 +147,7 @@ export class Map extends Phaser.GameObjects.Container {
 	setLayers(layers: Layer[]) {
 		this.mapLayers.forEach((mapLayer) => mapLayer.destroy());
 		this.mapLayers = [];
+		this.loadingLayers.clear();
 
 		// let removedTextures = this.mapLayers
 		// 	.filter((layer) => layer.active && !textures.includes(layer.texture))
@@ -204,10 +171,24 @@ export class Map extends Phaser.GameObjects.Container {
 		// });
 
 		layers.forEach((layer) => {
-			const mapLayer = new MapLayer(this.scene, layer);
+			const mapLayer = new MapLayer(this.scene);
 			this.mapLayerContainer.add(mapLayer);
 			this.mapLayers.push(mapLayer);
 			this.bringToTop(mapLayer);
+
+			/* Track loading state for image-type layers */
+			this.loadingLayers.add(mapLayer);
+
+			mapLayer.on("loaded", (loaded: boolean) => {
+				console.warn("-", (layer as any).raster, "loaded =", loaded);
+				if (loaded) {
+					this.loadingLayers.delete(mapLayer);
+				} else {
+					this.loadingLayers.add(mapLayer);
+				}
+			});
+
+			mapLayer.setLayer(layer);
 		});
 
 		this.bringToTop(this.fingerLamp);
