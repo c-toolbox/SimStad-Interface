@@ -180,16 +180,15 @@ export class GameScene extends BaseScene {
 	}
 
 	onResetButton() {
-		// this.socket.sendReset();
-		// this.restart();
+		this.socket.sendReset();
+		this.restart();
 	}
 
 	onHomeReset() {
 		// if (!this.socket.isConnectedToSocket) return;
 
-		// blocksManager.setDefaultLegend();
-		// this.socket.sendReset();
-		// this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+		blocksManager.setDefaultLegend();
+		this.socket.sendReset();
 
 		this.setLayers([
 			{ type: "image", raster: "Orto20230921" },
@@ -207,6 +206,10 @@ export class GameScene extends BaseScene {
 
 	onAttractionReset() {
 		this.setLayers([
+			{
+				type: "image",
+				raster: "HillShade",
+			},
 			{
 				type: "movie",
 				raster: "IdleMovie",

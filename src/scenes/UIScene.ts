@@ -32,7 +32,7 @@ export class UIScene extends BaseScene {
 
 		this.currentLanguage = languageManager.getCurrentLanguage();
 		this.audioEnabled = true;
-		blocksManager.sendBlocksAudio(this.audioEnabled);
+		blocksManager.setBlocksAudio(this.audioEnabled);
 
 		this.allowInput = false;
 		setTimeout(() => {
@@ -277,7 +277,7 @@ export class UIScene extends BaseScene {
 			audioButton.setTint(0xffffff);
 		}
 
-		blocksManager.sendBlocksAudio(this.audioEnabled);
+		blocksManager.setBlocksAudio(this.audioEnabled);
 	}
 
 	wakeUp() {
