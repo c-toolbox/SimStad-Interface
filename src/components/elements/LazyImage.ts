@@ -1,5 +1,5 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { contentManager } from "@/utils/ContentManager";
+import { textureManager } from "@/utils/TextureManager";
 
 const PLACEHOLDER = "blank";
 
@@ -26,12 +26,12 @@ export class LazyImage extends Phaser.GameObjects.Image {
 		const isLoaded = key !== PLACEHOLDER && this.scene.textures.exists(key);
 
 		if (key !== PLACEHOLDER) {
-			this.unsubscribeCallback = contentManager.subscribeToTexture(
+			this.unsubscribeCallback = textureManager.subscribeToTexture(
 				key,
 				this.refreshTexture.bind(this),
 			);
 
-			if (!isLoaded) contentManager.requestTexture(this.scene, key, true);
+			if (!isLoaded) textureManager.requestTexture(this.scene, key, true);
 		}
 
 		super.setTexture(isLoaded ? key : PLACEHOLDER);

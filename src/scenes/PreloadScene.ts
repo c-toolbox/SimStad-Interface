@@ -15,7 +15,7 @@ export class PreloadScene extends BaseScene {
 		if (renderer.pipelines) {
 			renderer.pipelines.addPostPipeline(
 				"GrayScalePostFilter",
-				GrayScalePostFilter
+				GrayScalePostFilter,
 			);
 			renderer.pipelines.addPostPipeline("BlurPostFilter", BlurPostFilter);
 		}
