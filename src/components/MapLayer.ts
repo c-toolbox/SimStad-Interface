@@ -20,6 +20,7 @@ export class MapLayer extends LazyImage {
 
 		switch (layer.type) {
 			case "image":
+			case "movie":
 				const raster = contentManager.layerToRaster(layer);
 				if (raster) {
 					this.setTexture(raster.minimap);
@@ -37,7 +38,6 @@ export class MapLayer extends LazyImage {
 				break;
 
 			case "flow":
-			case "movie":
 				this.setAlpha(0);
 				super.setTexture("square");
 				this.emit("loaded", true);
@@ -66,8 +66,18 @@ export class MapLayer extends LazyImage {
 	}
 
 	resize() {
-		const scaleX = layout.map.width / this.width;
-		const scaleY = layout.map.height / this.height;
-		this.setScale(scaleX, scaleY);
+		this.setAngle(layout.mapAngle);
+
+		if (layout.mapAngle % 180 == 0) {
+			this.setScale(
+				layout.map.width / this.width,
+				layout.map.height / this.height,
+			);
+		} else {
+			this.setScale(
+				layout.map.width / this.height,
+				layout.map.height / this.width,
+			);
+		}
 	}
 }

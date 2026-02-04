@@ -14,6 +14,7 @@ import {
 	Tag,
 } from "./interfaces";
 import { filesystem } from "@neutralinojs/lib";
+import { layoutManager } from "./LayoutManager";
 
 type SubscriptionCallback = (isLoaded: boolean) => void;
 
@@ -99,6 +100,9 @@ class ContentManager {
 		if (data) {
 			this.city = data as City;
 			this.city.name = `city_${this.city.key}_name`;
+
+			const angles = { north: 0, west: 90, south: 180, east: 270 };
+			layoutManager.mapAngle = angles[this.city.orientation] ?? 0;
 		}
 	}
 

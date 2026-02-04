@@ -41,7 +41,7 @@ export class Map extends Phaser.GameObjects.Container {
 		});
 		this.add(background);
 
-		this.map = scene.add.image(layout.map.centerX, layout.map.centerY, "white");
+		this.map = scene.add.image(layout.map.centerX, layout.map.centerY, "square");
 		// this.map.angle = -90;
 		const mapScaleX = layout.map.width / this.map.width;
 		const mapScaleY = layout.map.height / this.map.height;
@@ -180,7 +180,6 @@ export class Map extends Phaser.GameObjects.Container {
 			this.loadingLayers.add(mapLayer);
 
 			mapLayer.on("loaded", (loaded: boolean) => {
-				console.warn("-", (layer as any).raster, "loaded =", loaded);
 				if (loaded) {
 					this.loadingLayers.delete(mapLayer);
 				} else {

@@ -6,7 +6,6 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 
 import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { RoundRectangle } from "../elements/RoundRectangle";
 import { contentManager } from "@/utils/ContentManager";
 import { RasterButton } from "../RasterButton";
 import { LayerList } from "../LayerList";

@@ -1,6 +1,7 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color } from "./colors";
+import { contentManager } from "./ContentManager";
 
 class LayoutManager {
 	readonly screenWidth = 1920;
@@ -8,6 +9,8 @@ class LayoutManager {
 
 	private graphics: Phaser.GameObjects.Graphics;
 	public debugActive: boolean;
+
+	public mapAngle: number = 0; // Set by ContentManager
 
 	private _body: Phaser.Geom.Rectangle;
 	private _status: Phaser.Geom.Rectangle;
@@ -86,9 +89,16 @@ class LayoutManager {
 	get mapControls(): Phaser.Geom.Rectangle {
 		if (this._mapControls) return this._mapControls;
 
+		const { orientation, raster_width, raster_height } =
+			contentManager.getCity();
+		const landscape = orientation == "north" || orientation == "south";
+		const ratio = landscape
+			? raster_width / raster_height
+			: raster_height / raster_width;
+
 		// const h = 5 * this.margin;
 		const h = (this.body.height - this.separation) / 2;
-		const w = (this.body.height - h - this.separation) * (5120 / 3849);
+		const w = (this.body.height - h - this.separation) * ratio;
 		const x = this.body.right - w;
 		const y = this.body.bottom - h;
 
@@ -113,8 +123,10 @@ class LayoutManager {
 		if (this._mapControlsLower) return this._mapControlsLower;
 
 		const w = this.mapControls.width;
-		const h =
-			this.mapControls.height - this.mapControlsUpper.height - this.padding / 2;
+		const h = Math.min(
+			this.mapControls.height - this.mapControlsUpper.height - this.padding / 2,
+			w / 3,
+		);
 		const x = this.mapControls.left;
 		const y = this.mapControls.bottom - h;
 
@@ -137,7 +149,7 @@ class LayoutManager {
 		this._map = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._map;
 	}
-		
+
 	get nav(): Phaser.Geom.Rectangle {
 		if (this._nav) return this._nav;
 
@@ -331,7 +343,7 @@ class LayoutManager {
 				rect.x + offset,
 				rect.y + offset,
 				rect.width - 2 * offset,
-				rect.height - 2 * offset
+				rect.height - 2 * offset,
 			);
 			this.graphics.lineStyle(3, color as number);
 			this.graphics.strokeRectShape(rect);

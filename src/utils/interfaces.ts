@@ -11,6 +11,7 @@ type Timestamp = string;
 type ImageUrl = string;
 type HexColor = string;
 type LayerDisplayMode = "stacked" | "sequential";
+type Orientation = "north" | "east" | "south" | "west";
 
 export interface Tag {
 	created_at: Timestamp;
@@ -48,7 +49,7 @@ export interface Raster {
 	name: string;
 	notes: string | null;
 	tags: TagKey[];
-	media_type: "image" | "video",
+	media_type: "image" | "video";
 	image: ImageUrl | null;
 	video: ImageUrl | null;
 	minimap: ImageUrl;
@@ -169,6 +170,9 @@ export interface City {
 	min_y: number;
 	max_x: number;
 	max_y: number;
+	orientation: Orientation;
+	raster_width: number;
+	raster_height: number;
 	default_blocks_video: BlocksKey;
 	collections: CollectionKey[];
 	featured_collections: CollectionKey[];

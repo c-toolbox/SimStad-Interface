@@ -5,6 +5,7 @@ import { LazyImage } from "./elements/LazyImage";
 import { Color } from "@/utils/colors";
 import { Raster } from "@/utils/interfaces";
 import { languageManager } from "@/utils/LanguageManager";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 
 export class RasterButton extends Button {
 	protected border: RoundRectangle;
@@ -53,6 +54,7 @@ export class RasterButton extends Button {
 		this.image = new LazyImage(scene, 0, 0);
 		this.image.setScale(this.width / this.image.width);
 		this.add(this.image);
+		this.image.setAngle(layout.mapAngle);
 
 		/* Loader spinner */
 
