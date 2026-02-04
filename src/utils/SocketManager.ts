@@ -3,6 +3,7 @@ import { Color } from "./colors";
 import * as P from "./protocol";
 import { layoutManager as layout } from "./LayoutManager";
 import { config } from "@/utils/RuntimeConfig";
+import { concatUrl } from "./functions";
 
 const PING_TIMEOUT = 3000;
 
@@ -80,7 +81,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		if (!config.OMNI_URL)
 			return console.error("Missing `SOCKET_URL` in config.json");
 
-		const SOCKET_URL = config.OMNI_URL.replace("http", "ws") + "/ws";
+		const SOCKET_URL = concatUrl(config.OMNI_URL.replace("http", "ws"), "ws");
 		this.socket = new WebSocket(SOCKET_URL);
 
 		this.socket.onopen = () => {
@@ -249,7 +250,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		color: string = "#ffffff",
 		emission: number = 0,
 		opacity: number = 1,
-		density: number = 100
+		density: number = 100,
 	) {
 		let data: P.SetMarkerRequest = {
 			type: P.Request.SetMarker,
@@ -420,7 +421,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.emit(
 			"connectionStatus",
 			this.omniConnectionStatus,
-			this.unrealConnectionStatus
+			this.unrealConnectionStatus,
 		);
 	}
 

@@ -21,7 +21,7 @@ export function uuidv4() {
 export function interpolateColor(
 	color1: number,
 	color2: number,
-	value: number
+	value: number,
 ): number {
 	if (value <= 0) {
 		return color1;
@@ -34,8 +34,8 @@ export function interpolateColor(
 			Phaser.Display.Color.ValueToColor(color1),
 			Phaser.Display.Color.ValueToColor(color2),
 			255,
-			value * 255
-		)
+			value * 255,
+		),
 	).color;
 }
 
@@ -126,4 +126,14 @@ export function splitText(text: string) {
 	return (
 		text.substring(0, closestSpace) + "\n" + text.substring(closestSpace + 1)
 	);
+}
+
+// Combine URL strings
+export function concatUrl(...parts: string[]): string {
+	return parts
+		.map((part, index) => {
+			if (index === 0) return part.replace(/\/+$/, "");
+			else return part.replace(/^\/+|\/+$/g, "");
+		})
+		.join("/");
 }

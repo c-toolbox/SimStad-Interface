@@ -13,8 +13,9 @@ import { DebugPage } from "@/components/pages/DebugPage";
 import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 
 import { SocketManager } from "@/utils/SocketManager";
-import { CollectionKey, Layer } from "@/utils/interfaces";
+import { Collection, CollectionKey, Layer, Scenario } from "@/utils/interfaces";
 import { LayerRequestData } from "@/utils/protocol";
+import { blocksManager } from "@/utils/BlocksManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -93,6 +94,8 @@ export class GameScene extends BaseScene {
 				this.socket.send(data);
 			});
 
+			page.on("setCollection", this.setCollection, this);
+			page.on("setScenario", this.setScenario, this);
 			page.on("setLayers", this.setLayers, this);
 
 			page.on("collection", (key: CollectionKey) => {
@@ -212,6 +215,14 @@ export class GameScene extends BaseScene {
 				},
 			},
 		]);
+	}
+
+	setCollection(collection: Collection) {
+		blocksManager.setWallVideo(collection.blocks_video);
+	}
+
+	setScenario(scenario: Scenario) {
+		blocksManager.setLegend(scenario.key);
 	}
 
 	setLayers(layers: Layer[]) {

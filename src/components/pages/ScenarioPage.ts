@@ -11,8 +11,7 @@ import { TabButton } from "../TabButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
-import { blocksManager } from "@/utils/BlocksManager";
-import { CollectionKey, Layer, Scenario } from "@/utils/interfaces";
+import { CollectionKey, Scenario } from "@/utils/interfaces";
 import { contentManager } from "@/utils/ContentManager";
 
 export class ScenarioPage extends Page {
@@ -178,6 +177,8 @@ export class ScenarioPage extends Page {
 		this.backButton.removeListener("click");
 		this.backButton.on("click", () => {
 			if (this.allowInput()) {
+				this.currentScenario = contentManager.getScenario("default");
+				this.emit("setScenario", this.currentScenario);
 				this.emit("state", PageState.Home);
 			}
 		});
@@ -201,6 +202,14 @@ export class ScenarioPage extends Page {
 		this.foreground.setAlpha(0);
 		this.bringToTop(this.foreground);
 		this.foreground.setInteractive();
+
+		/* Language change detector */
+
+		let dummy = scene.add.text(0, 0, "");
+		dummy.setVisible(false);
+		languageManager.bind(dummy, "", () => {
+			this.emit("setScenario", this.currentScenario);
+		});
 	}
 
 	update(time: number, delta: number) {
@@ -224,6 +233,8 @@ export class ScenarioPage extends Page {
 			throw "More scenarios than tabs";
 		}
 
+		languageManager.bind(this.subtitle, `collection_${collectionKey}_name`);
+
 		this.updateTabs(scenarioKeys.length);
 		this.tabButtons.forEach((tab) => tab.setVisible(false));
 		scenarioKeys.forEach((key, index) => {
@@ -234,23 +245,26 @@ export class ScenarioPage extends Page {
 			this.tabButtons[index].removeListener("click");
 			this.tabButtons[index].on("click", () => {
 				if (this.currentScenario != scenario) {
-					this.fadeScenario(collectionKey, scenario);
+					this.fadeScenario(scenario);
 				}
 			});
 			this.tabButtons[index].setData("scenario", scenario.key);
 		});
 
 		let activeScenario = contentManager.getScenario(scenarioKeys[0]);
-		if (activeScenario) {
-			this.setScenario(collectionKey, activeScenario, false);
-
-			this.emit("resetLight");
-			this.socket.fadeLight(() => {
-				this.setScenario(collectionKey, activeScenario!);
-			});
+		if (!activeScenario) {
+			return console.error(`Collection '${collectionKey}' missing scenarios`);
 		}
 
-		blocksManager.setWallVideo(collection.blocks_video);
+		this.setScenario(activeScenario);
+		// this.setLayers();
+
+		this.emit("resetLight");
+		this.socket.fadeLight(() => {
+			this.emit("setCollection", collection);
+			this.emit("setScenario", activeScenario);
+			this.setLayers();
+		});
 	}
 
 	updateTabs(count: number) {
@@ -269,7 +283,7 @@ export class ScenarioPage extends Page {
 		}
 	}
 
-	fadeScenario(collectionKey: CollectionKey, scenario: Scenario) {
+	fadeScenario(scenario: Scenario) {
 		if (this.foreground.alpha > 0) return;
 
 		this.scene.add.tween({
@@ -288,7 +302,11 @@ export class ScenarioPage extends Page {
 		});
 
 		this.emit("resetLight");
-		this.socket.fadeLight(() => this.setScenario(collectionKey, scenario));
+		this.socket.fadeLight(() => {
+			this.setScenario(scenario);
+			this.emit("setScenario", scenario);
+			this.setLayers();
+		});
 	}
 
 	realignText() {
@@ -324,23 +342,12 @@ export class ScenarioPage extends Page {
 		});
 	}
 
-	setScenario(
-		collectionKey: CollectionKey,
-		scenario: Scenario,
-		sendDataset = true,
-	) {
+	setScenario(scenario: Scenario) {
 		this.currentScenario = scenario;
 
 		this.tabButtons.forEach((button) => {
 			button.setHighlight(button.getData("scenario") == scenario.key);
 		});
-
-		// if (
-		// 	scenario.layerButtons &&
-		// 	scenario.layerButtons.length > this.layerButtons.length
-		// ) {
-		// 	throw "More layers than buttons";
-		// }
 
 		if (scenario.legend) {
 			const legend = contentManager.getLegend(scenario.legend);
@@ -387,7 +394,6 @@ export class ScenarioPage extends Page {
 			});
 		}
 
-		languageManager.bind(this.subtitle, `collection_${collectionKey}_name`);
 		languageManager.bind(this.title, `scenario_${scenario.key}_name`, () => {
 			this.title.setScale(1);
 			if (this.title.width > layout.scenarioInfo.width) {
@@ -407,17 +413,13 @@ export class ScenarioPage extends Page {
 				this.realignText();
 			},
 		);
+	}
 
-		if (sendDataset) {
-			if (scenario.layer_display_mode == "stacked") {
-				this.emit("setLayers", scenario.layers);
-			} else {
-				this.emit("setLayers", [scenario.layers[0]]);
-			}
-
-			if (scenario.legend) {
-				blocksManager.setLegend(scenario.legend);
-			}
+	setLayers() {
+		if (this.currentScenario.layer_display_mode == "stacked") {
+			this.emit("setLayers", this.currentScenario.layers);
+		} else {
+			this.emit("setLayers", [this.currentScenario.layers[0]]);
 		}
 	}
 
