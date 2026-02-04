@@ -8,12 +8,11 @@ import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
 import { TextButton } from "@/components/TextButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
-import { LoadingIcon } from "@/components/LoadingIcon";
 
 export class CollectionPage extends Page {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
-	private loadingIcon: LoadingIcon;
+	// private loadingIcon: LoadingIcon;
 	private errorIcon: Phaser.GameObjects.Image;
 	private scenariosButtons: TextButton[];
 
@@ -102,8 +101,8 @@ export class CollectionPage extends Page {
 		this.sendToBack(areaBackground);
 		this.sendToBack(background);
 
-		this.loadingIcon = new LoadingIcon(scene, cx, cy, Color.Slate500, 60);
-		this.add(this.loadingIcon);
+		// this.loadingIcon = new LoadingIcon(scene, cx, cy, Color.Slate500, 60);
+		// this.add(this.loadingIcon);
 
 		this.errorIcon = scene.add.image(cx, cy, "wifi-slash");
 		this.errorIcon.setScale(((256 / 201) * 120) / this.errorIcon.width);
@@ -116,7 +115,7 @@ export class CollectionPage extends Page {
 
 		this.scrollArea.update(time, delta);
 		this.scrollBar.set(this.scrollArea.getScroll());
-		this.loadingIcon.update(time, delta);
+		// this.loadingIcon.update(time, delta);
 
 		this.scenariosButtons.forEach((button) => {
 			button.update(time, delta);
@@ -126,17 +125,17 @@ export class CollectionPage extends Page {
 	clearScenarios() {
 		this.scrollArea.clear();
 		this.scenariosButtons = [];
-		this.loadingIcon.setVisible(true);
+		// this.loadingIcon.setVisible(true);
 		this.errorIcon.setVisible(false);
 	}
 
 	updateConnection(omniStatus: CS, unrealStatus: CS) {
 		if (omniStatus == CS.Disconnected || unrealStatus == CS.Disconnected) {
 			this.clearScenarios();
-			this.loadingIcon.setVisible(false);
+			// this.loadingIcon.setVisible(false);
 			this.errorIcon.setVisible(true);
 		} else {
-			this.loadingIcon.setVisible(this.scenariosButtons.length == 0);
+			// this.loadingIcon.setVisible(this.scenariosButtons.length == 0);
 			this.errorIcon.setVisible(false);
 		}
 	}

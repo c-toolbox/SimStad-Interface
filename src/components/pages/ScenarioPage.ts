@@ -28,7 +28,6 @@ export class ScenarioPage extends Page {
 	private legendSource: Phaser.GameObjects.Text;
 	private backButton: TabButton;
 	private tabButtons: TabButton[];
-	// private layerButtons: TextButton[];
 	private layerSlider: LayerSlider;
 
 	private currentScenario: Scenario;
@@ -104,7 +103,7 @@ export class ScenarioPage extends Page {
 		this.legendShadow = scene.add.image(
 			layout.scenarioLegend.centerX,
 			layout.scenarioLegend.centerY + 2,
-			"legend_default",
+			"blank",
 		);
 		this.legendShadow.setOrigin(0.5, 0.0);
 		this.legendShadow.setTint(0);
@@ -135,9 +134,7 @@ export class ScenarioPage extends Page {
 		/* Listen for legend image load events */
 		this.legendImage.on("loaded", (loaded: boolean) => {
 			this.legendLoader.setVisible(!loaded);
-			if (loaded && this.legendImage.width > 0) {
-				this.updateLegendImageScale();
-			}
+			this.updateLegendImageScale();
 		});
 
 		this.legendSource = scene.addText({
@@ -157,16 +154,6 @@ export class ScenarioPage extends Page {
 		const by = bl.centerY;
 		const bh = bl.height;
 		const bc = Color.Yellow700;
-
-		// this.layerButtons = [];
-		// for (let i = 0; i < 3; i++) {
-		// 	let bt = "Layer " + (i + 1);
-		// 	let bx = bl.left + (i + 0.5) * bw + i * layout.separation;
-
-		// 	let button = new TextButton(scene, bx, by, bw, bh, bt, bc);
-		// 	this.add(button);
-		// 	this.layerButtons.push(button);
-		// }
 
 		/* Tabs */
 
@@ -221,7 +208,6 @@ export class ScenarioPage extends Page {
 
 		this.backButton.update(time, delta);
 		this.tabButtons.forEach((button) => button.update(time, delta));
-		// this.layerButtons.forEach((button) => button.update(time, delta));
 		this.layerSlider.update(time, delta);
 
 		/* Update loader spinner */
@@ -311,9 +297,6 @@ export class ScenarioPage extends Page {
 		if (this.layerSlider.visible) {
 			ah -= 3 * this.layerSlider.height + layout.separation;
 		}
-		// if (this.layerButtons[0].visible) {
-		// 	ah -= layout.scenarioControls.height + layout.separation;
-		// }
 
 		const breadText = this.bread[9].text;
 		const paragraphs = breadText
@@ -384,24 +367,6 @@ export class ScenarioPage extends Page {
 			this.setLegendSource(scenario.legend_image_source, hasImage);
 		}
 
-		// this.layerButtons.forEach((button) => button.setVisible(false));
-		// if (scenario.layerButtons) {
-		// 	scenario.layerButtons.forEach((layerString: string, index: number) => {
-		// 		let button = this.layerButtons[index];
-		// 		const layers = scenario.layerButtons![index];
-
-		// 		button.setVisible(true);
-		// 		button.setText(
-		// 			`${scenario.collectionOldId}_${scenario.key}_button${index}`
-		// 		);
-		// 		button.setData("layers", layers);
-		// 		button.removeListener("click");
-		// 		button.on("click", () => {
-		// 			this.activateDataset(layers);
-		// 		});
-		// 	});
-		// }
-
 		this.layerSlider.setVisible(false);
 		if (scenario.layer_display_mode == "sequential") {
 			this.layerSlider.setVisible(true);
@@ -471,6 +436,13 @@ export class ScenarioPage extends Page {
 		this.legendShadow.setTexture(this.legendImage.texture.key);
 		this.legendShadow.y = this.legendImage.y + 2;
 		this.legendShadow.setScale(this.legendImage.scaleX);
+
+		if (this.currentScenario.legend_image_source) {
+			this.setLegendSource(this.currentScenario.legend_image_source, true);
+		}
+
+		const { x, y } = this.legendImage.getCenter();
+		this.legendLoader.setPosition(x, y);
 	}
 
 	setLegendSource(key: string, hasImage: boolean) {

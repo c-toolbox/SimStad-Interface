@@ -44,7 +44,7 @@ export class CollectionButton extends Button {
 		this.loader = scene.add.image(0, 0, "vis_c_logo_white");
 		this.loader.setTint(0xffffff);
 		this.loader.setAlpha(0.5);
-		this.loader.setScale((0.4 * width) / this.loader.width);
+		this.loader.setScale((0.4 * height) / this.loader.height);
 		this.add(this.loader);
 
 		const titleHeight = width / 8;
@@ -78,9 +78,7 @@ export class CollectionButton extends Button {
 		this.isLoading = true;
 		this.image.on("loaded", (loaded: boolean) => {
 			this.isLoading = !loaded;
-			if (loaded) {
-				this.updateImageDisplay();
-			}
+			this.updateImageDisplay();
 		});
 		this.image.setTexture(collection.image);
 	}
