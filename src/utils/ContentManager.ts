@@ -341,6 +341,34 @@ class ContentManager {
 	}
 
 	/**
+	 * Attempts to find a file with the given filename and any supported extension.
+	 * Returns an object with the full file path and MIME type, or null if not found.
+	 */
+	private async findMediaFile(
+		baseFolder: string,
+		filename: string,
+	): Promise<{ filePath: string; mimeType: string } | null> {
+		const mimeTypes: Record<string, string> = {
+			".png": "image/png",
+			".jpg": "image/jpeg",
+			".jpeg": "image/jpeg",
+		};
+
+		for (const ext of Object.keys(mimeTypes)) {
+			const filePath = `${config.MEDIA_PATH}\\${baseFolder}\\${filename}${ext}`;
+
+			try {
+				await filesystem.readBinaryFile(filePath);
+				return { filePath, mimeType: mimeTypes[ext] };
+			} catch {
+				continue;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Processes the load queue sequentially, loading one image at a time.
 	 */
 	private async processLoadQueue(): Promise<void> {
@@ -368,12 +396,26 @@ class ContentManager {
 		}
 
 		const { folder, filename } = folderAndFile;
-		const filePath = `${config.MEDIA_PATH}\\${folder}\\${filename}.png`;
 
 		try {
+			// Find the media file with any supported extension
+			const mediaFile = await this.findMediaFile(folder, filename);
+
+			if (!mediaFile) {
+				console.error(
+					`Failed to find media asset ${textureKey} with any supported extension (png, jpg, jpeg)`,
+				);
+				resolve(false);
+				this.isLoading = false;
+				this.processLoadQueue();
+				return;
+			}
+
+			const { filePath, mimeType } = mediaFile;
+
 			// Read the binary file
 			const data = await filesystem.readBinaryFile(filePath);
-			const blob = new Blob([data], { type: "image/png" });
+			const blob = new Blob([data], { type: mimeType });
 			const objectUrl = URL.createObjectURL(blob);
 
 			// Add the image to the loader
@@ -396,10 +438,7 @@ class ContentManager {
 
 			scene.load.start();
 		} catch (error) {
-			console.error(
-				`Failed to load media asset ${textureKey} from ${filePath}:`,
-				error,
-			);
+			console.error(`Failed to load media asset ${textureKey}:`, error);
 			resolve(false);
 
 			// Continue with next item in queue
@@ -425,8 +464,6 @@ class ContentManager {
 
 		this.textureSubscriptions.get(textureKey)!.push(callback);
 
-		console.log("ContentManager subscribe:", textureKey);
-
 		// Return unsubscribe function
 		return () => {
 			const callbacks = this.textureSubscriptions.get(textureKey);
@@ -436,7 +473,6 @@ class ContentManager {
 					callbacks.splice(index, 1);
 				}
 			}
-			console.log("ContentManager unsubscribe:", textureKey);
 		};
 	}
 
