@@ -55,7 +55,12 @@ class ContentManager {
 	private legends: Legend[];
 	private symbols: Symbol[];
 	private tags: Tag[];
-	private loadQueue: Array<{
+	private priorityQueue: Array<{
+		scene: BaseScene;
+		textureKey: string;
+		resolve: (value: boolean) => void;
+	}>;
+	private preloadQueue: Array<{
 		scene: BaseScene;
 		textureKey: string;
 		resolve: (value: boolean) => void;
@@ -72,7 +77,8 @@ class ContentManager {
 		this.legends = [];
 		this.symbols = [];
 		this.tags = [];
-		this.loadQueue = [];
+		this.priorityQueue = [];
+		this.preloadQueue = [];
 		this.isLoading = false;
 		this.textureSubscriptions = new Map();
 	}
@@ -201,6 +207,54 @@ class ContentManager {
 		await this.fetchAll();
 	}
 
+	/**
+	 * Preload essential textures that are important enough to always be available.
+	 * These include: collection images, scenario legend images, symbol images,
+	 * and raster minimap/thumbnail images from scenario layers.
+	 * Should be called from PreloadScene after Phaser scene is initialized.
+	 */
+	async preloadEssentialTextures(scene: BaseScene): Promise<void> {
+		for (const collection of this.collections) {
+			if (collection.image) {
+				this.requestTexture(scene, collection.image);
+			}
+		}
+
+		for (const symbol of this.symbols) {
+			if (symbol.image) {
+				this.requestTexture(scene, symbol.image);
+			}
+		}
+
+		for (const scenario of this.scenarios) {
+			if (scenario.legend_image) {
+				this.requestTexture(scene, scenario.legend_image);
+			}
+		}
+
+		for (const scenario of this.scenarios) {
+			for (const layer of scenario.layers) {
+				const raster = this.layerToRaster(layer);
+				if (raster) {
+					if (raster.thumbnail) {
+						this.requestTexture(scene, raster.thumbnail);
+					}
+				}
+			}
+		}
+
+		for (const scenario of this.scenarios) {
+			for (const layer of scenario.layers) {
+				const raster = this.layerToRaster(layer);
+				if (raster) {
+					if (raster.minimap) {
+						this.requestTexture(scene, raster.minimap);
+					}
+				}
+			}
+		}
+	}
+
 	/* Content sharing */
 
 	getSwedishLocales(): { [key: string]: string } {
@@ -327,15 +381,23 @@ class ContentManager {
 	 * Images are loaded sequentially to avoid blocking the main thread.
 	 * Returns true if the load was queued/triggered, false if the texture already exists.
 	 */
-	async requestTexture(scene: BaseScene, textureKey: string): Promise<boolean> {
+	async requestTexture(
+		scene: BaseScene,
+		textureKey: string,
+		priority = false,
+	): Promise<boolean> {
 		// Check if texture already exists
 		if (scene.textures.exists(textureKey)) {
 			return false;
 		}
 
 		return new Promise((resolve) => {
-			// Add to load queue
-			this.loadQueue.push({ scene, textureKey, resolve });
+			// Add to appropriate queue
+			if (priority) {
+				this.priorityQueue.push({ scene, textureKey, resolve });
+			} else {
+				this.preloadQueue.push({ scene, textureKey, resolve });
+			}
 
 			// Process queue if not already loading
 			if (!this.isLoading) {
@@ -373,15 +435,25 @@ class ContentManager {
 	}
 
 	/**
-	 * Processes the load queue sequentially, loading one image at a time.
+	 * Processes the load queues sequentially, loading one image at a time.
+	 * Priority queue is processed first, then preload queue.
 	 */
 	private async processLoadQueue(): Promise<void> {
-		if (this.isLoading || this.loadQueue.length === 0) {
+		if (
+			this.isLoading ||
+			(this.priorityQueue.length === 0 && this.preloadQueue.length === 0)
+		) {
 			return;
 		}
 
 		this.isLoading = true;
-		const { scene, textureKey, resolve } = this.loadQueue.shift()!;
+		// Dequeue from priority queue first, then preload queue
+		const queueItem = this.priorityQueue.shift() ?? this.preloadQueue.shift();
+		if (!queueItem) {
+			this.isLoading = false;
+			return;
+		}
+		const { scene, textureKey, resolve } = queueItem;
 
 		// Skip if texture already exists
 		if (scene.textures.exists(textureKey)) {
@@ -427,6 +499,8 @@ class ContentManager {
 
 			// Start the loader and handle completion
 			scene.load.once("complete", () => {
+				console.log(`Loaded texture: ${textureKey}`);
+
 				// Revoke the object URL after loading
 				URL.revokeObjectURL(objectUrl);
 

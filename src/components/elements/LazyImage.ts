@@ -31,7 +31,7 @@ export class LazyImage extends Phaser.GameObjects.Image {
 				this.refreshTexture.bind(this),
 			);
 
-			if (!isLoaded) contentManager.requestTexture(this.scene, key);
+			if (!isLoaded) contentManager.requestTexture(this.scene, key, true);
 		}
 
 		super.setTexture(isLoaded ? key : PLACEHOLDER);

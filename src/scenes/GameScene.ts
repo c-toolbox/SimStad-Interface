@@ -16,6 +16,7 @@ import { SocketManager } from "@/utils/SocketManager";
 import { Collection, CollectionKey, Layer, Scenario } from "@/utils/interfaces";
 import { LayerRequestData } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
+import { contentManager } from "@/utils/ContentManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -134,6 +135,9 @@ export class GameScene extends BaseScene {
 		this.add.existing(this.map);
 
 		this.setState(PageState.Home);
+
+		// Preload essential textures
+		contentManager.preloadEssentialTextures(this);
 	}
 
 	update(time: number, delta: number) {
