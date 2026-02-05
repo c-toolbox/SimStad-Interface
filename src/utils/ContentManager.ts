@@ -8,6 +8,7 @@ import {
 	Legend,
 	LegendKey,
 	Raster,
+	RasterKey,
 	Scenario,
 	ScenarioKey,
 	Symbol,
@@ -266,6 +267,10 @@ class ContentManager {
 
 	getTags(): Tag[] {
 		return this.tags;
+	}
+
+	getRaster(rasterKey: RasterKey): Raster | undefined {
+		return this.rasters.find((raster) => raster.key == rasterKey);
 	}
 
 	getRastersByTag(tag: Tag): Raster[] {

@@ -4,6 +4,7 @@ export interface RuntimeConfig {
 	OMNI_URL: string;
 	OMNI_TOKEN: string;
 	CITY_ID: string;
+	IDLE_RASTER: string;
 	IDLE_TIME: number;
 	IDLE_FADE: number;
 	ONLINE: boolean;
@@ -15,6 +16,7 @@ export const config: RuntimeConfig = {
 	OMNI_URL: "",
 	OMNI_TOKEN: "",
 	CITY_ID: "",
+	IDLE_RASTER: "default",
 	IDLE_TIME: 300,
 	IDLE_FADE: 10,
 	ONLINE: true,

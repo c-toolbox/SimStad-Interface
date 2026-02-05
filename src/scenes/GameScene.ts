@@ -17,6 +17,7 @@ import { Collection, CollectionKey, Layer, Scenario } from "@/utils/interfaces";
 import { LayerRequestData } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
 import { contentManager } from "@/utils/ContentManager";
+import { config } from "@/utils/RuntimeConfig";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -209,19 +210,13 @@ export class GameScene extends BaseScene {
 	}
 
 	onAttractionReset() {
-		this.setLayers([
-			{
-				type: "image",
-				raster: "HillShade",
-			},
-			{
-				type: "movie",
-				raster: "IdleMovie",
-				movie: {
-					speed: 1,
-				},
-			},
-		]);
+		const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
+		if (!idleRaster)
+			return console.error(
+				"IDLE_RASTER in config.json not found in available rasters",
+			);
+		const layer = contentManager.rasterToLayer(idleRaster);
+		this.setLayers([layer]);
 	}
 
 	setCollection(collection: Collection) {
