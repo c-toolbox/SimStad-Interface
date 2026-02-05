@@ -41,7 +41,11 @@ export class Map extends Phaser.GameObjects.Container {
 		});
 		this.add(background);
 
-		this.map = scene.add.image(layout.map.centerX, layout.map.centerY, "square");
+		this.map = scene.add.image(
+			layout.map.centerX,
+			layout.map.centerY,
+			"square",
+		);
 		// this.map.angle = -90;
 		const mapScaleX = layout.map.width / this.map.width;
 		const mapScaleY = layout.map.height / this.map.height;
@@ -144,83 +148,42 @@ export class Map extends Phaser.GameObjects.Container {
 		// });
 	}
 
-	setLayers(layers: Layer[]) {
-		this.mapLayers.forEach((mapLayer) => mapLayer.destroy());
-		this.mapLayers = [];
-		this.loadingLayers.clear();
+	setLayers(layers: Layer[], flush: boolean = true) {
+		if (flush) {
+			// Destroy all existing layers and create new ones
+			this.mapLayers.forEach((mapLayer) => mapLayer.destroy());
+			this.mapLayers = [];
+			this.loadingLayers.clear();
 
-		// let removedTextures = this.mapLayers
-		// 	.filter((layer) => layer.active && !textures.includes(layer.texture))
-		// 	.map((layer) => layer.texture);
-		// let addedTextures = textures.filter(
-		// 	(texture) => !this.mapLayers.find((layer) => layer.texture == texture),
-		// );
+			layers.forEach((layer) => {
+				const mapLayer = new MapLayer(this.scene);
+				this.mapLayerContainer.add(mapLayer);
+				this.mapLayers.push(mapLayer);
+				this.bringToTop(mapLayer);
 
-		// addedTextures.forEach((texture) => {
-		// 	this.addLayer(texture);
-		// });
-		// removedTextures.forEach((texture) => {
-		// 	this.removeLayer(texture);
-		// });
+				this.loadingLayers.add(mapLayer);
 
-		// layers.forEach((a) => {
-		// 	let layer = this.mapLayers.find((layer) => layer.texture == texture);
-		// 	if (layer) {
-		// 		this.mapLayerContainer.bringToTop(layer.image);
-		// 	}
-		// });
+				mapLayer.on("loaded", (loaded: boolean) => {
+					if (loaded) {
+						this.loadingLayers.delete(mapLayer);
+					} else {
+						this.loadingLayers.add(mapLayer);
+					}
+				});
 
-		layers.forEach((layer) => {
-			const mapLayer = new MapLayer(this.scene);
-			this.mapLayerContainer.add(mapLayer);
-			this.mapLayers.push(mapLayer);
-			this.bringToTop(mapLayer);
-
-			/* Track loading state for image-type layers */
-			this.loadingLayers.add(mapLayer);
-
-			mapLayer.on("loaded", (loaded: boolean) => {
-				if (loaded) {
-					this.loadingLayers.delete(mapLayer);
-				} else {
-					this.loadingLayers.add(mapLayer);
+				mapLayer.setLayer(layer);
+			});
+		} else {
+			// Update existing layers without recreating
+			layers.forEach((layer, index) => {
+				if (index < this.mapLayers.length) {
+					this.mapLayers[index].setLayer(layer);
 				}
 			});
-
-			mapLayer.setLayer(layer);
-		});
+		}
 
 		this.bringToTop(this.fingerLamp);
 	}
-
-	// removeLayer(layer: Layer) {
-	// let layer = this.mapLayers.find((layer) => layer.texture == texture);
-	// if (layer) {
-	// 	layer.active = false;
-	// 	layer.texture = "";
-	// }
-	// }
-
-	// onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
-	// 	let lampName = this.lampIds.shift();
-	// 	if (lampName) {
-	// 		let lamp = new MapLight(this.scene, pointer.x, pointer.y, lampName);
-	// 		this.add(lamp);
-	// 		this.lamps.push(lamp);
-
-	// 		this.updateLamp(lamp, "add");
-	// 		lamp.on("update", () => {
-	// 			this.updateLamp(lamp, "update");
-	// 		});
-	// 		lamp.on("delete", () => {
-	// 			this.lamps.splice(this.lamps.indexOf(lamp), 1);
-	// 			this.updateLamp(lamp, "delete");
-	// 			this.lampIds.push(lamp.name);
-	// 			lamp.destroy();
-	// 		});
-	// 		lamp.on("click", lamp.changeColor);
-	// 	}
-	// }
 
 	onPointerDown(pointer: Phaser.Input.Pointer) {
 		if (pointer.identifier != 0) return;
@@ -262,8 +225,6 @@ export class Map extends Phaser.GameObjects.Container {
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
 		const px = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
 		const py = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
-		// const x = MIN_X + (MAX_X - MIN_X) * px;
-		// const y = MIN_Y + (MAX_Y - MIN_Y) * py;
 
 		if (method != "delete") {
 			this.socket.sendSetMarker(
@@ -276,13 +237,13 @@ export class Map extends Phaser.GameObjects.Container {
 				1,
 				1,
 			);
+			this.emit("setMapSlice", px);
 		} else {
 			this.socket.sendRemoveMarker(lamp.name);
 		}
 	}
 
 	reset() {
-		// this.setLayers("");
 		this.resetLightControls();
 
 		this.lamps.forEach((lamp) => {

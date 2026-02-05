@@ -184,8 +184,6 @@ export class LayerPage extends Page {
 	}
 
 	sendActiveDataset() {
-		console.warn(this.activeLayers);
-
 		this.activeLayers.forEach((layer, index) => {
 			let button = this.layerButtons.find((button) =>
 				layer.type == "image" || layer.type == "flow" || layer.type == "movie"

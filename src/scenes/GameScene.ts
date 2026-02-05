@@ -37,7 +37,13 @@ export class GameScene extends BaseScene {
 	private map: Map;
 
 	// Currently active layers
-	private layers: Layer[];
+	private activeLayers: Layer[];
+
+	// Layers used for comparative view (locked on the right side)
+	private lockedLayers: Layer[];
+
+	// Slice value for dividing the map between active and locked layers (0.0 to 1.0)
+	public mapSliceValue: number = 0.5;
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -48,7 +54,8 @@ export class GameScene extends BaseScene {
 		this.cameras.main.setBackgroundColor(Color.Slate950);
 		this.initBlur();
 
-		this.layers = [];
+		this.activeLayers = [];
+		this.lockedLayers = [];
 
 		// this.input.dragDistanceThreshold = 16;
 		this.input.addPointer(1);
@@ -135,6 +142,15 @@ export class GameScene extends BaseScene {
 		this.map.setDepth(1);
 		this.add.existing(this.map);
 
+		this.map.on(
+			"setMapSlice",
+			(value: number) => {
+				this.mapSliceValue = value;
+				this.setLayers(this.activeLayers, false);
+			},
+			this,
+		);
+
 		this.setState(PageState.Home);
 
 		// Preload essential textures
@@ -195,18 +211,11 @@ export class GameScene extends BaseScene {
 		blocksManager.setDefaultLegend();
 		this.socket.sendReset();
 
-		this.setLayers([
-			{ type: "image", raster: "Orto20230921" },
-			{
-				type: "flow",
-				raster: "StrommenFlowNew",
-				flow: {
-					texture: "Water",
-					scale: 200,
-					speed: 0.05,
-				},
-			},
-		]);
+		const defaultScenario = contentManager.getScenario("default");
+		if (defaultScenario) {
+			this.setLayers(defaultScenario.layers);
+			this.setScenario(defaultScenario);
+		}
 	}
 
 	onAttractionReset() {
@@ -227,18 +236,76 @@ export class GameScene extends BaseScene {
 		blocksManager.setLegend(scenario.key);
 	}
 
-	setLayers(layers: Layer[]) {
-		this.layers = layers;
+	setLayers(layers: Layer[], flush = true) {
+		this.activeLayers = layers;
 
-		this.layerPage.setLayers(layers);
+		// Create combined layers with crop properties applied
+		const combinedLayers = this.createCombinedLayers();
 
-		this.map.setLayers(layers);
+		this.layerPage.setLayers(this.activeLayers);
+
+		this.map.setLayers(combinedLayers, flush);
 
 		// this.socket.sendReset();
 		// this.emit("map", "");
 
-		const layerRequestData = this.convertLayersToProtocol(layers);
-		this.socket.sendLayers(layerRequestData);
+		const layerRequestData = this.convertLayersToProtocol(combinedLayers);
+		this.socket.sendLayers(layerRequestData, flush);
+	}
+
+	private createCombinedLayers(): Layer[] {
+		if (this.lockedLayers.length == 0) {
+			return this.activeLayers;
+		}
+
+		const combined: Layer[] = [];
+
+		// Add active layers with left-side crop
+		this.activeLayers.forEach((layer) => {
+			const layerCopy = { ...layer };
+			layerCopy.crop = {
+				type: "slice",
+				slice: {
+					min_u: this.mapSliceValue,
+					max_u: 1,
+					min_v: 0,
+					max_v: 1,
+				},
+			};
+			combined.push(layerCopy);
+		});
+
+		// Add locked layers with right-side crop
+		this.lockedLayers.forEach((layer) => {
+			const layerCopy = { ...layer };
+			layerCopy.crop = {
+				type: "slice",
+				slice: {
+					min_u: 0,
+					max_u: this.mapSliceValue,
+					min_v: 0,
+					max_v: 1,
+				},
+			};
+			combined.push(layerCopy);
+		});
+
+		combined.push({
+			type: "color",
+			color: "#000000",
+			opacity: 0.5,
+			crop: {
+				type: "slice",
+				slice: {
+					min_u: Math.max(this.mapSliceValue - 0.002, 0),
+					max_u: Math.min(this.mapSliceValue + 0.002, 1),
+					min_v: 0,
+					max_v: 1,
+				},
+			},
+		});
+
+		return combined;
 	}
 
 	convertLayersToProtocol(layers: Layer[]): LayerRequestData[] {
