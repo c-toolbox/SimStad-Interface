@@ -229,7 +229,17 @@ export class GameScene extends BaseScene {
 	}
 
 	setScenario(scenario: Scenario) {
-		blocksManager.setLegend(scenario.key);
+		this.activeScenario = scenario;
+
+		if (this.hasDualScenarios && this.lockedScenario) {
+			blocksManager.setDualLegend(
+				this.activeScenario.key,
+				this.lockedScenario.key,
+			);
+		} else {
+			blocksManager.setLegend(scenario.key);
+		}
+		this.map.setSlicePinnable(this.activeScenario != this.lockedScenario);
 	}
 
 	setLayers(layers: Layer[], flush = true) {
@@ -531,5 +541,24 @@ export class GameScene extends BaseScene {
 				},
 			});
 		}
+	}
+
+	get hasDualScenarios(): boolean {
+		if (!this.lockedScenario) {
+			return false;
+		}
+
+		if (this.activeScenario == this.lockedScenario) {
+			return false;
+		}
+
+		const defaultScenario = contentManager.getScenario("default");
+		if (defaultScenario) {
+			if (this.lockedScenario == defaultScenario) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

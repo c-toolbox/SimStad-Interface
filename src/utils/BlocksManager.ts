@@ -26,7 +26,13 @@ class BlocksManager {
 
 	public setLegend(legendKey: LegendKey) {
 		const languageParam = "/?language=" + languageManager.getCurrentLanguage();
-		const url = concatUrl(config.OMNI_URL, "legend", legendKey, languageParam);
+		const url = concatUrl(config.OMNI_URL, "/legend", legendKey, languageParam);
+		this.sendVariable("SimStad_URL", url);
+	}
+
+	public setDualLegend(key1: LegendKey, key2: LegendKey) {
+		const languageParam = "/?language=" + languageManager.getCurrentLanguage();
+		const url = concatUrl(config.OMNI_URL, "/legend", key1, key2, languageParam);
 		this.sendVariable("SimStad_URL", url);
 	}
 
