@@ -62,6 +62,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.Marker]: this.onMarker,
 			[P.Response.Reset]: this.onResetRepsonse,
 			[P.Response.Recache]: this.onRecache,
+			[P.Response.Status]: this.onStatus,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
@@ -199,6 +200,14 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		}
 	}
 
+	onStatus(data: P.StatusResponse) {
+		clearTimeout(this.pingTimeout);
+		this.pingAttempts = 0;
+		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+
+		console.log("CHECK STATUS", data);
+	}
+
 	/* Requests */
 
 	sendRequest(data: P.ValidRequests) {
@@ -274,12 +283,19 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendRecacheRequest(path: string = "Datasets/") {
+	sendRecacheRequest(rasters?: string[]) {
 		this.isRecaching = true;
 
 		let data: P.RecacheRequest = {
 			type: P.Request.Recache,
-			path,
+			rasters,
+		};
+		this.sendRequest(data);
+	}
+
+	sendStatusRequest() {
+		let data: P.StatusRequest = {
+			type: P.Request.Status,
 		};
 		this.sendRequest(data);
 	}
@@ -460,6 +476,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			BlocksReceive: console.log,
 			Error: console.error,
 		}[type];
-		logFunc(`Socket ${type}: ${text}`);
+		// logFunc(`Socket ${type}: ${text}`);
 	}
 }

@@ -10,6 +10,7 @@ export enum Request {
 	RemoveMarker = "RemoveMapMarkerRequest",
 	Reset = "ResetRequest",
 	Recache = "RecacheRequest",
+	Status = "StatusRequest",
 }
 
 export enum Response {
@@ -25,6 +26,7 @@ export enum Response {
 	Marker = "MapMarkerResponse",
 	Reset = "ResetResponse",
 	Recache = "RecacheResponse",
+	Status = "StatusResponse",
 }
 
 /* Omni*/
@@ -217,13 +219,24 @@ export interface ResetResponse {
 
 export interface RecacheRequest {
 	type: Request.Recache;
-	path: string;
+	rasters?: string[];
 }
 
 export interface RecacheResponse {
 	type: Response.Recache;
 	index: number;
 	max: number;
+}
+
+/* Status */
+
+export interface StatusRequest {
+	type: Request.Status;
+}
+
+export interface StatusResponse {
+	type: Response.Status;
+	recache_time: number;
 }
 
 /* All requests*/
@@ -236,4 +249,5 @@ export type ValidRequests =
 	| SetMarkerRequest
 	| RemoveMarkerRequest
 	| ResetRequest
-	| RecacheRequest;
+	| RecacheRequest
+	| StatusRequest;

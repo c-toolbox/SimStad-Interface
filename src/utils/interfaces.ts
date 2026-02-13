@@ -84,6 +84,7 @@ export interface LayerBaseData {
 	opacity?: number;
 	emission?: number;
 	crop?: LayerCrop;
+	locked_order?: boolean;
 }
 
 // Specific layer types
