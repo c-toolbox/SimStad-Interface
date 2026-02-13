@@ -106,7 +106,7 @@ interface LayerCircleCrop {
 type LayerCrop = LayerSliceCrop | LayerCircleCrop;
 
 interface LayerBaseData {
-	name: string;
+	id: string;
 	opacity?: number;
 	emission?: number;
 	crop?: LayerCrop;
@@ -114,10 +114,12 @@ interface LayerBaseData {
 
 interface LayerImageData extends LayerBaseData {
 	type: "image";
+	raster: string;
 }
 
 interface LayerFlowData extends LayerBaseData {
 	type: "flow";
+	raster: string;
 	flow: {
 		texture: string;
 		scale?: number;
@@ -127,6 +129,7 @@ interface LayerFlowData extends LayerBaseData {
 
 interface LayerMovieData extends LayerBaseData {
 	type: "movie";
+	raster: string;
 	movie?: {
 		speed: number;
 	};
@@ -166,7 +169,7 @@ export interface LayerRequest {
 
 export interface LayerResponse {
 	type: Response.Layer;
-	name: string;
+	id: string;
 	error?: string;
 }
 

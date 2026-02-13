@@ -176,8 +176,6 @@ class TextureManager {
 
 			// Start the loader and handle completion
 			scene.load.once("complete", () => {
-				console.log(`Loaded texture: ${textureKey}`);
-
 				// Revoke the object URL after loading
 				URL.revokeObjectURL(objectUrl);
 

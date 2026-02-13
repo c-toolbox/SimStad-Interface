@@ -1,7 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { Color, ColorStr } from "@/utils/colors";
-import { layoutManager as layout } from "@/utils/LayoutManager";
 import { languageManager } from "@/utils/LanguageManager";
 
 export class MapHint extends Phaser.GameObjects.Container {

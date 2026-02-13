@@ -13,7 +13,13 @@ import { DebugPage } from "@/components/pages/DebugPage";
 import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 
 import { SocketManager } from "@/utils/SocketManager";
-import { Collection, CollectionKey, Layer, Scenario } from "@/utils/interfaces";
+import {
+	Collection,
+	CollectionKey,
+	Layer,
+	RasterKey,
+	Scenario,
+} from "@/utils/interfaces";
 import { LayerRequestData } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
 import { contentManager } from "@/utils/ContentManager";
@@ -36,14 +42,10 @@ export class GameScene extends BaseScene {
 	private navigation: Navigation;
 	private map: Map;
 
-	// Currently active layers
-	private activeLayers: Layer[];
-
-	// Layers used for comparative view (locked on the right side)
-	private lockedLayers: Layer[];
-
-	// Slice value for dividing the map between active and locked layers (0.0 to 1.0)
-	public mapSliceValue: number = 0.5;
+	private activeScenario: Scenario | undefined; // Currently active scenario
+	private activeLayers: Layer[]; // Currently active map layers
+	private lockedScenario: Scenario | undefined; // Locked scenario, displayed on the right side
+	private lockedLayers: Layer[]; // Locked layers in map slicing mode, not necessarily tied to a scenario
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -54,6 +56,8 @@ export class GameScene extends BaseScene {
 		this.cameras.main.setBackgroundColor(Color.Slate950);
 		this.initBlur();
 
+		this.activeScenario = undefined;
+		this.lockedScenario = undefined;
 		this.activeLayers = [];
 		this.lockedLayers = [];
 
@@ -141,15 +145,7 @@ export class GameScene extends BaseScene {
 		this.map = new Map(this, this.socket);
 		this.map.setDepth(1);
 		this.add.existing(this.map);
-
-		this.map.on(
-			"setMapSlice",
-			(value: number) => {
-				this.mapSliceValue = value;
-				this.setLayers(this.activeLayers, false);
-			},
-			this,
-		);
+		this.initMapSlicing();
 
 		this.setState(PageState.Home);
 
@@ -206,7 +202,7 @@ export class GameScene extends BaseScene {
 	}
 
 	onHomeReset() {
-		// if (!this.socket.isConnectedToSocket) return;
+		if (this.mapSliceEnabled) this.disableMapSlicing();
 
 		blocksManager.setDefaultLegend();
 		this.socket.sendReset();
@@ -237,7 +233,7 @@ export class GameScene extends BaseScene {
 	}
 
 	setLayers(layers: Layer[], flush = true) {
-		this.activeLayers = layers;
+		this.activeLayers = JSON.parse(JSON.stringify(layers));
 
 		// Create combined layers with crop properties applied
 		const combinedLayers = this.createCombinedLayers();
@@ -254,7 +250,7 @@ export class GameScene extends BaseScene {
 	}
 
 	private createCombinedLayers(): Layer[] {
-		if (this.lockedLayers.length == 0) {
+		if (!this.mapSliceEnabled) {
 			return this.activeLayers;
 		}
 
@@ -266,7 +262,7 @@ export class GameScene extends BaseScene {
 			layerCopy.crop = {
 				type: "slice",
 				slice: {
-					min_u: this.mapSliceValue,
+					min_u: this.map.sliceValue,
 					max_u: 1,
 					min_v: 0,
 					max_v: 1,
@@ -282,7 +278,7 @@ export class GameScene extends BaseScene {
 				type: "slice",
 				slice: {
 					min_u: 0,
-					max_u: this.mapSliceValue,
+					max_u: this.map.sliceValue,
 					min_v: 0,
 					max_v: 1,
 				},
@@ -290,15 +286,32 @@ export class GameScene extends BaseScene {
 			combined.push(layerCopy);
 		});
 
+		if (this.activeScenario == this.lockedScenario) {
+			combined.push({
+				type: "color",
+				color: "#000000",
+				opacity: 0.25,
+				crop: {
+					type: "slice",
+					slice: {
+						min_u: 0,
+						max_u: this.map.sliceValue,
+						min_v: 0,
+						max_v: 1,
+					},
+				},
+			});
+		}
+
 		combined.push({
 			type: "color",
 			color: "#000000",
-			opacity: 0.5,
+			opacity: 0.8,
 			crop: {
 				type: "slice",
 				slice: {
-					min_u: Math.max(this.mapSliceValue - 0.002, 0),
-					max_u: Math.min(this.mapSliceValue + 0.002, 1),
+					min_u: Math.max(this.map.sliceValue - 0.0025, 0),
+					max_u: Math.min(this.map.sliceValue + 0.0025, 1),
 					min_v: 0,
 					max_v: 1,
 				},
@@ -309,6 +322,13 @@ export class GameScene extends BaseScene {
 	}
 
 	convertLayersToProtocol(layers: Layer[]): LayerRequestData[] {
+		function getImage(rasterKey: RasterKey): string {
+			const raster = contentManager.getRaster(rasterKey);
+			if (raster && raster.image) return raster.image;
+			if (raster && raster.video) return raster.video;
+			return rasterKey;
+		}
+
 		return layers.map((layer, index) => {
 			const common = {
 				opacity: layer.opacity,
@@ -320,22 +340,29 @@ export class GameScene extends BaseScene {
 				case "image":
 					return {
 						type: "image",
-						name: `${layer.raster}_${index}`,
+						id: `${index}_${layer.raster}`,
+						raster: getImage(layer.raster),
 						...common,
 					};
 
 				case "flow":
 					return {
 						type: "flow",
-						name: `${layer.raster}_${index}`,
-						flow: layer.flow,
+						id: `${index}_${layer.raster}`,
+						raster: getImage(layer.raster),
+						flow: {
+							texture: getImage(layer.flow.texture),
+							scale: layer.flow.scale,
+							speed: layer.flow.speed,
+						},
 						...common,
 					};
 
 				case "movie":
 					return {
 						type: "movie",
-						name: `${layer.raster}_${index}`,
+						id: `${index}_${layer.raster}`,
+						raster: getImage(layer.raster),
 						movie: layer.movie,
 						...common,
 					};
@@ -343,7 +370,7 @@ export class GameScene extends BaseScene {
 				case "color":
 					return {
 						type: "color",
-						name: `${layer.color}_${index}`,
+						id: `${index}_${layer.color}`,
 						color: layer.color,
 						...common,
 					};
@@ -351,12 +378,64 @@ export class GameScene extends BaseScene {
 				case "ndi":
 					return {
 						type: "ndi",
-						name: `${layer.ndi.stream}_${index}`,
+						id: `${index}_${layer.ndi.stream}`,
 						ndi: layer.ndi,
 						...common,
 					};
 			}
 		});
+	}
+
+	/* Map slicing */
+
+	initMapSlicing() {
+		this.map.on("toggleMapSlice", () => {
+			if (this.mapSliceEnabled) {
+				this.disableMapSlicing();
+			} else {
+				this.enableMapSlicing();
+			}
+
+			this.map.setSlicePinnable(this.activeScenario != this.lockedScenario);
+			this.setLayers(this.activeLayers);
+		});
+
+		this.map.on("sliceValue", (value: number) => {
+			this.setLayers(this.activeLayers, false);
+		});
+
+		this.map.on("pin", () => {
+			this.lockedScenario = this.activeScenario;
+			this.lockedLayers = JSON.parse(JSON.stringify(this.activeLayers));
+			this.map.setSlicePinnable(false);
+			this.setLayers(this.activeLayers);
+		});
+
+		this.disableMapSlicing();
+	}
+
+	enableMapSlicing() {
+		const defaultScenario = contentManager.getScenario("default");
+		if (defaultScenario) {
+			this.lockedScenario = defaultScenario;
+			this.lockedLayers = JSON.parse(JSON.stringify(defaultScenario.layers));
+		} else {
+			this.lockedScenario = this.activeScenario;
+			this.lockedLayers = JSON.parse(JSON.stringify(this.activeLayers));
+		}
+		this.map.setSliceEnabled(true);
+		this.map.setSliceValue(0.0, false);
+		this.map.setSliceValue(0.33, true);
+	}
+
+	disableMapSlicing() {
+		this.lockedScenario = undefined;
+		this.lockedLayers = [];
+		this.map.setSliceEnabled(false);
+	}
+
+	get mapSliceEnabled(): boolean {
+		return this.lockedLayers.length > 0;
 	}
 
 	/* Blur */

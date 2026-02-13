@@ -9,6 +9,9 @@ import { MapHint } from "./MapHint";
 import { MapControls } from "./MapControls";
 import { Layer } from "@/utils/interfaces";
 import { MapLayer } from "./MapLayer";
+import { MapSliceButton } from "./MapSliceButton";
+import { MapPinButton } from "./MapPinButton";
+import { MapSliceKnob } from "./MapSliceKnob";
 
 export class Map extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
@@ -24,6 +27,11 @@ export class Map extends Phaser.GameObjects.Container {
 	private mapControls: MapControls;
 	private loader: Phaser.GameObjects.Image;
 	private loadingLayers: Set<MapLayer>;
+
+	private mapSliceButton: MapSliceButton;
+	private mapPinButton: MapPinButton;
+	private mapSliceKnob: MapSliceKnob;
+	private mapPin: Phaser.GameObjects.Image;
 
 	constructor(scene: BaseScene, socket: SocketManager) {
 		super(scene);
@@ -115,12 +123,60 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.mapControls = new MapControls(scene, socket);
 		this.add(this.mapControls);
+
+		this.mapSliceButton = new MapSliceButton(
+			scene,
+			layout.map.right - 40,
+			layout.map.top + 40,
+			60,
+		);
+		this.add(this.mapSliceButton);
+		this.mapSliceButton.on("click", () => {
+			this.mapHint.setVisible(false);
+			this.emit("toggleMapSlice");
+		});
+
+		this.mapPinButton = new MapPinButton(
+			scene,
+			layout.map.left + 40,
+			layout.map.bottom - 40,
+			60,
+		);
+		this.add(this.mapPinButton);
+		this.mapPinButton.on("click", () => {
+			this.mapHint.setVisible(false);
+			this.scene.tweens.add({
+				targets: this.mapPin,
+				alpha: { from: 1.0, to: 0.4 },
+				ease: Phaser.Math.Easing.Cubic.In,
+			});
+			this.emit("pin");
+		});
+
+		this.mapPin = scene.add.image(0, 0, "tack");
+
+		this.mapPin.setScale((0.25 * layout.map.height) / this.mapPin.height);
+		this.add(this.mapPin);
+
+		this.mapSliceKnob = new MapSliceKnob(
+			scene,
+			layout.map.centerX,
+			layout.map.centerY,
+			60,
+		);
+		this.add(this.mapSliceKnob);
+		this.mapSliceKnob.on("sliceValue", (value: number) => {
+			this.emit("sliceValue", value);
+		});
 	}
 
 	update(time: number, delta: number) {
 		this.fingerLamp.update(time, delta);
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
 		this.mapControls.update(time, delta);
+		this.mapSliceButton.update(time, delta);
+		this.mapPinButton.update(time, delta);
+		this.mapSliceKnob.update(time, delta);
 
 		/* Update loader spinner */
 		if (this.loadingLayers.size > 0) {
@@ -182,7 +238,38 @@ export class Map extends Phaser.GameObjects.Container {
 			});
 		}
 
+		this.mapPin.setPosition(
+			layout.map.left + layout.map.width * (1 - this.sliceValue / 2),
+			layout.map.centerY,
+		);
+		const remainingWidth =
+			(layout.map.width * this.sliceValue) / this.mapPin.displayWidth;
+		this.mapPin.setCrop(
+			this.mapPin.width * ((1 - remainingWidth) / 2),
+			this.mapPin.height * 0,
+			this.mapPin.width * remainingWidth,
+			this.mapPin.height * 1,
+		);
+
+		this.bringToTop(this.mapPin);
 		this.bringToTop(this.fingerLamp);
+	}
+
+	setSliceEnabled(enabled: boolean) {
+		this.mapSliceButton.setHighlight(enabled);
+		this.mapSliceKnob.setVisible(enabled);
+		this.mapPinButton.setVisible(enabled);
+		this.mapPin.setVisible(enabled);
+	}
+
+	setSliceValue(value: number, animate: boolean) {
+		this.mapSliceKnob.setValue(value, animate);
+	}
+
+	setSlicePinnable(canPin: boolean) {
+		console.log("canPin", canPin);
+		this.mapPinButton.setHighlight(canPin);
+		this.mapPin.setAlpha(canPin ? 0.0 : 0.4);
 	}
 
 	onPointerDown(pointer: Phaser.Input.Pointer) {
@@ -237,7 +324,6 @@ export class Map extends Phaser.GameObjects.Container {
 				1,
 				1,
 			);
-			this.emit("setMapSlice", px);
 		} else {
 			this.socket.sendRemoveMarker(lamp.name);
 		}
@@ -252,9 +338,14 @@ export class Map extends Phaser.GameObjects.Container {
 		});
 		this.lamps = [];
 		this.mapHint.setVisible(true);
+		// this.mapSliceButton.setVisible(false);
 	}
 
 	resetLightControls() {
 		this.mapControls.resetLight();
+	}
+
+	get sliceValue(): number {
+		return this.mapSliceKnob.value;
 	}
 }

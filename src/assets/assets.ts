@@ -38,14 +38,14 @@ let images: Image[] = [
 	image("season_spring", "icons/season_spring.png"),
 	image("season_summer", "icons/season_summer.png"),
 	image("season_winter", "icons/season_winter.png"),
+	image("slider-knob", "icons/slider-knob.png"),
+	image("split", "icons/split.png"),
+	image("tack", "icons/tack.png"),
+	image("tack-slash", "icons/tack-slash.png"),
 	image("unreal", "icons/unreal.png"),
 	image("wifi", "icons/wifi.png"),
 	image("wifi-slash", "icons/wifi-slash.png"),
 	image("x", "icons/x.png"),
-
-	// image("minimaps/Color/white.png", "minimaps/Color/white"),
-	// image("minimaps/Nkpg/Hillshade.png", "minimaps/Nkpg/Hillshade"),
-	// image("minimaps/Nkpg/Orto20230921.png", "minimaps/Nkpg/Orto20230921"),
 ];
 
 /* Fonts */
