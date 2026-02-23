@@ -11,7 +11,7 @@ import { TabButton } from "../TabButton";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
-import { CollectionKey, Scenario } from "@/utils/interfaces";
+import { CollectionKey, Layer, Scenario } from "@/utils/interfaces";
 import { contentManager } from "@/utils/ContentManager";
 
 export class ScenarioPage extends Page {
@@ -376,22 +376,33 @@ export class ScenarioPage extends Page {
 
 		this.layerSlider.setVisible(false);
 		if (scenario.layer_display_mode == "sequential") {
-			this.layerSlider.setVisible(true);
-			this.layerSlider.value = 0;
-			this.layerSlider.setSteps(scenario.layers.length);
-			this.layerSlider.setTitle(scenario.sequence_title || "");
-			this.layerSlider.setLabels(
-				scenario.sequence_labels.map((label) => label.text),
-			);
+			const unlockedLayers = this.getUnlockedLayers(scenario.layers);
+			const lockedLayers = this.getLockedLayers(scenario.layers);
 
-			this.layerSlider.removeListener("onChange");
-			this.layerSlider.on("onChange", (value: number) => {
-				if (scenario.layers.length > 1) {
-					let index = Math.round(value / (1 / (scenario.layers.length - 1)));
-					this.layerSlider.setLabel(index.toString());
-					this.emit("setLayers", [scenario.layers[index]]);
-				}
-			});
+			// Only show slider if there are unlocked layers to choose from
+			if (unlockedLayers.length > 0) {
+				this.layerSlider.setVisible(true);
+				this.layerSlider.value = 0;
+				this.layerSlider.setSteps(unlockedLayers.length);
+				this.layerSlider.setTitle(scenario.sequence_title || "");
+				this.layerSlider.setLabels(
+					scenario.sequence_labels.map((label) => label.text),
+				);
+
+				this.layerSlider.removeListener("onChange");
+				this.layerSlider.on("onChange", (value: number) => {
+					if (unlockedLayers.length > 1) {
+						let unlockedIndex = Math.round(
+							value / (1 / (unlockedLayers.length - 1))
+						);
+						this.layerSlider.setLabel(unlockedIndex.toString());
+						this.emit("setLayers", this.buildSequentialLayers(scenario, unlockedIndex));
+					} else if (unlockedLayers.length === 1) {
+						this.layerSlider.setLabel("0");
+						this.emit("setLayers", this.buildSequentialLayers(scenario, 0));
+					}
+				});
+			}
 		}
 
 		languageManager.bind(this.title, `scenario_${scenario.key}_name`, () => {
@@ -415,11 +426,40 @@ export class ScenarioPage extends Page {
 		);
 	}
 
+	private getLockedLayers(layers: Layer[]): Layer[] {
+		return layers.filter((layer) => layer.locked_order === true);
+	}
+
+	private getUnlockedLayers(layers: Layer[]): Layer[] {
+		return layers.filter((layer) => layer.locked_order !== true);
+	}
+
+	private buildSequentialLayers(
+		scenario: Scenario,
+		unlockedIndex: number
+	): Layer[] {
+		const unlockedLayers = this.getUnlockedLayers(scenario.layers);
+		const selectedUnlocked =
+			unlockedIndex >= 0 && unlockedIndex < unlockedLayers.length
+				? unlockedLayers[unlockedIndex]
+				: null;
+
+		const result: Layer[] = [];
+		for (const layer of scenario.layers) {
+			// Include if locked OR if it's the selected unlocked layer
+			if (layer.locked_order === true || layer === selectedUnlocked) {
+				result.push(layer);
+			}
+		}
+		return result;
+	}
+
 	setLayers() {
 		if (this.currentScenario.layer_display_mode == "stacked") {
 			this.emit("setLayers", this.currentScenario.layers);
 		} else {
-			this.emit("setLayers", [this.currentScenario.layers[0]]);
+			// Sequential mode: show locked layers + first unlocked layer
+			this.emit("setLayers", this.buildSequentialLayers(this.currentScenario, 0));
 		}
 	}
 
