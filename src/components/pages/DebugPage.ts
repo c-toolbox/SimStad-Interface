@@ -6,13 +6,13 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
 import { contentManager } from "@/utils/ContentManager";
+import { config } from "@/utils/RuntimeConfig";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
 	private areas: Phaser.Geom.Rectangle[];
 	private sliders: CheckSlider[];
 
-	private trafficSlider: CheckSlider;
 	private recacheButton: TextButton;
 	private advLayerSlider: CheckSlider;
 	private loggingSlider: CheckSlider;
@@ -82,24 +82,6 @@ export class DebugPage extends Page {
 		this.recacheLoader.setTint(Color.Slate200);
 		this.add(this.recacheLoader);
 
-		/* Traffic */
-
-		this.trafficSlider = this.setCheckboxArea(
-			1,
-			"Live traffic",
-			"Enable live traffic data, streaming the location of busses and trams",
-			(active: boolean) => {
-				if (this.socket.isConnectedToUnreal) {
-					this.trafficSlider.setIsLoading(true);
-					// this.socket.sendLiveTraffic(active);
-				}
-			}
-		);
-		this.socket.on("serverTrafficEnabled", (enabled: boolean) => {
-			this.trafficSlider.setIsLoading(false);
-			this.trafficSlider.value = enabled ? 1 : 0;
-		});
-
 		/* Logging */
 
 		this.loggingSlider = this.setCheckboxArea(
@@ -108,7 +90,7 @@ export class DebugPage extends Page {
 			"Show logs of all websocket messages being sent and received",
 			(active: boolean) => {
 				this.emit("logging", active);
-			}
+			},
 		);
 
 		/* UI Layout */
@@ -119,7 +101,7 @@ export class DebugPage extends Page {
 			"Display layer usage count and drive status in layer page",
 			(active: boolean) => {
 				this.emit("showLayerInfo", active);
-			}
+			},
 		);
 
 		// this.layoutSlider = this.setCheckboxArea(
@@ -133,24 +115,22 @@ export class DebugPage extends Page {
 
 		/* Miscellaneous buttons */
 
-		// this.setButtonArea(4, "Reset", "", () => {
-		// 	this.socket.sendReset();
-		// });
+		this.setButtonArea(4, "Reset", "", () => {
+			this.socket.sendReset();
+		});
 
 		this.setButtonArea(5, "Ping", "", () => {
 			this.socket.sendPing();
 		});
 
-		this.setButtonArea(6, "Play movie", "", () => {
-			this.socket.send({
-				type: "LayerRequest",
-				layers: [
-					{
-						type: "movie",
-						name: "Movies/3DPRINT_ANIMATION_V003",
-					},
-				],
-			});
+		this.setButtonArea(6, "Play idle", "", () => {
+			// const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
+			// if (!idleRaster)
+			// 	return console.error(
+			// 		"IDLE_RASTER in config.json not found in available rasters",
+			// 	);
+			// const layer = contentManager.rasterToLayer(idleRaster);
+			// this.setLayers([layer]);
 		});
 
 		this.setButtonArea(7, "Motala Ström", "", () => {
@@ -178,7 +158,9 @@ export class DebugPage extends Page {
 			this.socket.send({ type: "HAHAHA" });
 		});
 
-		this.setButtonArea(9, "", "", () => {});
+		this.setButtonArea(9, "Status", "Status request", () => {
+			this.socket.sendStatusRequest();
+		});
 
 		// this.setButtonArea(10, "Layer Image", "", () => {
 		// 	this.socket.sendLayers(
@@ -243,11 +225,12 @@ export class DebugPage extends Page {
 		// 	);
 		// });
 
-		this.setButtonArea(13, "Recache /Beredskap", "", () => {
-			this.socket.send({
-				type: "RecacheRequest",
-				path: "/Datasets/Tellden",
-			});
+		this.setButtonArea(13, "Recache 3 rasters", "", () => {
+			this.socket.sendRecacheRequest([
+				"100ars_regn",
+				"200ars_regn",
+				"500ars_regn",
+			]);
 		});
 
 		// this.setButtonArea(14, "Circle crop", "", () => {
@@ -267,36 +250,27 @@ export class DebugPage extends Page {
 		// 	]);
 		// });
 
-		// this.setButtonArea(15, "NDI", "", () => {
-		// 	this.socket.sendLayers([
-		// 		{
-		// 			type: "image",
-		// 			name: "Finals/kollektivtrafik",
-		// 		},
-		// 		// {
-		// 		// 	type: "image",
-		// 		// 	name: "Color/Black",
-		// 		// 	opacity: 0.5,
-		// 		// },
-		// 		{
-		// 			type: "ndi",
-		// 			name: "TrafficOverlayNDI",
-		// 			opacity: 0.1,
-		// 			emission: 1,
-		// 			ndi: {
-		// 				stream: "TrafficOverlayNDI",
-		// 			},
-		// 			crop: {
-		// 				type: "circle",
-		// 				circle: {
-		// 					u: Math.random(),
-		// 					v: Math.random(),
-		// 					radius: 0.5,
-		// 				},
-		// 			},
-		// 		},
-		// 	]);
-		// });
+		this.setButtonArea(15, "NDI", "", () => {
+			this.socket.sendLayers([
+				{
+					type: "ndi",
+					id: "TrafficOverlayNDI",
+					opacity: 0.1,
+					emission: 1,
+					ndi: {
+						stream: "TrafficOverlayNDI",
+					},
+					crop: {
+						type: "circle",
+						circle: {
+							u: Math.random(),
+							v: Math.random(),
+							radius: 0.5,
+						},
+					},
+				},
+			]);
+		});
 	}
 
 	update(time: number, delta: number) {
@@ -308,7 +282,6 @@ export class DebugPage extends Page {
 	}
 
 	reset() {
-		this.trafficSlider.value = 0;
 		this.advLayerSlider.value = 0;
 		this.loggingSlider.value = 0;
 

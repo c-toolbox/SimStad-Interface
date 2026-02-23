@@ -109,7 +109,12 @@ class ContentManager {
 			this.rasters = data as Raster[];
 			this.rasters.forEach((raster) => {
 				raster.name = `raster_${raster.key}_name`;
-				raster.image = raster.image ? this.stripImagePath(raster.image) : null;
+				// raster.image = raster.image ? this.stripImagePath(raster.image) : null;
+				raster.image = raster.image
+					? decodeURIComponent(raster.image)
+							.replace(/^\/media\/rasters\//, "")
+							.replace(/\.[^/.]+$/, "")
+					: null;
 				raster.video = raster.video ? this.stripImagePath(raster.video) : null;
 				raster.minimap = this.stripImagePath(raster.minimap);
 				raster.thumbnail = this.stripImagePath(raster.thumbnail);
