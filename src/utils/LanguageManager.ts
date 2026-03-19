@@ -72,7 +72,7 @@ class LanguageManager {
 
 	// Change language
 	setLanguage(language: LanguageKey): void {
-		console.assert(this.languageData.get(language), "Language not available.");
+		console.assert(!!this.languageData.get(language), "Language not available.");
 		if (this.currentLanguage != language) {
 			this.currentLanguage = language;
 			this.updateAllObjects();
