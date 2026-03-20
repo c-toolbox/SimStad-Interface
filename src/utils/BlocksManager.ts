@@ -42,12 +42,13 @@ class BlocksManager {
 
 	public setWallVideo(blocksVideoKey: string) {
 		this.sendVariable("VisualCity_Video", blocksVideoKey);
+		this.sendTask(blocksVideoKey);
 	}
 
 	public setBlocksAudio(enabled: boolean) {
-		// this.sendTask(
-		// 	enabled ? "VisualCity-Wall_PlayAudio" : "VisualCity-Wall_PauseAudio",
-		// );
+		this.sendTask(
+			enabled ? "VisualCity-Wall_PlayAudio" : "VisualCity-Wall_PauseAudio",
+		);
 	}
 
 	/* Requests */
