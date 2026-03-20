@@ -86,11 +86,13 @@ export class MapSliceKnob extends Button {
 					ease: "Cubic.Out",
 					duration: 500,
 					onUpdate: (tween) => {
-						this.emit("sliceValue", tween.getValue()!);
+						const x = tween.getValue()!;
+						this.dragX = x;
+						this.emit("sliceValue", x);
 					},
 					onComplete: () => {
 						console.log("Tween complete");
-					}
+					},
 				});
 			}
 		} else {
