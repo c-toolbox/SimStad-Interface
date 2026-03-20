@@ -301,7 +301,7 @@ export class GameScene extends BaseScene {
 		combined.push({
 			type: "color",
 			color: "#000000",
-			opacity: 0.25,
+			opacity: 0.2,
 			crop: {
 				type: "slice",
 				slice: {
@@ -437,6 +437,10 @@ export class GameScene extends BaseScene {
 		this.lockedScenario = undefined;
 		this.lockedLayers = [];
 		this.map.setSliceEnabled(false);
+
+		if (this.activeScenario) {
+			blocksManager.setLegend(this.activeScenario.key);
+		}
 	}
 
 	get mapSliceEnabled(): boolean {
