@@ -76,7 +76,7 @@ class ContentManager {
 			this.collections = data as Collection[];
 			this.collections.forEach((collection) => {
 				collection.name = `collection_${collection.key}_name`;
-				collection.image = this.stripImagePath(collection.image);
+				collection.image = this.stripImagePath(collection.image)!;
 			});
 		}
 	}
@@ -95,9 +95,7 @@ class ContentManager {
 				scenario.sequence_labels.forEach((label) => {
 					label.text = `scenario_${scenario.key}_sequence_label_${label.order}`;
 				});
-				scenario.legend_image = scenario.legend_image
-					? this.stripImagePath(scenario.legend_image)
-					: null;
+				scenario.legend_image = this.stripImagePath(scenario.legend_image);
 				scenario.legend_image_source = `scenario_${scenario.key}_legend_image_source`;
 			});
 		}
@@ -109,20 +107,10 @@ class ContentManager {
 			this.rasters = data as Raster[];
 			this.rasters.forEach((raster) => {
 				raster.name = `raster_${raster.key}_name`;
-				// raster.image = raster.image ? this.stripImagePath(raster.image) : null;
-				raster.image = raster.image
-					? decodeURIComponent(raster.image)
-							.replace(/^\/media\/rasters\//, "")
-							.replace(/\.[^/.]+$/, "")
-					: null;
-				// raster.video = raster.video ? this.stripImagePath(raster.video) : null;
-				raster.video = raster.video
-					? decodeURIComponent(raster.video)
-							.replace(/^\/media\/rasters\//, "")
-							.replace(/\.[^/.]+$/, "")
-					: null;
-				raster.minimap = this.stripImagePath(raster.minimap);
-				raster.thumbnail = this.stripImagePath(raster.thumbnail);
+				raster.image = this.stripImagePath(raster.image, true);
+				raster.video = this.stripImagePath(raster.video, true);
+				raster.minimap = this.stripImagePath(raster.minimap)!;
+				raster.thumbnail = this.stripImagePath(raster.thumbnail)!;
 			});
 		}
 	}
@@ -145,7 +133,7 @@ class ContentManager {
 		if (data) {
 			this.symbols = data as Symbol[];
 			this.symbols.forEach((symbol) => {
-				symbol.image = this.stripImagePath(symbol.image);
+				symbol.image = this.stripImagePath(symbol.image)!;
 			});
 		}
 	}
@@ -320,11 +308,18 @@ class ContentManager {
 		}
 	}
 
-	stripImagePath(path: string): string {
-		return decodeURIComponent(path)
-			.replace(/^\/media\//, "")
-			.replace(/\.[^/.]+$/, "")
-			.replace(/\//g, "_");
+	stripImagePath(path: string | null, addFolderPrefix = false): string | null {
+		if (!path) return null;
+
+		if (addFolderPrefix)
+			return decodeURIComponent(path)
+				.replace(/^\/media\/rasters\//, "")
+				.replace(/\.[^/.]+$/, "");
+		else
+			return decodeURIComponent(path)
+				.replace(/^\/media\//, "")
+				.replace(/\.[^/.]+$/, "")
+				.replace(/\//g, "_");
 	}
 
 	/**
