@@ -267,9 +267,8 @@ export class Map extends Phaser.GameObjects.Container {
 	}
 
 	setSlicePinnable(canPin: boolean) {
-		console.log("canPin", canPin);
 		this.mapPinButton.setHighlight(canPin);
-		this.mapPin.setAlpha(0.4);
+		this.mapPin.setAlpha(0.3);
 	}
 
 	onPointerDown(pointer: Phaser.Input.Pointer) {

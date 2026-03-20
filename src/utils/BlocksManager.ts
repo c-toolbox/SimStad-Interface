@@ -27,17 +27,17 @@ class BlocksManager {
 	public setLegend(legendKey: LegendKey) {
 		const language = "/?language=" + languageManager.getCurrentLanguage();
 		const url = concatUrl(config.OMNI_URL, "/legend", legendKey, language);
-		this.sendVariable("SimStad_URL_Left", url + "&orientation=left");
-		this.sendVariable("SimStad_URL_Forward", url + "&orientation=up");
-		this.sendVariable("SimStad_URL_Right", url + "&orientation=right");
+		this.sendVariable("SimStad_URL_Left", url);
+		this.sendVariable("SimStad_URL_Forward", url);
+		this.sendVariable("SimStad_URL_Right", url);
 	}
 
 	public setDualLegend(key1: LegendKey, key2: LegendKey) {
 		const language = "/?language=" + languageManager.getCurrentLanguage();
 		const url = concatUrl(config.OMNI_URL, "/legend", key1, key2, language);
-		this.sendVariable("SimStad_URL_Left", url + "&orientation=left");
-		this.sendVariable("SimStad_URL_Forward", url + "&orientation=up");
-		this.sendVariable("SimStad_URL_Right", url + "&orientation=right");
+		this.sendVariable("SimStad_URL_Left", url + "&direction=tb");
+		this.sendVariable("SimStad_URL_Forward", url + "&direction=rl");
+		this.sendVariable("SimStad_URL_Right", url + "&direction=bt");
 	}
 
 	public setWallVideo(blocksVideoKey: string) {

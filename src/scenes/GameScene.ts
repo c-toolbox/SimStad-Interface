@@ -239,7 +239,6 @@ export class GameScene extends BaseScene {
 		} else {
 			blocksManager.setLegend(scenario.key);
 		}
-		this.map.setSlicePinnable(this.activeScenario != this.lockedScenario);
 	}
 
 	setLayers(layers: Layer[], flush = true) {
@@ -257,6 +256,8 @@ export class GameScene extends BaseScene {
 
 		const layerRequestData = this.convertLayersToProtocol(combinedLayers);
 		this.socket.sendLayers(layerRequestData, flush);
+
+		this.map.setSlicePinnable(this.canPin);
 	}
 
 	private createCombinedLayers(): Layer[] {
@@ -296,23 +297,23 @@ export class GameScene extends BaseScene {
 			combined.push(layerCopy);
 		});
 
-		if (this.activeScenario == this.lockedScenario) {
-			combined.push({
-				type: "color",
-				color: "#000000",
-				opacity: 0.25,
-				crop: {
-					type: "slice",
-					slice: {
-						min_u: 0,
-						max_u: this.map.sliceValue,
-						min_v: 0,
-						max_v: 1,
-					},
+		// Right side pinned shaded area
+		combined.push({
+			type: "color",
+			color: "#000000",
+			opacity: 0.25,
+			crop: {
+				type: "slice",
+				slice: {
+					min_u: 0,
+					max_u: this.map.sliceValue,
+					min_v: 0,
+					max_v: 1,
 				},
-			});
-		}
+			},
+		});
 
+		// Center line separator
 		combined.push({
 			type: "color",
 			color: "#000000",
@@ -406,7 +407,7 @@ export class GameScene extends BaseScene {
 				this.enableMapSlicing();
 			}
 
-			this.map.setSlicePinnable(this.activeScenario != this.lockedScenario);
+			this.map.setSlicePinnable(this.canPin);
 			this.setLayers(this.activeLayers);
 		});
 
@@ -425,14 +426,8 @@ export class GameScene extends BaseScene {
 	}
 
 	enableMapSlicing() {
-		const defaultScenario = contentManager.getScenario("default");
-		if (defaultScenario) {
-			this.lockedScenario = defaultScenario;
-			this.lockedLayers = JSON.parse(JSON.stringify(defaultScenario.layers));
-		} else {
-			this.lockedScenario = this.activeScenario;
-			this.lockedLayers = JSON.parse(JSON.stringify(this.activeLayers));
-		}
+		this.lockedScenario = this.activeScenario;
+		this.lockedLayers = JSON.parse(JSON.stringify(this.activeLayers));
 		this.map.setSliceEnabled(true);
 		this.map.setSliceValue(0.0, false);
 		this.map.setSliceValue(0.33, true);
@@ -560,5 +555,11 @@ export class GameScene extends BaseScene {
 		}
 
 		return true;
+	}
+
+	get canPin(): boolean {
+		return (
+			JSON.stringify(this.activeLayers) != JSON.stringify(this.lockedLayers)
+		);
 	}
 }

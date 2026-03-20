@@ -275,6 +275,10 @@ class ContentManager {
 		return this.rasters.filter((raster) => raster.tags.includes(tag.key));
 	}
 
+	getRasterCount(): number {
+		return this.rasters.length;
+	}
+
 	getLegendSymbol(symbolKey: string): Symbol {
 		const symbol = this.symbols.find((s) => s.key == symbolKey);
 		if (!symbol) throw new Error(`Symbol "${symbolKey}" not found`);

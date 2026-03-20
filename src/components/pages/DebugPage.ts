@@ -7,6 +7,7 @@ import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
 import { contentManager } from "@/utils/ContentManager";
 import { config } from "@/utils/RuntimeConfig";
+import { GameScene } from "@/scenes/GameScene";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
@@ -50,19 +51,28 @@ export class DebugPage extends Page {
 		// 	);
 		// });
 
+		this.setButtonArea(
+			0,
+			"Restart interface",
+			"Restart this application and refresh all content.\nThis action takes about 5 seconds.",
+			() => {
+				location.reload();
+			},
+		);
+
 		/* Recache database */
 
 		this.recacheButton = this.setButtonArea(
-			0,
-			"Recache database",
-			"Request Unreal to reload all raster images.\nThis action takes about 90 seconds.",
+			1,
+			"Reload all rasters",
+			`Reload ${contentManager.getRasterCount()} raster images in Unreal.\nThis action takes about 60 seconds.`,
 			() => {
 				if (this.socket.isConnectedToUnreal) {
 					this.socket.sendRecacheRequest();
 					this.recacheLoader.setVisible(true);
 					contentManager.reloadLayers();
 				}
-			}
+			},
 		);
 		this.socket.on("onRecacheProgress", (count: number, max: number) => {
 			const percent = `${Math.round((count / max) * 100)}%`;
@@ -75,7 +85,7 @@ export class DebugPage extends Page {
 		this.recacheLoader = scene.add.image(
 			this.recacheButton.x + this.recacheButton.width / 2 + 60,
 			this.recacheButton.y,
-			"vis_c_logo_white"
+			"vis_c_logo_white",
 		);
 		this.recacheLoader.setVisible(false);
 		this.recacheLoader.setScale(60 / this.recacheLoader.height);
@@ -123,14 +133,14 @@ export class DebugPage extends Page {
 			this.socket.sendPing();
 		});
 
-		this.setButtonArea(6, "Play idle", "", () => {
-			// const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
-			// if (!idleRaster)
-			// 	return console.error(
-			// 		"IDLE_RASTER in config.json not found in available rasters",
-			// 	);
-			// const layer = contentManager.rasterToLayer(idleRaster);
-			// this.setLayers([layer]);
+		this.setButtonArea(6, "Idle movie", "", () => {
+			const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
+			if (!idleRaster)
+				return console.error(
+					"IDLE_RASTER in config.json not found in available rasters",
+				);
+			const layer = contentManager.rasterToLayer(idleRaster);
+			(this.scene as GameScene).setLayers([layer]);
 		});
 
 		this.setButtonArea(7, "Motala Ström", "", () => {
@@ -154,25 +164,13 @@ export class DebugPage extends Page {
 			});
 		});
 
-		this.setButtonArea(8, "Send crap", "", () => {
-			this.socket.send({ type: "HAHAHA" });
-		});
+		this.setButtonArea(8, "", "", () => {});
 
-		this.setButtonArea(9, "Status", "Status request", () => {
+		this.setButtonArea(9, "Status", "", () => {
 			this.socket.sendStatusRequest();
 		});
 
-		// this.setButtonArea(10, "Layer Image", "", () => {
-		// 	this.socket.sendLayers(
-		// 		[
-		// 			{
-		// 				type: "image",
-		// 				name: "Finals/Kollektivtrafik",
-		// 			},
-		// 		],
-		// 		true
-		// 	);
-		// });
+		this.setButtonArea(10, "", "", () => {});
 
 		// this.setButtonArea(11, "Layer Color", "", () => {
 		// 	this.socket.sendLayers(
@@ -180,11 +178,12 @@ export class DebugPage extends Page {
 		// 			{
 		// 				type: "image",
 		// 				emission: 0,
-		// 				name: "Nkpg/Orto20230921",
+		// 				id: "Orto",
+		// 				raster: "Orto20230921",
 		// 			},
 		// 			{
 		// 				type: "color",
-		// 				name: "MyColor",
+		// 				id: "MyColor",
 		// 				color: "ff0000",
 		// 				emission: 0,
 		// 				crop: {
@@ -197,7 +196,7 @@ export class DebugPage extends Page {
 		// 			},
 		// 			{
 		// 				type: "color",
-		// 				name: "MyColor2",
+		// 				id: "MyColor2",
 		// 				color: "ff0000",
 		// 				emission: 1,
 		// 				crop: {
@@ -209,7 +208,7 @@ export class DebugPage extends Page {
 		// 				},
 		// 			},
 		// 		],
-		// 		true
+		// 		true,
 		// 	);
 		// });
 
@@ -327,7 +326,7 @@ export class DebugPage extends Page {
 		rectIndex: number,
 		titleText: string,
 		descText: string,
-		callback: () => void
+		callback: () => void,
 	): TextButton {
 		const rect = this.areas[rectIndex];
 
@@ -338,7 +337,7 @@ export class DebugPage extends Page {
 			60,
 			titleText,
 			titleText ? Color.Rose700 : Color.Slate700,
-			callback
+			callback,
 		);
 
 		const desc = this.scene.addText({
@@ -359,7 +358,7 @@ export class DebugPage extends Page {
 		rectIndex: number,
 		titleText: string,
 		descText: string,
-		callback: (active: boolean) => void
+		callback: (active: boolean) => void,
 	): CheckSlider {
 		const rect = this.areas[rectIndex];
 		const centerY = rect.centerY - 20;
