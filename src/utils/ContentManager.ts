@@ -115,7 +115,12 @@ class ContentManager {
 							.replace(/^\/media\/rasters\//, "")
 							.replace(/\.[^/.]+$/, "")
 					: null;
-				raster.video = raster.video ? this.stripImagePath(raster.video) : null;
+				// raster.video = raster.video ? this.stripImagePath(raster.video) : null;
+				raster.video = raster.video
+					? decodeURIComponent(raster.video)
+							.replace(/^\/media\/rasters\//, "")
+							.replace(/\.[^/.]+$/, "")
+					: null;
 				raster.minimap = this.stripImagePath(raster.minimap);
 				raster.thumbnail = this.stripImagePath(raster.thumbnail);
 			});
