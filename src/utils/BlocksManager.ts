@@ -25,15 +25,19 @@ class BlocksManager {
 	}
 
 	public setLegend(legendKey: LegendKey) {
-		const languageParam = "/?language=" + languageManager.getCurrentLanguage();
-		const url = concatUrl(config.OMNI_URL, "/legend", legendKey, languageParam);
-		this.sendVariable("SimStad_URL", url);
+		const language = "/?language=" + languageManager.getCurrentLanguage();
+		const url = concatUrl(config.OMNI_URL, "/legend", legendKey, language);
+		this.sendVariable("SimStad_URL_Left", url + "&orientation=left");
+		this.sendVariable("SimStad_URL_Forward", url + "&orientation=up");
+		this.sendVariable("SimStad_URL_Right", url + "&orientation=right");
 	}
 
 	public setDualLegend(key1: LegendKey, key2: LegendKey) {
-		const languageParam = "/?language=" + languageManager.getCurrentLanguage();
-		const url = concatUrl(config.OMNI_URL, "/legend", key1, key2, languageParam);
-		this.sendVariable("SimStad_URL", url);
+		const language = "/?language=" + languageManager.getCurrentLanguage();
+		const url = concatUrl(config.OMNI_URL, "/legend", key1, key2, language);
+		this.sendVariable("SimStad_URL_Left", url + "&orientation=left");
+		this.sendVariable("SimStad_URL_Forward", url + "&orientation=up");
+		this.sendVariable("SimStad_URL_Right", url + "&orientation=right");
 	}
 
 	public setWallVideo(blocksVideoKey: string) {
@@ -77,7 +81,7 @@ class BlocksManager {
 			.then((text) => this.announce(text, LogType.BlocksReceive))
 			.catch((error) => {
 				this.blocksConnectionStatus = ConnectionStatus.Disconnected;
-				console.error("Blocks connection error:", error);
+				console.error("Blocks error:", error);
 			});
 
 		this.announce(JSON.stringify(data), LogType.BlocksSend);
