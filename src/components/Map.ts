@@ -226,6 +226,10 @@ export class Map extends Phaser.GameObjects.Container {
 						this.loadingLayers.add(mapLayer);
 					}
 				});
+				mapLayer.on("error", () => {
+					console.warn("Unhandled");
+					this.loadingLayers.delete(mapLayer);
+				});
 
 				mapLayer.setLayer(layer);
 			});

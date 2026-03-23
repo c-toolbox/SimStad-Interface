@@ -16,6 +16,7 @@ import {
 } from "./interfaces";
 import { layoutManager } from "./LayoutManager";
 import { textureManager } from "./TextureManager";
+import { languageManager } from "./LanguageManager";
 
 class ContentManager {
 	private localization: {
@@ -29,6 +30,9 @@ class ContentManager {
 	private legends: Legend[];
 	private symbols: Symbol[];
 	private tags: Tag[];
+
+	private lastFetchTime: number;
+	private rasterRefreshCallback: (rasters: Raster[]) => void;
 
 	constructor() {
 		this.localization = { sv: {}, en: {} };
@@ -148,7 +152,8 @@ class ContentManager {
 		}
 	}
 
-	private async fetchAll() {
+	// Fetch all JSON content from Omni
+	private async fetchAll(): Promise<Raster[]> {
 		await this.fetchLocalization();
 		await this.fetchCity();
 		await this.fetchCollections();
@@ -157,10 +162,42 @@ class ContentManager {
 		await this.fetchLegends();
 		await this.fetchSymbols();
 		await this.fetchTags();
+
+		// Update localization
+		languageManager.loadLocalizations(this.localization);
+
+		// Check for recent changes or additions
+		let updatedRasters: Raster[] = [];
+		if (this.lastFetchTime) {
+			updatedRasters = this.rasters.filter((raster) => {
+				const created = new Date(raster.created_at).getTime();
+				const changed = new Date(raster.changed_at).getTime();
+
+				return created > this.lastFetchTime || changed > this.lastFetchTime;
+			});
+		}
+
+		// Stay 15 seconds behind to allow syncthing to catch up
+		this.lastFetchTime = Date.now() - 15000;
+
+		return updatedRasters;
 	}
 
-	async reloadLayers() {
+	// Load all data
+	async init() {
 		await this.fetchAll();
+	}
+
+	// Load all data and return updated rasters
+	async refresh() {
+		const updatedRasters = await this.fetchAll();
+		if (this.rasterRefreshCallback) {
+			this.rasterRefreshCallback(updatedRasters);
+		}
+	}
+
+	setRasterRefreshListener(callback: (raster: Raster[]) => void) {
+		this.rasterRefreshCallback = callback;
 	}
 
 	/**
@@ -212,14 +249,6 @@ class ContentManager {
 	}
 
 	/* Content sharing */
-
-	getSwedishLocales(): { [key: string]: string } {
-		return this.localization.sv;
-	}
-
-	getEnglishLocales(): { [key: string]: string } {
-		return this.localization.en;
-	}
 
 	getDefaultBlocksVideo() {
 		if (this.city) {
@@ -324,21 +353,6 @@ class ContentManager {
 				.replace(/^\/media\//, "")
 				.replace(/\.[^/.]+$/, "")
 				.replace(/\//g, "_");
-	}
-
-	/**
-	 * Refresh all rasters from the server and reload their textures.
-	 * Also refreshes the raster-related textures through TextureManager.
-	 */
-	async refreshRasters(scene: BaseScene): Promise<void> {
-		// Clear existing rasters
-		this.rasters = [];
-
-		// Fetch fresh raster data from server
-		await this.fetchRasters();
-
-		// Refresh raster textures through TextureManager
-		await textureManager.refreshRasterTextures(scene);
 	}
 }
 

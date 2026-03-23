@@ -26,17 +26,18 @@ class LanguageManager {
 		this.boundObjects = new Map();
 	}
 
-	loadLocalizations() {
-		const swedishLocales = contentManager.getSwedishLocales();
-		const englishLocales = contentManager.getEnglishLocales();
-		this.setupLanguageData(swedishLocales, englishLocales);
+	loadLocalizations(localization: {
+		sv: { [key: string]: string };
+		en: { [key: string]: string };
+	}) {
+		this.setupLanguageData(localization.sv, localization.en);
 		this.checkLanguageData();
 	}
 
 	// Load data from imported jsons
 	setupLanguageData(
 		swedishLocales: LocalesMap,
-		englishLocales: LocalesMap
+		englishLocales: LocalesMap,
 	): void {
 		swedishLocales = Object.assign({}, swedishLocales);
 		englishLocales = Object.assign({}, englishLocales);

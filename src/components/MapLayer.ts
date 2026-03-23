@@ -4,6 +4,7 @@ import { Layer } from "@/utils/interfaces";
 import { colorToNumber } from "@/utils/functions";
 import { contentManager } from "@/utils/ContentManager";
 import { LazyImage } from "@/components/elements/LazyImage";
+import { TextureState } from "@/utils/TextureManager";
 
 export class MapLayer extends LazyImage {
 	public layer: Layer;
@@ -60,8 +61,8 @@ export class MapLayer extends LazyImage {
 		return this;
 	}
 
-	protected refreshTexture(isLoaded: boolean): void {
-		super.refreshTexture(isLoaded);
+	protected refreshTexture(state: TextureState): void {
+		super.refreshTexture(state);
 		this.resize();
 	}
 

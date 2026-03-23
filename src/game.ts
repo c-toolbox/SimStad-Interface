@@ -20,16 +20,33 @@ import { setRuntimeConfig } from "@/utils/RuntimeConfig";
 import { contentManager } from "./utils/ContentManager";
 
 async function loadConfig() {
-	if (!window.NL_TOKEN) {
-		return console.warn("Running in browser - skipping config.json");
+	// 1. Try to load from Neutralino (first launch)
+	if (window.NL_TOKEN) {
+		try {
+			const data = await filesystem.readFile("config.json");
+			const config = JSON.parse(data);
+
+			// ✅ Save it for future reloads
+			localStorage.setItem("app_config", JSON.stringify(config));
+
+			setRuntimeConfig(config);
+			console.log("Config", config);
+			return;
+		} catch (e) {
+			console.error("Could not load config.json", e);
+		}
+	} else {
+		console.warn("Neutralino unavailable");
 	}
 
-	try {
-		const data = await filesystem.readFile("config.json");
-		const config = JSON.parse(data);
-		setRuntimeConfig(config);
-	} catch (e) {
-		console.error("Could not load config.json", e);
+	// 2. Fallback: load from localStorage (after reload)
+	const cached = localStorage.getItem("app_config");
+
+	if (cached) {
+		console.warn("Using cached config (browser mode)");
+		setRuntimeConfig(JSON.parse(cached));
+	} else {
+		console.warn("No config available");
 	}
 }
 
@@ -41,7 +58,7 @@ const loadingTextElement: HTMLElement =
 	await loadConfig();
 
 	loadingTextElement.innerHTML = "Fetching json from Omni...";
-	await contentManager.reloadLayers();
+	await contentManager.init();
 
 	loadingTextElement.innerHTML = "Booting...";
 	const game = new Phaser.Game(config);

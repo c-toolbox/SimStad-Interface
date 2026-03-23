@@ -6,6 +6,7 @@ export class Lockdown extends Phaser.GameObjects.Container {
 	private background: Phaser.GameObjects.Rectangle;
 	private explanationText: Phaser.GameObjects.Text;
 	private loadingText: Phaser.GameObjects.Text;
+	private loader: Phaser.GameObjects.Image;
 	private timer: NodeJS.Timeout;
 
 	constructor(scene: BaseScene) {
@@ -14,7 +15,7 @@ export class Lockdown extends Phaser.GameObjects.Container {
 		scene.add.existing(this);
 
 		this.background = scene.add
-			.rectangle(0, 0, scene.W, scene.H, 0, 0.75)
+			.rectangle(0, 0, scene.W, scene.H, 0, 0.8)
 			.setInteractive()
 			.on("pointerdown", () => {});
 		this.add(this.background);
@@ -43,26 +44,32 @@ export class Lockdown extends Phaser.GameObjects.Container {
 			.setOrigin(0.5, 0.0);
 		this.add(this.loadingText);
 
+		this.loader = scene.add.image(0, 48, "vis_c_logo_white");
+		this.setAlpha(0.9);
+		this.loader.setScale(82 / this.loader.width);
+		this.add(this.loader);
+
 		this.setVisible(false);
 	}
 
-	onRecacheProgress(count: number, max: number) {
-		this.setVisible(true);
+	update(time: number, delta: number) {
+		this.loader.angle = time / 2;
+	}
 
-		this.explanationText.setText(
-			`Updating ${max} images`
-		);
+	trigger(enabled: boolean, title = "", description = "") {
+		if (enabled) {
+			this.setVisible(true);
 
-		const percent = `${Math.round((count / max) * 100)}%`;
-		this.loadingText.setText(`Loading... ${percent}`);
+			this.explanationText.setText(title);
+			this.loadingText.setText(description);
+			this.loader.setVisible(!description);
 
-		clearTimeout(this.timer);
-		this.timer = setTimeout(() => {
+			clearTimeout(this.timer);
+			this.timer = setTimeout(() => {
+				this.setVisible(false);
+			}, 10000);
+		} else {
 			this.setVisible(false);
-		}, 10000);
-	}
-
-	onRecacheComplete() {
-		this.setVisible(false);
+		}
 	}
 }

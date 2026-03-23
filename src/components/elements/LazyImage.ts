@@ -1,5 +1,5 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { textureManager } from "@/utils/TextureManager";
+import { textureManager, TextureState } from "@/utils/TextureManager";
 
 const PLACEHOLDER = "blank";
 
@@ -40,16 +40,22 @@ export class LazyImage extends Phaser.GameObjects.Image {
 		return this;
 	}
 
-	protected refreshTexture(isLoaded: boolean): void {
+	protected refreshTexture(state: TextureState): void {
 		if (
-			isLoaded &&
+			state == "loaded" &&
 			this.currentTextureKey &&
 			this.scene.textures.exists(this.currentTextureKey)
 		) {
 			super.setTexture(this.currentTextureKey);
 			this.emit("loaded", true);
-		} else {
-			// Texture was removed, reset to placeholder
+		}
+		// Texture is missing, show cross
+		else if (state == "failed") {
+			super.setTexture(PLACEHOLDER);
+			this.emit("error");
+		}
+		// Texture was removed, show placeholder
+		else {
 			super.setTexture(PLACEHOLDER);
 			this.emit("loaded", false);
 		}

@@ -17,6 +17,7 @@ export class RasterButton extends Button {
 	private orderBg: Phaser.GameObjects.Image;
 	private orderText: Phaser.GameObjects.Text;
 	private isLoading: boolean;
+	private error: Phaser.GameObjects.Image;
 
 	public raster: Raster;
 	public selected: boolean;
@@ -63,6 +64,14 @@ export class RasterButton extends Button {
 		this.loader.setAlpha(0.5);
 		this.loader.setScale((0.4 * width) / this.loader.width);
 		this.add(this.loader);
+
+		/* Error icon */
+
+		this.error = scene.add.image(0, 0, "x");
+		this.error.setTint(0xff0000);
+		this.error.setScale((0.4 * width) / this.error.width);
+		this.error.setVisible(false);
+		this.add(this.error);
 
 		/* Title */
 
@@ -127,6 +136,11 @@ export class RasterButton extends Button {
 		this.isLoading = true;
 		this.image.on("loaded", (loaded: boolean) => {
 			this.isLoading = !loaded;
+			this.error.setVisible(false);
+		});
+		this.image.on("error", () => {
+			this.isLoading = false;
+			this.error.setVisible(true);
 		});
 		this.image.setTexture(raster.thumbnail);
 

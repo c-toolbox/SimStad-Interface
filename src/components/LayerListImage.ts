@@ -1,6 +1,6 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { Color, ColorStr } from "@/utils/colors";
-import { layoutManager } from "@/utils/LayoutManager";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Button } from "./elements/Button";
 import { LazyImage } from "./elements/LazyImage";
 import { Layer } from "@/utils/interfaces";
@@ -34,6 +34,7 @@ export class LayerListImage extends Button {
 
 		this.image = new LazyImage(scene, 0, 0);
 		this.image.setScale(size / this.image.width);
+		this.image.setAngle(layout.mapAngle);
 		this.add(this.image);
 
 		this.border = this.scene.add.image(0, 0, "border");
@@ -121,8 +122,8 @@ export class LayerListImage extends Button {
 	setType(type: string) {
 		this.pillBg.setVisible(type != "image");
 		this.pillText.setVisible(type != "image");
-		this.pillBg.setWidth(this.pillText.displayWidth + this.pillBg.height);
 		this.pillText.setText(type);
+		this.pillBg.setWidth(this.pillText.displayWidth + this.pillBg.height);
 	}
 
 	/* Input */
@@ -196,7 +197,7 @@ export class LayerListImage extends Button {
 	}
 
 	get isWithinBounds() {
-		const l = layoutManager.mapControlsLower;
+		const l = layout.mapControlsLower;
 		const lx = Phaser.Math.Clamp(this.x, l.left, l.right);
 		const ly = Phaser.Math.Clamp(this.y, l.top, l.bottom);
 		const maxDistance = l.height / 2;

@@ -30,10 +30,6 @@ export class LayerPage extends Page {
 		let background = layout.addRect(scene, layout.panel, Color.Slate800);
 		this.add(background);
 
-		/* Folders */
-
-		this.loadFolders();
-
 		/* Scroll area */
 
 		const gridLayout = layout.layerGrid;
@@ -59,9 +55,6 @@ export class LayerPage extends Page {
 		);
 		this.add(this.scrollBar);
 
-		const tags = contentManager.getTags();
-		this.loadTag(tags[0]);
-
 		/* Active layer list */
 
 		this.layerList = new LayerList(scene, 0, 0);
@@ -71,6 +64,17 @@ export class LayerPage extends Page {
 			this.activeLayers = layers;
 			this.sendActiveDataset();
 		});
+
+		/* Folders */
+
+		this.refresh();
+	}
+
+	refresh() {
+		this.loadFolders();
+
+		const tags = contentManager.getTags();
+		this.loadTag(tags[0]);
 	}
 
 	update(time: number, delta: number) {
@@ -116,8 +120,12 @@ export class LayerPage extends Page {
 		});
 
 		y -= h + s;
-		this.addButton(x, y, w, h, "Refresh", Color.Blue600, () => {
-			contentManager.refreshRasters(this.scene as BaseScene);
+		this.addButton(x, y, w, h, "Refresh", Color.Blue600, async () => {
+			this.scene.events.emit("lockdown", true, "Fetching data from Omni...");
+
+			await contentManager.refresh();
+
+			this.scene.events.emit("lockdown", false);
 		});
 
 		tags.forEach((tag, index) => {

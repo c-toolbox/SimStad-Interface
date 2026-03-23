@@ -337,6 +337,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	checkUnrealConnection() {
+		if (!this.scene) return;
+
 		if (this.pingAttempts < 10) {
 			this.setUnrealConnectionStatus(ConnectionStatus.Connecting);
 

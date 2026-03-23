@@ -2,7 +2,9 @@ import { config } from "./RuntimeConfig";
 import { BaseScene } from "@/scenes/BaseScene";
 import { filesystem } from "@neutralinojs/lib";
 
-type SubscriptionCallback = (isLoaded: boolean) => void;
+export type TextureState = "loaded" | "unloaded" | "failed";
+
+type SubscriptionCallback = (state: TextureState) => void;
 
 /**
  * Raster-related folders that are updated together.
@@ -124,6 +126,7 @@ class TextureManager {
 		}
 
 		this.isLoading = true;
+
 		// Dequeue from priority queue first, then preload queue
 		const queueItem = this.priorityQueue.shift() ?? this.preloadQueue.shift();
 		if (!queueItem) {
@@ -158,6 +161,7 @@ class TextureManager {
 				console.error(
 					`Failed to find media asset ${textureKey} with any supported extension (png, jpg, jpeg)`,
 				);
+				this.notifyTextureSubscribers(textureKey, "failed");
 				resolve(false);
 				this.isLoading = false;
 				this.processLoadQueue();
@@ -180,7 +184,7 @@ class TextureManager {
 				URL.revokeObjectURL(objectUrl);
 
 				// Notify all subscribers that this texture is loaded
-				this.notifyTextureSubscribers(textureKey, true);
+				this.notifyTextureSubscribers(textureKey, "loaded");
 
 				resolve(true);
 
@@ -192,6 +196,7 @@ class TextureManager {
 			scene.load.start();
 		} catch (error) {
 			console.error(`Failed to load media asset ${textureKey}:`, error);
+			this.notifyTextureSubscribers(textureKey, "failed");
 			resolve(false);
 
 			// Continue with next item in queue
@@ -235,11 +240,11 @@ class TextureManager {
 	 */
 	private notifyTextureSubscribers(
 		textureKey: string,
-		isLoaded: boolean,
+		state: TextureState,
 	): void {
 		const callbacks = this.textureSubscriptions.get(textureKey);
 		if (callbacks) {
-			callbacks.forEach((callback) => callback(isLoaded));
+			callbacks.forEach((callback) => callback(state));
 		}
 	}
 
@@ -253,30 +258,43 @@ class TextureManager {
 	}
 
 	/**
-	 * Refresh all raster-related textures.
-	 * Notifies all subscribers of raster-related textures to reset to placeholder,
-	 * removes them from the scene, and requeues them for loading.
+	 * Clear all raster-related textures from texture memory.
 	 */
-	async refreshRasterTextures(scene: BaseScene): Promise<void> {
+	private async clearRasterTextures(
+		scene: BaseScene,
+		textureKeys: string[],
+	): Promise<void> {
 		// Notify all subscribers of raster-related textures to reset to placeholder
-		const subscribedTextures = Array.from(this.textureSubscriptions.keys());
-		for (const textureKey of subscribedTextures) {
+		for (const textureKey of textureKeys) {
 			if (this.isRasterRelatedTexture(textureKey)) {
-				this.notifyTextureSubscribers(textureKey, false);
+				this.notifyTextureSubscribers(textureKey, "unloaded");
 			}
 		}
 
 		// Remove all raster-related textures from the scene
-		for (const textureKey of subscribedTextures) {
+		for (const textureKey of textureKeys) {
 			if (this.isRasterRelatedTexture(textureKey)) {
 				if (scene.textures.exists(textureKey)) {
 					scene.textures.remove(textureKey);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Refresh all raster-related textures.
+	 * Notifies all subscribers of raster-related textures to reset to placeholder,
+	 * removes them from the scene, and requeues them for loading.
+	 */
+	async refreshRasters(scene: BaseScene, rasterKeys?: string[]): Promise<void> {
+		const subscribedTextures = Array.from(this.textureSubscriptions.keys());
+		const textureKeys = !!rasterKeys ? rasterKeys : subscribedTextures;
+		console.log(subscribedTextures, textureKeys);
+
+		this.clearRasterTextures(scene, textureKeys);
 
 		// Load all raster-related textures that have subscribers
-		for (const textureKey of subscribedTextures) {
+		for (const textureKey of textureKeys) {
 			if (this.isRasterRelatedTexture(textureKey)) {
 				await this.requestTexture(scene, textureKey);
 			}

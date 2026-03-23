@@ -1,3 +1,4 @@
+import * as Neutralino from "@neutralinojs/lib";
 import { BaseScene } from "@/scenes/BaseScene";
 import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
@@ -7,7 +8,7 @@ import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
 import { contentManager } from "@/utils/ContentManager";
 import { config } from "@/utils/RuntimeConfig";
-import { GameScene } from "@/scenes/GameScene";
+import { LayerRequestData } from "@/utils/protocol";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
@@ -38,39 +39,28 @@ export class DebugPage extends Page {
 		this.add(this.title);
 
 		this.areas = this.getAreas();
-		// this.areas.forEach((area) => {
-		// 	this.add(
-		// 		scene.add.rectangle(
-		// 			area.centerX,
-		// 			area.centerY,
-		// 			area.width,
-		// 			area.height,
-		// 			0x000000,
-		// 			0.1
-		// 		)
-		// 	);
-		// });
 
-		this.setButtonArea(
-			0,
-			"Restart interface",
-			"Restart this application and refresh all content.\nThis action takes about 5 seconds.",
-			() => {
-				location.reload();
-			},
-		);
-
-		/* Recache database */
+		/* Recache Unreal */
 
 		this.recacheButton = this.setButtonArea(
-			1,
-			"Reload all rasters",
+			0,
+			"Refresh Unreal",
 			`Reload ${contentManager.getRasterCount()} raster images in Unreal.\nThis action takes about 60 seconds.`,
 			() => {
 				if (this.socket.isConnectedToUnreal) {
+					this.scene.events.emit(
+						"lockdown",
+						true,
+						"Restarting interface",
+						"Fetching json from Omni...",
+					);
+
+					this.socket.sendReset();
 					this.socket.sendRecacheRequest();
 					this.recacheLoader.setVisible(true);
-					contentManager.reloadLayers();
+					contentManager.refresh();
+
+					this.scene.events.emit("lockdown", false);
 				}
 			},
 		);
@@ -91,6 +81,17 @@ export class DebugPage extends Page {
 		this.recacheLoader.setScale(60 / this.recacheLoader.height);
 		this.recacheLoader.setTint(Color.Slate200);
 		this.add(this.recacheLoader);
+
+		/* Restart application */
+
+		this.setButtonArea(
+			1,
+			"Restart interface",
+			"Refresh all content.",
+			async () => {
+				Neutralino.app.restartProcess();
+			},
+		);
 
 		/* Logging */
 
@@ -125,106 +126,76 @@ export class DebugPage extends Page {
 
 		/* Miscellaneous buttons */
 
-		this.setButtonArea(4, "Reset", "", () => {
+		this.setButtonArea(4, "ResetRequest", "", () => {
 			this.socket.sendReset();
 		});
 
-		this.setButtonArea(5, "Ping", "", () => {
+		this.setButtonArea(5, "PingRequest", "", () => {
 			this.socket.sendPing();
 		});
 
-		this.setButtonArea(6, "Idle movie", "", () => {
+		this.setButtonArea(6, "StatusRequest", "", () => {
+			this.socket.sendStatusRequest();
+		});
+
+		this.setButtonArea(7, "Idle Movie", "", () => {
 			const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
 			if (!idleRaster)
 				return console.error(
 					"IDLE_RASTER in config.json not found in available rasters",
 				);
 			const layer = contentManager.rasterToLayer(idleRaster);
-			(this.scene as GameScene).setLayers([layer]);
+			this.emit("setLayers", [layer]);
 		});
 
-		this.setButtonArea(7, "Motala Ström", "", () => {
-			this.socket.send({
-				type: "LayerRequest",
-				layers: [
-					{
-						type: "image",
-						name: "Nkpg/Orto20230921",
-					},
-					{
-						type: "flow",
-						name: "Flow/strommen_flow_new",
-						flow: {
-							texture: "Flow/Water",
-							scale: 200,
-							speed: 0.05,
+		this.setButtonArea(8, "Crop slice", "", () => {
+			const layers: LayerRequestData[] = [];
+			for (let color of ["#ff0000", "#00ff00", "#0000ff", "#ffff00"]) {
+				const width = 0.1 * 0.3 + Math.random();
+				const height = 0.1 * 0.3 + Math.random();
+				const left = (1 - width) * Math.random();
+				const top = (1 - height) * Math.random();
+				layers.push({
+					type: "color",
+					id: color,
+					color,
+					crop: {
+						type: "slice",
+						slice: {
+							min_u: left,
+							max_u: left + width,
+							min_v: top,
+							max_v: top + height,
 						},
 					},
-				],
-			});
+					opacity: 0.5,
+				});
+			}
+			this.emit("setLayers", layers);
 		});
 
-		this.setButtonArea(8, "", "", () => {});
-
-		this.setButtonArea(9, "Status", "", () => {
-			this.socket.sendStatusRequest();
+		this.setButtonArea(9, "Crop circle", "", () => {
+			const layers: LayerRequestData[] = [];
+			for (let color of ["#ff0000", "#00ff00", "#0000ff", "#ffff00"]) {
+				layers.push({
+					type: "color",
+					id: color,
+					color,
+					crop: {
+						type: "circle",
+						circle: {
+							u: Math.random(),
+							v: Math.random(),
+							radius: 0.1 + 0.3 * Math.random(),
+						},
+					},
+					opacity: 0.5,
+				});
+			}
+			this.emit("setLayers", layers);
 		});
 
-		this.setButtonArea(10, "", "", () => {});
-
-		// this.setButtonArea(11, "Layer Color", "", () => {
-		// 	this.socket.sendLayers(
-		// 		[
-		// 			{
-		// 				type: "image",
-		// 				emission: 0,
-		// 				id: "Orto",
-		// 				raster: "Orto20230921",
-		// 			},
-		// 			{
-		// 				type: "color",
-		// 				id: "MyColor",
-		// 				color: "ff0000",
-		// 				emission: 0,
-		// 				crop: {
-		// 					type: "circle",
-		// 					circle: {
-		// 						u: 0.25,
-		// 						v: 0.5,
-		// 					},
-		// 				},
-		// 			},
-		// 			{
-		// 				type: "color",
-		// 				id: "MyColor2",
-		// 				color: "ff0000",
-		// 				emission: 1,
-		// 				crop: {
-		// 					type: "circle",
-		// 					circle: {
-		// 						u: 0.75,
-		// 						v: 0.5,
-		// 					},
-		// 				},
-		// 			},
-		// 		],
-		// 		true,
-		// 	);
-		// });
-
-		// this.setButtonArea(12, "Layer Movie", "", () => {
-		// 	this.socket.sendLayers(
-		// 		[
-		// 			{
-		// 				type: "image",
-		// 				name: "Finals/Kollektivtrafik",
-		// 			},
-		// 		],
-		// 		true
-		// 	);
-		// });
-
-		this.setButtonArea(13, "Recache 3 rasters", "", () => {
+		this.setButtonArea(10, "Recache 3 rasters", "", () => {
 			this.socket.sendRecacheRequest([
 				"100ars_regn",
 				"200ars_regn",
@@ -232,24 +203,7 @@ export class DebugPage extends Page {
 			]);
 		});
 
-		// this.setButtonArea(14, "Circle crop", "", () => {
-		// 	this.socket.sendLayers([
-		// 		{
-		// 			type: "image",
-		// 			name: "Nkpg/Buller_V2",
-		// 			crop: {
-		// 				type: "circle",
-		// 				circle: {
-		// 					u: Math.random(),
-		// 					v: Math.random(),
-		// 					radius: 0.5,
-		// 				},
-		// 			},
-		// 		},
-		// 	]);
-		// });
-
-		this.setButtonArea(15, "NDI", "", () => {
+		this.setButtonArea(11, "NDI", "", () => {
 			this.socket.sendLayers([
 				{
 					type: "ndi",
@@ -270,6 +224,11 @@ export class DebugPage extends Page {
 				},
 			]);
 		});
+
+		this.setButtonArea(12, "", "", () => {});
+		this.setButtonArea(13, "", "", () => {});
+		this.setButtonArea(14, "", "", () => {});
+		this.setButtonArea(15, "", "", () => {});
 	}
 
 	update(time: number, delta: number) {

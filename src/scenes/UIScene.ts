@@ -151,24 +151,13 @@ export class UIScene extends BaseScene {
 		this.lockdown = new Lockdown(this);
 		this.scene
 			.get("GameScene")
-			.events.on(
-				"onRecacheProgress",
-				this.lockdown.onRecacheProgress,
-				this.lockdown
-			);
-		this.scene
-			.get("GameScene")
-			.events.on(
-				"onRecacheComplete",
-				this.lockdown.onRecacheComplete,
-				this.lockdown
-			);
+			.events.on("lockdown", this.lockdown.trigger, this.lockdown);
 	}
 
 	update(time: number, delta: number): void {
 		this.attractionView.update(time, delta);
 		this.infoWindow.update(time, delta);
-		// this.storyWindow.update(time, delta);
+		this.lockdown.update(time, delta);
 
 		this.attractionView.alpha *= 1 - 0.99 * this.infoWindow.alpha;
 
@@ -214,7 +203,7 @@ export class UIScene extends BaseScene {
 	onInfoButton() {
 		if (!this.allowInput) return;
 
-		if (this.infoWindow.isClosed /*&& this.storyWindow.isClosed*/) {
+		if (this.infoWindow.isClosed) {
 			this.events.emit("info", true);
 			this.infoWindow.show();
 		} else if (this.infoWindow.isOpen) {
@@ -228,7 +217,6 @@ export class UIScene extends BaseScene {
 
 		if (!this.attractionView.visible || this.infoWindow.isOpen) {
 			this.infoWindow.hide();
-			// this.storyWindow.hide();
 			this.attractionView.show();
 			this.infoWindow.setGuideMode(false);
 

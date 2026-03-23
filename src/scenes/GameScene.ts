@@ -17,6 +17,7 @@ import {
 	Collection,
 	CollectionKey,
 	Layer,
+	Raster,
 	RasterKey,
 	Scenario,
 } from "@/utils/interfaces";
@@ -24,6 +25,7 @@ import { LayerRequestData } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
 import { contentManager } from "@/utils/ContentManager";
 import { config } from "@/utils/RuntimeConfig";
+import { textureManager } from "@/utils/TextureManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -73,10 +75,13 @@ export class GameScene extends BaseScene {
 			this.restart();
 		});
 		this.socket.on("onRecacheProgress", (count: number, max: number) => {
-			this.events.emit("onRecacheProgress", count, max);
+			const percent = `${Math.round((count / max) * 100)}%`;
+			const title = `Updating ${max} images`;
+			const description = `Loading... ${percent}`;
+			this.events.emit("lockdown", true, title, description);
 		});
 		this.socket.on("onRecacheComplete", () => {
-			this.events.emit("onRecacheComplete");
+			this.events.emit("lockdown", false);
 			this.layerPage.loadFolders();
 		});
 
@@ -151,6 +156,20 @@ export class GameScene extends BaseScene {
 
 		// Preload essential textures
 		contentManager.preloadEssentialTextures(this);
+		contentManager.setRasterRefreshListener(
+			async (updatedRasters: Raster[]) => {
+				const textures: string[] = [];
+				updatedRasters.forEach((raster) => {
+					textures.push(raster.thumbnail);
+					textures.push(raster.minimap);
+				});
+				await textureManager.refreshRasters(this, textures);
+				this.socket.sendRecacheRequest(
+					updatedRasters.map((raster) => raster.key),
+				);
+				this.layerPage.refresh();
+			},
+		);
 	}
 
 	update(time: number, delta: number) {

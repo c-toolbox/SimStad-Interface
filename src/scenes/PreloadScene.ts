@@ -52,7 +52,6 @@ export class PreloadScene extends BaseScene {
 	}
 
 	create() {
-		languageManager.loadLocalizations();
 		languageManager.setLanguage(LanguageKey.Swedish);
 
 		this.fade(true, 200, 0x000000);
