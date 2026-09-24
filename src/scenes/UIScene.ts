@@ -55,7 +55,7 @@ export class UIScene extends BaseScene {
 
 		/* Info window (clicking info-button) */
 
-		this.infoWindow = new InfoWindow(this, 0x261e07, 0x755917);
+		this.infoWindow = new InfoWindow(this, 0x261e07, 0x8f6b18);
 		this.infoWindow.on(
 			"close",
 			() => {
