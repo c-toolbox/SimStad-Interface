@@ -1,18 +1,24 @@
-image: node:24
+image: node:24-alpine
 
 stages:
   - build
   - release
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key:
+    files:
+      - package-lock.json
   paths:
-    - node_modules/
+    - .npm/
 
 build-job:
   stage: build
+
+  before_script:
+    - apk add --no-cache git
+
   script:
-    - npm install
+    - npm ci --cache .npm --prefer-offline
     - npm run build
     - npx bestzip DigitalTwinCityInterface.zip dist/win/digitaltwincity-interface/*
   artifacts:
