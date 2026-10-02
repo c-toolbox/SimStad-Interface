@@ -11,8 +11,6 @@ cache:
 
 build-job:
   stage: build
-  tags:
-    - windows
   script:
     - npm ci
     - npm run build
