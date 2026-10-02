@@ -4,13 +4,6 @@ stages:
   - build
   - release
 
-cache:
-  key:
-    files:
-      - package-lock.json
-  paths:
-    - .npm/
-
 build-job:
   stage: build
 
@@ -18,7 +11,8 @@ build-job:
     - apk add --no-cache git
 
   script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci
+    - npm run postinstall
     - npm run build
     - npx bestzip DigitalTwinCityInterface.zip dist/win/digitaltwincity-interface/*
   artifacts:
