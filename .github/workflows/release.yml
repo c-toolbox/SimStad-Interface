@@ -1,0 +1,66 @@
+name: Build and release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Create Windows archive
+        working-directory: dist/win/digitaltwincity-interface
+        run: zip -r ../../../DigitalTwinCityInterface.zip .
+
+      - name: Set release metadata
+        shell: bash
+        run: |
+          short_sha="$(git rev-parse --short HEAD)"
+          echo "tag=v-${short_sha}" >> "$GITHUB_ENV"
+          echo "short_sha=${short_sha}" >> "$GITHUB_ENV"
+
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" DigitalTwinCityInterface.zip --clobber
+            gh release edit "$tag" \
+              --title "Latest Build ($short_sha)" \
+              --notes "Automated build generated from commit $short_sha on branch $GITHUB_REF_NAME." \
+              --latest
+          else
+            gh release create "$tag" DigitalTwinCityInterface.zip \
+              --target "$GITHUB_SHA" \
+              --title "Latest Build ($short_sha)" \
+              --notes "Automated build generated from commit $short_sha on branch $GITHUB_REF_NAME." \
+              --latest
+          fi
