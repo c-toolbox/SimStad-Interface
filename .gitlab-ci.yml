@@ -2,7 +2,7 @@ image: node:24
 
 stages:
   - build
-  - deploy
+  - release
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -14,19 +14,26 @@ build-job:
   script:
     - npm install
     - npm run build
+    - npx bestzip DigitalTwinCityInterface.zip dist/win/digitaltwincity-interface/*
   artifacts:
-    expire_in: 14 days
-    paths:
-      - dist/win/digitaltwincity-interface/
-
-deploy-manually:
-  stage: deploy
-  when: manual
-  tags:
-    - windows
-  script:
-    - powershell Compress-Archive -Path dist/win/digitaltwincity-interface -DestinationPath DigitalTwinCityInterface.zip -Force
-  artifacts:
-    expire_in: 14 days
+    name: "DigitalTwinCityInterface-$CI_COMMIT_SHORT_SHA"
+    expire_in: 30 days
     paths:
       - DigitalTwinCityInterface.zip
+
+release-job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: build-job
+      artifacts: true
+  script:
+    - echo "Creating automated release for commit $CI_COMMIT_SHORT_SHA..."
+  release:
+    name: "Latest Build ($CI_COMMIT_SHORT_SHA)"
+    tag_name: "v-$CI_COMMIT_SHORT_SHA"
+    description: "Automated build generated from commit $CI_COMMIT_SHORT_SHA on branch $CI_COMMIT_REF_NAME."
+    assets:
+      links:
+        - name: "DigitalTwinCityInterface.zip"
+          url: "${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/raw/DigitalTwinCityInterface.zip"
