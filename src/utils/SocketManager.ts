@@ -1,13 +1,9 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { Color, ColorStr } from "./colors";
+import { Color } from "./colors";
 import * as P from "./protocol";
-import { languageManager } from "./LanguageManager";
 import { layoutManager as layout } from "./LayoutManager";
-import { ONLINE } from "./constants";
-
-//const CLIENT_TOKEN = "29cde70e-155a-4f82-ba0d-d43d69365ee5"; // Production
-const CLIENT_TOKEN = "4c5f9b5c-8991-4053-8662-4d378b124152"; // Testing
-const URL = "wss://omni.itn.liu.se/ws/"; // ws://localhost:8000/ws/
+import { config } from "@/utils/RuntimeConfig";
+import { concatUrl } from "./functions";
 
 const PING_TIMEOUT = 3000;
 
@@ -37,11 +33,6 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	private pingTimeout: NodeJS.Timeout;
 	private pingAttempts: number;
 
-	private scenariosLoaded: boolean;
-	private localTrafficEnabled: boolean;
-	private serverTrafficEnabled: boolean;
-
-	// private queuedRecacheRequest: boolean;
 	private isRecaching: boolean;
 
 	private fadeTween: Phaser.Tweens.Tween;
@@ -67,23 +58,17 @@ export class SocketManager extends Phaser.GameObjects.Container {
 			[P.Response.OmniError]: this.onOmniError,
 
 			[P.Response.Ping]: this.onPing,
-			[P.Response.Scenarios]: this.onScenarios,
-			[P.Response.ErrorResponse]: this.onErrorRepsonse,
-			[P.Response.ResetResponse]: this.onResetRepsonse,
-			[P.Response.ActivateTraffic]: this.onActivateTraffic,
-			[P.Response.DeactivateTraffic]: this.onDeactivateTraffic,
-			[P.Response.CacheProgress]: this.onCacheProgress,
-			[P.Response.CacheComplete]: this.onCacheComplete,
+			[P.Response.Layer]: this.onLayerRepsonse,
+			[P.Response.Marker]: this.onMarker,
+			[P.Response.Reset]: this.onResetRepsonse,
+			[P.Response.Recache]: this.onRecache,
+			[P.Response.Status]: this.onStatus,
 		};
 
 		this.omniConnectionStatus = ConnectionStatus.Disconnected;
 		this.unrealConnectionStatus = ConnectionStatus.Disconnected;
 		this.pingAttempts = 0;
 
-		this.scenariosLoaded = false;
-		this.localTrafficEnabled = false;
-		this.serverTrafficEnabled = false;
-		// this.queuedRecacheRequest = false;
 		this.isRecaching = false;
 
 		this.debugTexts = [];
@@ -93,9 +78,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	connect(): void {
-		if (!ONLINE) return;
+		if (!config.ONLINE) return;
+		if (!config.OMNI_URL)
+			return console.error("Missing `SOCKET_URL` in config.json");
 
-		this.socket = new WebSocket(URL);
+		const SOCKET_URL = concatUrl(config.OMNI_URL.replace("http", "ws"), "ws");
+		this.socket = new WebSocket(SOCKET_URL);
 
 		this.socket.onopen = () => {
 			this.addLog("WebSocket: Open", LogType.Status);
@@ -117,7 +105,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	send(data: object, isOmni = false) {
-		if (!ONLINE) return;
+		if (!config.ONLINE) return;
 
 		if (this.isConnectedToSocket) {
 			this.socket.send(JSON.stringify(data));
@@ -151,7 +139,10 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	/* Response handlers */
 
 	onOmniConnect(data: P.OmniConnect) {
-		this.send({ token: CLIENT_TOKEN }, true);
+		if (!config.OMNI_TOKEN) {
+			return console.error("Missing `TOKEN` in config.json");
+		}
+		this.send({ token: config.OMNI_TOKEN }, true);
 	}
 
 	onOmniDisconnect(data: P.OmniDisconnect) {
@@ -183,65 +174,38 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		clearTimeout(this.pingTimeout);
 		this.pingAttempts = 0;
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
-
-		if (!this.scenariosLoaded) {
-			this.sendScenariosRequest();
-		}
 	}
 
-	onResetRepsonse(data: P.ResetResponse) {
-		// this.addLog(
-		// 	`Received reset! queuedRecacheRequest: ${this.queuedRecacheRequest} && isRecaching: ${this.isRecaching}`,
-		// 	LogType.Status
-		// );
-		// Unreal has finished resetting
-		// if (this.queuedRecacheRequest && !this.isRecaching) {
-		// 	this.sendReCacheDatabase();
-		// }
-	}
+	onResetRepsonse(data: P.ResetResponse) {}
 
-	onErrorRepsonse(data: P.ErrorResponse) {
-		console.error(data);
-		// if (data.error_type == "ScenarioRequestError") {}
-	}
-
-	onScenarios(data: P.ScenariosResponse) {
-		this.scenariosLoaded = true;
+	onLayerRepsonse(data: P.LayerResponse) {
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onActivateTraffic(data: P.ActivateTrafficResponse) {
-		this.serverTrafficEnabled = true;
-		this.emit("serverTrafficEnabled", true);
-		if (!this.localTrafficEnabled) {
-			this.sendDeactivateTraffic();
-		}
-		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+	onMarker(data: P.LayerResponse) {
+		// this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 	}
 
-	onDeactivateTraffic(data: P.DeactivateTrafficResponse) {
-		this.serverTrafficEnabled = false;
-		this.emit("serverTrafficEnabled", false);
-		if (this.localTrafficEnabled) {
-			this.sendActivateTraffic();
-		}
-		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
-	}
-
-	onCacheProgress(data: P.CacheProgressResponse) {
+	onRecache(data: P.RecacheResponse) {
 		clearTimeout(this.pingTimeout);
 		this.pingAttempts = 0;
 		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
 
-		this.isRecaching = true;
-		// this.queuedRecacheRequest = false;
-		this.emit("onCacheProgress");
+		if (data.index + 1 < data.max) {
+			this.isRecaching = true;
+			this.emit("onRecacheProgress", data.index + 1, data.max);
+		} else {
+			this.isRecaching = false;
+			this.emit("onRecacheComplete");
+		}
 	}
 
-	onCacheComplete(data: P.CacheCompleteResponse) {
-		this.isRecaching = false;
-		// this.queuedRecacheRequest = false;
-		this.emit("onCacheComplete");
+	onStatus(data: P.StatusResponse) {
+		clearTimeout(this.pingTimeout);
+		this.pingAttempts = 0;
+		this.setUnrealConnectionStatus(ConnectionStatus.Connected);
+
+		console.log("CHECK STATUS", data);
 	}
 
 	/* Requests */
@@ -267,50 +231,13 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendScenariosRequest() {
-		this.scenariosLoaded = false;
-
-		let data: P.ScenariosRequest = {
-			type: P.Request.Scenarios,
-			language: languageManager.getCurrentLanguage(),
+	sendLayers(layers: P.LayerRequestData[], flush = true) {
+		let data: P.LayerRequest = {
+			type: P.Request.Layer,
+			flush,
+			layers: layers,
 		};
 		this.sendRequest(data);
-	}
-
-	sendActivateDataset(datasets: string) {
-		let data: P.ActivateDatasetRequest = {
-			type: P.Request.ActivateDataset,
-			datasets,
-		};
-		this.sendRequest(data);
-	}
-
-	sendDeactivateDataset(datasets: string) {
-		let data: P.DeactivateDatasetRequest = {
-			type: P.Request.DeactivateDataset,
-			datasets,
-		};
-		this.sendRequest(data);
-	}
-
-	sendActivateTraffic() {
-		if (!this.localTrafficEnabled) {
-			let data: P.ActivateTrafficRequest = {
-				type: P.Request.ActivateTraffic,
-			};
-			this.sendRequest(data);
-		}
-		this.localTrafficEnabled = true;
-	}
-
-	sendDeactivateTraffic() {
-		if (this.localTrafficEnabled) {
-			let data: P.DeactivateTrafficRequest = {
-				type: P.Request.DeactivateTraffic,
-			};
-			this.sendRequest(data);
-		}
-		this.localTrafficEnabled = false;
 	}
 
 	sendLight(year: number, month: number, day: number, hour: number) {
@@ -324,50 +251,51 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.sendRequest(data);
 	}
 
-	sendMapLight(
-		name: string,
-		northing: number,
-		easting: number,
-		height: number,
-		color: string,
-		typeofmessage: "add" | "update" | "delete",
-		enable: boolean
+	sendSetMarker(
+		id: string,
+		u: number,
+		v: number,
+		radius: number,
+		color: string = "#ffffff",
+		emission: number = 0,
+		opacity: number = 1,
+		density: number = 100,
 	) {
-		let data: P.MapLightRequest = {
-			type: P.Request.MapLight,
-			name,
-			northing,
-			easting,
-			height,
+		let data: P.SetMarkerRequest = {
+			type: P.Request.SetMarker,
+			id,
+			u,
+			v,
+			radius,
 			color,
-			typeofmessage,
-			enable,
+			emission,
+			opacity,
+			density,
 		};
 		this.sendRequest(data);
 	}
 
-	sendMovie() {
-		this.send({
-			type: "ActivateDatasetRequest",
-			datasets: "Idle/Idle_Movie",
-		});
-
-		this.emit("movieEnabled", true);
+	sendRemoveMarker(id: string) {
+		let data: P.RemoveMarkerRequest = {
+			type: P.Request.RemoveMarker,
+			id,
+		};
+		this.sendRequest(data);
 	}
 
-	// queueReCacheDatabase() {
-	// 	this.sendReset();
-	// 	this.queuedRecacheRequest = true;
-	// 	this.emit("onCacheProgress");
-	// }
-
-	sendReCacheDatabase() {
-		this.scenariosLoaded = false;
+	sendRecacheRequest(rasters?: string[]) {
 		this.isRecaching = true;
 
-		let data: P.CacheRequest = {
-			type: P.Request.Cache,
-			request: "ReCacheDatabase",
+		let data: P.RecacheRequest = {
+			type: P.Request.Recache,
+			rasters,
+		};
+		this.sendRequest(data);
+	}
+
+	sendStatusRequest() {
+		let data: P.StatusRequest = {
+			type: P.Request.Status,
 		};
 		this.sendRequest(data);
 	}
@@ -409,6 +337,8 @@ export class SocketManager extends Phaser.GameObjects.Container {
 	}
 
 	checkUnrealConnection() {
+		if (!this.scene) return;
+
 		if (this.pingAttempts < 10) {
 			this.setUnrealConnectionStatus(ConnectionStatus.Connecting);
 
@@ -509,12 +439,12 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		this.emit(
 			"connectionStatus",
 			this.omniConnectionStatus,
-			this.unrealConnectionStatus
+			this.unrealConnectionStatus,
 		);
 	}
 
 	announceOffline() {
-		this.emit("serverTrafficEnabled", false);
+		// this.emit("serverTrafficEnabled", false);
 	}
 
 	get isConnectedToSocket() {
@@ -523,7 +453,7 @@ export class SocketManager extends Phaser.GameObjects.Container {
 
 	get isConnectedToUnreal() {
 		return (
-			ONLINE &&
+			config.ONLINE &&
 			this.isConnectedToSocket &&
 			this.omniConnectionStatus == ConnectionStatus.Connected &&
 			this.unrealConnectionStatus == ConnectionStatus.Connected
@@ -536,6 +466,18 @@ export class SocketManager extends Phaser.GameObjects.Container {
 		if (typeof text === "object" && text.token) text.token = "TOKEN";
 		if (typeof text !== "string") text = JSON.stringify(text);
 		this.emit("log", text, type);
-		console.log(text);
+
+		const logFunc = {
+			Status: console.log,
+			OmniSend: console.log,
+			OmniReceive: console.log,
+			UnrealSend: console.log,
+			UnrealReceive: console.log,
+			SocketUnhandled: console.error,
+			BlocksSend: console.log,
+			BlocksReceive: console.log,
+			Error: console.error,
+		}[type];
+		// logFunc(`Socket ${type}: ${text}`);
 	}
 }

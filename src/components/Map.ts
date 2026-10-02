@@ -1,47 +1,43 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { layoutManager as layout, layoutManager } from "@/utils/LayoutManager";
-import { Color, ColorStr } from "@/utils/colors";
+import { layoutManager as layout } from "@/utils/LayoutManager";
+import { Color } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
 import { MapLight } from "./MapLight";
 import { SocketManager } from "@/utils/SocketManager";
 import { Response } from "@/utils/protocol";
-import { CircleButton } from "./CircleButton";
 import { MapHint } from "./MapHint";
 import { MapControls } from "./MapControls";
-
-// Bottom right
-const MIN_X = 129411.4;
-const MIN_Y = 6495015.262;
-
-// Top left
-const MAX_X = 134211.4;
-const MAX_Y = 6498915.262;
-
-interface MapLayer {
-	active: boolean;
-	fade: number;
-	texture: string;
-	image: Phaser.GameObjects.Image;
-}
+import { Layer } from "@/utils/interfaces";
+import { MapLayer } from "./MapLayer";
+import { MapSliceButton } from "./MapSliceButton";
+import { MapPinButton } from "./MapPinButton";
+import { MapSliceKnob } from "./MapSliceKnob";
 
 export class Map extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 	public socket: SocketManager;
 
 	private map: Phaser.GameObjects.Image;
-	private layerContainer: Phaser.GameObjects.Container;
-	private layers: MapLayer[];
+	private mapLayerContainer: Phaser.GameObjects.Container;
+	private mapLayers: MapLayer[];
 	private mapHint: MapHint;
 	private lamps: MapLight[];
 	private lampIds: string[];
 	private fingerLamp: MapLight;
-
 	private mapControls: MapControls;
+	private loader: Phaser.GameObjects.Image;
+	private loadingLayers: Set<MapLayer>;
+
+	private mapSliceButton: MapSliceButton;
+	private mapPinButton: MapPinButton;
+	private mapSliceKnob: MapSliceKnob;
+	private mapPin: Phaser.GameObjects.Image;
 
 	constructor(scene: BaseScene, socket: SocketManager) {
 		super(scene);
 		this.scene = scene;
 		this.socket = socket;
+		this.loadingLayers = new Set();
 
 		let background = new RoundRectangle(scene, {
 			x: layout.map.centerX,
@@ -56,39 +52,24 @@ export class Map extends Phaser.GameObjects.Container {
 		this.map = scene.add.image(
 			layout.map.centerX,
 			layout.map.centerY,
-			"minimaps/Nkpg/Hillshade"
+			"square",
 		);
 		// this.map.angle = -90;
-		this.map.setScale(layout.map.width / this.map.width);
+		const mapScaleX = layout.map.width / this.map.width;
+		const mapScaleY = layout.map.height / this.map.height;
+		this.map.setScale(mapScaleX, mapScaleY);
 		this.add(this.map);
 
-		this.layerContainer = scene.add.container();
-		this.add(this.layerContainer);
+		this.mapLayerContainer = scene.add.container();
+		this.add(this.mapLayerContainer);
 
-		this.layers = [];
-		for (let i = 0; i < 10; i++) {
-			let layer = scene.add.image(
-				layout.map.centerX,
-				layout.map.centerY,
-				"minimaps/Color/white"
-			);
-			this.layerContainer.add(layer);
-			layer.setVisible(false);
-			layer.setScale(layout.map.width / layer.width);
-			this.layers.push({
-				active: false,
-				fade: 0.0,
-				texture: "",
-				image: layer,
-			});
-		}
+		this.mapLayers = [];
 
 		this.mapHint = new MapHint(
 			scene,
 			layout.map.centerX,
-			layout.map.bottom - 60
+			layout.map.bottom - 60,
 		);
-		this.mapHint.setVisible(false);
 		this.add(this.mapHint);
 
 		this.width = this.map.displayHeight;
@@ -104,11 +85,34 @@ export class Map extends Phaser.GameObjects.Container {
 		this.scene.input.on("pointermove", this.onPointerMove, this);
 		this.scene.input.on("pointerup", this.onPointerUp, this);
 
+		/* Loader spinner */
+		this.loader = scene.add.image(
+			layout.map.centerX,
+			layout.map.centerY,
+			"vis_c_logo_white",
+		);
+		this.loader.setTint(0xffffff);
+		this.loader.setAlpha(0.5);
+		this.loader.setScale(0.15);
+		this.loader.setVisible(false);
+		this.add(this.loader);
+
+		// const fullscreen = new CircleButton(
+		// 	scene,
+		// 	layout.map.right,
+		// 	layout.map.top,
+		// 	64,
+		// 	"maximize",
+		// 	0x000000
+		// );
+		// fullscreen.setHighlight(false);
+		// this.add(fullscreen);
+
 		/* Lamps */
 
 		this.lampIds = ["lamp_1", "lamp_2", "lamp_3"];
 		this.lamps = [];
-		this.socket.on(Response.ResetResponse, () => {
+		this.socket.on(Response.Reset, () => {
 			this.lamps.forEach((lamp) => lamp.destroy());
 			this.lamps = [];
 		});
@@ -119,104 +123,156 @@ export class Map extends Phaser.GameObjects.Container {
 
 		this.mapControls = new MapControls(scene, socket);
 		this.add(this.mapControls);
+
+		this.mapSliceButton = new MapSliceButton(
+			scene,
+			layout.map.right - 40,
+			layout.map.top + 40,
+			60,
+		);
+		this.add(this.mapSliceButton);
+		this.mapSliceButton.on("click", () => {
+			this.mapHint.setVisible(false);
+			this.emit("toggleMapSlice");
+		});
+
+		this.mapPinButton = new MapPinButton(
+			scene,
+			layout.map.left + 40,
+			layout.map.bottom - 40,
+			60,
+		);
+		this.add(this.mapPinButton);
+		this.mapPinButton.on("click", () => {
+			this.mapHint.setVisible(false);
+			this.scene.tweens.add({
+				targets: this.mapPin,
+				alpha: { from: 1.0, to: 0.4 },
+				ease: Phaser.Math.Easing.Cubic.In,
+			});
+			this.emit("pin");
+		});
+
+		this.mapPin = scene.add.image(0, 0, "tack");
+
+		this.mapPin.setScale((0.25 * layout.map.height) / this.mapPin.height);
+		this.add(this.mapPin);
+
+		this.mapSliceKnob = new MapSliceKnob(
+			scene,
+			layout.map.centerX,
+			layout.map.centerY,
+			60,
+		);
+		this.add(this.mapSliceKnob);
+		this.mapSliceKnob.on("sliceValue", (value: number) => {
+			this.emit("sliceValue", value);
+		});
 	}
 
 	update(time: number, delta: number) {
 		this.fingerLamp.update(time, delta);
 		this.lamps.forEach((lamp) => lamp.update(time, delta));
 		this.mapControls.update(time, delta);
+		this.mapSliceButton.update(time, delta);
+		this.mapPinButton.update(time, delta);
+		this.mapSliceKnob.update(time, delta);
 
-		this.layers.forEach((layer) => {
-			let dx = ((layer.active ? delta : -delta) / 1000) * 2;
+		/* Update loader spinner */
+		if (this.loadingLayers.size > 0) {
+			this.loader.angle = time / 2;
+			this.loader.setVisible(true);
+		} else {
+			this.loader.setVisible(false);
+		}
 
-			if (
-				["Flood", "Asfalt", "Byggnad", "Vegitation"].some((name) =>
-					layer.texture.includes(name)
-				)
-			) {
-				dx = 1;
-			}
+		// this.mapLayers.forEach((layer) => {
+		// 	let dx = ((layer.active ? delta : -delta) / 1000) * 2;
 
-			layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
-			layer.image.setVisible(layer.fade > 0);
-			let ease = Phaser.Math.Easing.Sine.Out;
-			layer.image.setAlpha(ease(layer.fade));
-		});
+		// 	if (
+		// 		["Flood", "Asfalt", "Byggnad", "Vegitation"].some((name) =>
+		// 			layer.texture.includes(name),
+		// 		)
+		// 	) {
+		// 		dx = 1;
+		// 	}
+
+		// 	layer.fade = Phaser.Math.Clamp(layer.fade + dx, 0, 1);
+		// 	layer.image.setVisible(layer.fade > 0);
+		// 	let ease = Phaser.Math.Easing.Sine.Out;
+		// 	layer.image.setAlpha(ease(layer.fade));
+		// });
 	}
 
-	setLayers(layerString: string) {
-		let textures = layerString.split(",");
-		textures = textures.filter((layer) => !!layer);
-		textures = textures.map((layer) => "minimaps/" + layer);
+	setLayers(layers: Layer[], flush: boolean = true) {
+		if (flush) {
+			// Destroy all existing layers and create new ones
+			this.mapLayers.forEach((mapLayer) => mapLayer.destroy());
+			this.mapLayers = [];
+			this.loadingLayers.clear();
 
-		let removedTextures = this.layers
-			.filter((layer) => layer.active && !textures.includes(layer.texture))
-			.map((layer) => layer.texture);
-		let addedTextures = textures.filter(
-			(texture) => !this.layers.find((layer) => layer.texture == texture)
+			layers.forEach((layer) => {
+				const mapLayer = new MapLayer(this.scene);
+				this.mapLayerContainer.add(mapLayer);
+				this.mapLayers.push(mapLayer);
+				this.bringToTop(mapLayer);
+
+				this.loadingLayers.add(mapLayer);
+
+				mapLayer.on("loaded", (loaded: boolean) => {
+					if (loaded) {
+						this.loadingLayers.delete(mapLayer);
+					} else {
+						this.loadingLayers.add(mapLayer);
+					}
+				});
+				mapLayer.on("error", () => {
+					console.warn("Unhandled");
+					this.loadingLayers.delete(mapLayer);
+				});
+
+				mapLayer.setLayer(layer);
+			});
+		} else {
+			// Update existing layers without recreating
+			layers.forEach((layer, index) => {
+				if (index < this.mapLayers.length) {
+					this.mapLayers[index].setLayer(layer);
+				}
+			});
+		}
+
+		this.mapPin.setPosition(
+			layout.map.left + layout.map.width * (1 - this.sliceValue / 2),
+			layout.map.centerY,
+		);
+		const remainingWidth =
+			(layout.map.width * this.sliceValue) / this.mapPin.displayWidth;
+		this.mapPin.setCrop(
+			this.mapPin.width * ((1 - remainingWidth) / 2),
+			this.mapPin.height * 0,
+			this.mapPin.width * remainingWidth,
+			this.mapPin.height * 1,
 		);
 
-		addedTextures.forEach((texture) => {
-			this.addLayer(texture);
-		});
-		removedTextures.forEach((texture) => {
-			this.removeLayer(texture);
-		});
-
-		textures.forEach((texture) => {
-			let layer = this.layers.find((layer) => layer.texture == texture);
-			if (layer) {
-				this.layerContainer.bringToTop(layer.image);
-			}
-		});
-
+		this.bringToTop(this.mapPin);
 		this.bringToTop(this.fingerLamp);
 	}
 
-	addLayer(texture: string) {
-		let layer = this.layers.find((layer) => !layer.active && layer.fade == 0);
-		if (!layer) {
-			layer = this.layers.find((layer) => !layer.active);
-		}
-		if (layer) {
-			layer.active = true;
-			layer.texture = texture;
-			layer.image.setTexture(texture);
-			this.layerContainer.bringToTop(layer.image);
-
-			if (!this.scene.textures.exists(texture)) {
-				console.error("Missing texture:", texture);
-			}
-		}
+	setSliceEnabled(enabled: boolean) {
+		this.mapSliceButton.setHighlight(enabled);
+		this.mapSliceKnob.setVisible(enabled);
+		this.mapPinButton.setVisible(enabled);
+		this.mapPin.setVisible(enabled);
 	}
 
-	removeLayer(texture: string) {
-		let layer = this.layers.find((layer) => layer.texture == texture);
-		if (layer) {
-			layer.active = false;
-			layer.texture = "";
-		}
+	setSliceValue(value: number, animate: boolean) {
+		this.mapSliceKnob.setValue(value, animate);
 	}
 
-	onClick(pointer: Phaser.Input.Pointer, localX: number, localY: number) {
-		let lampName = this.lampIds.shift();
-		if (lampName) {
-			let lamp = new MapLight(this.scene, pointer.x, pointer.y, lampName);
-			this.add(lamp);
-			this.lamps.push(lamp);
-
-			this.updateLamp(lamp, "add");
-			lamp.on("update", () => {
-				this.updateLamp(lamp, "update");
-			});
-			lamp.on("delete", () => {
-				this.lamps.splice(this.lamps.indexOf(lamp), 1);
-				this.updateLamp(lamp, "delete");
-				this.lampIds.push(lamp.name);
-				lamp.destroy();
-			});
-			lamp.on("click", lamp.changeColor);
-		}
+	setSlicePinnable(canPin: boolean) {
+		this.mapPinButton.setHighlight(canPin);
+		this.mapPin.setAlpha(0.3);
 	}
 
 	onPointerDown(pointer: Phaser.Input.Pointer) {
@@ -258,16 +314,25 @@ export class Map extends Phaser.GameObjects.Container {
 
 	updateLamp(lamp: MapLight, method: "add" | "update" | "delete") {
 		const px = 1 - (lamp.goalX - layout.map.left) / layout.map.width;
-		const py = (lamp.goalY - layout.map.top) / layout.map.height;
-		const x = MIN_X + (MAX_X - MIN_X) * px;
-		const y = MIN_Y + (MAX_Y - MIN_Y) * py;
-		const color = lamp.color;
+		const py = 1 - (lamp.goalY - layout.map.top) / layout.map.height;
 
-		this.socket.sendMapLight(lamp.name, x, y, lamp.height, color, method, true);
+		if (method != "delete") {
+			this.socket.sendSetMarker(
+				lamp.name,
+				px,
+				py,
+				0.012,
+				lamp.color,
+				100,
+				1,
+				1,
+			);
+		} else {
+			this.socket.sendRemoveMarker(lamp.name);
+		}
 	}
 
 	reset() {
-		this.setLayers("");
 		this.resetLightControls();
 
 		this.lamps.forEach((lamp) => {
@@ -275,10 +340,15 @@ export class Map extends Phaser.GameObjects.Container {
 			lamp.destroy();
 		});
 		this.lamps = [];
-		this.mapHint.setVisible(false);
+		this.mapHint.setVisible(true);
+		// this.mapSliceButton.setVisible(false);
 	}
 
 	resetLightControls() {
 		this.mapControls.resetLight();
+	}
+
+	get sliceValue(): number {
+		return this.mapSliceKnob.value;
 	}
 }

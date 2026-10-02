@@ -3,19 +3,29 @@ import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { Color } from "@/utils/colors";
 import { Navigation } from "@/components/Navigation";
 import { Map } from "@/components/Map";
-import { ScenarioId } from "@/utils/ScenarioManager";
 
 import { Page, PageState } from "@/components/pages/Page";
 import { HomePage } from "@/components/pages/HomePage";
 import { ScenarioPage } from "@/components/pages/ScenarioPage";
-import { ScenariosPage } from "@/components/pages/ScenariosPage";
+import { CollectionPage } from "@/components/pages/CollectionPage";
 import { LayerPage } from "@/components/pages/LayerPage";
 import { DebugPage } from "@/components/pages/DebugPage";
 import { LoggingOverlay } from "@/components/pages/LoggingOverlay";
 
 import { SocketManager } from "@/utils/SocketManager";
-import { Response, ScenariosResponse } from "@/utils/protocol";
+import {
+	Collection,
+	CollectionKey,
+	Layer,
+	Raster,
+	RasterKey,
+	Scenario,
+} from "@/utils/interfaces";
+import { LayerRequestData } from "@/utils/protocol";
 import { blocksManager } from "@/utils/BlocksManager";
+import { contentManager } from "@/utils/ContentManager";
+import { config } from "@/utils/RuntimeConfig";
+import { textureManager } from "@/utils/TextureManager";
 
 export class GameScene extends BaseScene {
 	private attractionOpen: boolean;
@@ -27,12 +37,17 @@ export class GameScene extends BaseScene {
 	private pages: Page[];
 	private homePage: HomePage;
 	private scenarioPage: ScenarioPage;
-	private scenariosPage: ScenariosPage;
+	private scenariosPage: CollectionPage;
 	private layerPage: LayerPage;
 	private debugPage: DebugPage;
 	private loggingOverlay: LoggingOverlay;
 	private navigation: Navigation;
 	private map: Map;
+
+	private activeScenario: Scenario | undefined; // Currently active scenario
+	private activeLayers: Layer[]; // Currently active map layers
+	private lockedScenario: Scenario | undefined; // Locked scenario, displayed on the right side
+	private lockedLayers: Layer[]; // Locked layers in map slicing mode, not necessarily tied to a scenario
 
 	constructor() {
 		super({ key: "GameScene" });
@@ -43,6 +58,11 @@ export class GameScene extends BaseScene {
 		this.cameras.main.setBackgroundColor(Color.Slate950);
 		this.initBlur();
 
+		this.activeScenario = undefined;
+		this.lockedScenario = undefined;
+		this.activeLayers = [];
+		this.lockedLayers = [];
+
 		// this.input.dragDistanceThreshold = 16;
 		this.input.addPointer(1);
 
@@ -50,22 +70,18 @@ export class GameScene extends BaseScene {
 		this.socket.setDepth(1000);
 		this.socket.connect();
 
-		this.socket.on(Response.Scenarios, (data: ScenariosResponse) => {
-			this.scenariosPage.loadScenarios(data);
-		});
 		this.socket.on("reconnect", () => {
-			this.socket.sendReset();
+			// this.socket.sendReset();
 			this.restart();
-			this.socket.send({
-				type: "DeactivateDatasetRequest",
-				datasets: "RiverFlow",
-			});
 		});
-		this.socket.on("onCacheProgress", () => {
-			this.events.emit("onCacheProgress");
+		this.socket.on("onRecacheProgress", (count: number, max: number) => {
+			const percent = `${Math.round((count / max) * 100)}%`;
+			const title = `Updating ${max} images`;
+			const description = `Loading... ${percent}`;
+			this.events.emit("lockdown", true, title, description);
 		});
-		this.socket.on("onCacheComplete", () => {
-			this.events.emit("onCacheComplete");
+		this.socket.on("onRecacheComplete", () => {
+			this.events.emit("lockdown", false);
 			this.layerPage.loadFolders();
 		});
 
@@ -74,10 +90,10 @@ export class GameScene extends BaseScene {
 		this.pages = [];
 		this.homePage = new HomePage(this, PageState.Home, this.socket);
 		this.scenarioPage = new ScenarioPage(this, PageState.Scenario, this.socket);
-		this.scenariosPage = new ScenariosPage(
+		this.scenariosPage = new CollectionPage(
 			this,
 			PageState.Scenarios,
-			this.socket
+			this.socket,
 		);
 		this.layerPage = new LayerPage(this, PageState.Layer, this.socket);
 		this.debugPage = new DebugPage(this, PageState.Debug, this.socket);
@@ -96,14 +112,13 @@ export class GameScene extends BaseScene {
 				this.socket.send(data);
 			});
 
-			page.on("map", (layers: string) => {
-				this.map.setLayers(layers);
-				this.layerPage.setLayers(layers);
-			});
+			page.on("setCollection", this.setCollection, this);
+			page.on("setScenario", this.setScenario, this);
+			page.on("setLayers", this.setLayers, this);
 
-			page.on("scenario", (scenarioId: ScenarioId) => {
+			page.on("collection", (key: CollectionKey) => {
 				this.setState(PageState.Scenario);
-				this.scenarioPage.setScenario(scenarioId);
+				this.scenarioPage.setCollection(key);
 			});
 
 			page.on("resetLight", () => {
@@ -122,7 +137,7 @@ export class GameScene extends BaseScene {
 		this.loggingOverlay = new LoggingOverlay(
 			this,
 			PageState.Logging,
-			this.socket
+			this.socket,
 		);
 		this.loggingOverlay.setDepth(3);
 		this.loggingOverlay.setVisible(false);
@@ -135,8 +150,26 @@ export class GameScene extends BaseScene {
 		this.map = new Map(this, this.socket);
 		this.map.setDepth(1);
 		this.add.existing(this.map);
+		this.initMapSlicing();
 
 		this.setState(PageState.Home);
+
+		// Preload essential textures
+		contentManager.preloadEssentialTextures(this);
+		contentManager.setRasterRefreshListener(
+			async (updatedRasters: Raster[]) => {
+				const textures: string[] = [];
+				updatedRasters.forEach((raster) => {
+					textures.push(raster.thumbnail);
+					textures.push(raster.minimap);
+				});
+				await textureManager.refreshRasters(this, textures);
+				this.socket.sendRecacheRequest(
+					updatedRasters.map((raster) => raster.key),
+				);
+				this.layerPage.refresh();
+			},
+		);
 	}
 
 	update(time: number, delta: number) {
@@ -175,21 +208,262 @@ export class GameScene extends BaseScene {
 		if (state == PageState.Home) {
 			if (smooth) {
 				this.map.resetLightControls();
-				this.socket.fadeLight(() => {
-					blocksManager.setDefaultLegend();
-					this.socket.sendReset();
-					this.scenarioPage.activateDataset("Nkpg/Orto20230921");
-					this.map.setLayers("Nkpg/Orto20230921");
-					this.socket.sendDeactivateTraffic();
-				});
+				this.socket.fadeLight(() => this.onHomeReset());
 			} else {
-				blocksManager.setDefaultLegend();
-				this.socket.sendReset();
-				this.scenarioPage.activateDataset("Nkpg/Orto20230921");
-				this.map.setLayers("Nkpg/Orto20230921");
-				this.socket.sendDeactivateTraffic();
+				this.onHomeReset();
 			}
 		}
+	}
+
+	onResetButton() {
+		this.socket.sendReset();
+		this.restart();
+	}
+
+	onHomeReset() {
+		if (this.mapSliceEnabled) this.disableMapSlicing();
+
+		blocksManager.setDefaultLegend();
+		this.socket.sendReset();
+
+		const defaultScenario = contentManager.getScenario("default");
+		if (defaultScenario) {
+			this.setLayers(defaultScenario.layers);
+			this.setScenario(defaultScenario);
+		}
+	}
+
+	onAttractionReset() {
+		const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
+		if (!idleRaster)
+			return console.error(
+				"IDLE_RASTER in config.json not found in available rasters",
+			);
+		const layer = contentManager.rasterToLayer(idleRaster);
+		this.setLayers([layer]);
+	}
+
+	setCollection(collection: Collection) {
+		blocksManager.setWallVideo(collection.blocks_video);
+	}
+
+	setScenario(scenario: Scenario) {
+		this.activeScenario = scenario;
+
+		if (this.hasDualScenarios && this.lockedScenario) {
+			blocksManager.setDualLegend(
+				this.activeScenario.key,
+				this.lockedScenario.key,
+			);
+		} else {
+			blocksManager.setLegend(scenario.key);
+		}
+	}
+
+	setLayers(layers: Layer[], flush = true) {
+		this.activeLayers = JSON.parse(JSON.stringify(layers));
+
+		// Create combined layers with crop properties applied
+		const combinedLayers = this.createCombinedLayers();
+
+		this.layerPage.setLayers(this.activeLayers);
+
+		this.map.setLayers(combinedLayers, flush);
+
+		// this.socket.sendReset();
+		// this.emit("map", "");
+
+		const layerRequestData = this.convertLayersToProtocol(combinedLayers);
+		this.socket.sendLayers(layerRequestData, flush);
+
+		this.map.setSlicePinnable(this.canPin);
+	}
+
+	private createCombinedLayers(): Layer[] {
+		if (!this.mapSliceEnabled) {
+			return this.activeLayers;
+		}
+
+		const combined: Layer[] = [];
+
+		// Add active layers with left-side crop
+		this.activeLayers.forEach((layer) => {
+			const layerCopy = { ...layer };
+			layerCopy.crop = {
+				type: "slice",
+				slice: {
+					min_u: this.map.sliceValue,
+					max_u: 1,
+					min_v: 0,
+					max_v: 1,
+				},
+			};
+			combined.push(layerCopy);
+		});
+
+		// Add locked layers with right-side crop
+		this.lockedLayers.forEach((layer) => {
+			const layerCopy = { ...layer };
+			layerCopy.crop = {
+				type: "slice",
+				slice: {
+					min_u: 0,
+					max_u: this.map.sliceValue,
+					min_v: 0,
+					max_v: 1,
+				},
+			};
+			combined.push(layerCopy);
+		});
+
+		// Right side pinned shaded area
+		combined.push({
+			type: "color",
+			color: "#000000",
+			opacity: 0.2,
+			crop: {
+				type: "slice",
+				slice: {
+					min_u: 0,
+					max_u: this.map.sliceValue,
+					min_v: 0,
+					max_v: 1,
+				},
+			},
+		});
+
+		// Center line separator
+		combined.push({
+			type: "color",
+			color: "#000000",
+			opacity: 0.8,
+			crop: {
+				type: "slice",
+				slice: {
+					min_u: Math.max(this.map.sliceValue - 0.0025, 0),
+					max_u: Math.min(this.map.sliceValue + 0.0025, 1),
+					min_v: 0,
+					max_v: 1,
+				},
+			},
+		});
+
+		return combined;
+	}
+
+	convertLayersToProtocol(layers: Layer[]): LayerRequestData[] {
+		function getImage(rasterKey: RasterKey): string {
+			const raster = contentManager.getRaster(rasterKey);
+			if (raster && raster.image) return raster.image;
+			if (raster && raster.video) return raster.video;
+			return rasterKey;
+		}
+
+		return layers.map((layer, index) => {
+			const common = {
+				opacity: layer.opacity,
+				emission: layer.emission,
+				crop: layer.crop,
+			};
+
+			switch (layer.type) {
+				case "image":
+					return {
+						type: "image",
+						id: `${index}_${layer.raster}`,
+						raster: getImage(layer.raster),
+						...common,
+					};
+
+				case "flow":
+					return {
+						type: "flow",
+						id: `${index}_${layer.raster}`,
+						raster: getImage(layer.raster),
+						flow: {
+							texture: getImage(layer.flow.texture),
+							scale: layer.flow.scale,
+							speed: layer.flow.speed,
+						},
+						...common,
+					};
+
+				case "movie":
+					return {
+						type: "movie",
+						id: `${index}_${layer.raster}`,
+						raster: getImage(layer.raster),
+						movie: layer.movie,
+						...common,
+					};
+
+				case "color":
+					return {
+						type: "color",
+						id: `${index}_${layer.color}`,
+						color: layer.color,
+						...common,
+					};
+
+				case "ndi":
+					return {
+						type: "ndi",
+						id: `${index}_${layer.ndi.stream}`,
+						ndi: layer.ndi,
+						...common,
+					};
+			}
+		});
+	}
+
+	/* Map slicing */
+
+	initMapSlicing() {
+		this.map.on("toggleMapSlice", () => {
+			if (this.mapSliceEnabled) {
+				this.disableMapSlicing();
+			} else {
+				this.enableMapSlicing();
+			}
+
+			this.map.setSlicePinnable(this.canPin);
+			this.setLayers(this.activeLayers);
+		});
+
+		this.map.on("sliceValue", (value: number) => {
+			this.setLayers(this.activeLayers, false);
+		});
+
+		this.map.on("pin", () => {
+			this.lockedScenario = this.activeScenario;
+			this.lockedLayers = JSON.parse(JSON.stringify(this.activeLayers));
+			this.map.setSlicePinnable(false);
+			this.setLayers(this.activeLayers);
+		});
+
+		this.disableMapSlicing();
+	}
+
+	enableMapSlicing() {
+		this.lockedScenario = this.activeScenario;
+		this.lockedLayers = JSON.parse(JSON.stringify(this.activeLayers));
+		this.map.setSliceEnabled(true);
+		this.map.setSliceValue(0.0, false);
+		this.map.setSliceValue(0.33, true);
+	}
+
+	disableMapSlicing() {
+		this.lockedScenario = undefined;
+		this.lockedLayers = [];
+		this.map.setSliceEnabled(false);
+
+		if (this.activeScenario) {
+			blocksManager.setLegend(this.activeScenario.key);
+		}
+	}
+
+	get mapSliceEnabled(): boolean {
+		return this.lockedLayers.length > 0;
 	}
 
 	/* Blur */
@@ -198,23 +472,22 @@ export class GameScene extends BaseScene {
 		// Listen for events from the UI scene
 		this.scene.get("UIScene").events.on(
 			"attraction",
-			(state: boolean) => {
-				this.attractionOpen = state;
+			(isAttractionMode: boolean) => {
+				this.attractionOpen = isAttractionMode;
 
 				this.updateBlur();
 				// this.foodWeb.toggleAttraction(state);
 
-				if (state) {
-					this.socket.sendMovie();
+				if (isAttractionMode) {
+					this.onAttractionReset();
 				} else {
 					this.map.resetLightControls();
 					this.socket.fadeLight(() => {
-						this.socket.sendReset();
-						this.scenarioPage.activateDataset("Nkpg/Orto20230921");
+						this.onHomeReset();
 					});
 				}
 			},
-			this
+			this,
 		);
 
 		this.scene.get("UIScene").events.on(
@@ -223,7 +496,7 @@ export class GameScene extends BaseScene {
 				this.infoWindowOpen = state;
 				this.updateBlur();
 			},
-			this
+			this,
 		);
 
 		this.scene.get("UIScene").events.on(
@@ -236,22 +509,15 @@ export class GameScene extends BaseScene {
 					this.restart();
 				}
 			},
-			this
+			this,
 		);
 
-		this.scene.get("UIScene").events.on(
-			"restart",
-			() => {
-				this.socket.sendReset();
-				this.restart();
-			},
-			this
-		);
+		this.scene.get("UIScene").events.on("restart", this.onResetButton, this);
 	}
 
 	updateBlur(): void {
 		let filter = this.cameras.main.getPostPipeline(
-			BlurPostFilter
+			BlurPostFilter,
 		) as BlurPostFilter;
 		let isActive = this.cameras.main.hasPostPipeline;
 		let shouldBeActive = this.attractionOpen || this.infoWindowOpen;
@@ -260,7 +526,7 @@ export class GameScene extends BaseScene {
 			if (!isActive) {
 				this.cameras.main.setPostPipeline(BlurPostFilter);
 				filter = this.cameras.main.getPostPipeline(
-					BlurPostFilter
+					BlurPostFilter,
 				) as BlurPostFilter;
 			}
 
@@ -293,5 +559,30 @@ export class GameScene extends BaseScene {
 				},
 			});
 		}
+	}
+
+	get hasDualScenarios(): boolean {
+		if (!this.lockedScenario) {
+			return false;
+		}
+
+		if (this.activeScenario == this.lockedScenario) {
+			return false;
+		}
+
+		const defaultScenario = contentManager.getScenario("default");
+		if (defaultScenario) {
+			if (this.lockedScenario == defaultScenario) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	get canPin(): boolean {
+		return (
+			JSON.stringify(this.activeLayers) != JSON.stringify(this.lockedLayers)
+		);
 	}
 }

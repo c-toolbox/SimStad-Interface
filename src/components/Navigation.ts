@@ -9,6 +9,7 @@ export class Navigation extends Phaser.GameObjects.Container {
 
 	private scenarioButton: CircleButton;
 	private layerButton: CircleButton;
+	private collectionButton: CircleButton;
 	private debugButton: CircleButton;
 
 	constructor(scene: BaseScene) {
@@ -30,6 +31,11 @@ export class Navigation extends Phaser.GameObjects.Container {
 		this.layerButton = new CircleButton(scene, x, y, s, "layers", c);
 		this.add(this.layerButton);
 
+		// y -= 1.75 * s;
+		c = Color.Yellow800;
+		this.collectionButton = new CircleButton(scene, x - 1000, y, s, "book", c);
+		this.add(this.collectionButton);
+
 		y -= 1.75 * s;
 		c = Color.Rose800;
 		this.debugButton = new CircleButton(scene, x, y, s, "gear-code", c);
@@ -37,6 +43,9 @@ export class Navigation extends Phaser.GameObjects.Container {
 
 		this.scenarioButton.on("click", () => this.emit("state", PageState.Home));
 		this.layerButton.on("click", () => this.emit("state", PageState.Layer));
+		this.collectionButton.on("click", () =>
+			this.emit("state", PageState.Scenarios),
+		);
 		this.debugButton.on("click", () => this.emit("state", PageState.Debug));
 
 		this.setGuideMode(false);
@@ -45,12 +54,14 @@ export class Navigation extends Phaser.GameObjects.Container {
 	update(time: number, delta: number) {
 		this.scenarioButton.update(time, delta);
 		this.layerButton.update(time, delta);
+		this.collectionButton.update(time, delta);
 		this.debugButton.update(time, delta);
 	}
 
 	setState(state: PageState): this {
 		this.scenarioButton.setHighlight(state == PageState.Home);
 		this.layerButton.setHighlight(state == PageState.Layer);
+		this.collectionButton.setHighlight(state == PageState.Scenarios);
 		this.debugButton.setHighlight(state == PageState.Debug);
 		return this;
 	}
@@ -58,6 +69,7 @@ export class Navigation extends Phaser.GameObjects.Container {
 	setGuideMode(value: boolean) {
 		this.scenarioButton.setVisible(value);
 		this.layerButton.setVisible(value);
+		this.collectionButton.setVisible(value);
 		this.debugButton.setVisible(value);
 	}
 }

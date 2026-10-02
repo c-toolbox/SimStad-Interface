@@ -26,8 +26,7 @@ export class MapLight extends Button {
 		this.goalX = x;
 		this.goalY = y;
 
-		this.height = 100;
-		const size = 10;
+		const size = 20;
 
 		let maskGraphics = this.scene.make.graphics({}, false);
 		maskGraphics.fillStyle(Color.White);
@@ -46,7 +45,7 @@ export class MapLight extends Button {
 		this.glow = this.scene.add.image(0, 0, "light");
 		this.glow.setBlendMode(Phaser.BlendModes.ADD);
 		this.glow.setAlpha(0.75);
-		this.glow.setScale(400 / this.glow.width);
+		this.glow.setScale(200 / this.glow.width);
 		this.container.add(this.glow);
 
 		this.background = this.scene.add.ellipse(0, 0, size, size, Color.Stone100);

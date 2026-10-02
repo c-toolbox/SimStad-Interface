@@ -1,3 +1,4 @@
+import * as Neutralino from "@neutralinojs/lib";
 import { BaseScene } from "@/scenes/BaseScene";
 import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
@@ -5,20 +6,20 @@ import { Color } from "@/utils/colors";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { CheckSlider } from "../elements/CheckSlider";
 import { TextButton } from "../TextButton";
-import { layerManager } from "@/utils/LayerManager";
+import { contentManager } from "@/utils/ContentManager";
+import { config } from "@/utils/RuntimeConfig";
+import { LayerRequestData } from "@/utils/protocol";
 
 export class DebugPage extends Page {
 	private title: Phaser.GameObjects.Text;
 	private areas: Phaser.Geom.Rectangle[];
 	private sliders: CheckSlider[];
 
-	private trafficSlider: CheckSlider;
-	private reCacheButton: TextButton;
+	private recacheButton: TextButton;
 	private advLayerSlider: CheckSlider;
 	private loggingSlider: CheckSlider;
 
 	private recacheLoader: Phaser.GameObjects.Image;
-	private recacheCount: number = 0;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -38,77 +39,59 @@ export class DebugPage extends Page {
 		this.add(this.title);
 
 		this.areas = this.getAreas();
-		// this.areas.forEach((area) => {
-		// 	this.add(
-		// 		scene.add.rectangle(
-		// 			area.centerX,
-		// 			area.centerY,
-		// 			area.width,
-		// 			area.height,
-		// 			0x000000,
-		// 			0.1
-		// 		)
-		// 	);
-		// });
 
-		/* Recache database */
+		/* Recache Unreal */
 
-		this.reCacheButton = this.setButtonArea(
+		this.recacheButton = this.setButtonArea(
 			0,
-			"Recache database",
-			"Request Unreal to reload all raster images.\nThis action takes about 90 seconds.",
+			"Refresh Unreal",
+			`Reload ${contentManager.getRasterCount()} raster images in Unreal.\nThis action takes about 60 seconds.`,
 			() => {
 				if (this.socket.isConnectedToUnreal) {
-					this.recacheCount = 0;
-					// this.socket.queueReCacheDatabase();
-					this.socket.sendReCacheDatabase();
+					this.scene.events.emit(
+						"lockdown",
+						true,
+						"Restarting interface",
+						"Fetching json from Omni...",
+					);
+
+					this.socket.sendReset();
+					this.socket.sendRecacheRequest();
 					this.recacheLoader.setVisible(true);
-					layerManager.reloadLayers();
+					contentManager.refresh();
+
+					this.scene.events.emit("lockdown", false);
 				}
-			}
+			},
 		);
-		this.socket.on("onCacheProgress", () => {
-			const layerCount = layerManager.getLayerCount();
-			this.recacheCount += 1;
-			this.reCacheButton.setText(
-				`Loading... ${this.recacheCount} / ${layerCount}`
-			);
+		this.socket.on("onRecacheProgress", (count: number, max: number) => {
+			const percent = `${Math.round((count / max) * 100)}%`;
+			this.recacheButton.setText(`Loading... ${percent}`);
 		});
-		this.socket.on("onCacheComplete", () => {
+		this.socket.on("onRecacheComplete", () => {
 			this.recacheLoader.setVisible(false);
-			this.reCacheButton.setText("Recache database");
+			this.recacheButton.setText("Recache database");
 		});
 		this.recacheLoader = scene.add.image(
-			this.reCacheButton.x + this.reCacheButton.width / 2 + 60,
-			this.reCacheButton.y,
-			"vis_c_logo_white"
+			this.recacheButton.x + this.recacheButton.width / 2 + 60,
+			this.recacheButton.y,
+			"vis_c_logo_white",
 		);
 		this.recacheLoader.setVisible(false);
 		this.recacheLoader.setScale(60 / this.recacheLoader.height);
 		this.recacheLoader.setTint(Color.Slate200);
 		this.add(this.recacheLoader);
 
-		/* Traffic */
+		/* Restart application */
 
-		this.trafficSlider = this.setCheckboxArea(
+		this.setButtonArea(
 			1,
-			"Live traffic",
-			"Enable live traffic data, streaming the location of busses and trams",
-			(active: boolean) => {
-				if (this.socket.isConnectedToUnreal) {
-					this.trafficSlider.setIsLoading(true);
-					if (active) {
-						this.socket.sendActivateTraffic();
-					} else {
-						this.socket.sendDeactivateTraffic();
-					}
-				}
-			}
+			"Restart interface",
+			"Refresh all content.",
+			async () => {
+				Neutralino.app.restartProcess();
+			},
 		);
-		this.socket.on("serverTrafficEnabled", (enabled: boolean) => {
-			this.trafficSlider.setIsLoading(false);
-			this.trafficSlider.value = enabled ? 1 : 0;
-		});
 
 		/* Logging */
 
@@ -118,7 +101,7 @@ export class DebugPage extends Page {
 			"Show logs of all websocket messages being sent and received",
 			(active: boolean) => {
 				this.emit("logging", active);
-			}
+			},
 		);
 
 		/* UI Layout */
@@ -129,7 +112,7 @@ export class DebugPage extends Page {
 			"Display layer usage count and drive status in layer page",
 			(active: boolean) => {
 				this.emit("showLayerInfo", active);
-			}
+			},
 		);
 
 		// this.layoutSlider = this.setCheckboxArea(
@@ -143,101 +126,109 @@ export class DebugPage extends Page {
 
 		/* Miscellaneous buttons */
 
-		this.setButtonArea(4, "Reset", "", () => {
+		this.setButtonArea(4, "ResetRequest", "", () => {
 			this.socket.sendReset();
 		});
 
-		this.setButtonArea(5, "Ping", "", () => {
+		this.setButtonArea(5, "PingRequest", "", () => {
 			this.socket.sendPing();
 		});
 
-		this.setButtonArea(6, "RiverFlow", "", () => {
-			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "RiverFlow",
-			});
+		this.setButtonArea(6, "StatusRequest", "", () => {
+			this.socket.sendStatusRequest();
 		});
 
-		this.setButtonArea(7, "IdleMovie", "", () => {
-			this.socket.send({
-				type: "ActivateDatasetRequest",
-				datasets: "Idle/Idle_Movie",
-			});
+		this.setButtonArea(7, "Idle Movie", "", () => {
+			const idleRaster = contentManager.getRaster(config.IDLE_RASTER);
+			if (!idleRaster)
+				return console.error(
+					"IDLE_RASTER in config.json not found in available rasters",
+				);
+			const layer = contentManager.rasterToLayer(idleRaster);
+			this.emit("setLayers", [layer]);
 		});
 
-		this.setButtonArea(8, "Light add", "", () => {
-			this.socket.send({
-				type: "MapLightRequest",
-				name: "something",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				height: 200.0,
-				color: "#ffffff",
-				typeofmessage: "add",
-				enable: true,
-			});
+		this.setButtonArea(8, "Crop slice", "", () => {
+			const layers: LayerRequestData[] = [];
+			for (let color of ["#ff0000", "#00ff00", "#0000ff", "#ffff00"]) {
+				const width = 0.1 * 0.3 + Math.random();
+				const height = 0.1 * 0.3 + Math.random();
+				const left = (1 - width) * Math.random();
+				const top = (1 - height) * Math.random();
+				layers.push({
+					type: "color",
+					id: color,
+					color,
+					crop: {
+						type: "slice",
+						slice: {
+							min_u: left,
+							max_u: left + width,
+							min_v: top,
+							max_v: top + height,
+						},
+					},
+					opacity: 0.5,
+				});
+			}
+			this.emit("setLayers", layers);
 		});
 
-		this.setButtonArea(9, "Light delete", "", () => {
-			this.socket.send({
-				type: "MapLightRequest",
-				name: "something",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				height: 200.0,
-				color: "#ffffff",
-				typeofmessage: "delete",
-				enable: true,
-			});
+		this.setButtonArea(9, "Crop circle", "", () => {
+			const layers: LayerRequestData[] = [];
+			for (let color of ["#ff0000", "#00ff00", "#0000ff", "#ffff00"]) {
+				layers.push({
+					type: "color",
+					id: color,
+					color,
+					crop: {
+						type: "circle",
+						circle: {
+							u: Math.random(),
+							v: Math.random(),
+							radius: 0.1 + 0.3 * Math.random(),
+						},
+					},
+					opacity: 0.5,
+				});
+			}
+			this.emit("setLayers", layers);
 		});
 
-		this.setButtonArea(10, "Marker on", "", () => {
-			this.socket.send({
-				type: "MapMarkerRequest",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				typeofmessage: "On", // On/Off/3sec/5sec/..
-				enable: true,
-			});
+		this.setButtonArea(10, "Recache 3 rasters", "", () => {
+			this.socket.sendRecacheRequest([
+				"100ars_regn",
+				"200ars_regn",
+				"500ars_regn",
+			]);
 		});
 
-		this.setButtonArea(11, "Marker off", "", () => {
-			this.socket.send({
-				type: "MapMarkerRequest",
-				northing: (129411.4 + 134211.4) / 2,
-				easting: (6495015.262 + 6498915.262) / 2,
-				typeofmessage: "Off",
-				enable: true,
-			});
+		this.setButtonArea(11, "NDI", "", () => {
+			this.socket.sendLayers([
+				{
+					type: "ndi",
+					id: "TrafficOverlayNDI",
+					opacity: 0.1,
+					emission: 1,
+					ndi: {
+						stream: "TrafficOverlayNDI",
+					},
+					crop: {
+						type: "circle",
+						circle: {
+							u: Math.random(),
+							v: Math.random(),
+							radius: 0.5,
+						},
+					},
+				},
+			]);
 		});
 
-		this.setButtonArea(12, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
-
-		this.setButtonArea(13, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
-
-		this.setButtonArea(14, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
-
-		this.setButtonArea(15, "", "", () => {
-			this.socket.send({
-				type: "Type",
-				data: "insert_data",
-			});
-		});
+		this.setButtonArea(12, "", "", () => {});
+		this.setButtonArea(13, "", "", () => {});
+		this.setButtonArea(14, "", "", () => {});
+		this.setButtonArea(15, "", "", () => {});
 	}
 
 	update(time: number, delta: number) {
@@ -249,7 +240,6 @@ export class DebugPage extends Page {
 	}
 
 	reset() {
-		this.trafficSlider.value = 0;
 		this.advLayerSlider.value = 0;
 		this.loggingSlider.value = 0;
 
@@ -295,7 +285,7 @@ export class DebugPage extends Page {
 		rectIndex: number,
 		titleText: string,
 		descText: string,
-		callback: () => void
+		callback: () => void,
 	): TextButton {
 		const rect = this.areas[rectIndex];
 
@@ -306,7 +296,7 @@ export class DebugPage extends Page {
 			60,
 			titleText,
 			titleText ? Color.Rose700 : Color.Slate700,
-			callback
+			callback,
 		);
 
 		const desc = this.scene.addText({
@@ -327,7 +317,7 @@ export class DebugPage extends Page {
 		rectIndex: number,
 		titleText: string,
 		descText: string,
-		callback: (active: boolean) => void
+		callback: (active: boolean) => void,
 	): CheckSlider {
 		const rect = this.areas[rectIndex];
 		const centerY = rect.centerY - 20;

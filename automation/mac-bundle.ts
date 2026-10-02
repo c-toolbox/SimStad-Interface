@@ -52,6 +52,7 @@ exec "\${MACOS}/game" --path="\${CONTENTS}/Resources" --enable-extensions=true`;
 	copyFileSync(`${build_path}/${game_dir}-mac_universal`, `${out_dir}/Contents/MacOS/game`);
 	copyFileSync(`${build_path}/resources.neu`, `${out_dir}/Contents/Resources/resources.neu`);
 	copyFileSync(`./src/public/icon.png`, `${out_dir}/Contents/Resources/icon.png`);
+	copyFileSync(`./config.json`, `${out_dir}/config.json`);
 	renameSync(out_dir, `${out_dir}.app`);
 
 	try {

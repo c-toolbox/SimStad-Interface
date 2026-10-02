@@ -5,15 +5,14 @@ import { languageManager } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color, ColorStr } from "@/utils/colors";
 import { Legend } from "@/components/Legend";
-import { ScenarioId, Section, scenarioManager } from "@/utils/ScenarioManager";
-import { TextButton } from "../TextButton";
+import { LazyImage } from "@/components/elements/LazyImage";
 import { LayerSlider } from "../LayerSlider";
 import { TabButton } from "../TabButton";
-import { ONLINE } from "@/utils/constants";
 import { RoundRectangle } from "../elements/RoundRectangle";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { splitText } from "@/utils/functions";
-import { blocksManager } from "@/utils/BlocksManager";
+import { CollectionKey, Layer, Scenario } from "@/utils/interfaces";
+import { contentManager } from "@/utils/ContentManager";
 
 export class ScenarioPage extends Page {
 	private background: RoundRectangle;
@@ -23,20 +22,17 @@ export class ScenarioPage extends Page {
 	private bread: Phaser.GameObjects.Text[];
 	private legend: Legend;
 	private legendShadow: Phaser.GameObjects.Image;
-	private legendImage: Phaser.GameObjects.Image;
+	private legendImage: LazyImage;
+	private legendLoader: Phaser.GameObjects.Image;
 	private legendSource: Phaser.GameObjects.Text;
 	private backButton: TabButton;
 	private tabButtons: TabButton[];
-	private layerButtons: TextButton[];
 	private layerSlider: LayerSlider;
 
-	private currentSection: Section;
-	private currentLayerString: string;
+	private currentScenario: Scenario;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
-
-		this.currentLayerString = "";
 
 		this.background = new RoundRectangle(scene, {
 			rect: layout.scenario,
@@ -106,7 +102,7 @@ export class ScenarioPage extends Page {
 		this.legendShadow = scene.add.image(
 			layout.scenarioLegend.centerX,
 			layout.scenarioLegend.centerY + 2,
-			"legend_default"
+			"blank",
 		);
 		this.legendShadow.setOrigin(0.5, 0.0);
 		this.legendShadow.setTint(0);
@@ -114,13 +110,31 @@ export class ScenarioPage extends Page {
 		this.legendShadow.setPostPipeline(BlurPostFilter);
 		this.add(this.legendShadow);
 
-		this.legendImage = scene.add.image(
+		this.legendImage = new LazyImage(
+			scene,
 			layout.scenarioLegend.centerX,
 			layout.scenarioLegend.centerY,
-			"legend_default"
 		);
 		this.legendImage.setOrigin(0.5, 0.0);
 		this.add(this.legendImage);
+
+		/* Loader spinner */
+		this.legendLoader = scene.add.image(
+			layout.scenarioLegend.centerX,
+			layout.scenarioLegend.centerY,
+			"vis_c_logo_white",
+		);
+		this.legendLoader.setTint(0xffffff);
+		this.legendLoader.setAlpha(0.5);
+		this.legendLoader.setScale(0.15);
+		this.legendLoader.setVisible(false);
+		this.add(this.legendLoader);
+
+		/* Listen for legend image load events */
+		this.legendImage.on("loaded", (loaded: boolean) => {
+			this.legendLoader.setVisible(!loaded);
+			this.updateLegendImageScale();
+		});
 
 		this.legendSource = scene.addText({
 			size: 18,
@@ -140,19 +154,9 @@ export class ScenarioPage extends Page {
 		const bh = bl.height;
 		const bc = Color.Yellow700;
 
-		this.layerButtons = [];
-		for (let i = 0; i < 3; i++) {
-			let bt = "Layer " + (i + 1);
-			let bx = bl.left + (i + 0.5) * bw + i * layout.separation;
-
-			let button = new TextButton(scene, bx, by, bw, bh, bt, bc);
-			this.add(button);
-			this.layerButtons.push(button);
-		}
-
 		/* Tabs */
 
-		const tn = 6;
+		const tn = 13;
 		const tl = layout.scenarioTabs;
 		const ty = tl.centerY;
 		const th = tl.height;
@@ -173,6 +177,8 @@ export class ScenarioPage extends Page {
 		this.backButton.removeListener("click");
 		this.backButton.on("click", () => {
 			if (this.allowInput()) {
+				this.currentScenario = contentManager.getScenario("default");
+				this.emit("setScenario", this.currentScenario);
 				this.emit("state", PageState.Home);
 			}
 		});
@@ -196,6 +202,14 @@ export class ScenarioPage extends Page {
 		this.foreground.setAlpha(0);
 		this.bringToTop(this.foreground);
 		this.foreground.setInteractive();
+
+		/* Language change detector */
+
+		let dummy = scene.add.text(0, 0, "");
+		dummy.setVisible(false);
+		languageManager.bind(dummy, "", () => {
+			this.emit("setScenario", this.currentScenario);
+		});
 	}
 
 	update(time: number, delta: number) {
@@ -203,53 +217,54 @@ export class ScenarioPage extends Page {
 
 		this.backButton.update(time, delta);
 		this.tabButtons.forEach((button) => button.update(time, delta));
-		this.layerButtons.forEach((button) => button.update(time, delta));
 		this.layerSlider.update(time, delta);
+
+		/* Update loader spinner */
+		if (this.legendLoader.visible) {
+			this.legendLoader.angle = time / 2;
+		}
 	}
 
-	setScenario(scenarioId: ScenarioId) {
-		const sections = scenarioManager.getScenario(scenarioId).sections;
+	setCollection(collectionKey: CollectionKey) {
+		const collection = contentManager.getCollection(collectionKey);
+		const scenarioKeys = contentManager.getCollection(collectionKey).scenarios;
 
-		if (sections.length > this.tabButtons.length) {
-			throw "More sections than tabs";
+		if (scenarioKeys.length > this.tabButtons.length) {
+			throw "More scenarios than tabs";
 		}
 
-		this.updateTabs(sections.length);
+		languageManager.bind(this.subtitle, `collection_${collectionKey}_name`);
+
+		this.updateTabs(scenarioKeys.length);
 		this.tabButtons.forEach((tab) => tab.setVisible(false));
-		sections.forEach((section, index) => {
-			let textKey = `${scenarioId}_${section.key}_tab`;
-			if (!languageManager.get(textKey, false)) {
-				textKey = `${scenarioId}_${section.key}_title`;
-			}
+		scenarioKeys.forEach((key, index) => {
+			const scenario = contentManager.getScenario(key);
 
 			this.tabButtons[index].setVisible(true);
-			this.tabButtons[index].setText(textKey);
+			this.tabButtons[index].setText(scenario.short_name || scenario.name);
 			this.tabButtons[index].removeListener("click");
 			this.tabButtons[index].on("click", () => {
-				if (this.currentSection != section) {
-					this.fadeSection(section);
+				if (this.currentScenario != scenario) {
+					this.fadeScenario(scenario);
 				}
 			});
-			this.tabButtons[index].setData("section", section.key);
+			this.tabButtons[index].setData("scenario", scenario.key);
 		});
 
-		let activeSection = sections.find((section) => section.default);
-		if (activeSection) {
-			this.setSection(activeSection, false);
-
-			this.emit("resetLight");
-			this.socket.fadeLight(() => {
-				this.setSection(activeSection!);
-			});
+		let activeScenario = contentManager.getScenario(scenarioKeys[0]);
+		if (!activeScenario) {
+			return console.error(`Collection '${collectionKey}' missing scenarios`);
 		}
 
-		blocksManager.setWallVideo(scenarioId);
+		this.setScenario(activeScenario);
+		// this.setLayers();
 
-		if (scenarioId == "rorelse") {
-			this.socket.sendActivateTraffic();
-		} else {
-			this.socket.sendDeactivateTraffic();
-		}
+		this.emit("resetLight");
+		this.socket.fadeLight(() => {
+			this.emit("setCollection", collection);
+			this.emit("setScenario", activeScenario);
+			this.setLayers();
+		});
 	}
 
 	updateTabs(count: number) {
@@ -268,7 +283,7 @@ export class ScenarioPage extends Page {
 		}
 	}
 
-	fadeSection(section: Section) {
+	fadeScenario(scenario: Scenario) {
 		if (this.foreground.alpha > 0) return;
 
 		this.scene.add.tween({
@@ -287,7 +302,11 @@ export class ScenarioPage extends Page {
 		});
 
 		this.emit("resetLight");
-		this.socket.fadeLight(() => this.setSection(section));
+		this.socket.fadeLight(() => {
+			this.setScenario(scenario);
+			this.emit("setScenario", scenario);
+			this.setLayers();
+		});
 	}
 
 	realignText() {
@@ -295,9 +314,6 @@ export class ScenarioPage extends Page {
 		let ah = layout.scenarioInner.height - (ay - layout.scenarioInner.top);
 		if (this.layerSlider.visible) {
 			ah -= 3 * this.layerSlider.height + layout.separation;
-		}
-		if (this.layerButtons[0].visible) {
-			ah -= layout.scenarioControls.height + layout.separation;
 		}
 
 		const breadText = this.bread[9].text;
@@ -326,129 +342,149 @@ export class ScenarioPage extends Page {
 		});
 	}
 
-	setSection(section: Section, sendDataset = true) {
-		this.currentSection = section;
+	setScenario(scenario: Scenario) {
+		this.currentScenario = scenario;
 
 		this.tabButtons.forEach((button) => {
-			button.setHighlight(button.getData("section") == section.key);
+			button.setHighlight(button.getData("scenario") == scenario.key);
 		});
 
-		if (
-			section.layerButtons &&
-			section.layerButtons.length > this.layerButtons.length
-		) {
-			throw "More layers than buttons";
-		}
-
-		if (section.legendColors.length > 0) {
+		if (scenario.legend) {
+			const legend = contentManager.getLegend(scenario.legend);
 			this.legend.setVisible(true);
-			this.legend.setLegend(
-				`${section.scenarioId}_${section.key}_legend`,
-				section.legendColors
-			);
+			this.legend.setLegend(legend);
 		} else {
 			this.legend.setVisible(false);
 		}
 
-		if (this.scene.textures.exists(section.legendImage)) {
+		let hasImage = false;
+		if (scenario.legend_image) {
 			this.legendShadow.setVisible(true);
 			this.legendImage.setVisible(true);
-			this.setLegendImage(section.legendImage);
+			this.legendLoader.setVisible(true);
+			this.setLegendImage(scenario.legend_image);
+			hasImage = true;
 		} else {
 			this.legendShadow.setVisible(false);
 			this.legendImage.setVisible(false);
+			this.legendLoader.setVisible(false);
 		}
 
-		this.setLegendSource(
-			`${section.scenarioId}_${section.key}_legend_source`,
-			this.scene.textures.exists(section.legendImage)
-		);
-
-		this.layerButtons.forEach((button) => button.setVisible(false));
-		if (section.layerButtons) {
-			section.layerButtons.forEach((layerString: string, index: number) => {
-				let button = this.layerButtons[index];
-				const layers = section.layerButtons![index];
-
-				button.setVisible(true);
-				button.setText(`${section.scenarioId}_${section.key}_button${index}`);
-				button.setData("layers", layers);
-				button.removeListener("click");
-				button.on("click", () => {
-					this.activateDataset(layers);
-				});
-			});
+		if (scenario.legend_image_source) {
+			this.setLegendSource(scenario.legend_image_source, hasImage);
 		}
 
 		this.layerSlider.setVisible(false);
-		if (section.layerSlider) {
-			this.layerSlider.setVisible(true);
-			this.layerSlider.value = 0;
-			this.layerSlider.setSteps(section.layerSlider.layers.length);
-			this.layerSlider.setTitle(
-				`${section.scenarioId}_${section.key}_sliderTitle`
-			);
-			let labels = [];
-			for (let i = 0; i < section.layerSlider.labels; i++) {
-				labels.push(`${section.scenarioId}_${section.key}_sliderLabel${i}`);
-			}
-			this.layerSlider.setLabels(labels);
+		if (scenario.layer_display_mode == "sequential") {
+			const unlockedLayers = this.getUnlockedLayers(scenario.layers);
+			const lockedLayers = this.getLockedLayers(scenario.layers);
 
-			this.layerSlider.removeListener("onChange");
-			this.layerSlider.on("onChange", (value: number) => {
-				let layers = section.layerSlider?.layers;
-				if (layers) {
-					let index = Math.round(value / (1 / (layers.length - 1)));
-					this.layerSlider.setLabel(index.toString());
-					this.activateDataset(layers[index]);
-				}
-			});
+			// Only show slider if there are unlocked layers to choose from
+			if (unlockedLayers.length > 0) {
+				this.layerSlider.setVisible(true);
+				this.layerSlider.value = 0;
+				this.layerSlider.setSteps(unlockedLayers.length);
+				this.layerSlider.setTitle(scenario.sequence_title || "");
+				this.layerSlider.setLabels(
+					scenario.sequence_labels.map((label) => label.text),
+				);
+
+				this.layerSlider.removeListener("onChange");
+				this.layerSlider.on("onChange", (value: number) => {
+					if (unlockedLayers.length > 1) {
+						let unlockedIndex = Math.round(
+							value / (1 / (unlockedLayers.length - 1))
+						);
+						this.layerSlider.setLabel(unlockedIndex.toString());
+						this.emit("setLayers", this.buildSequentialLayers(scenario, unlockedIndex));
+					} else if (unlockedLayers.length === 1) {
+						this.layerSlider.setLabel("0");
+						this.emit("setLayers", this.buildSequentialLayers(scenario, 0));
+					}
+				});
+			}
 		}
 
-		languageManager.bind(this.subtitle, `${section.scenarioId}_title`);
-		languageManager.bind(
-			this.title,
-			`${section.scenarioId}_${section.key}_title`,
-			() => {
-				this.title.setScale(1);
-				if (this.title.width > layout.scenarioInfo.width) {
-					this.title.displayWidth = layout.scenarioInfo.width;
-					if (this.title.scaleX < 0.9) {
-						this.title.setText(splitText(this.title.text));
-						this.title.setScale(0.9);
-					} else {
-						this.title.scaleY = this.title.scaleX;
-					}
+		languageManager.bind(this.title, `scenario_${scenario.key}_name`, () => {
+			this.title.setScale(1);
+			if (this.title.width > layout.scenarioInfo.width) {
+				this.title.displayWidth = layout.scenarioInfo.width;
+				if (this.title.scaleX < 0.9) {
+					this.title.setText(splitText(this.title.text));
+					this.title.setScale(0.9);
+				} else {
+					this.title.scaleY = this.title.scaleX;
 				}
 			}
-		);
+		});
 		languageManager.bind(
 			this.bread[9],
-			`${section.scenarioId}_${section.key}_bread`,
+			`scenario_${scenario.key}_description`,
 			() => {
 				this.realignText();
-			}
+			},
 		);
+	}
 
-		if (sendDataset) {
-			this.activateDataset(section.defaultLayer);
-			blocksManager.setLegend(section);
+	private getLockedLayers(layers: Layer[]): Layer[] {
+		return layers.filter((layer) => layer.locked_order === true);
+	}
+
+	private getUnlockedLayers(layers: Layer[]): Layer[] {
+		return layers.filter((layer) => layer.locked_order !== true);
+	}
+
+	private buildSequentialLayers(
+		scenario: Scenario,
+		unlockedIndex: number
+	): Layer[] {
+		const unlockedLayers = this.getUnlockedLayers(scenario.layers);
+		const selectedUnlocked =
+			unlockedIndex >= 0 && unlockedIndex < unlockedLayers.length
+				? unlockedLayers[unlockedIndex]
+				: null;
+
+		const result: Layer[] = [];
+		for (const layer of scenario.layers) {
+			// Include if locked OR if it's the selected unlocked layer
+			if (layer.locked_order === true || layer === selectedUnlocked) {
+				result.push(layer);
+			}
+		}
+		return result;
+	}
+
+	setLayers() {
+		if (this.currentScenario.layer_display_mode == "stacked") {
+			this.emit("setLayers", this.currentScenario.layers);
+		} else {
+			// Sequential mode: show locked layers + first unlocked layer
+			this.emit("setLayers", this.buildSequentialLayers(this.currentScenario, 0));
 		}
 	}
 
 	setLegendImage(key: string) {
 		this.legendImage.setTexture(key);
-		this.legendImage.setScale(
-			Math.min(
-				layout.scenarioLegend.width / this.legendImage.width,
-				layout.scenarioLegend.height / this.legendImage.height
-			)
+	}
+
+	private updateLegendImageScale() {
+		const scale = Math.min(
+			layout.scenarioLegend.width / this.legendImage.width,
+			layout.scenarioLegend.height / this.legendImage.height,
 		);
+		this.legendImage.setScale(scale);
 		this.legendImage.y = this.title.y;
 
-		this.legendShadow.setTexture(key);
+		this.legendShadow.setTexture(this.legendImage.texture.key);
 		this.legendShadow.y = this.legendImage.y + 2;
 		this.legendShadow.setScale(this.legendImage.scaleX);
+
+		if (this.currentScenario.legend_image_source) {
+			this.setLegendSource(this.currentScenario.legend_image_source, true);
+		}
+
+		const { x, y } = this.legendImage.getCenter();
+		this.legendLoader.setPosition(x, y);
 	}
 
 	setLegendSource(key: string, hasImage: boolean) {
@@ -466,25 +502,12 @@ export class ScenarioPage extends Page {
 			this.legendSource.setWordWrapWidth(this.legend.width);
 		}
 
-		languageManager.bind(this.legendSource, key);
+		if (languageManager.get(key, false)) {
+			languageManager.bind(this.legendSource, key);
+		} else {
+			this.legendSource.setText("");
+		}
 
 		const s = this.legendSource;
-	}
-
-	activateDataset(layerString: string) {
-		this.emit("map", layerString);
-		this.layerButtons.forEach((button) => {
-			button.setHighlight(button.getData("layers") == layerString);
-		});
-
-		let newLayers = layerString.split(",");
-		let oldLayers = this.currentLayerString.split(",");
-		this.currentLayerString = layerString;
-
-		let removedLayers = oldLayers.filter((layer) => !newLayers.includes(layer));
-		let removedLayerString = removedLayers.join(",");
-
-		this.socket.sendActivateDataset(layerString);
-		this.socket.sendDeactivateDataset(removedLayerString);
 	}
 }

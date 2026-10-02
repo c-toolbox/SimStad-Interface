@@ -1,27 +1,40 @@
 import { BaseScene } from "@/scenes/BaseScene";
-import { ColorStr } from "@/utils/colors";
-import { layoutManager } from "@/utils/LayoutManager";
+import { Color, ColorStr } from "@/utils/colors";
+import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Button } from "./elements/Button";
+import { LazyImage } from "./elements/LazyImage";
+import { Layer } from "@/utils/interfaces";
+import { contentManager } from "@/utils/ContentManager";
+import { colorToNumber } from "@/utils/functions";
+import { RoundRectangle } from "./elements/RoundRectangle";
 
 export class LayerListImage extends Button {
+	public layer: Layer;
+
 	private border: Phaser.GameObjects.Image;
 	private text: Phaser.GameObjects.Text;
-	private image: Phaser.GameObjects.Image;
+	private image: LazyImage;
 
+	private size: number;
 	private snapX: number;
 	private snapY: number;
 	private animSpawn: number;
 	private animFade: number;
 
+	private pillBg: RoundRectangle;
+	private pillText: Phaser.GameObjects.Text;
+
 	constructor(scene: BaseScene, size: number) {
 		super(scene, 0, 0);
+		this.size = size;
 		this.snapX = 0;
 		this.snapY = 0;
 		this.animSpawn = 0;
 		this.animFade = 0;
 
-		this.image = this.scene.add.image(0, 0, "Nkpg/Hillshade");
+		this.image = new LazyImage(scene, 0, 0);
 		this.image.setScale(size / this.image.width);
+		this.image.setAngle(layout.mapAngle);
 		this.add(this.image);
 
 		this.border = this.scene.add.image(0, 0, "border");
@@ -39,21 +52,81 @@ export class LayerListImage extends Button {
 		this.text.setOrigin(0.5);
 		this.add(this.text);
 
+		/* Type pill */
+
+		let psize = 0.15 * this.size;
+		let py = this.size / 2 - 0.8 * psize;
+
+		this.pillBg = new RoundRectangle(this.scene, {
+			y: py,
+			width: size,
+			height: psize,
+			color: Color.Black,
+			radius: psize / 2,
+		});
+		this.pillBg.setAlpha(0.5);
+		this.add(this.pillBg);
+
+		this.pillText = this.scene.addText({
+			y: py,
+			size: 0.65 * psize,
+			fontFamily: "Lato-Regular",
+			text: "type",
+			color: "white",
+		});
+		this.pillText.setOrigin(0.5);
+		this.add(this.pillText);
+
+		/* Input */
+
 		this.bindInteractive(this.border, true);
 		this.border.on("dragstart", this.onDragStart, this);
 		this.border.on("dragend", this.onDragEnd, this);
 		this.border.on("drag", this.onDrag, this);
 	}
 
-	setLayer(index: number, texture: string) {
-		this.name = texture;
-		this.text.setText(`${index + 1}`);
-		if (this.scene.textures.exists(texture)) {
-			this.image.setTexture(texture);
-		} else {
-			this.image.setTexture("city");
+	setLayer(index: number, layer: Layer) {
+		this.layer = layer;
+
+		this.image.setTint(0xffffff);
+
+		switch (layer.type) {
+			case "image":
+			case "flow":
+			case "movie":
+				const raster = contentManager.layerToRaster(layer);
+				if (raster) this.image.setTexture(raster.thumbnail);
+				else console.error(`Raster not found: '${raster}'`);
+				break;
+
+			case "color":
+				this.image.setTexture("square");
+				this.image.setTint(colorToNumber(layer.color));
+				break;
+
+			case "ndi":
+				this.image.setTexture("blank");
+				break;
+
+			default:
+				throw Error(`Unknown layer type: '${layer}'`);
 		}
+
+		this.image.setScale(this.size / this.image.width);
+
+		this.text.setText(`${index + 1}`);
+
+		this.setType(layer.type);
 	}
+
+	setType(type: string) {
+		this.pillBg.setVisible(type != "image");
+		this.pillText.setVisible(type != "image");
+		this.pillText.setText(type);
+		this.pillBg.setWidth(this.pillText.displayWidth + this.pillBg.height);
+	}
+
+	/* Input */
 
 	onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void {
 		super.onDrag(pointer, dragX, dragY);
@@ -124,7 +197,7 @@ export class LayerListImage extends Button {
 	}
 
 	get isWithinBounds() {
-		const l = layoutManager.mapControlsLower;
+		const l = layout.mapControlsLower;
 		const lx = Phaser.Math.Clamp(this.x, l.left, l.right);
 		const ly = Phaser.Math.Clamp(this.y, l.top, l.bottom);
 		const maxDistance = l.height / 2;

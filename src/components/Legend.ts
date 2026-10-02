@@ -1,9 +1,12 @@
 import { BaseScene } from "@/scenes/BaseScene";
 import { colorToNumber, splitText } from "@/utils/functions";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import { Color, ColorStr } from "@/utils/colors";
+import { Color } from "@/utils/colors";
 import { RoundRectangle } from "./elements/RoundRectangle";
+import { LazyImage } from "./elements/LazyImage";
 import { languageManager } from "@/utils/LanguageManager";
+import { Legend as LegendData } from "@/utils/interfaces";
+import { contentManager } from "@/utils/ContentManager";
 
 interface Stop {
 	color: string;
@@ -19,7 +22,7 @@ export class Legend extends Phaser.GameObjects.Container {
 	private graphics: Phaser.GameObjects.Graphics;
 	private title: Phaser.GameObjects.Text;
 	private labels: Phaser.GameObjects.Text[];
-	private symbols: Phaser.GameObjects.Image[];
+	private symbols: LazyImage[];
 
 	constructor(
 		scene: BaseScene,
@@ -27,7 +30,7 @@ export class Legend extends Phaser.GameObjects.Container {
 		y: number,
 		width: number,
 		height: number,
-		rescale = 1.0
+		rescale = 1.0,
 	) {
 		super(scene, x, y);
 		this.scene = scene;
@@ -60,7 +63,7 @@ export class Legend extends Phaser.GameObjects.Container {
 			this.title.y + this.title.displayHeight + 8 * rescale,
 			width - this.padding,
 			2,
-			Color.White
+			Color.White,
 		);
 		this.add(hr);
 
@@ -68,9 +71,9 @@ export class Legend extends Phaser.GameObjects.Container {
 		this.symbols = [];
 	}
 
-	setLegend(title: string, stops: Stop[]) {
+	setLegend(legend: LegendData) {
 		this.graphics.clear();
-		this.setTitle(title);
+		this.setTitle(legend.title);
 
 		const padding = 80 * this.rescale;
 
@@ -82,22 +85,26 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		const ty = this.title.y + this.title.displayHeight * 2.0;
 		const th = this.height / 2 - ty - padding / 2;
-		const count = Math.max(stops.length, 10);
+		const count = Math.max(legend.entries.length, 10);
 		const hgap = 28 * this.rescale;
-		const vgap = (24 - 2 * (Math.max(stops.length, 10) - 10)) * this.rescale;
+		const vgap =
+			(24 - 2 * (Math.max(legend.entries.length, 10) - 10)) * this.rescale;
 		const height = (th - vgap * (count - 1)) / count;
 		const width = 2 * height;
 
-		stops.forEach(({ color, type }, index) => {
+		legend.entries.forEach(({ text, color, symbol: symbolKey, order }) => {
 			let x = this.title.x;
-			let y = ty + (height + vgap) * index + height / 2;
+			let y = ty + (height + vgap) * (order - 1) + height / 2;
 
-			const icon = `symbol_${type ?? "rectangle"}`;
-			let symbol = this.scene.add.image(x + width / 2, y, icon);
-			symbol.setScale(height / symbol.height);
-			symbol.setTint(colorToNumber(color));
-			this.symbols.push(symbol);
-			this.add(symbol);
+			const icon = contentManager.getLegendSymbol(symbolKey).image;
+			let symbolImage = new LazyImage(this.scene, x + width / 2, y);
+			symbolImage.on("loaded", () => {
+				symbolImage.setScale(height / symbolImage.height);
+			});
+			symbolImage.setTexture(icon);
+			symbolImage.setTint(colorToNumber(color));
+			this.symbols.push(symbolImage);
+			this.add(symbolImage);
 
 			let label = this.scene.addText({
 				x: x + width + vgap / 2,
@@ -109,8 +116,8 @@ export class Legend extends Phaser.GameObjects.Container {
 			this.add(label);
 
 			const maxWidth = this.width / 2 - vgap / 2 - label.x;
-			if (languageManager.get(title + index)) {
-				languageManager.bind(label, title + index, () => {
+			if (languageManager.get(text)) {
+				languageManager.bind(label, text, () => {
 					if (label.displayWidth > maxWidth && label.text.includes(" ")) {
 						label.setText(splitText(label.text));
 					}
@@ -128,7 +135,7 @@ export class Legend extends Phaser.GameObjects.Container {
 
 		let newHeight =
 			ty +
-			(height + vgap) * (stops.length - 1) +
+			(height + vgap) * (legend.entries.length - 1) +
 			height / 2 +
 			this.height / 2 +
 			padding / 2;

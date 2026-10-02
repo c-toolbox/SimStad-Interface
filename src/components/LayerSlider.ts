@@ -101,7 +101,7 @@ export class LayerSlider extends Phaser.GameObjects.Container {
 		this.tickLabels = [];
 
 		for (let i = 0; i < labelKeys.length; i++) {
-			let w = this.width;
+			let w = this.width + this.height / 2;
 			let k = labelKeys.length - 1;
 			let x = w * (i / k - 0.5);
 
@@ -113,7 +113,7 @@ export class LayerSlider extends Phaser.GameObjects.Container {
 				color: "white",
 			});
 			languageManager.bind(label, labelKeys[i]);
-			label.setOrigin(0.5, 0.0);
+			label.setOrigin(i / k, 0.0);
 			this.add(label);
 
 			this.tickLabels.push(label);

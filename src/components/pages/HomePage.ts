@@ -3,14 +3,15 @@ import { SocketManager } from "@/utils/SocketManager";
 import { Page, PageState } from "./Page";
 import { layoutManager as layout } from "@/utils/LayoutManager";
 import { Color } from "@/utils/colors";
-import { Scenario, scenarioManager } from "@/utils/ScenarioManager";
-import { ScenarioButton } from "../ScenarioButton";
+import { CollectionButton } from "../CollectionButton";
 import { languageManager } from "@/utils/LanguageManager";
+import { contentManager } from "@/utils/ContentManager";
+import { Collection } from "@/utils/interfaces";
 
 export class HomePage extends Page {
 	private title: Phaser.GameObjects.Text;
 	private areas: Phaser.Geom.Rectangle[];
-	private scenarioButtons: ScenarioButton[];
+	private collectionButtons: CollectionButton[];
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, state, socket);
@@ -59,38 +60,43 @@ export class HomePage extends Page {
 
 		/* Scenario buttons */
 
-		this.scenarioButtons = [];
-		scenarioManager.getScenarios().forEach((scenario: Scenario, i: number) => {
-			let area = this.areas[i];
-			let text = scenario.id + "_title";
+		this.collectionButtons = [];
+		contentManager
+			.getFeaturedCollections()
+			.forEach((collection: Collection, i: number) => {
+				let area = this.areas[i];
+				if (!area) {
+					return console.error(
+						`HomePage.getAreas has run out of areas. You are attempting to display too many scenarios.`,
+					);
+				}
 
-			let button = new ScenarioButton(
-				this.scene,
-				area.centerX,
-				area.centerY,
-				area.width,
-				area.height,
-				text,
-				scenario.thumbnail
-			);
-			button.on(
-				"click",
-				() => {
-					if (this.allowInput()) {
-						this.emit("scenario", scenario.id);
-					}
-				},
-				this
-			);
-			this.add(button);
-			this.scenarioButtons.push(button);
-		});
+				let button = new CollectionButton(
+					this.scene,
+					area.centerX,
+					area.centerY,
+					area.width,
+					area.height,
+					collection,
+				);
+				button.on(
+					"click",
+					() => {
+						if (this.allowInput()) {
+							this.emit("collection", collection.key);
+						}
+					},
+					this,
+				);
+				this.add(button);
+				this.collectionButtons.push(button);
+			});
 	}
 
 	update(time: number, delta: number) {
 		super.update(time, delta);
 
-		this.scenarioButtons.forEach((button) => button.update(time, delta));
+		this.collectionButtons.forEach((button) => button.update(time, delta));
 	}
 
 	getAreas() {
@@ -108,7 +114,7 @@ export class HomePage extends Page {
 			panel.bottom - lowerHeight - upperHeight - 2 * gap,
 			panel.width,
 			panel.height / 4,
-			gap
+			gap,
 		);
 		areas.push(...upperRects);
 
@@ -119,7 +125,7 @@ export class HomePage extends Page {
 			panel.bottom - lowerHeight,
 			panel.width,
 			lowerHeight,
-			gap
+			gap,
 		);
 		areas.push(...lowerRects);
 
@@ -133,7 +139,7 @@ export class HomePage extends Page {
 		top: number,
 		width: number,
 		height: number,
-		gap: number
+		gap: number,
 	): Phaser.Geom.Rectangle[] {
 		let rectWidth = (width - gap * (M - 1)) / M;
 		let rectHeight = (height - gap * (N - 1)) / N;

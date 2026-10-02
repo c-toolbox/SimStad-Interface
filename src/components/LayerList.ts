@@ -2,12 +2,13 @@ import { BaseScene } from "@/scenes/BaseScene";
 import { Color } from "@/utils/colors";
 import { layoutManager } from "@/utils/LayoutManager";
 import { LayerListImage } from "./LayerListImage";
+import { Layer } from "@/utils/interfaces";
 
 export class LayerList extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
 
 	private snapPositions: { x: number; y: number }[];
-	private layers: LayerListImage[];
+	private layerImages: LayerListImage[];
 
 	constructor(scene: BaseScene, x: number, y: number) {
 		super(scene, x, y);
@@ -18,20 +19,22 @@ export class LayerList extends Phaser.GameObjects.Container {
 
 		// Layers
 		this.snapPositions = [];
-		this.layers = [];
+		this.layerImages = [];
 		this.updateSnapPositions(0);
 
 		const N = 10;
 		for (let i = 0; i < N; i++) {
 			const layer = new LayerListImage(scene, this.layout.height);
-			this.layers.push(layer);
+			this.layerImages.push(layer);
 			this.add(layer);
 
 			layer.on("drag", this.repositionLayers, this);
 			layer.on("drop", this.sendUpdatedOrder, this);
 			layer.on("click", () => {
 				layer.setVisible(false);
-				this.layers = this.layers.filter((l) => l !== layer).concat(layer);
+				this.layerImages = this.layerImages
+					.filter((l) => l !== layer)
+					.concat(layer);
 				this.sendUpdatedOrder();
 			});
 		}
@@ -39,16 +42,16 @@ export class LayerList extends Phaser.GameObjects.Container {
 	}
 
 	update(time: number, delta: number) {
-		this.layers.forEach((layer, index) => layer.update(time, delta));
+		this.layerImages.forEach((layer, index) => layer.update(time, delta));
 	}
 
-	setLayers(layers: string[]) {
+	setLayers(layers: Layer[]) {
 		this.updateSnapPositions(Math.max(layers.length, 4));
 
-		this.layers.sort((a, b) =>
-			a.visible === b.visible ? 0 : a.visible ? -1 : 1
+		this.layerImages.sort((a, b) =>
+			a.visible === b.visible ? 0 : a.visible ? -1 : 1,
 		);
-		this.layers.forEach((layer, i) => {
+		this.layerImages.forEach((layer, i) => {
 			if (i < layers.length) {
 				const isNew = !layer.visible;
 				layer.setVisible(true);
@@ -69,14 +72,14 @@ export class LayerList extends Phaser.GameObjects.Container {
 	}
 
 	repositionLayers() {
-		this.layers.sort((a, b) => {
+		this.layerImages.sort((a, b) => {
 			if (a.visible !== b.visible) {
 				return a.visible ? -1 : 1;
 			}
 			return a.x - b.x;
 		});
 
-		this.layers.forEach((layer, index) => {
+		this.layerImages.forEach((layer, index) => {
 			if (index < this.snapPositions.length) {
 				const { x, y } = this.snapPositions[index];
 				layer.setSnapPosition(x, y, false);
@@ -100,9 +103,9 @@ export class LayerList extends Phaser.GameObjects.Container {
 	}
 
 	sendUpdatedOrder() {
-		const layers = this.layers
-			.filter((layer) => layer.visible && layer.name)
-			.map((layer) => layer.name);
+		const layers = this.layerImages
+			.filter((layer) => layer.visible && layer.layer)
+			.map((layer) => layer.layer);
 
 		this.emit("updateOrder", layers);
 	}

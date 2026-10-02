@@ -50,7 +50,7 @@ export class MapControls extends Phaser.GameObjects.Container {
 
 		this.controlButtons = [];
 
-		const cll = layout.mapControlsLower;
+		// const cll = layout.mapControlsLower;
 		// const size = cll.height;
 		// const xCoords = [cll.left + size / 2, cll.centerX, cll.right - size / 2];
 

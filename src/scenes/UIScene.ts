@@ -1,11 +1,12 @@
 import { BaseScene } from "./BaseScene";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
 import { layoutManager as layout } from "@/utils/LayoutManager";
-import { IDLE_TIME, IDLE_FADE } from "@/utils/constants";
+import { config } from "@/utils/RuntimeConfig";
 
 import { InfoWindow } from "@/components/attraction/InfoWindow";
 import { ToolboxButton } from "@/components/attraction/ToolboxButton";
 import { AttractionView } from "@/components/attraction/AttractionView";
+import { Lockdown } from "@/components/attraction/Lockdown";
 import { getLocalStorage, setLocalStorage } from "@/utils/functions";
 import { blocksManager } from "@/utils/BlocksManager";
 
@@ -13,10 +14,7 @@ export class UIScene extends BaseScene {
 	private attractionView: AttractionView;
 	private idleTimer: number;
 	private fader: Phaser.GameObjects.Rectangle;
-
-	private lockdown: Phaser.GameObjects.Rectangle;
-	private lockdownText: Phaser.GameObjects.Text;
-	private lockdownTimer: NodeJS.Timeout;
+	private lockdown: Lockdown;
 
 	private infoWindow: InfoWindow;
 	private toolButtons: ToolboxButton[];
@@ -34,7 +32,7 @@ export class UIScene extends BaseScene {
 
 		this.currentLanguage = languageManager.getCurrentLanguage();
 		this.audioEnabled = true;
-		blocksManager.sendBlocksAudio(this.audioEnabled);
+		blocksManager.setBlocksAudio(this.audioEnabled);
 
 		this.allowInput = false;
 		setTimeout(() => {
@@ -57,7 +55,7 @@ export class UIScene extends BaseScene {
 
 		/* Info window (clicking info-button) */
 
-		this.infoWindow = new InfoWindow(this, 0x261e07, 0x755917);
+		this.infoWindow = new InfoWindow(this, 0x261e07, 0x8f6b18);
 		this.infoWindow.on(
 			"close",
 			() => {
@@ -150,43 +148,16 @@ export class UIScene extends BaseScene {
 
 		/* Lockdown */
 
-		this.lockdown = this.add
-			.rectangle(this.CX, this.CY, this.W, this.H, 0, 0.5)
-			.setVisible(false)
-			.setInteractive()
-			.on("pointerdown", () => {});
-
-		this.lockdownText = this.addText({
-			x: this.W - 12,
-			y: this.H - 12,
-			size: 24,
-			color: "white",
-			fontFamily: "Lato-Bold",
-			text: "Loading...",
-		})
-			.setOrigin(1)
-			.setVisible(false);
-
-		this.scene.get("GameScene").events.on("onCacheProgress", () => {
-			this.lockdown.setVisible(true);
-			this.lockdownText.setVisible(true);
-
-			clearTimeout(this.lockdownTimer);
-			this.lockdownTimer = setTimeout(() => {
-				this.lockdown.setVisible(false);
-				this.lockdownText.setVisible(false);
-			}, 10000);
-		});
-		this.scene.get("GameScene").events.on("onCacheComplete", () => {
-			this.lockdown.setVisible(false);
-			this.lockdownText.setVisible(false);
-		});
+		this.lockdown = new Lockdown(this);
+		this.scene
+			.get("GameScene")
+			.events.on("lockdown", this.lockdown.trigger, this.lockdown);
 	}
 
 	update(time: number, delta: number): void {
 		this.attractionView.update(time, delta);
 		this.infoWindow.update(time, delta);
-		// this.storyWindow.update(time, delta);
+		this.lockdown.update(time, delta);
 
 		this.attractionView.alpha *= 1 - 0.99 * this.infoWindow.alpha;
 
@@ -202,17 +173,17 @@ export class UIScene extends BaseScene {
 				this.currentLanguage != LanguageKey.Swedish ||
 				!this.audioEnabled
 			) {
-				if (this.idleTimer > IDLE_TIME) {
+				if (this.idleTimer > config.IDLE_TIME) {
 					this.fader.setVisible(true);
 					this.fader.setAlpha(
-						Math.pow((this.idleTimer - IDLE_TIME) / IDLE_FADE, 0.7)
+						Math.pow((this.idleTimer - config.IDLE_TIME) / config.IDLE_FADE, 0.7)
 					);
 
-					if (this.idleTimer > IDLE_TIME + IDLE_FADE / 3) {
+					if (this.idleTimer > config.IDLE_TIME + config.IDLE_FADE / 3) {
 						this.fader.input!.enabled = true;
 					}
 
-					if (this.idleTimer > IDLE_TIME + IDLE_FADE) {
+					if (this.idleTimer > config.IDLE_TIME + config.IDLE_FADE) {
 						this.onRestartButton(false);
 						this.idleTimer = -2;
 					}
@@ -232,7 +203,7 @@ export class UIScene extends BaseScene {
 	onInfoButton() {
 		if (!this.allowInput) return;
 
-		if (this.infoWindow.isClosed /*&& this.storyWindow.isClosed*/) {
+		if (this.infoWindow.isClosed) {
 			this.events.emit("info", true);
 			this.infoWindow.show();
 		} else if (this.infoWindow.isOpen) {
@@ -246,7 +217,6 @@ export class UIScene extends BaseScene {
 
 		if (!this.attractionView.visible || this.infoWindow.isOpen) {
 			this.infoWindow.hide();
-			// this.storyWindow.hide();
 			this.attractionView.show();
 			this.infoWindow.setGuideMode(false);
 
@@ -295,7 +265,7 @@ export class UIScene extends BaseScene {
 			audioButton.setTint(0xffffff);
 		}
 
-		blocksManager.sendBlocksAudio(this.audioEnabled);
+		blocksManager.setBlocksAudio(this.audioEnabled);
 	}
 
 	wakeUp() {

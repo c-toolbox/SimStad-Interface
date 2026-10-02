@@ -4,12 +4,8 @@ import { Button } from "@/components/elements/Button";
 import { RoundRectangle } from "@/components/elements/RoundRectangle";
 import { ScrollArea } from "@/components/elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { SCALE, VERSION } from "@/utils/constants";
-import {
-	interpolateColor,
-	colorToString,
-	colorToNumber,
-} from "@/utils/functions";
+import { version as versionJson } from "@/version.json";
+import { colorToString } from "@/utils/functions";
 
 export class InfoWindow extends Phaser.GameObjects.Container {
 	public scene: BaseScene;
@@ -21,6 +17,9 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 	private visButton: Button;
 	private visLogo: Phaser.GameObjects.Image;
 	private visText: Phaser.GameObjects.Text;
+	private qrButton: Button;
+	private qrLogo: Phaser.GameObjects.Image;
+	private qrText: Phaser.GameObjects.Text;
 	private highlightColor: number;
 	private visClicks: number;
 	private guideModeEnabled: boolean;
@@ -34,7 +33,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 	constructor(
 		scene: BaseScene,
 		backgroundColor: number,
-		highlightColor: number
+		highlightColor: number,
 	) {
 		super(scene, scene.CX, scene.CY);
 		this.scene = scene;
@@ -47,10 +46,10 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 
 		this.width = 0.7 * scene.W;
 		this.height = 0.8 * scene.H;
-		this.fontSize = 12 * 1.6 * SCALE;
+		this.fontSize = 12 * 1.6;
 		this.sep = this.fontSize;
 		this.pad = 3 * this.fontSize;
-		this.shadowSize = 4 * SCALE;
+		this.shadowSize = 4;
 
 		let outside = scene.add.rectangle(0, 0, scene.W, scene.H, 0x000000, 0.6);
 		this.add(outside);
@@ -63,7 +62,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			y: 0,
 			width: this.width,
 			height: this.height,
-			radius: 10 * SCALE,
+			radius: 10,
 			color: backgroundColor,
 			alpha: 0.6,
 		});
@@ -75,7 +74,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			-this.width / 2 + this.pad,
 			-this.height / 2 + this.pad,
 			0.85 * this.width - 2 * this.pad,
-			this.height - 2 * this.pad - this.fontSize - this.sep
+			this.height - 2 * this.pad - this.fontSize - this.sep,
 		);
 		this.box.add(this.scrollArea);
 
@@ -83,8 +82,8 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			this.scene,
 			-this.width / 2 + this.pad / 2,
 			-this.fontSize,
-			6 * SCALE,
-			this.scrollArea.height
+			6,
+			this.scrollArea.height,
 		);
 		this.box.add(this.scrollBar);
 
@@ -94,9 +93,6 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			{ weight: 700, color: highColor, text: "info_welcome" },
 			{ weight: 700, size: 4, text: "info_title" },
 			{ weight: 500, text: "info_pitch" },
-			null,
-			{ weight: 700, size: 1, color: textColor, text: "info_how_1" },
-			{ weight: 500, text: "info_how_2" },
 			null,
 			{ weight: 700, size: 1, color: textColor, text: "info_data_1" },
 			{ weight: 500, text: "info_data_2" },
@@ -146,8 +142,8 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.repositionText();
 
 		let qw = 0.15 * this.width - this.pad;
-		let qx = 0.5 * this.width - this.pad;
-		let qy = -0.5 * this.height + this.pad;
+		let qx = 0.5 * this.width - this.pad - qw / 2;
+		let qy = -0.5 * this.height + this.pad + qw / 2;
 
 		// let qrBg = new RoundRectangle(scene, qx-qw/2, qy+qw/2, qw, qw, 4, 0xFFFFFF);
 		// this.box.add(qrBg);
@@ -159,18 +155,14 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.visLogo.setTint(highlightColor);
 		this.visLogo.setBlendMode(Phaser.BlendModes.ADD);
 
-		this.visButton = new Button(
-			this.scene,
-			qx - this.visLogo.displayWidth / 2,
-			qy + this.visLogo.displayHeight / 2
-		);
+		this.visButton = new Button(this.scene, qx, qy);
 		this.box.add(this.visButton);
 		this.visButton.bindInteractive(this.visLogo);
 		this.visButton.add(this.visLogo);
 
 		this.visText = scene.addText({
 			x: this.visButton.x,
-			y: this.visButton.y + qw / 2 + this.fontSize,
+			y: this.visButton.y + qw / 2 + this.fontSize / 2,
 			size: this.fontSize,
 			fontFamily: "Lato-Bold",
 			color: "white",
@@ -192,7 +184,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 					duration: 1000,
 					ease: "Back.InOut",
 					onUpdate: (tween) => {
-						this.visButton.setAngle(tween.getValue());
+						this.visButton.setAngle(tween.getValue()!);
 						this.visClicks = 0;
 					},
 				});
@@ -202,22 +194,36 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			}
 		});
 
-		/*
-		let visImage = scene.add.image(0, 0, "vis_c_logo");
-		visImage.setScale(qw / visImage.width);
-		// visImage.setOrigin(1, 0);
-		visImage.setAlpha(0.5);
-		visImage.setTint(highlightColor);
-		visImage.setBlendMode(Phaser.BlendModes.SCREEN);
+		/* QR code */
 
-		qy = 0 * this.height + this.pad;
-		let visButton = new Button(this.scene,
-			qx - visImage.displayWidth/2,
-			qy + visImage.displayHeight/2);
-		this.box.add(visButton);
-		visButton.bindInteractive(visImage);
-		visButton.add(visImage);
-		*/
+		qy = this.visButton.y + qw + 3 * this.sep;
+
+		this.qrLogo = scene.add.image(0, 0, "qr_documentation");
+		this.qrLogo.setOrigin(0.5);
+		this.qrLogo.setScale(qw / this.qrLogo.width);
+		this.qrLogo.setTint(highlightColor);
+		this.qrLogo.setBlendMode(Phaser.BlendModes.ADD);
+		this.box.add(this.qrLogo);
+		
+		this.qrButton = new Button(this.scene, qx, qy);
+		this.box.add(this.qrButton);
+		this.qrButton.bindInteractive(this.qrLogo);
+		this.qrButton.add(this.qrLogo);
+
+		this.qrText = scene.addText({
+			x: this.qrButton.x,
+			y: this.qrButton.y + qw / 2 + this.fontSize / 2,
+			size: this.fontSize,
+			fontFamily: "Lato-Regular",
+			color: "white",
+		});
+		this.qrText.setTint(highlightColor);
+		this.qrText.setBlendMode(Phaser.BlendModes.ADD);
+		this.qrText.setOrigin(0.5, 0.0);
+		languageManager.bind(this.qrText, "info_qr");
+		this.box.add(this.qrText);
+
+		/* Copyright */
 
 		let cx = this.width / 2 - this.pad;
 		let cy = this.height / 2 - this.pad;
@@ -235,7 +241,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		languageManager.bind(
 			copyright,
 			"info_copyright",
-			this.repositionText.bind(this)
+			this.repositionText.bind(this),
 		);
 		this.box.add(copyright);
 
@@ -244,7 +250,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 			y: cy - 1.4 * this.fontSize,
 			size: this.fontSize,
 			color: textColor,
-			text: VERSION,
+			text: versionJson.split(".")[0],
 		}); // light
 		version.setOrigin(1, 1);
 		version.setPadding(this.shadowSize);
@@ -260,7 +266,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 					this.hide();
 				}
 			},
-			this
+			this,
 		);
 
 		this.setGuideMode(false);
@@ -297,7 +303,7 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.emit("guide", this.guideModeEnabled);
 
 		this.visLogo.setTint(
-			this.guideModeEnabled ? 0xffffff : this.highlightColor
+			this.guideModeEnabled ? 0xffffff : this.highlightColor,
 		);
 		this.visText.setVisible(this.guideModeEnabled);
 	}
@@ -315,13 +321,14 @@ export class InfoWindow extends Phaser.GameObjects.Container {
 		this.alpha += Phaser.Math.Clamp(
 			this.alphaGoal - this.alpha,
 			-delta / duration,
-			delta / duration
+			delta / duration,
 		);
-		this.box.y = Phaser.Math.Easing.Cubic.In(1 - this.alpha) * 20 * SCALE;
+		this.box.y = Phaser.Math.Easing.Cubic.In(1 - this.alpha) * 20;
 		this.setVisible(this.alpha > 0);
 		this.scrollArea.update(time, delta);
 		this.scrollBar.set(this.scrollArea.getScroll());
 
 		this.visButton.setScale(1.0 - 0.05 * this.visButton.holdSmooth);
+		this.qrButton.setScale(1.0 - 0.05 * this.qrButton.holdSmooth);
 	}
 }

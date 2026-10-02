@@ -6,19 +6,18 @@ import { layoutManager as layout } from "@/utils/LayoutManager";
 
 import { ScrollArea } from "../elements/ScrollArea";
 import { ScrollBar } from "@/components/elements/ScrollBar";
-import { LayerImageButton } from "../LayerImageButton";
-import { RoundRectangle } from "../elements/RoundRectangle";
-import { Layer, layerManager } from "@/utils/LayerManager";
-import { LayerButton } from "../LayerButton";
+import { contentManager } from "@/utils/ContentManager";
+import { RasterButton } from "../RasterButton";
 import { LayerList } from "../LayerList";
+import { Layer, Raster, Tag } from "@/utils/interfaces";
 
 export class LayerPage extends Page {
 	private scrollArea: ScrollArea;
 	private scrollBar: ScrollBar;
-	private layerButtons: LayerButton[];
+	private layerButtons: RasterButton[];
 	private showLayerInfo: boolean;
 
-	private activeLayers: string[];
+	private activeLayers: Layer[];
 	private layerList: LayerList;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
@@ -30,10 +29,6 @@ export class LayerPage extends Page {
 
 		let background = layout.addRect(scene, layout.panel, Color.Slate800);
 		this.add(background);
-
-		/* Folders */
-
-		this.loadFolders();
 
 		/* Scroll area */
 
@@ -47,7 +42,7 @@ export class LayerPage extends Page {
 			gridLayout.left,
 			scrollTop,
 			gridLayout.width,
-			scrollHeight
+			scrollHeight,
 		);
 		this.add(this.scrollArea);
 
@@ -56,36 +51,30 @@ export class LayerPage extends Page {
 			gridLayout.right + 20,
 			this.scrollArea.y + this.scrollArea.height / 2,
 			10,
-			this.scrollArea.height - 32
+			this.scrollArea.height - 8,
 		);
 		this.add(this.scrollBar);
-
-		let cx = this.scrollArea.centerX;
-		let cy = this.scrollArea.centerY;
-
-		let areaBackground = new RoundRectangle(scene, {
-			x: cx,
-			y: cy,
-			width: this.scrollArea.width,
-			height: this.scrollArea.height,
-			radius: layout.radius,
-			color: Color.Slate700,
-		});
-		this.add(areaBackground);
-		this.sendToBack(areaBackground);
-		this.sendToBack(background);
-
-		this.loadLayerFolder(layerManager.getFolders()[0].name);
 
 		/* Active layer list */
 
 		this.layerList = new LayerList(scene, 0, 0);
 		this.add(this.layerList);
 
-		this.layerList.on("updateOrder", (layers: string[]) => {
+		this.layerList.on("updateOrder", (layers: Layer[]) => {
 			this.activeLayers = layers;
 			this.sendActiveDataset();
 		});
+
+		/* Folders */
+
+		this.refresh();
+	}
+
+	refresh() {
+		this.loadFolders();
+
+		const tags = contentManager.getTags();
+		this.loadTag(tags[0]);
 	}
 
 	update(time: number, delta: number) {
@@ -118,8 +107,8 @@ export class LayerPage extends Page {
 		this.buttons = [];
 
 		const folderLayout = layout.layerFolders;
-		const folders = layerManager.getFolders();
-		let n = folders.length + 1;
+		const tags = contentManager.getTags();
+		let n = tags.length + 2;
 		let s = 20;
 		let w = folderLayout.width;
 		let h = (folderLayout.height - s * (n - 1)) / n;
@@ -127,60 +116,62 @@ export class LayerPage extends Page {
 		let y = folderLayout.bottom - h / 2;
 
 		this.addButton(x, y, w, h, "Clear", Color.Rose800, () => {
-			this.socket.sendReset();
-			this.resetLayers();
-			this.emit("map", "");
+			this.emit("setLayers", []);
 		});
 
-		folders.forEach((folder, index) => {
+		y -= h + s;
+		this.addButton(x, y, w, h, "Refresh", Color.Blue600, async () => {
+			this.scene.events.emit("lockdown", true, "Fetching data from Omni...");
+
+			await contentManager.refresh();
+
+			this.scene.events.emit("lockdown", false);
+		});
+
+		tags.forEach((tag, index) => {
 			let y = folderLayout.top + h / 2 + (h + s) * index;
-			const color = folder.isSequential ? Color.Slate700 : Color.Slate600;
-			this.addButton(x, y, w, h, folder.name, color, () => {
-				this.loadLayerFolder(folder.name);
+			const tagButton = this.addButton(x, y, w, h, tag.name, Color.Slate600, () => {
+				this.loadTag(tag);
 			});
+			tagButton.setData("tag", tag.key);
 		});
 	}
 
-	loadLayerFolder(folder = "") {
+	loadTag(tag: Tag) {
 		this.clearLayers();
 		const areas = this.getGrid();
 
 		// Folder buttons
 		this.buttons.forEach((button) => {
-			button.setHighlight(button.getText() == folder);
+			button.setHighlight(button.getData("tag") == tag.key);
 		});
 
-		layerManager.getLayers(folder).forEach((layer: Layer) => {
-			if (layer.isInDrive || this.showLayerInfo) {
-				this.addLayerButton(layer, areas.next().value);
-			}
+		contentManager.getRastersByTag(tag).forEach((raster: Raster) => {
+			this.addRasterButton(raster, areas.next().value);
 		});
 	}
 
-	addLayerButton(layer: Layer, { x, y, w, h }: GridArea) {
-		let button = new LayerImageButton(this.scene, x, y, w, h, layer.name);
+	addRasterButton(raster: Raster, { x, y, w, h }: GridArea) {
+		let button = new RasterButton(this.scene, x, y, w, h, raster);
 		button.setDraggable();
 		this.add(button);
 		this.layerButtons.push(button);
 		this.scrollArea.apply(button);
 
-		let activeIndex = this.activeLayers.indexOf(layer.name);
+		let activeIndex = this.activeLayers.findIndex((layer) =>
+			layer.type == "image" || layer.type == "flow" || layer.type == "movie"
+				? layer.raster == raster.key
+				: false,
+		);
 		if (activeIndex != -1) {
 			button.setSelected(true);
 			button.setOrder(activeIndex + 1);
 		}
 
-		if (!layer.isInDrive) {
-			button.addErrorIcon();
-		}
-		if (this.showLayerInfo) {
-			button.addUseCount(layer.useCount);
-		}
-
 		button.on("click", () => this.onLayerButtonClick(button));
 	}
 
-	onLayerButtonClick(button: LayerButton) {
+	onLayerButtonClick(button: RasterButton) {
 		if (!button.selected && this.activeLayers.length >= 10) {
 			return;
 		}
@@ -188,9 +179,13 @@ export class LayerPage extends Page {
 		button.setSelected(!button.selected);
 
 		if (button.selected) {
-			this.activeLayers.push(button.layer);
+			this.activeLayers.push(contentManager.rasterToLayer(button.raster));
 		} else {
-			const index = this.activeLayers.indexOf(button.layer);
+			const index = this.activeLayers.findIndex((layer) =>
+				layer.type == "image" || layer.type == "flow" || layer.type == "movie"
+					? layer.raster == button.raster.key
+					: false,
+			);
 			this.activeLayers.splice(index, 1);
 		}
 		this.sendActiveDataset();
@@ -198,31 +193,29 @@ export class LayerPage extends Page {
 
 	sendActiveDataset() {
 		this.activeLayers.forEach((layer, index) => {
-			let button = this.layerButtons.find((button) => button.layer == layer);
+			let button = this.layerButtons.find((button) =>
+				layer.type == "image" || layer.type == "flow" || layer.type == "movie"
+					? button.raster.key == layer.raster
+					: false,
+			);
 			if (button) {
 				button.setOrder(index + 1);
 			}
 		});
 
-		let layerString = this.activeLayers.join(",");
-		this.emit("map", layerString);
-
-		this.socket.sendReset();
-		this.socket.sendActivateDataset(layerString);
+		this.emit("setLayers", this.activeLayers);
 	}
 
-	resetLayers() {
-		this.activeLayers = [];
-		this.layerList.setLayers(this.activeLayers);
-		this.layerButtons.forEach((buttons) => buttons.setSelected(false));
-	}
-
-	setLayers(layerString: string) {
-		this.activeLayers = layerString.split(",").filter((layer) => !!layer);
+	setLayers(layers: Layer[]) {
+		this.activeLayers = layers;
 		this.layerList.setLayers(this.activeLayers);
 
 		this.layerButtons.forEach((button) => {
-			const index = this.activeLayers.indexOf(button.layer);
+			const index = this.activeLayers.findIndex((layer) =>
+				layer.type == "image" || layer.type == "flow" || layer.type == "movie"
+					? layer.raster == button.raster.key
+					: false,
+			);
 			if (index !== -1) {
 				button.setSelected(true);
 				button.setOrder(index + 1);
@@ -235,7 +228,7 @@ export class LayerPage extends Page {
 
 	*getGrid(): Generator<GridArea> {
 		let N = 4;
-		let margin = 30;
+		let margin = 4;
 		let sep = 20;
 		let w = (this.scrollArea.width - 2 * margin - (N - 1) * sep) / N;
 		let h = w;
@@ -255,7 +248,7 @@ export class LayerPage extends Page {
 
 	setShowLayerInfo(show: boolean) {
 		this.showLayerInfo = show;
-		this.loadLayerFolder(layerManager.getFolders()[0].name);
+		this.loadTag(contentManager.getTags()[0]);
 	}
 }
 

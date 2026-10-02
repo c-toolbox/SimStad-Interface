@@ -1,9 +1,8 @@
 import { BaseScene } from "./BaseScene";
-import { images, spritesheets, audios } from "@/assets/assets";
+import { images } from "@/assets/assets";
 import { GrayScalePostFilter } from "@/utils/pipelines/GrayScalePostFilter";
 import { BlurPostFilter } from "@/utils/pipelines/BlurPostFilter";
 import { languageManager, LanguageKey } from "@/utils/LanguageManager";
-import { title, version } from "@/version.json";
 
 export class PreloadScene extends BaseScene {
 	constructor() {
@@ -16,7 +15,7 @@ export class PreloadScene extends BaseScene {
 		if (renderer.pipelines) {
 			renderer.pipelines.addPostPipeline(
 				"GrayScalePostFilter",
-				GrayScalePostFilter
+				GrayScalePostFilter,
 			);
 			renderer.pipelines.addPostPipeline("BlurPostFilter", BlurPostFilter);
 		}
@@ -41,25 +40,14 @@ export class PreloadScene extends BaseScene {
 			text: "Loading...",
 		}).setOrigin(0, 1.5);
 
-		// Listener
+		// Loading progress bar animation
 		this.load.on("progress", (progress: number) => {
 			bar.width = progress * width;
 		});
 
-		// Load assets
+		// Load local project images (defined in src/assets/assets.ts)
 		for (let image of images) {
 			this.load.image(image.key, image.path);
-		}
-
-		for (let image of spritesheets) {
-			this.load.spritesheet(image.key, image.path, {
-				frameWidth: image.width,
-				frameHeight: image.height,
-			});
-		}
-
-		for (let audio of audios) {
-			this.load.audio(audio.key, audio.path);
 		}
 	}
 
@@ -70,7 +58,6 @@ export class PreloadScene extends BaseScene {
 		this.addEvent(200, () => {
 			this.scene.start("GameScene");
 			this.scene.launch("UIScene");
-			// this.scene.start("LegendScene");
 		});
 	}
 }

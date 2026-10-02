@@ -1,6 +1,4 @@
-import swedishLocales from "@/assets/locales/sv_SE.json";
-import englishLocales from "@/assets/locales/en_GB.json";
-import { scenarioManager } from "./ScenarioManager";
+import { contentManager } from "./ContentManager";
 
 export enum LanguageKey {
 	English = "en-GB",
@@ -26,15 +24,20 @@ class LanguageManager {
 		this.languageData = new Map();
 		this.currentLanguage = LanguageKey.Swedish;
 		this.boundObjects = new Map();
+	}
 
-		this.setupLanguageData(swedishLocales, englishLocales);
+	loadLocalizations(localization: {
+		sv: { [key: string]: string };
+		en: { [key: string]: string };
+	}) {
+		this.setupLanguageData(localization.sv, localization.en);
 		this.checkLanguageData();
 	}
 
 	// Load data from imported jsons
 	setupLanguageData(
 		swedishLocales: LocalesMap,
-		englishLocales: LocalesMap
+		englishLocales: LocalesMap,
 	): void {
 		swedishLocales = Object.assign({}, swedishLocales);
 		englishLocales = Object.assign({}, englishLocales);
@@ -70,7 +73,7 @@ class LanguageManager {
 
 	// Change language
 	setLanguage(language: LanguageKey): void {
-		console.assert(this.languageData.get(language), "Language not available.");
+		console.assert(!!this.languageData.get(language), "Language not available.");
 		if (this.currentLanguage != language) {
 			this.currentLanguage = language;
 			this.updateAllObjects();
@@ -92,7 +95,7 @@ class LanguageManager {
 			if (text.includes("\\")) {
 				console.warn(text);
 			}
-			text = text.replace(/\\\\/g, "\\");
+			text = text.replace(/\\n/g, "\n");
 		}
 		return text;
 	}
