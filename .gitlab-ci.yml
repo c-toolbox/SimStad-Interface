@@ -12,7 +12,6 @@ build-job:
 
   script:
     - npm ci
-    - npm run postinstall
     - npm run build
     - npx bestzip DigitalTwinCityInterface.zip dist/win/digitaltwincity-interface/*
   artifacts:
@@ -36,4 +35,4 @@ release-job:
     assets:
       links:
         - name: "DigitalTwinCityInterface.zip"
-          url: "${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/raw/DigitalTwinCityInterface.zip"
+          url: "${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_REF_NAME}/raw/DigitalTwinCityInterface.zip?job=build-job"
