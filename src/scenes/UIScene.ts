@@ -91,7 +91,7 @@ export class UIScene extends BaseScene {
 			},
 			{
 				image:
-					this.currentLanguage == LanguageKey.Swedish ? "flag-en" : "flag-se",
+					this.currentLanguage == LanguageKey.Swedish ? "flag-se" : "flag-en",
 				function: this.onLanguageButton,
 			},
 		];
@@ -242,11 +242,11 @@ export class UIScene extends BaseScene {
 		if (this.currentLanguage == LanguageKey.Swedish) {
 			this.currentLanguage = LanguageKey.English;
 			languageManager.setLanguage(LanguageKey.English);
-			languageButton.setTexture("flag-se");
+			languageButton.setTexture("flag-en");
 		} else {
 			this.currentLanguage = LanguageKey.Swedish;
 			languageManager.setLanguage(LanguageKey.Swedish);
-			languageButton.setTexture("flag-en");
+			languageButton.setTexture("flag-se");
 		}
 	}
 
