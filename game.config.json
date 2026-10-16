@@ -1,7 +1,7 @@
 {
 	"team": "Visualiseringscenter C",
-	"title": "DigitalTwinCity Interface",
-	"description": "Interface for DigitalTwinCity",
+	"title": "SimStad Interface",
+	"description": "Phaser-based interface for the SimStad exhibition. Read more about the project here: https://immvis.appvis.se/guides/simstad/",
 	"neutralino": {
 		"allow": [
 			"app.exit",
