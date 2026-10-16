@@ -145,15 +145,6 @@ export class ScenarioPage extends Page {
 		this.legendSource.setShadow(0, 2, "#00000077", 4);
 		this.add(this.legendSource);
 
-		/* Layer buttons */
-
-		const bl = layout.scenarioControls;
-		const bn = 3;
-		const bw = (bl.width - (bn - 1) * layout.separation) / bn;
-		const by = bl.centerY;
-		const bh = bl.height;
-		const bc = Color.Yellow700;
-
 		/* Tabs */
 
 		const tn = 13;
@@ -189,9 +180,9 @@ export class ScenarioPage extends Page {
 
 		const sl = layout.scenarioControls;
 		const sx = sl.centerX;
-		const sy = sl.top;
-		const sw = sl.width - 64;
-		const sh = 0.7 * sl.height;
+		const sy = sl.centerY;
+		const sw = sl.width;
+		const sh = sl.height;
 
 		this.layerSlider = new LayerSlider(scene, sx, sy, sw, sh, "Slider", 10);
 		this.layerSlider.setVisible(false);
@@ -310,40 +301,71 @@ export class ScenarioPage extends Page {
 	}
 
 	realignText() {
-		let ay = this.title.y + 1.3 * this.title.displayHeight;
-		let ah = layout.scenarioInner.height - (ay - layout.scenarioInner.top);
-		if (this.layerSlider.visible) {
-			ah -= 3 * this.layerSlider.height + layout.separation;
-		}
-
 		const breadText = this.bread[9].text;
 		const paragraphs = breadText
 			.split("\n")
 			.map((line) => line.trim())
 			.filter((line) => !!line);
+		const contentBottom = this.layerSlider.visible
+			? layout.scenarioControls.top - layout.separation
+			: layout.scenarioInner.bottom;
+		const top = this.title.y + 1.3 * this.title.displayHeight;
+		let fontSize = 28;
 
-		let ty = this.title.y + 1.3 * this.title.displayHeight;
+		const layoutParagraphs = () => {
+			let y = top;
+			this.bread.forEach((text) => text.setVisible(false));
 
-		this.bread.forEach((text) => text.setVisible(false));
-		paragraphs.forEach((paragraph, index) => {
-			let bread = this.bread[index];
-			bread.setVisible(true);
-			bread.setText(paragraph);
-			bread.y = ty;
+			paragraphs.forEach((paragraph, index) => {
+				const bread = this.bread[index];
+				bread.setVisible(true);
+				bread.setFontSize(fontSize);
+				bread.setLineSpacing(0.25 * fontSize);
+				bread.setText(paragraph);
+				bread.y = y;
 
-			const rightBottom = this.legend.bottom;
-			if (!this.legendImage.visible && ty > rightBottom) {
-				bread.setWordWrapWidth(layout.scenarioInner.width);
-			} else {
-				bread.setWordWrapWidth(layout.scenarioInfo.width);
-			}
+				const rightBottom = this.legend.bottom;
+				bread.setWordWrapWidth(
+					!this.legendImage.visible && y > rightBottom
+						? layout.scenarioInner.width
+						: layout.scenarioInfo.width,
+				);
 
-			ty += bread.displayHeight + 0.75 * 28;
+				y += bread.displayHeight + 0.75 * fontSize;
+			});
+
+			return y - 0.75 * fontSize;
+		};
+
+		let textBottom = layoutParagraphs();
+		if (textBottom > contentBottom) {
+			fontSize = Math.max(
+				18,
+				Math.floor(fontSize * ((contentBottom - top) / (textBottom - top))),
+			);
+			textBottom = layoutParagraphs();
+		}
+
+		this.bread.forEach((bread) => {
+			bread.setVisible(
+				bread.visible && bread.y + bread.displayHeight <= contentBottom,
+			);
 		});
 	}
 
 	setScenario(scenario: Scenario) {
 		this.currentScenario = scenario;
+		const isSequential = scenario.layer_display_mode == "sequential";
+		const unlockedLayers = isSequential
+			? this.getUnlockedLayers(scenario.layers)
+			: [];
+		const hasSlider = unlockedLayers.length > 0;
+		const contentHeight =
+			layout.scenarioInner.height -
+			(hasSlider ? layout.scenarioControls.height : 0);
+		this.layerSlider.setVisible(hasSlider);
+		this.legend.setHeight(contentHeight);
+		this.legend.y = layout.scenarioInner.top + contentHeight / 2;
 
 		this.tabButtons.forEach((button) => {
 			button.setHighlight(button.getData("scenario") == scenario.key);
@@ -374,35 +396,30 @@ export class ScenarioPage extends Page {
 			this.setLegendSource(scenario.legend_image_source, hasImage);
 		}
 
-		this.layerSlider.setVisible(false);
-		if (scenario.layer_display_mode == "sequential") {
-			const unlockedLayers = this.getUnlockedLayers(scenario.layers);
-			const lockedLayers = this.getLockedLayers(scenario.layers);
+		if (hasSlider) {
+			this.layerSlider.value = 0;
+			this.layerSlider.setSteps(unlockedLayers.length);
+			this.layerSlider.setTitle(scenario.sequence_title || "");
+			this.layerSlider.setLabels(
+				scenario.sequence_labels.map((label) => label.text),
+			);
 
-			// Only show slider if there are unlocked layers to choose from
-			if (unlockedLayers.length > 0) {
-				this.layerSlider.setVisible(true);
-				this.layerSlider.value = 0;
-				this.layerSlider.setSteps(unlockedLayers.length);
-				this.layerSlider.setTitle(scenario.sequence_title || "");
-				this.layerSlider.setLabels(
-					scenario.sequence_labels.map((label) => label.text),
-				);
-
-				this.layerSlider.removeListener("onChange");
-				this.layerSlider.on("onChange", (value: number) => {
-					if (unlockedLayers.length > 1) {
-						let unlockedIndex = Math.round(
-							value / (1 / (unlockedLayers.length - 1))
-						);
-						this.layerSlider.setLabel(unlockedIndex.toString());
-						this.emit("setLayers", this.buildSequentialLayers(scenario, unlockedIndex));
-					} else if (unlockedLayers.length === 1) {
-						this.layerSlider.setLabel("0");
-						this.emit("setLayers", this.buildSequentialLayers(scenario, 0));
-					}
-				});
-			}
+			this.layerSlider.removeListener("onChange");
+			this.layerSlider.on("onChange", (value: number) => {
+				if (unlockedLayers.length > 1) {
+					let unlockedIndex = Math.round(
+						value / (1 / (unlockedLayers.length - 1)),
+					);
+					this.layerSlider.setLabel(unlockedIndex.toString());
+					this.emit(
+						"setLayers",
+						this.buildSequentialLayers(scenario, unlockedIndex),
+					);
+				} else if (unlockedLayers.length === 1) {
+					this.layerSlider.setLabel("0");
+					this.emit("setLayers", this.buildSequentialLayers(scenario, 0));
+				}
+			});
 		}
 
 		languageManager.bind(this.title, `scenario_${scenario.key}_name`, () => {
@@ -436,7 +453,7 @@ export class ScenarioPage extends Page {
 
 	private buildSequentialLayers(
 		scenario: Scenario,
-		unlockedIndex: number
+		unlockedIndex: number,
 	): Layer[] {
 		const unlockedLayers = this.getUnlockedLayers(scenario.layers);
 		const selectedUnlocked =
@@ -459,7 +476,10 @@ export class ScenarioPage extends Page {
 			this.emit("setLayers", this.currentScenario.layers);
 		} else {
 			// Sequential mode: show locked layers + first unlocked layer
-			this.emit("setLayers", this.buildSequentialLayers(this.currentScenario, 0));
+			this.emit(
+				"setLayers",
+				this.buildSequentialLayers(this.currentScenario, 0),
+			);
 		}
 	}
 
@@ -468,9 +488,12 @@ export class ScenarioPage extends Page {
 	}
 
 	private updateLegendImageScale() {
+		const availableHeight =
+			layout.scenarioInner.height -
+			(this.layerSlider.visible ? layout.scenarioControls.height : 0);
 		const scale = Math.min(
 			layout.scenarioLegend.width / this.legendImage.width,
-			layout.scenarioLegend.height / this.legendImage.height,
+			availableHeight / this.legendImage.height,
 		);
 		this.legendImage.setScale(scale);
 		this.legendImage.y = this.title.y;

@@ -264,7 +264,7 @@ class LayoutManager {
 	get scenarioControls(): Phaser.Geom.Rectangle {
 		if (this._scenarioControls) return this._scenarioControls;
 
-		const h = 80;
+		const h = 168;
 		const x = this.scenarioInner.left;
 		const y = this.scenarioInner.bottom - h;
 		const w = this.scenarioInner.width;
@@ -279,10 +279,7 @@ class LayoutManager {
 		const w = 0.3 * this.scenarioInner.width;
 		const x = this.scenarioInner.right - w;
 		const y = this.scenarioInner.top;
-		const h =
-			this.scenarioInner.height -
-			this.scenarioControls.height -
-			this.separation;
+		const h = this.scenarioInner.height;
 
 		this._scenarioLegend = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._scenarioLegend;
@@ -294,11 +291,8 @@ class LayoutManager {
 		const x = this.scenarioInner.left;
 		const y = this.scenarioInner.top;
 		const w =
-			this.scenarioInner.width - this.scenarioLegend.width - this.separation;
-		const h =
-			this.scenarioInner.height -
-			this.scenarioControls.height -
-			this.separation;
+			this.scenarioInner.width - this.scenarioLegend.width - this.separation / 2;
+		const h = this.scenarioInner.height;
 
 		this._scenarioInfo = new Phaser.Geom.Rectangle(x, y, w, h);
 		return this._scenarioInfo;

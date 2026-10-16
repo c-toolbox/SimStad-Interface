@@ -27,18 +27,20 @@ export class LayerSlider extends Phaser.GameObjects.Container {
 		this.scene = scene;
 		this.width = width;
 		this.height = height;
+		const innerWidth = width - (28 + layout.padding + 16);
+		const innerHeight = height - (2 * 28 + layout.padding + 16);
 
 		let background = new RoundRectangle(scene, {
-			width: width + 1 * 28 + layout.padding + 16,
-			height: height + 2 * 28 + layout.padding + 16,
+			width,
+			height,
 			radius: layout.radius,
 			color: Color.Slate700,
 		});
 		this.add(background);
 
 		this.title = scene.addText({
-			x: -this.width / 2 - 14,
-			y: -this.height / 2 - 8,
+			x: -innerWidth / 2 - 14,
+			y: -innerHeight / 2 - 8,
 			size: 28,
 			fontFamily: "Lato-Bold",
 			color: "white",
@@ -48,8 +50,8 @@ export class LayerSlider extends Phaser.GameObjects.Container {
 		this.add(this.title);
 
 		this.valueLabel = scene.addText({
-			x: this.width / 2,
-			y: -this.height / 2 - 8,
+			x: innerWidth / 2,
+			y: -innerHeight / 2 - 8,
 			size: 28,
 			fontFamily: "Lato-Bold",
 			color: "white",
@@ -64,9 +66,9 @@ export class LayerSlider extends Phaser.GameObjects.Container {
 			scene,
 			0,
 			0,
-			this.width,
-			this.height,
-			this.height / 2,
+			innerWidth,
+			innerHeight,
+			innerHeight / 2,
 			steps
 		);
 		this.add(this.slider);
@@ -101,13 +103,13 @@ export class LayerSlider extends Phaser.GameObjects.Container {
 		this.tickLabels = [];
 
 		for (let i = 0; i < labelKeys.length; i++) {
-			let w = this.width + this.height / 2;
+			let w = this.slider.width + this.slider.height / 2;
 			let k = labelKeys.length - 1;
 			let x = w * (i / k - 0.5);
 
 			let label = this.scene.addText({
 				x,
-				y: this.height / 2 + 8,
+				y: this.slider.height / 2 + 8,
 				size: 28,
 				fontFamily: "Lato-Bold",
 				color: "white",
