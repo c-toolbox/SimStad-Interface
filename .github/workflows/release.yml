@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Create Windows archive
-        working-directory: dist/win/digitaltwincity-interface
+        working-directory: dist/win/simstad-interface
         run: zip -r ../../../DigitalTwinCityInterface.zip .
 
       - name: Set release metadata
