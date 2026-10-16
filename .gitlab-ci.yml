@@ -13,12 +13,12 @@ build-job:
   script:
     - npm ci
     - npm run build
-    - npx bestzip DigitalTwinCityInterface.zip dist/win/digitaltwincity-interface/*
+    - npx bestzip SimStadInterface.zip dist/win/simstad-interface/*
   artifacts:
-    name: "DigitalTwinCityInterface-$CI_COMMIT_SHORT_SHA"
+    name: "SimStadInterface-$CI_COMMIT_SHORT_SHA"
     expire_in: 30 days
     paths:
-      - DigitalTwinCityInterface.zip
+      - SimStadInterface.zip
 
 release-job:
   stage: release
@@ -34,5 +34,5 @@ release-job:
     description: "Automated build generated from commit $CI_COMMIT_SHORT_SHA on branch $CI_COMMIT_REF_NAME."
     assets:
       links:
-        - name: "DigitalTwinCityInterface.zip"
-          url: "${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_REF_NAME}/raw/DigitalTwinCityInterface.zip?job=build-job"
+        - name: "SimStadInterface.zip"
+          url: "${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_REF_NAME}/raw/SimStadInterface.zip?job=build-job"

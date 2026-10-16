@@ -36,8 +36,8 @@ jobs:
         run: npm run build
 
       - name: Create Windows archive
-        working-directory: dist/win/digitaltwincity-interface
-        run: zip -r ../../../DigitalTwinCityInterface.zip .
+        working-directory: dist/win/simstad-interface
+        run: zip -r ../../../SimStadInterface.zip .
 
       - name: Set release metadata
         shell: bash
@@ -52,13 +52,13 @@ jobs:
         shell: bash
         run: |
           if gh release view "$tag" >/dev/null 2>&1; then
-            gh release upload "$tag" DigitalTwinCityInterface.zip --clobber
+            gh release upload "$tag" SimStadInterface.zip --clobber
             gh release edit "$tag" \
               --title "Latest Build ($short_sha)" \
               --notes "Automated build generated from commit $short_sha on branch $GITHUB_REF_NAME." \
               --latest
           else
-            gh release create "$tag" DigitalTwinCityInterface.zip \
+            gh release create "$tag" SimStadInterface.zip \
               --target "$GITHUB_SHA" \
               --title "Latest Build ($short_sha)" \
               --notes "Automated build generated from commit $short_sha on branch $GITHUB_REF_NAME." \
