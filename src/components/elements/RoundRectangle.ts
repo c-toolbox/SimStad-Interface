@@ -82,6 +82,16 @@ export class RoundRectangle extends Phaser.GameObjects.Container {
 		this.updatePolygon();
 	}
 
+	setCorners(
+		bottomRight: boolean,
+		bottomLeft: boolean,
+		topLeft: boolean,
+		topRight: boolean
+	) {
+		this.corners = [bottomRight, bottomLeft, topLeft, topRight];
+		this.updatePolygon();
+	}
+
 	setColor(value: number) {
 		this.color = value;
 		this.updatePolygon();

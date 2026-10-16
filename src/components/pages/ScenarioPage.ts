@@ -199,7 +199,9 @@ export class ScenarioPage extends Page {
 		let dummy = scene.add.text(0, 0, "");
 		dummy.setVisible(false);
 		languageManager.bind(dummy, "", () => {
-			this.emit("setScenario", this.currentScenario);
+			if (this.currentScenario) {
+				this.emit("setScenario", this.currentScenario);
+			}
 		});
 	}
 
@@ -259,20 +261,52 @@ export class ScenarioPage extends Page {
 	}
 
 	updateTabs(count: number) {
-		const tn = count;
 		const tg = 15;
 		const tl = layout.scenarioTabs;
+		const twoRows = count > 7;
+		const rowCounts = twoRows
+			? [Math.ceil(count / 2), Math.floor(count / 2)]
+			: [count];
+		const rowGap = twoRows ? 10 : 0;
+		const availableHeight = twoRows ? layout.screenHeight - tl.top : tl.height;
+		const rowHeight = (availableHeight - rowGap) / rowCounts.length;
+		const maxRowCount = Math.max(...rowCounts);
 		const tw = Math.min(
 			280,
-			(tl.width - (tn - 1) * tg - this.backButton.width - layout.separation) /
-				tn,
+			(tl.width -
+				(maxRowCount - 1) * tg -
+				this.backButton.width -
+				layout.separation) /
+				maxRowCount,
 		);
 
-		for (let i = 0; i < tn; i++) {
-			let tx = tl.right - (tn - i - 0.5) * tw - (tn - i - 1) * tg;
+		this.backButton.y = tl.top + rowHeight / 2;
+		this.backButton.setLayout(this.backButton.width, rowHeight, false, 32);
 
-			this.tabButtons[i].x = tx;
-			this.tabButtons[i].setWidth(tw);
+		let buttonIndex = 0;
+		rowCounts.forEach((rowCount, rowIndex) => {
+			const ty = tl.top + rowHeight / 2 + rowIndex * (rowHeight + rowGap);
+
+			for (let rowPosition = 0; rowPosition < rowCount; rowPosition++) {
+				const tx =
+					tl.right -
+					(rowCount - rowPosition - 0.5) * tw -
+					(rowCount - rowPosition - 1) * tg;
+				const button = this.tabButtons[buttonIndex++];
+
+				button.x = tx;
+				button.y = ty;
+				button.setLayout(
+					tw,
+					rowHeight,
+					rowIndex === 1,
+					rowIndex === 0 ? 32 : 0,
+				);
+			}
+		});
+
+		for (let i = buttonIndex; i < this.tabButtons.length; i++) {
+			this.tabButtons[i].setLayout(tw, tl.height, false, 32);
 		}
 	}
 

@@ -79,12 +79,34 @@ export class TabButton extends Button {
 		this.bindInteractive(this.background, true);
 	}
 
+	setLayout(width: number, height: number, rounded: boolean, topExtension = 0) {
+		this.width = width;
+		this.height = height;
+
+		this.background.y = -topExtension / 2;
+		this.background.setWidth(width);
+		this.background.setHeight(height + topExtension);
+		this.background.setCorners(true, true, rounded, rounded);
+		this.background.input?.hitArea.setSize(
+			this.background.width,
+			this.background.height
+		);
+
+		this.border.y = -topExtension / 2;
+		this.border.setWidth(width + 8);
+		this.border.setHeight(height + topExtension + 8);
+		this.border.setCorners(true, true, rounded, rounded);
+		this.rescaleText();
+	}
+
 	setWidth(width: number) {
+		this.width = width;
 		this.background.setWidth(width);
 		this.background.input?.hitArea.setSize(
 			this.background.width,
 			this.background.height
 		);
+		this.rescaleText();
 	}
 
 	setHighlight(value: boolean) {
@@ -114,6 +136,15 @@ export class TabButton extends Button {
 			this.title.scaleY = Math.min(0.8, this.title.scaleX);
 			this.title.scaleX = this.title.scaleY;
 		}
+		this.emit("textResize");
+	}
+
+	getTextScale() {
+		return this.title.scaleX;
+	}
+
+	setTextScale(scale: number) {
+		this.title.setScale(scale);
 	}
 
 	getText() {
