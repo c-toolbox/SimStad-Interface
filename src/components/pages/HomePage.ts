@@ -6,10 +6,10 @@ import { Color } from "@/utils/colors";
 import { CollectionButton } from "../CollectionButton";
 import { languageManager } from "@/utils/LanguageManager";
 import { contentManager } from "@/utils/ContentManager";
-import { Collection } from "@/utils/interfaces";
 
 export class HomePage extends Page {
 	private title: Phaser.GameObjects.Text;
+	private subtitle: Phaser.GameObjects.Text;
 	private areas: Phaser.Geom.Rectangle[];
 	private collectionButtons: CollectionButton[];
 
@@ -17,7 +17,6 @@ export class HomePage extends Page {
 		super(scene, state, socket);
 
 		this.fadeDir *= -1;
-		this.areas = this.getAreas();
 
 		/* Background */
 
@@ -47,50 +46,20 @@ export class HomePage extends Page {
 		languageManager.bind(bread, "home_bread");
 		this.add(bread);
 
-		let subtitle = scene.addText({
+		this.subtitle = scene.addText({
 			x: layout.panelInner.left,
-			y: this.areas[2].top - 64,
 			size: 28,
 			color: "white",
 		});
-		languageManager.bind(subtitle, "home_subtitle");
-		subtitle.setShadow(0, 2, "#00000099", 8);
-		subtitle.setWordWrapWidth(layout.panelInner.width);
-		this.add(subtitle);
+		languageManager.bind(this.subtitle, "home_subtitle");
+		this.subtitle.setShadow(0, 2, "#00000099", 8);
+		this.subtitle.setWordWrapWidth(layout.panelInner.width);
+		this.add(this.subtitle);
 
-		/* Scenario buttons */
+		/* Collection grid */
 
 		this.collectionButtons = [];
-		contentManager
-			.getFeaturedCollections()
-			.forEach((collection: Collection, i: number) => {
-				let area = this.areas[i];
-				if (!area) {
-					return console.error(
-						`HomePage.getAreas has run out of areas. You are attempting to display too many scenarios.`,
-					);
-				}
-
-				let button = new CollectionButton(
-					this.scene,
-					area.centerX,
-					area.centerY,
-					area.width,
-					area.height,
-					collection,
-				);
-				button.on(
-					"click",
-					() => {
-						if (this.allowInput()) {
-							this.emit("collection", collection.key);
-						}
-					},
-					this,
-				);
-				this.add(button);
-				this.collectionButtons.push(button);
-			});
+		this.loadCollections();
 	}
 
 	update(time: number, delta: number) {
@@ -99,57 +68,128 @@ export class HomePage extends Page {
 		this.collectionButtons.forEach((button) => button.update(time, delta));
 	}
 
-	getAreas() {
-		const areas: Phaser.Geom.Rectangle[] = [];
-		const panel = layout.panelInner;
+	protected override onGuideModeChanged() {
+		this.loadCollections();
+	}
 
+	private loadCollections() {
+		this.collectionButtons.forEach((button) => button.destroy());
+		this.collectionButtons = [];
+
+		const featured = contentManager.getFeaturedCollections();
+		const featuredKeys = new Set(featured.map((collection) => collection.key));
+		const collections = this.guideModeEnabled
+			? [
+					...featured,
+					...contentManager
+						.getCollections()
+						.filter((collection) => !featuredKeys.has(collection.key)),
+				]
+			: featured;
+
+		this.areas = this.getAreas(collections.length);
+		this.subtitle.setVisible(!this.guideModeEnabled);
+		if (!this.guideModeEnabled) {
+			this.subtitle.setY(this.areas[2].top - 64);
+		}
+		collections.forEach((collection, i) => {
+			const area = this.areas[i];
+			if (!area) {
+				return console.error(
+					"HomePage has run out of featured collection areas.",
+				);
+			}
+			const button = new CollectionButton(
+				this.scene,
+				area.centerX,
+				area.centerY,
+				area.width,
+				area.height,
+				collection
+			);
+			button.on(
+				"click",
+				() => {
+					if (this.allowInput()) {
+						this.emit("collection", collection.key);
+					}
+				},
+				this,
+			);
+			this.add(button);
+			this.collectionButtons.push(button);
+		});
+	}
+
+	getAreas(collectionCount: number): Phaser.Geom.Rectangle[] {
+		if (this.guideModeEnabled) {
+			return this.getDebugAreas(collectionCount);
+		} else {
+			return this.getFeaturedAreas(collectionCount);
+		}
+	}
+
+	private getFeaturedAreas(collectionCount: number): Phaser.Geom.Rectangle[] {
+		const panel = layout.panelInner;
 		const upperHeight = 0.3 * panel.height;
 		const lowerHeight = 0.4 * panel.height;
 		const gap = 48;
 
-		const upperRects = this.getGrid(
-			2,
-			1,
-			panel.left,
-			panel.bottom - lowerHeight - upperHeight - 2 * gap,
-			panel.width,
-			panel.height / 4,
-			gap,
-		);
-		areas.push(...upperRects);
-
-		const lowerRects = this.getGrid(
-			3,
-			2,
-			panel.left,
-			panel.bottom - lowerHeight,
-			panel.width,
-			lowerHeight,
-			gap,
-		);
-		areas.push(...lowerRects);
-
-		return areas;
+		return [
+			...this.getGrid(
+				2,
+				1,
+				panel.left,
+				panel.bottom - lowerHeight - upperHeight - 2 * gap,
+				panel.width,
+				panel.height / 4,
+				gap,
+			),
+			...this.getGrid(
+				3,
+				2,
+				panel.left,
+				panel.bottom - lowerHeight,
+				panel.width,
+				lowerHeight,
+				gap,
+			),
+		];
 	}
 
-	getGrid(
-		M: number,
-		N: number,
+	private getDebugAreas(collectionCount: number): Phaser.Geom.Rectangle[] {
+		const panel = layout.panelInner;
+		const height = panel.height - 150;
+		const gap = 32;
+		const rows = Math.ceil(collectionCount / 3);
+
+		return this.getGrid(
+			3,
+			rows,
+			panel.left,
+			panel.bottom - height,
+			panel.width,
+			height,
+			gap,
+		);
+	}
+
+	private getGrid(
+		columns: number,
+		rows: number,
 		left: number,
 		top: number,
 		width: number,
 		height: number,
 		gap: number,
 	): Phaser.Geom.Rectangle[] {
-		let rectWidth = (width - gap * (M - 1)) / M;
-		let rectHeight = (height - gap * (N - 1)) / N;
+		const rectWidth = (width - gap * (columns - 1)) / columns;
+		const rectHeight = (height - gap * (rows - 1)) / rows;
 
-		let rects: Phaser.Geom.Rectangle[] = [];
-		for (let i = 0; i < M * N; i++) {
-			let x = left + (rectWidth + gap) * (i % M);
-			let y = top + (rectHeight + gap) * Math.floor(i / M);
-			rects.push(new Phaser.Geom.Rectangle(x, y, rectWidth, rectHeight));
-		}
-		return rects;
+		return Array.from({ length: columns * rows }, (_, i) => {
+			const x = left + (rectWidth + gap) * (i % columns);
+			const y = top + (rectHeight + gap) * Math.floor(i / columns);
+			return new Phaser.Geom.Rectangle(x, y, rectWidth, rectHeight);
+		});
 	}
 }
