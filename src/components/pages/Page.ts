@@ -20,6 +20,7 @@ export class Page extends Phaser.GameObjects.Container {
 	protected fadeTween: Phaser.Tweens.Tween;
 	protected fadeDir: number;
 	protected buttons: TextButton[];
+	protected guideModeEnabled = false;
 
 	constructor(scene: BaseScene, state: PageState, socket: SocketManager) {
 		super(scene, 0, 0);
@@ -37,6 +38,15 @@ export class Page extends Phaser.GameObjects.Container {
 			button.update(time, delta);
 		});
 	}
+
+	setGuideMode(value: boolean) {
+		if (this.guideModeEnabled === value) return;
+
+		this.guideModeEnabled = value;
+		this.onGuideModeChanged();
+	}
+
+	protected onGuideModeChanged() {}
 
 	addButton(
 		x: number,

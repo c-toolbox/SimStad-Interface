@@ -503,6 +503,8 @@ export class GameScene extends BaseScene {
 			"guide",
 			(isGuideMode: boolean) => {
 				this.navigation.setGuideMode(isGuideMode);
+				this.pages.forEach((page) => page.setGuideMode(isGuideMode));
+				this.loggingOverlay.setGuideMode(isGuideMode);
 				if (isGuideMode) {
 					this.setState(PageState.Layer);
 				} else {
