@@ -262,12 +262,14 @@ export class ScenarioPage extends Page {
 		const tn = count;
 		const tg = 15;
 		const tl = layout.scenarioTabs;
-		const tw =
+		const tw = Math.min(
+			280,
 			(tl.width - (tn - 1) * tg - this.backButton.width - layout.separation) /
-			tn;
+				tn,
+		);
 
 		for (let i = 0; i < tn; i++) {
-			let tx = tl.right - (i + 0.5) * tw - i * tg;
+			let tx = tl.right - (tn - i - 0.5) * tw - (tn - i - 1) * tg;
 
 			this.tabButtons[i].x = tx;
 			this.tabButtons[i].setWidth(tw);
