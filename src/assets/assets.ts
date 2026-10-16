@@ -16,6 +16,7 @@ let images: Image[] = [
 	image("vis_c_logo_color", "vis_c_logo_color.png"),
 	image("vis_c_logo_lines", "vis_c_logo_lines.png"),
 	image("vis_c_logo_white", "vis_c_logo_white.png"),
+	image("qr_documentation", "qr_documentation.png"),
 	image("light", "light.png"),
 
 	image("arrow-left", "icons/arrow-left.png"),
